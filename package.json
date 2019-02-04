@@ -3,14 +3,17 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "node ./bin/www"
+        "start": "nodemon -e .njk ./bin/www",
+        "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css"
     },
     "dependencies": {
         "cookie-parser": "~1.4.3",
         "debug": "~2.6.9",
         "express": "~4.16.0",
+        "govuk-frontend": "^2.5.1",
         "helmet": "^3.15.0",
-        "morgan": "~1.9.0"
+        "morgan": "~1.9.0",
+        "nunjucks": "^3.1.7"
     },
     "_m0": {
         "devDependencies": {
@@ -52,6 +55,8 @@
         "husky": "^1.3.1",
         "jest": "^23.6.0",
         "lint-staged": "^8.0.4",
+        "node-sass": "^4.11.0",
+        "nodemon": "^1.18.9",
         "prettier": "^1.14.3"
     },
     "license": "MIT"
