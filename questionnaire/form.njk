@@ -1,0 +1,436 @@
+{% extends "page.njk" %}
+
+{% block content %}
+
+<p>This is some body content</p>
+
+
+
+{% from "checkboxes/macro.njk" import govukCheckboxes %}
+
+<form method="post">
+
+    {{ govukCheckboxes({
+    idPrefix: "waste",
+    name: "waste[]",
+    fieldset: {
+        legend: {
+        text: "Which types of waste do you transport?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--xl"
+        }
+    },
+    hint: {
+        text: "Select all that apply."
+    },
+    items: [
+        {
+        value: "carcasses",
+        text: "Waste from animal carcasses"
+        },
+        {
+        value: "mines",
+        text: "Waste from mines or quarries"
+        },
+        {
+        value: "farm",
+        text: "Farm or agricultural waste"
+        }
+    ]
+    }) }}
+
+
+    {% from "radios/macro.njk" import govukRadios %}
+{% from "input/macro.njk" import govukInput %}
+
+{% set emailHtml %}
+    {{ govukInput({
+    id: "contact-by-email",
+    name: "contact-by-email",
+    type: "email",
+    classes: "govuk-!-width-one-third",
+    label: {
+        text: "Email address"
+    }
+    }) }}
+{% endset -%}
+
+{% set phoneHtml %}
+{{ govukInput({
+  id: "contact-by-phone",
+  name: "contact-by-phone",
+  type: "tel",
+  classes: "govuk-!-width-one-third",
+  label: {
+    text: "Phone number"
+  }
+}) }}
+{% endset -%}
+
+{% set textHtml %}
+{{ govukInput({
+  id: "contact-by-text",
+  name: "contact-by-text",
+  type: "tel",
+  classes: "govuk-!-width-one-third",
+  label: {
+    text: "Mobile phone number"
+  }
+}) }}
+{% endset -%}
+
+{{ govukRadios({
+  idPrefix: "how-contacted-conditional",
+  name: "how-contacted",
+  fieldset: {
+    legend: {
+      text: "How would you prefer to be contacted?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--xl"
+    }
+  },
+  hint: {
+    text: "Select one option."
+  },
+  items: [
+    {
+      value: "email",
+      text: "Email",
+      conditional: {
+        html: ([emailHtml, phoneHtml] | join())
+      }
+    },
+    {
+      value: "phone",
+      text: "Phone",
+      conditional: {
+        html: phoneHtml
+      }
+    },
+    {
+      value: "text",
+      text: "Text message",
+      conditional: {
+        html: textHtml
+      }
+    }
+  ]
+}) }}
+
+
+
+{% from "input/macro.njk" import govukInput %}
+{% from "fieldset/macro.njk" import govukFieldset %}
+
+{% call govukFieldset({
+  legend: {
+    text: "What is your address?",
+    classes: "govuk-fieldset__legend--xl",
+    isPageHeading: true
+  }
+}) %}
+
+  {{ govukInput({
+    label: {
+      html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+    },
+    id: "address-line-1",
+    name: "address-line-1"
+  }) }}
+
+  {{ govukInput({
+    label: {
+      html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+    },
+    id: "address-line-2",
+    name: "address-line-2"
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Town or city"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "address-town",
+    name: "address-town"
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "County"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "address-county",
+    name: "address-county"
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Postcode"
+    },
+    classes: "govuk-input--width-10",
+    id: "address-postcode",
+    name: "address-postcode"
+  }) }}
+
+{% endcall %}
+
+{% from "date-input/macro.njk" import govukDateInput %}
+
+{% from "date-input/macro.njk" import govukDateInput %}
+
+{{ govukDateInput({
+  id: "dob",
+  fieldset: {
+    legend: {
+      text: "What is your date of birth?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--xl"
+    }
+  },
+  hint: {
+    text: "For example, 31 3 1980"
+  },
+  items: [
+    {
+
+      name: "dob[day]",
+      classes: "govuk-input--width-2",
+      autocomplete: "bday-day"
+    },
+    {
+      label: 'M',
+      name: "dob[month]",
+      classes: "govuk-input--width-2",
+      autocomplete: "bday-month"
+    },
+    {
+      label: 'Y',
+      name: "dob[year]",
+      classes: "govuk-input--width-2",
+      autocomplete: "bday-year"
+    }
+  ]
+}) }}
+
+
+
+{{ govukDateInput({
+    id: '',
+    fieldset: {
+        legend: {
+            text: 'When was your passport issued?',
+            isPageHeading: true,
+            classes: 'govuk-fieldset__legend--xl'
+        }
+    },
+    hint: {
+        text: 'For example, 12 11 2007'
+    },
+    items: [
+        {
+            label: 'Day',
+            classes: 'govuk-input--width-2',
+            name: 'passport-issued[day]',
+            value: "1"
+        },
+        {
+            label: 'Month',
+            classes: 'govuk-input--width-2',
+            name: 'passport-issued[month]'
+        },
+        {
+            label: 'Year',
+            classes: 'govuk-input--width-4',
+            name: 'passport-issued[year]'
+        }
+    ]
+}) }}
+
+
+{{ govukDateInput({
+  id: "dob",
+  namePrefix: "dob",
+  fieldset: {
+    legend: {
+      text: "What is your date of birth?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--xl"
+    }
+  },
+  hint: {
+    text: "For example, 31 3 1980"
+  },
+  items: [
+    {
+      name: "day",
+      classes: "govuk-input--width-2",
+      autocomplete: "bday-day"
+    },
+    {
+      name: "month",
+      classes: "govuk-input--width-2",
+      autocomplete: "bday-month"
+    },
+    {
+      name: "year",
+      classes: "govuk-input--width-2",
+      autocomplete: "bday-year"
+    }
+  ]
+}) }}
+
+
+
+    <input type="submit" />
+</form>
+
+
+{% from "warning-text/macro.njk" import govukWarningText %}
+<p>By continuing you confirm that the information you will give is true as far as you know.</p>
+{{ govukWarningText({
+    text: "You could be prosecuted or get less compensation if you give false or misleading information.",
+    iconFallbackText: "Warning"
+}) }}
+
+
+<form method="post">
+                            {% from "button/macro.njk" import govukButton %}
+                            {% from "radios/macro.njk" import govukRadios %}
+                            {{ govukRadios({
+                                "idPrefix": "contact",
+                                "name": "contact",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
+                                    }
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([
+                                                govukInput({
+                                                    "id": "email",
+                                                    "name": "email",
+                                                    "type": "email",
+                                                    "label": {
+                                                        "text": "Email address",
+                                                        "isPageHeading": false,
+                                                        "classes": ""
+                                                    },
+                                                    "hint": {
+                                                        "text": "e.g. something@something.com"
+                                                    },
+                                                    "classes": "govuk-!-width-one-third"
+                                                }),
+                                                govukInput({
+                                                    "id": "email",
+                                                    "name": "email",
+                                                    "type": "email",
+                                                    "label": {
+                                                        "text": "Email address",
+                                                        "isPageHeading": false,
+                                                        "classes": ""
+                                                    },
+                                                    "hint": {
+                                                        "text": "e.g. something@something.com"
+                                                    },
+                                                    "classes": "govuk-!-width-one-third"
+                                                }),
+                                                govukInput({
+                                                    "id": "email",
+                                                    "name": "email",
+                                                    "type": "email",
+                                                    "label": {
+                                                        "text": "Email address",
+                                                        "isPageHeading": false,
+                                                        "classes": ""
+                                                    },
+                                                    "hint": {
+                                                        "text": "e.g. something@something.com"
+                                                    },
+                                                    "classes": "govuk-!-width-one-third"
+                                                })
+                                            ] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "phone",
+                                        "text": "Phone",
+                                        "conditional": {
+                                            "html": ([
+                                                govukInput({
+                                                    "id": "phone",
+                                                    "name": "phone",
+                                                    "type": "text",
+                                                    "label": {
+                                                        "text": "Phone number",
+                                                        "isPageHeading": false,
+                                                        "classes": ""
+                                                    },
+                                                    "hint": null,
+                                                    "classes": "govuk-!-width-one-third"
+                                                })
+                                            ] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "Text message",
+                                        "conditional": {
+                                            "html": ([
+                                                govukInput({
+                                                    "id": "text",
+                                                    "name": "text",
+                                                    "type": "text",
+                                                    "label": {
+                                                        "text": "Mobile phone number",
+                                                        "isPageHeading": false,
+                                                        "classes": ""
+                                                    },
+                                                    "hint": null,
+                                                    "classes": "govuk-!-width-one-third"
+                                                })
+                                            ] | join())
+                                        }
+                                    }
+                                ]
+                            }) }}
+                            {{ govukButton({
+                                text: "Continue"
+                            }) }}
+                        </form>
+
+
+{% from "details/macro.njk" import govukDetails %}
+
+{{ govukDetails({
+  summaryText: "Help with nationality",
+  text: "
+  We need to know your nationality so we can work out which elections you’re entitled to vote in. If you cannot provide your nationality, you’ll have to send copies of identity documents through the post.
+
+  bla
+
+    more stuff
+    <div>hello</div>
+  "
+}) }}
+
+{{ govukDetails({
+summaryText: "If you need help or support",
+html: '
+    <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>
+    <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>
+    <p class="govuk-body">For practical or emotional support near you <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>
+'
+}) }}
+
+
+{% endblock %}

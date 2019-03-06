@@ -7,6 +7,7 @@ const nunjucks = require('nunjucks');
 
 // const indexRouter = require('./routes/index');
 const indexRouter = require('./questionnaire/routes');
+const questionnaireRouter = require('./questionnaire2/routes');
 
 const app = express();
 
@@ -25,8 +26,10 @@ nunjucks.configure(
 
 app.use(helmet());
 app.use(logger('dev'));
+// https://expressjs.com/en/api.html#express.json
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+// https://expressjs.com/en/api.html#express.urlencoded
+app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -44,5 +47,6 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/all.js'))
 );
 app.use('/', indexRouter);
+app.use('/q', questionnaireRouter);
 
 module.exports = app;
