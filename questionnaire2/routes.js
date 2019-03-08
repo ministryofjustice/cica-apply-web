@@ -48,32 +48,68 @@ router.post('/', (req, res) => {
     // Ajv mutates the data it's testing when using the coerce option
     // Create a copy to avoid issues
     const bodyCopy = Object.assign({}, body);
+
+    // Handle req.body
+    Object.keys(bodyCopy).forEach(property => {
+        const value = bodyCopy[property];
+
+        // Remove attributes from obj that have empty strings so that schema "requires" work
+        if (typeof value === 'string' && value === '') {
+            delete bodyCopy[property];
+        }
+
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            // todo: install moment and turn object dates to an iso string e.g. {day: 7, month: 3, year: 2018}
+            // simulate date string
+            bodyCopy[property] = '2018-03-07T18:04:57.608Z';
+        }
+    });
+
     const currentSectionId = qRouter.current();
     const currentSchema = q.sections[currentSectionId];
     const errors = qValidator.validationResponseAgainstSchema(currentSchema, bodyCopy);
 
     if (!errors.valid) {
-        res.send(errors);
+        const schema = q.sections[currentSectionId];
+        const transformation = qTransformer.transform({
+            schemaKey: currentSectionId,
+            schema,
+            uiSchema: {},
+            data: body,
+            schemaErrors: errors
+        });
+
+        const html = nunjucks.renderString(
+            `
+                {% extends "page.njk" %}
+                {% block content %}
+                    ${JSON.stringify(errors, null, 4)}
+                    ${transformation}
+                {% endblock %}
+            `
+        );
+
+        res.send(html);
+    } else {
+        const nextSection = qRouter.next('ANSWER', body);
+        const schema = q.sections[nextSection];
+        const transformation = qTransformer.transform({
+            schemaKey: nextSection,
+            schema,
+            uiSchema: {}
+        });
+
+        const html = nunjucks.renderString(
+            `
+                {% extends "page.njk" %}
+                {% block content %}
+                    ${transformation}
+                {% endblock %}
+            `
+        );
+
+        res.send(html);
     }
-
-    const nextSection = qRouter.next('ANSWER', body);
-    const schema = q.sections[nextSection];
-    const transformation = qTransformer.transform({
-        schemaKey: nextSection,
-        schema,
-        uiSchema: {}
-    });
-
-    const html = nunjucks.renderString(
-        `
-            {% extends "page.njk" %}
-            {% block content %}
-                ${transformation}
-            {% endblock %}
-        `
-    );
-
-    res.send(html);
 });
 
 router.get('/form', (req, res) => {
