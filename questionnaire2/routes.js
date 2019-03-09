@@ -64,11 +64,9 @@ router.post('/', (req, res) => {
             bodyCopy[property] = '2018-03-07T18:04:57.608Z';
         }
     });
-
     const currentSectionId = qRouter.current();
     const currentSchema = q.sections[currentSectionId];
     const errors = qValidator.validationResponseAgainstSchema(currentSchema, bodyCopy);
-
     if (!errors.valid) {
         const schema = q.sections[currentSectionId];
         const transformation = qTransformer.transform({
@@ -78,17 +76,14 @@ router.post('/', (req, res) => {
             data: body,
             schemaErrors: errors
         });
-
         const html = nunjucks.renderString(
             `
                 {% extends "page.njk" %}
                 {% block content %}
-                    ${JSON.stringify(errors, null, 4)}
                     ${transformation}
                 {% endblock %}
             `
         );
-
         res.send(html);
     } else {
         const nextSection = qRouter.next('ANSWER', body);
@@ -99,6 +94,11 @@ router.post('/', (req, res) => {
             uiSchema: {}
         });
 
+        // ToDo: {% block beforeContent %}
+        // ToDo: Implement Breadcrumbs nunjucks
+        // ToDo: Implement back button nunjucks <a href="/{{questionnaireId}}/{{questionnaireName}}/previous" class="govuk-back-link">Back</a>
+        // ToDo: {% endblock %}
+
         const html = nunjucks.renderString(
             `
                 {% extends "page.njk" %}
@@ -107,7 +107,6 @@ router.post('/', (req, res) => {
                 {% endblock %}
             `
         );
-
         res.send(html);
     }
 });
