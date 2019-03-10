@@ -4,6 +4,7 @@ const createQRouter = require('q-router');
 const createQTransformer = require('q-transformer');
 const createQValidator = require('q-validator');
 const q = require('./questionnaire');
+const startPageString = require('../page/start-page');
 
 const router = express.Router();
 const qRouter = createQRouter(q);
@@ -31,14 +32,17 @@ router.get('/', (req, res) => {
         uiSchema: {}
     });
 
-    const html = nunjucks.renderString(
-        `
+    const templateString =
+        schema.context === 'start-page'
+            ? startPageString
+            : `
             {% extends "page.njk" %}
-            {% block content %}
+            {% block innerContent %}
                 ${transformation}
             {% endblock %}
-        `
-    );
+        `;
+
+    const html = nunjucks.renderString(templateString);
 
     res.send(html);
 });
@@ -95,7 +99,6 @@ router.post('/', (req, res) => {
         });
 
         // ToDo: {% block beforeContent %}
-        // ToDo: Implement Breadcrumbs nunjucks
         // ToDo: Implement back button nunjucks <a href="/{{questionnaireId}}/{{questionnaireName}}/previous" class="govuk-back-link">Back</a>
         // ToDo: {% endblock %}
 

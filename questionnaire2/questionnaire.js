@@ -288,7 +288,7 @@ module.exports = {
                     maxItems: 4,
                     uniqueItems: true,
                     items: {
-                        anyOf: [
+                        oneOf: [
                             {
                                 title: 'I was under 18',
                                 const: 'underage'
@@ -858,7 +858,7 @@ module.exports = {
                     maxItems: 3,
                     uniqueItems: true,
                     items: {
-                        anyOf: [
+                        oneOf: [
                             {
                                 title: 'I was under 18',
                                 const: 'underage'
@@ -929,7 +929,7 @@ module.exports = {
                     maxItems: 1,
                     uniqueItems: true,
                     items: {
-                        anyOf: [
+                        oneOf: [
                             {
                                 title: 'I have no contact with the offender',
                                 const: 'none'
