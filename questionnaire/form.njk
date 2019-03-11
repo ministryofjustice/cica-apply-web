@@ -2,6 +2,38 @@
 
 {% block content %}
 
+{% from "error-summary/macro.njk" import govukErrorSummary %}
+
+
+{% from "textarea/macro.njk" import govukTextarea %}
+
+{{ govukTextarea({
+  name: "more-detail",
+  id: "more-detail",
+  label: {
+    text: "Can you provide more detail?"
+  },
+  hint: {
+    text: "Do not include personal or financial information, like your National Insurance number or credit card details."
+  },
+  value: '<script>alert(1);</script>'
+}) }}
+
+
+{{ govukErrorSummary({
+  titleText: "There is a problem",
+  errorList: [
+    {
+      text: "The date your passport was issued must be in the past",
+      href: "#passport-issued-error"
+    },
+    {
+      text: "Enter a postcode, like AA1 1AA",
+      href: "#postcode-error"
+    }
+  ]
+}) }}
+
 <p>This is some body content</p>
 
 
@@ -11,7 +43,6 @@
 <form method="post">
 
     {{ govukCheckboxes({
-    idPrefix: "waste",
     name: "waste[]",
     fieldset: {
         legend: {
