@@ -2,7 +2,10 @@ module.exports = {
     'p-applicant-have-you-applied-to-us-before': {
         // transformer: 'form',
         options: {
-            transformOrder: ['todo2', 'q-applicant-have-you-applied-to-us-before'],
+            transformOrder: [
+                'q-enter-your-previous-reference-number',
+                'q-applicant-have-you-applied-to-us-before'
+            ],
             outputOrder: ['q-applicant-have-you-applied-to-us-before'],
             properties: {
                 'q-applicant-have-you-applied-to-us-before': {
@@ -11,7 +14,7 @@ module.exports = {
                         conditionalComponentMap: [
                             {
                                 itemValue: true,
-                                componentIds: ['todo2']
+                                componentIds: ['q-enter-your-previous-reference-number']
                             }
                         ]
                     }
@@ -23,7 +26,7 @@ module.exports = {
         // transformer: 'form',
         options: {
             transformOrder: [
-                'todo',
+                'q-applicant-applied-for-other-compensation-briefly-explain-why-not',
                 'q-applicant-have-you-applied-for-or-received-any-other-compensation'
             ],
             outputOrder: ['q-applicant-have-you-applied-for-or-received-any-other-compensation'],
@@ -34,7 +37,9 @@ module.exports = {
                         conditionalComponentMap: [
                             {
                                 itemValue: false,
-                                componentIds: ['todo']
+                                componentIds: [
+                                    'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
+                                ]
                             }
                         ]
                     }
@@ -46,24 +51,27 @@ module.exports = {
         // transformer: 'form',
         options: {
             transformOrder: [
-                'q-todo-who-have-you-applied-to',
-                'q-todo-award-amount',
-                'q-todo-find-out-about-award',
-                'q-todo-decision-made'
+                'q-applicant-who-did-you-apply-to',
+                'q-how-much-was-award',
+                'q-when-will-you-find-out',
+                'q-applicant-has-a-decision-been-made'
             ],
-            outputOrder: ['q-todo-who-have-you-applied-to', 'q-todo-decision-made'],
+            outputOrder: [
+                'q-applicant-who-did-you-apply-to',
+                'q-applicant-has-a-decision-been-made'
+            ],
             properties: {
-                'q-todo-decision-made': {
+                'q-applicant-has-a-decision-been-made': {
                     // transformer: 'govukRadios',
                     options: {
                         conditionalComponentMap: [
                             {
                                 itemValue: false,
-                                componentIds: ['q-todo-find-out-about-award']
+                                componentIds: ['q-when-will-you-find-out']
                             },
                             {
                                 itemValue: true,
-                                componentIds: ['q-todo-award-amount']
+                                componentIds: ['q-how-much-was-award']
                             }
                         ]
                     }

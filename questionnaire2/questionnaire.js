@@ -959,13 +959,18 @@ module.exports = {
                 }
             },
             required: ['q-applicant-have-you-applied-to-us-before'],
-            allOf: [{$ref: '#/definitions/if-yes-then-reference-number-is-required'}],
+            allOf: [
+                {
+                    $ref:
+                        '#/definitions/if-true-then-q-enter-your-previous-reference-number-is-required'
+                }
+            ],
             definitions: {
-                'if-yes-then-reference-number-is-required': {
+                'if-true-then-q-enter-your-previous-reference-number-is-required': {
                     if: {
                         properties: {
                             'q-applicant-have-you-applied-to-us-before': {
-                                const: 'yes'
+                                const: true
                             }
                         }
                     },
@@ -1003,13 +1008,18 @@ module.exports = {
                 }
             },
             required: ['q-applicant-have-you-applied-for-or-received-any-other-compensation'],
-            allOf: [{$ref: '#/definitions/if-no-then-todo-is-required'}],
+            allOf: [
+                {
+                    $ref:
+                        '#/definitions/if-false-then-q-applicant-applied-for-other-compensation-briefly-explain-why-not-is-required'
+                }
+            ],
             definitions: {
-                'if-no-then-todo-is-required': {
+                'if-false-then-q-applicant-applied-for-other-compensation-briefly-explain-why-not-is-required': {
                     if: {
                         properties: {
                             'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
-                                const: 'no'
+                                const: false
                             }
                         }
                     },
@@ -1060,13 +1070,20 @@ module.exports = {
                 }
             },
             required: ['q-applicant-who-did-you-apply-to', 'q-applicant-has-a-decision-been-made'],
-            allOf: [{$ref: '#/definitions/if-no-then-q-when-will-you-find-out-is-required'}],
+            allOf: [
+                {
+                    $ref: '#/definitions/if-false-then-q-when-will-you-find-out-is-required'
+                },
+                {
+                    $ref: '#/definitions/if-true-then-q-how-much-was-award-is-required'
+                }
+            ],
             definitions: {
-                'if-no-then-q-when-will-you-find-out-is-required': {
+                'if-false-then-q-when-will-you-find-out-is-required': {
                     if: {
                         properties: {
                             'q-applicant-has-a-decision-been-made': {
-                                const: 'no'
+                                const: false
                             }
                         }
                     },
@@ -1081,11 +1098,11 @@ module.exports = {
                         }
                     }
                 },
-                'if-yes-then-q-how-much-was-award-is-required': {
+                'if-true-then-q-how-much-was-award-is-required': {
                     if: {
                         properties: {
                             'q-applicant-has-a-decision-been-made': {
-                                const: 'yes'
+                                const: true
                             }
                         }
                     },
