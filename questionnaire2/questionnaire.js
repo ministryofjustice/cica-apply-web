@@ -943,22 +943,25 @@ module.exports = {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             propertyNames: {
-                enum: ['q-applicant-have-you-applied-to-us-before', 'todo2']
+                enum: [
+                    'q-applicant-have-you-applied-to-us-before',
+                    'q-enter-your-previous-reference-number'
+                ]
             },
             properties: {
                 'q-applicant-have-you-applied-to-us-before': {
                     title: 'Have you applied to us before?',
                     type: 'boolean'
                 },
-                todo2: {
+                'q-enter-your-previous-reference-number': {
                     type: 'string',
                     title: 'Enter your previous reference number if you know it (optional)'
                 }
             },
             required: ['q-applicant-have-you-applied-to-us-before'],
-            allOf: [{$ref: '#/definitions/if-yes-then-todo2-is-required'}],
+            allOf: [{$ref: '#/definitions/if-yes-then-reference-number-is-required'}],
             definitions: {
-                'if-yes-then-todo2-is-required': {
+                'if-yes-then-reference-number-is-required': {
                     if: {
                         properties: {
                             'q-applicant-have-you-applied-to-us-before': {
@@ -967,9 +970,12 @@ module.exports = {
                         }
                     },
                     then: {
-                        required: ['todo2'],
+                        required: ['q-enter-your-previous-reference-number'],
                         propertyNames: {
-                            enum: ['q-applicant-have-you-applied-to-us-before', 'todo2']
+                            enum: [
+                                'q-applicant-have-you-applied-to-us-before',
+                                'q-enter-your-previous-reference-number'
+                            ]
                         }
                     }
                 }
@@ -981,7 +987,7 @@ module.exports = {
             propertyNames: {
                 enum: [
                     'q-applicant-have-you-applied-for-or-received-any-other-compensation',
-                    'todo'
+                    'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
                 ]
             },
             properties: {
@@ -991,7 +997,7 @@ module.exports = {
                         'For example, if you claimed insurance, sought civil damages, or a court decided you should get compensation.',
                     type: 'boolean'
                 },
-                todo: {
+                'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
                     type: 'string',
                     title: 'Briefly explain why not.'
                 }
@@ -1008,11 +1014,13 @@ module.exports = {
                         }
                     },
                     then: {
-                        required: ['todo'],
+                        required: [
+                            'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
+                        ],
                         propertyNames: {
                             enum: [
                                 'q-applicant-have-you-applied-for-or-received-any-other-compensation',
-                                'todo'
+                                'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
                             ]
                         }
                     }
@@ -1025,69 +1033,69 @@ module.exports = {
             title: 'Other compensation',
             propertyNames: {
                 enum: [
-                    'q-todo-who-have-you-applied-to',
-                    'q-todo-decision-made',
-                    'q-todo-award-amount',
-                    'q-todo-find-out-about-award'
+                    'q-applicant-who-did-you-apply-to',
+                    'q-applicant-has-a-decision-been-made',
+                    'q-how-much-was-award',
+                    'q-when-will-you-find-out'
                 ]
             },
             properties: {
-                'q-todo-who-have-you-applied-to': {
+                'q-applicant-who-did-you-apply-to': {
                     type: 'string',
                     title: 'Who have you applied to or received compensation from?'
                 },
-                'q-todo-decision-made': {
+                'q-applicant-has-a-decision-been-made': {
                     title: 'Have they made a decision?',
                     type: 'boolean'
                 },
-                'q-todo-award-amount': {
+                'q-how-much-was-award': {
                     type: 'string',
                     title: 'How much was the award? '
                 },
-                'q-todo-find-out-about-award': {
+                'q-when-will-you-find-out': {
                     type: 'string',
                     title: 'When will you find out?',
                     description:
                         'Enter an approximate date, for example, December 2019. If you do not know you can say so.'
                 }
             },
-            required: ['q-todo-who-have-you-applied-to', 'q-todo-decision-made'],
-            allOf: [{$ref: '#/definitions/if-no-then-q-todo-find-out-about-award-is-required'}],
+            required: ['q-applicant-who-did-you-apply-to', 'q-applicant-has-a-decision-been-made'],
+            allOf: [{$ref: '#/definitions/if-no-then-q-when-will-you-find-out-is-required'}],
             definitions: {
-                'if-no-then-q-todo-find-out-about-award-is-required': {
+                'if-no-then-q-when-will-you-find-out-is-required': {
                     if: {
                         properties: {
-                            'q-todo-decision-made': {
+                            'q-applicant-has-a-decision-been-made': {
                                 const: 'no'
                             }
                         }
                     },
                     then: {
-                        required: ['q-todo-find-out-about-award'],
+                        required: ['q-when-will-you-find-out'],
                         propertyNames: {
                             enum: [
-                                'q-todo-who-have-you-applied-to',
-                                'q-todo-decision-made',
-                                'q-todo-find-out-about-award'
+                                'q-applicant-who-did-you-apply-to',
+                                'q-applicant-has-a-decision-been-made',
+                                'q-when-will-you-find-out'
                             ]
                         }
                     }
                 },
-                'if-yes-then-q-todo-award-amount-is-required': {
+                'if-yes-then-q-how-much-was-award-is-required': {
                     if: {
                         properties: {
-                            'q-todo-decision-made': {
+                            'q-applicant-has-a-decision-been-made': {
                                 const: 'yes'
                             }
                         }
                     },
                     then: {
-                        required: ['q-todo-award-amount'],
+                        required: ['q-how-much-was-award'],
                         propertyNames: {
                             enum: [
-                                'q-todo-who-have-you-applied-to',
-                                'q-todo-decision-made',
-                                'q-todo-award-amount'
+                                'q-applicant-who-did-you-apply-to',
+                                'q-applicant-has-a-decision-been-made',
+                                'q-how-much-was-award'
                             ]
                         }
                     }
