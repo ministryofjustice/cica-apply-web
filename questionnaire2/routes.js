@@ -88,10 +88,15 @@ router.post('/', (req, res) => {
 
     const currentSectionId = qRouter.current();
     const currentSchema = q.sections[currentSectionId];
+
+    console.log('@@@@@@@@@: ', {currentSectionId, currentSchema});
+
     // const currentAnswers = getAnswerValues(q.answers[currentSectionId]);
     const errors = qValidator.validationResponseAgainstSchema(currentSchema, bodyCopy);
 
     if (!errors.valid) {
+        console.log('@@@@@@@@@2: ');
+
         const schema = q.sections[currentSectionId];
         const transformation = qTransformer.transform({
             schemaKey: currentSectionId,
@@ -102,16 +107,18 @@ router.post('/', (req, res) => {
         });
         // ${JSON.stringify(bodyCopy, null, 4)}
         // ${JSON.stringify(errors, null, 4)}
-        console.log(
-            JSON.stringify(
-                {
-                    answers: q.answers,
-                    progress: q.progress
-                },
-                null,
-                4
-            )
-        );
+        // console.log(
+        //     JSON.stringify(
+        //         {
+        //             currentSectionId,
+        //             currentSchema,
+        //             answers: q.answers,
+        //             progress: q.progress
+        //         },
+        //         null,
+        //         4
+        //     )
+        // );
         const html = nunjucks.renderString(
             `
                 {% extends "page.njk" %}
@@ -124,9 +131,12 @@ router.post('/', (req, res) => {
 
         res.send(html);
     } else {
+        console.log('@@@@@@@@@3: ');
         try {
             const nextSection = qRouter.next('ANSWER', body);
             const schema = q.sections[nextSection];
+
+            console.log('>>>>>>>>: ', {nextSection, schema});
 
             const transformation = qTransformer.transform({
                 schemaKey: nextSection,
@@ -145,6 +155,7 @@ router.post('/', (req, res) => {
 
             res.send(html);
         } catch (err) {
+            console.log('@@@@@@@@@4: ');
             console.error(err);
             console.log(
                 JSON.stringify(
@@ -158,10 +169,6 @@ router.post('/', (req, res) => {
             );
         }
     }
-});
-
-router.get('/form', (req, res) => {
-    res.render('form.njk');
 });
 
 router.post('/form', (req, res) => {

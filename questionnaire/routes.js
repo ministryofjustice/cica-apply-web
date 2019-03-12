@@ -7,6 +7,14 @@ router.get('/', (req, res) => {
     res.render('questionnaire.njk');
 });
 
+router.get('/consent', (req, res) => {
+    res.render('consent.njk');
+});
+
+router.get('/start-page', (req, res) => {
+    res.render('start-page.njk');
+});
+
 router.get('/nunjucksz', (req, res) => {
     nunjucks.configure(
         [

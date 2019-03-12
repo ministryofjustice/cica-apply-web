@@ -942,22 +942,36 @@ module.exports = {
         'p-applicant-have-you-applied-to-us-before': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
-            required: ['q-applicant-have-you-applied-to-us-before'],
-            additionalProperties: false,
+            propertyNames: {
+                enum: ['q-applicant-have-you-applied-to-us-before', 'todo2']
+            },
             properties: {
                 'q-applicant-have-you-applied-to-us-before': {
                     title: 'Have you applied to us before?',
+                    type: 'boolean'
+                },
+                todo2: {
                     type: 'string',
-                    oneOf: [
-                        {
-                            title: 'Yes',
-                            const: 'Yes'
-                        },
-                        {
-                            title: 'No',
-                            const: 'No'
+                    title: 'Enter your previous reference number if you know it (optional)'
+                }
+            },
+            required: ['q-applicant-have-you-applied-to-us-before'],
+            allOf: [{$ref: '#/definitions/if-yes-then-todo2-is-required'}],
+            definitions: {
+                'if-yes-then-todo2-is-required': {
+                    if: {
+                        properties: {
+                            'q-applicant-have-you-applied-to-us-before': {
+                                const: 'yes'
+                            }
                         }
-                    ]
+                    },
+                    then: {
+                        required: ['todo2'],
+                        propertyNames: {
+                            enum: ['q-applicant-have-you-applied-to-us-before', 'todo2']
+                        }
+                    }
                 }
             }
         },
@@ -1007,26 +1021,75 @@ module.exports = {
         },
         'p-applicant-other-compensation-details': {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            title: 'Other compensation',
             type: 'object',
-            required: [
-                'q-who-did-you-apply-for-compensation-to',
-                'q-how-much-compensation-did-you-get'
-            ],
-            additionalProperties: false,
+            title: 'Other compensation',
+            propertyNames: {
+                enum: [
+                    'q-todo-who-have-you-applied-to',
+                    'q-todo-decision-made',
+                    'q-todo-award-amount',
+                    'q-todo-find-out-about-award'
+                ]
+            },
             properties: {
-                'q-who-did-you-apply-for-compensation-to': {
+                'q-todo-who-have-you-applied-to': {
                     type: 'string',
-                    title: 'Who did you apply to?',
-                    errorMessages: {
-                        required: 'Tell us who you applied to'
+                    title: 'Who have you applied to or received compensation from?'
+                },
+                'q-todo-decision-made': {
+                    title: 'Have they made a decision?',
+                    type: 'boolean'
+                },
+                'q-todo-award-amount': {
+                    type: 'string',
+                    title: 'How much was the award? '
+                },
+                'q-todo-find-out-about-award': {
+                    type: 'string',
+                    title: 'When will you find out?',
+                    description:
+                        'Enter an approximate date, for example, December 2019. If you do not know you can say so.'
+                }
+            },
+            required: ['q-todo-who-have-you-applied-to', 'q-todo-decision-made'],
+            allOf: [{$ref: '#/definitions/if-no-then-q-todo-find-out-about-award-is-required'}],
+            definitions: {
+                'if-no-then-q-todo-find-out-about-award-is-required': {
+                    if: {
+                        properties: {
+                            'q-todo-decision-made': {
+                                const: 'no'
+                            }
+                        }
+                    },
+                    then: {
+                        required: ['q-todo-find-out-about-award'],
+                        propertyNames: {
+                            enum: [
+                                'q-todo-who-have-you-applied-to',
+                                'q-todo-decision-made',
+                                'q-todo-find-out-about-award'
+                            ]
+                        }
                     }
                 },
-                'q-how-much-compensation-did-you-get': {
-                    type: 'string',
-                    title: 'How much compensation did you get, or expect to get?',
-                    errorMessages: {
-                        required: 'Tell us how much compensation you got, or are expecting to get'
+                'if-yes-then-q-todo-award-amount-is-required': {
+                    if: {
+                        properties: {
+                            'q-todo-decision-made': {
+                                const: 'yes'
+                            }
+                        }
+                    },
+                    then: {
+                        required: ['q-todo-award-amount'],
+                        propertyNames: {
+                            enum: [
+                                'q-todo-who-have-you-applied-to',
+                                'q-todo-decision-made',
+                                'q-todo-award-amount'
+                            ]
+                        }
                     }
                 }
             }
@@ -1817,7 +1880,6 @@ module.exports = {
         }
     },
     answers: {
-        /*
         'p--start-now': {},
         'p-applicant-declaration': {},
         'p-applicant-british-citizen-or-eu-national': {
@@ -1904,7 +1966,7 @@ module.exports = {
             'q--which-scottish-police-force-is-investigating-the-crime': {
                 value: 'ayrshire'
             }
-        },
+        } /* ,
         'p-offender-do-you-know-the-name-of-the-offender': {
             'q-offender-do-you-know-the-name-of-the-offender': {
                 value: 'false'
@@ -1925,7 +1987,7 @@ module.exports = {
         } */
     },
     progress: [
-        /* 'p--start-now',
+        'p--start-now',
         'p-applicant-declaration',
         'p-applicant-british-citizen-or-eu-national',
         'p-applicant-are-you-18-or-over',
@@ -1941,7 +2003,7 @@ module.exports = {
         'p-applicant-select-reasons-for-the-delay-in-making-your-application',
         'p-applicant-where-did-the-crime-happen',
         'p-applicant-where-in-scotland-did-it-happen',
-        'p--which-police-scotland-division-is-investigating-the-crime',
+        'p--which-police-scotland-division-is-investigating-the-crime' /* ,
         'p-offender-do-you-know-the-name-of-the-offender',
         'p-applicant-have-you-applied-to-us-before',
         'p-applicant-have-you-applied-for-or-received-any-other-compensation' */
