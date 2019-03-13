@@ -1,13 +1,6 @@
 module.exports = {
     uri: 'apply-for-compensation',
     sections: {
-        'p--start-now': {
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            type: 'object',
-            additionalProperties: false,
-            properties: {},
-            context: 'start-page'
-        },
         'p-applicant-declaration': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
@@ -160,7 +153,7 @@ module.exports = {
                 'q--when-was-the-crime-reported-to-police': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-07T22:20:41.010Z',
+                    formatMaximum: '2019-03-12T17:11:41.732Z',
                     title: 'When was the crime reported to the police?',
                     errorMessages: {
                         required: 'Enter the date the crime was reported to the police',
@@ -218,7 +211,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-happen': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-07T22:20:41.015Z',
+                    formatMaximum: '2019-03-12T17:11:41.733Z',
                     title: 'When did the crime happen?',
                     errorMessages: {
                         required:
@@ -241,7 +234,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-start': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-07T22:20:41.017Z',
+                    formatMaximum: '2019-03-12T17:11:41.734Z',
                     title: 'When did it start?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -263,7 +256,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-stop': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-07T22:20:41.019Z',
+                    formatMaximum: '2019-03-12T17:11:41.734Z',
                     title: 'When did it stop?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -998,13 +991,18 @@ module.exports = {
                 }
             },
             required: ['q-applicant-have-you-applied-to-us-before'],
-            allOf: [{$ref: '#/definitions/if-yes-then-reference-number-is-required'}],
+            allOf: [
+                {
+                    $ref:
+                        '#/definitions/if-true-then-q-enter-your-previous-reference-number-is-required'
+                }
+            ],
             definitions: {
-                'if-yes-then-reference-number-is-required': {
+                'if-true-then-q-enter-your-previous-reference-number-is-required': {
                     if: {
                         properties: {
                             'q-applicant-have-you-applied-to-us-before': {
-                                const: 'yes'
+                                const: true
                             }
                         }
                     },
@@ -1042,13 +1040,18 @@ module.exports = {
                 }
             },
             required: ['q-applicant-have-you-applied-for-or-received-any-other-compensation'],
-            allOf: [{$ref: '#/definitions/if-no-then-todo-is-required'}],
+            allOf: [
+                {
+                    $ref:
+                        '#/definitions/if-false-then-q-applicant-applied-for-other-compensation-briefly-explain-why-not-is-required'
+                }
+            ],
             definitions: {
-                'if-no-then-todo-is-required': {
+                'if-false-then-q-applicant-applied-for-other-compensation-briefly-explain-why-not-is-required': {
                     if: {
                         properties: {
                             'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
-                                const: 'no'
+                                const: false
                             }
                         }
                     },
@@ -1099,13 +1102,20 @@ module.exports = {
                 }
             },
             required: ['q-applicant-who-did-you-apply-to', 'q-applicant-has-a-decision-been-made'],
-            allOf: [{$ref: '#/definitions/if-no-then-q-when-will-you-find-out-is-required'}],
+            allOf: [
+                {
+                    $ref: '#/definitions/if-false-then-q-when-will-you-find-out-is-required'
+                },
+                {
+                    $ref: '#/definitions/if-true-then-q-how-much-was-award-is-required'
+                }
+            ],
             definitions: {
-                'if-no-then-q-when-will-you-find-out-is-required': {
+                'if-false-then-q-when-will-you-find-out-is-required': {
                     if: {
                         properties: {
                             'q-applicant-has-a-decision-been-made': {
-                                const: 'no'
+                                const: false
                             }
                         }
                     },
@@ -1120,11 +1130,11 @@ module.exports = {
                         }
                     }
                 },
-                'if-yes-then-q-how-much-was-award-is-required': {
+                'if-true-then-q-how-much-was-award-is-required': {
                     if: {
                         properties: {
                             'q-applicant-has-a-decision-been-made': {
-                                const: 'yes'
+                                const: true
                             }
                         }
                     },
@@ -1353,7 +1363,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-british-citizen-or-eu-national.q-applicant-british-citizen-or-eu-national.value',
-                                'false'
+                                false
                             ]
                         },
                         {
@@ -1361,7 +1371,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-british-citizen-or-eu-national.q-applicant-british-citizen-or-eu-national.value',
-                                'true'
+                                true
                             ]
                         }
                     ]
@@ -1375,7 +1385,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-are-you-18-or-over.q-applicant-are-you-18-or-over.value',
-                                'false'
+                                false
                             ]
                         },
                         {
@@ -1383,7 +1393,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-are-you-18-or-over.q-applicant-are-you-18-or-over.value',
-                                'true'
+                                true
                             ]
                         }
                     ]
@@ -1419,7 +1429,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-were-you-a-victim-of-sexual-assault-or-abuse.q-applicant-were-you-a-victim-of-sexual-assault-or-abuse.value',
-                                'false'
+                                false
                             ]
                         },
                         {
@@ -1427,7 +1437,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-were-you-a-victim-of-sexual-assault-or-abuse.q-applicant-were-you-a-victim-of-sexual-assault-or-abuse.value',
-                                'true'
+                                true
                             ]
                         }
                     ]
@@ -1472,7 +1482,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police.value',
-                                'false'
+                                false
                             ]
                         },
                         {
@@ -1480,7 +1490,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police.value',
-                                'true'
+                                true
                             ]
                         }
                     ]
@@ -1723,7 +1733,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-offender-do-you-know-the-name-of-the-offender.q-offender-do-you-know-the-name-of-the-offender.value',
-                                'false'
+                                false
                             ]
                         },
                         {
@@ -1731,7 +1741,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-offender-do-you-know-the-name-of-the-offender.q-offender-do-you-know-the-name-of-the-offender.value',
-                                'true'
+                                true
                             ]
                         }
                     ]
@@ -1773,7 +1783,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-have-you-applied-for-or-received-any-other-compensation.q-applicant-have-you-applied-for-or-received-any-other-compensation.value',
-                                'true'
+                                true
                             ]
                         },
                         {
@@ -1781,7 +1791,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-have-you-applied-for-or-received-any-other-compensation.q-applicant-have-you-applied-for-or-received-any-other-compensation.value',
-                                'false'
+                                false
                             ]
                         }
                     ]
@@ -1813,7 +1823,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-have-you-been-known-by-any-other-names.q-applicant-have-you-been-known-by-any-other-names.value',
-                                'false'
+                                false
                             ]
                         },
                         {
@@ -1821,7 +1831,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-have-you-been-known-by-any-other-names.q-applicant-have-you-been-known-by-any-other-names.value',
-                                'true'
+                                true
                             ]
                         }
                     ]
@@ -1901,7 +1911,7 @@ module.exports = {
                 on: {
                     ANSWER: [
                         {
-                            target: 'p-applicant-you-cannot-get-compensation'
+                            target: 'p-applicant-redirect-to-our-other-application'
                         }
                     ]
                 }
@@ -1910,7 +1920,7 @@ module.exports = {
                 on: {
                     ANSWER: [
                         {
-                            target: 'p-applicant-you-cannot-get-compensation'
+                            target: 'p-applicant-did-the-crime-happen-once-or-over-time'
                         }
                     ]
                 }
