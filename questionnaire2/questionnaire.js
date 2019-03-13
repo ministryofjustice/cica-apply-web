@@ -918,11 +918,18 @@ module.exports = {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             additionalProperties: false,
+            propertyNames: {
+                enum: ['q-offender-contact-description', 'q-offender-no-contact-with-offender']
+            },
             properties: {
                 'q-offender-contact-description': {
                     type: 'string',
                     title: 'If you have contact with the offender, describe it below',
-                    maxLength: 500
+                    maxLength: 500,
+                    errorMessages: {
+                        required:
+                            "Please describe your contact with the offender, or click 'I have no contact with the offender'"
+                    }
                 },
                 'q-offender-no-contact-with-offender': {
                     type: 'array',
@@ -935,6 +942,38 @@ module.exports = {
                                 const: 'none'
                             }
                         ]
+                    },
+                    errorMessages: {
+                        required:
+                            "Please describe your contact with the offender, or click 'I have no contact with the offender'"
+                    }
+                }
+            },
+            allOf: [
+                {
+                    $ref:
+                        '#/definitions/if-not-checked-then-q-offender-contact-description-is-required'
+                }
+            ],
+            definitions: {
+                'if-not-checked-then-q-offender-contact-description-is-required': {
+                    if: {
+                        not: {
+                            properties: {
+                                'q-offender-no-contact-with-offender': {
+                                    const: 'none'
+                                }
+                            }
+                        }
+                    },
+                    then: {
+                        required: ['q-offender-contact-description'],
+                        propertyNames: {
+                            enum: [
+                                'q-offender-no-contact-with-offender',
+                                'q-offender-contact-description'
+                            ]
+                        }
                     }
                 }
             }
@@ -1295,17 +1334,8 @@ module.exports = {
         }
     },
     routes: {
-        initial: 'p--start-now',
+        initial: 'p-applicant-declaration',
         states: {
-            'p--start-now': {
-                on: {
-                    ANSWER: [
-                        {
-                            target: 'p-applicant-declaration'
-                        }
-                    ]
-                }
-            },
             'p-applicant-declaration': {
                 on: {
                     ANSWER: [
@@ -1886,134 +1916,5 @@ module.exports = {
                 }
             }
         }
-    },
-    answers: {
-        'p--start-now': {},
-        'p-applicant-declaration': {},
-        'p-applicant-british-citizen-or-eu-national': {
-            'q-applicant-british-citizen-or-eu-national': {
-                value: 'true'
-            }
-        },
-        'p-applicant-are-you-18-or-over': {
-            'q-applicant-are-you-18-or-over': {
-                value: 'true'
-            }
-        },
-        'p-applicant-who-are-you-applying-for': {
-            'q-applicant-who-are-you-applying-for': {
-                value: 'myself'
-            }
-        },
-        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
-            'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
-                value: 'true'
-            }
-        },
-        'p--before-you-continue': {},
-        'p-applicant-select-the-option-that-applies-to-you': {
-            'q-applicant-option': {
-                value: 'opt1'
-            }
-        },
-        'p--was-the-crime-reported-to-police': {
-            'q-was-the-crime-reported-to-police': {
-                value: 'true'
-            }
-        },
-        'p--when-was-the-crime-reported-to-police': {
-            'q--when-was-the-crime-reported-to-police': {
-                value: {
-                    day: '',
-                    month: '',
-                    year: ''
-                }
-            }
-        },
-        'p--whats-the-crime-reference-number': {
-            'q-whats-the-crime-reference-number': {
-                value: 'hdfhgh'
-            }
-        },
-        'p-applicant-did-the-crime-happen-once-or-over-time': {
-            'q-applicant-did-the-crime-happen-once-or-over-time': {
-                value: 'once'
-            }
-        },
-        'p-applicant-when-did-the-crime-happen': {
-            'q-applicant-when-did-the-crime-happen': {
-                value: {
-                    day: '',
-                    month: '',
-                    year: ''
-                }
-            }
-        },
-        'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
-            'q-applicant-reason-for-delay-in-application': {
-                value: ['underage', 'med']
-            },
-            'q-applicant-explain-delay-reasons': {
-                value: 'hdfh'
-            }
-        },
-        'p-applicant-where-did-the-crime-happen': {
-            'q-applicant-where-did-the-crime-happen': {
-                value: 'scotland'
-            }
-        },
-        'p-applicant-where-in-scotland-did-it-happen': {
-            'q-applicant-scottish-town-or-city': {
-                value: 'fdhdfg'
-            },
-            'q-applicant-scottish-location': {
-                value: 'dfhdfhg'
-            }
-        },
-        'p--which-police-scotland-division-is-investigating-the-crime': {
-            'q--which-scottish-police-force-is-investigating-the-crime': {
-                value: 'ayrshire'
-            }
-        } /* ,
-        'p-offender-do-you-know-the-name-of-the-offender': {
-            'q-offender-do-you-know-the-name-of-the-offender': {
-                value: 'false'
-            }
-        },
-        'p-applicant-have-you-applied-to-us-before': {
-            'q-applicant-have-you-applied-to-us-before': {
-                value: 'No'
-            }
-        },
-        'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
-            'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
-                value: 'false'
-            },
-            todo: {
-                value: 'dfhdfhg'
-            }
-        } */
-    },
-    progress: [
-        'p--start-now',
-        'p-applicant-declaration',
-        'p-applicant-british-citizen-or-eu-national',
-        'p-applicant-are-you-18-or-over',
-        'p-applicant-who-are-you-applying-for',
-        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
-        'p--before-you-continue',
-        'p-applicant-select-the-option-that-applies-to-you',
-        'p--was-the-crime-reported-to-police',
-        'p--when-was-the-crime-reported-to-police',
-        'p--whats-the-crime-reference-number',
-        'p-applicant-did-the-crime-happen-once-or-over-time',
-        'p-applicant-when-did-the-crime-happen',
-        'p-applicant-select-reasons-for-the-delay-in-making-your-application',
-        'p-applicant-where-did-the-crime-happen',
-        'p-applicant-where-in-scotland-did-it-happen',
-        'p--which-police-scotland-division-is-investigating-the-crime' /* ,
-        'p-offender-do-you-know-the-name-of-the-offender',
-        'p-applicant-have-you-applied-to-us-before',
-        'p-applicant-have-you-applied-for-or-received-any-other-compensation' */
-    ]
+    }
 };
