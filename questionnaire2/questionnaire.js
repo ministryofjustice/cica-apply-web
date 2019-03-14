@@ -153,7 +153,7 @@ module.exports = {
                 'q--when-was-the-crime-reported-to-police': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-12T17:11:41.732Z',
+                    formatMaximum: '2019-03-13T16:12:12.194Z',
                     title: 'When was the crime reported to the police?',
                     errorMessages: {
                         required: 'Enter the date the crime was reported to the police',
@@ -211,7 +211,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-happen': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-12T17:11:41.733Z',
+                    formatMaximum: '2019-03-13T16:12:12.211Z',
                     title: 'When did the crime happen?',
                     errorMessages: {
                         required:
@@ -234,7 +234,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-start': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-12T17:11:41.734Z',
+                    formatMaximum: '2019-03-13T16:12:12.216Z',
                     title: 'When did it start?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -256,7 +256,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-stop': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-12T17:11:41.734Z',
+                    formatMaximum: '2019-03-13T16:12:12.220Z',
                     title: 'When did it stop?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -339,7 +339,7 @@ module.exports = {
                         }
                     ],
                     errorMessages: {
-                        required: 'please select an option'
+                        required: 'Select England, Scotland, Wales or Somewhere else'
                     }
                 }
             }
@@ -983,7 +983,10 @@ module.exports = {
             properties: {
                 'q-applicant-have-you-applied-to-us-before': {
                     title: 'Have you applied to us before?',
-                    type: 'boolean'
+                    type: 'boolean',
+                    errorMessages: {
+                        required: 'Select yes if you have applied to us before'
+                    }
                 },
                 'q-enter-your-previous-reference-number': {
                     type: 'string',
@@ -1032,11 +1035,19 @@ module.exports = {
                     title: 'Have you applied for or received any other form of compensation?',
                     description:
                         'For example, if you claimed insurance, sought civil damages, or a court decided you should get compensation.',
-                    type: 'boolean'
+                    type: 'boolean',
+                    errorMessages: {
+                        required:
+                            'Select yes if you have applied for or received another form of compensation'
+                    }
                 },
                 'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
                     type: 'string',
-                    title: 'Briefly explain why not.'
+                    title: 'Briefly explain why not.',
+                    errorMessages: {
+                        required:
+                            'Select yes if you have applied for or received another form of compensation'
+                    }
                 }
             },
             required: ['q-applicant-have-you-applied-for-or-received-any-other-compensation'],
@@ -1084,7 +1095,11 @@ module.exports = {
             properties: {
                 'q-applicant-who-did-you-apply-to': {
                     type: 'string',
-                    title: 'Who have you applied to or received compensation from?'
+                    title: 'Who have you applied to or received compensation from?',
+                    errorMessages: {
+                        required:
+                            'Enter the source of the other compensation, for example, the name of a person, company or court'
+                    }
                 },
                 'q-applicant-has-a-decision-been-made': {
                     title: 'Have they made a decision?',
@@ -1092,7 +1107,10 @@ module.exports = {
                 },
                 'q-how-much-was-award': {
                     type: 'string',
-                    title: 'How much was the award? '
+                    title: 'How much was the award?',
+                    errorMessages: {
+                        required: 'Enter the amount of compensation you got'
+                    }
                 },
                 'q-when-will-you-find-out': {
                     type: 'string',
@@ -1230,7 +1248,8 @@ module.exports = {
                     },
                     title: 'Enter your date of birth',
                     errorMessages: {
-                        required: 'Enter your date of birth'
+                        required: 'Enter your date of birth',
+                        format: 'Enter a real date of birth'
                     }
                 }
             }
@@ -1926,5 +1945,66 @@ module.exports = {
                 }
             }
         }
-    }
+    },
+    answer: {
+        'p-applicant-have-you-applied-to-us-before': {
+            'q-applicant-have-you-applied-to-us-before': {
+                value: false
+            }
+        },
+        'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
+            'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
+                value: false
+            },
+            'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
+                value: 'vccn'
+            }
+        },
+        'p-applicant-enter-your-name': {
+            'q-applicant-name-title': {
+                value: 'cvn'
+            },
+            'q-applicant-name-firstname': {
+                value: 'cbn'
+            },
+            'q-applicant-name-lastname': {
+                value: 'cvn'
+            }
+        },
+        'p-applicant-have-you-been-known-by-any-other-names': {
+            'q-applicant-have-you-been-known-by-any-other-names': {
+                value: true
+            }
+        },
+        'p-applicant-what-other-names-have-you-used': {
+            'q-applicant-what-other-names-have-you-used': {
+                value: 'cnb'
+            }
+        }
+    },
+    progress: [
+        'p-applicant-declaration',
+        'p-applicant-british-citizen-or-eu-national',
+        'p-applicant-are-you-18-or-over',
+        'p-applicant-who-are-you-applying-for',
+        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+        'p--before-you-continue',
+        'p-applicant-select-the-option-that-applies-to-you',
+        'p--was-the-crime-reported-to-police',
+        'p--when-was-the-crime-reported-to-police',
+        'p--whats-the-crime-reference-number',
+        'p-applicant-did-the-crime-happen-once-or-over-time',
+        'p-applicant-when-did-the-crime-happen',
+        'p-applicant-select-reasons-for-the-delay-in-making-your-application',
+        'p-applicant-where-did-the-crime-happen',
+        'p-applicant-where-in-scotland-did-it-happen',
+        'p--which-police-scotland-division-is-investigating-the-crime',
+        'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
+        'p-offender-do-you-know-the-name-of-the-offender',
+        'p-applicant-have-you-applied-to-us-before',
+        'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+        'p-applicant-enter-your-name',
+        'p-applicant-have-you-been-known-by-any-other-names',
+        'p-applicant-what-other-names-have-you-used'
+    ]
 };
