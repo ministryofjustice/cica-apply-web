@@ -1947,6 +1947,7 @@ module.exports = {
         }
     },
     answer: {
+        /*
         'p-applicant-have-you-applied-to-us-before': {
             'q-applicant-have-you-applied-to-us-before': {
                 value: false
@@ -1980,10 +1981,10 @@ module.exports = {
             'q-applicant-what-other-names-have-you-used': {
                 value: 'cnb'
             }
-        }
+        } */
     },
     progress: [
-        'p-applicant-declaration',
+        /* 'p-applicant-declaration',
         'p-applicant-british-citizen-or-eu-national',
         'p-applicant-are-you-18-or-over',
         'p-applicant-who-are-you-applying-for',
@@ -2005,6 +2006,6 @@ module.exports = {
         'p-applicant-have-you-applied-for-or-received-any-other-compensation',
         'p-applicant-enter-your-name',
         'p-applicant-have-you-been-known-by-any-other-names',
-        'p-applicant-what-other-names-have-you-used'
+        'p-applicant-what-other-names-have-you-used' */
     ]
 };

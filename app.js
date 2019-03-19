@@ -47,6 +47,6 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/all.js'))
 );
 app.use('/', indexRouter);
-app.use('/q', questionnaireRouter);
+app.use('/apply', questionnaireRouter);
 
 module.exports = app;
