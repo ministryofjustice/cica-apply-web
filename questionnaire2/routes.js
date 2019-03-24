@@ -42,7 +42,7 @@ function getAnswerValues(answers) {
     }, {});
 }
 
-function getPageHTML(transformation) {
+function getPageHTML(transformation, sectionId) {
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
@@ -50,7 +50,7 @@ function getPageHTML(transformation) {
                 {% from "back-link/macro.njk" import govukBackLink %}
                 {{ govukBackLink({
                     text: "Back",
-                    href: "/apply/previous"
+                    href: "/apply/previous/${sectionId}"
                 }) }}
                 ${transformation}
             {% endblock %}
@@ -58,7 +58,9 @@ function getPageHTML(transformation) {
     );
 }
 
-function logProgress(questionnaire) {
+function logProgress(req, questionnaire) {
+    console.log('\n\n\n-------------------');
+    console.log(req.method, ': ', req.url);
     console.log(
         'PROGRESS: ',
         JSON.stringify(
@@ -70,6 +72,7 @@ function logProgress(questionnaire) {
             4
         )
     );
+    console.log('-------------------\n\n\n');
 }
 
 function processRequest(reqBody) {
@@ -110,16 +113,16 @@ function removeSectionIdPrefix(sectionId) {
     return sectionId.replace(/p-{1,2}/, '');
 }
 
-function prefixSectionId(sectionId, questionnaireRouter) {
+function prefixSectionId(sectionId, questionnaire) {
     let prefixedSectionId = `p-${sectionId}`;
 
-    if (prefixedSectionId in questionnaireRouter.questionnaire.sections) {
+    if (prefixedSectionId in questionnaire.sections) {
         return prefixedSectionId;
     }
 
     prefixedSectionId = `p--${sectionId}`;
 
-    if (prefixedSectionId in questionnaireRouter.questionnaire.sections) {
+    if (prefixedSectionId in questionnaire.sections) {
         return prefixedSectionId;
     }
 
@@ -132,32 +135,34 @@ function validSectionIdFormat(sectionId) {
     return rxValidSectionId.test(sectionId);
 }
 
-function validSectionId(sectionId, questionnaireRouter) {
+function validSectionId(sectionId, questionnaire) {
     if (validSectionIdFormat(sectionId)) {
-        const prefixedSectionId = prefixSectionId(sectionId, questionnaireRouter);
-
-        if (
-            prefixedSectionId &&
-            (questionnaireRouter.current() === prefixedSectionId ||
-                questionnaireRouter.questionnaire.progress.includes(prefixedSectionId))
-        ) {
-            return prefixedSectionId;
-        }
+        return prefixSectionId(sectionId, questionnaire);
     }
 
     return false;
 }
 
 router.route('/').get((req, res) => {
-    const section = removeSectionIdPrefix(qRouter.questionnaire.routes.initial);
+    const section = removeSectionIdPrefix(qRouter.current().context.routes.initial);
 
     res.redirect(`${req.baseUrl}/${section}`);
 });
 
-router.get('/previous', (req, res) => {
-    const prev = `${req.baseUrl}/${removeSectionIdPrefix(qRouter.previous())}`;
+router.get('/previous/:section', (req, res) => {
 
-    console.log('~~~~~~~: ', prev);
+    const {section} = req.params;
+    const questionnaire = qRouter.current().context;
+    const sectionId = validSectionId(section, questionnaire);
+
+    try {
+        qRouter.current(sectionId);
+    } catch (err) {
+        console.error(err);
+        return res.status(404).render('404.njk');
+    }
+
+    const prev = `${req.baseUrl}/${removeSectionIdPrefix(qRouter.previous().id)}`;
 
     res.redirect(prev);
 });
@@ -166,17 +171,20 @@ router
     .route('/:section')
     .get((req, res) => {
         const {section} = req.params;
-        const sectionId = validSectionId(section, qRouter);
+        const questionnaire = qRouter.current().context;
+        const sectionId = validSectionId(section, questionnaire);
 
-        console.log('############## get: ', {
-            progress: q.progress,
-            current: qRouter.current(),
-            url: req.params.section,
-            sectionId
-        });
-        if (sectionId) {
-            const schema = q.sections[sectionId];
-            const answers = getAnswerValues(q.answers[sectionId]);
+        // try {
+        //     qRouter.current(sectionId);
+        //     q
+        // } catch (err) {
+        //     console.error(err);
+        //     return res.status(404).render('404.njk');
+        // }
+
+        if (sectionId && qRouter.isSectionAvailable(sectionId)) {
+            const schema = questionnaire.sections[sectionId];
+            const answers = getAnswerValues(questionnaire.answers[sectionId]);
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
@@ -184,67 +192,61 @@ router
                 data: answers
             });
 
-            const html = getPageHTML(transformation);
+            const html = getPageHTML(transformation, removeSectionIdPrefix(sectionId));
 
             res.send(html);
         } else {
-            res.status(404).render('404.njk');
+            return res.status(404).render('404.njk');
         }
     })
     .post((req, res) => {
         const {body} = req;
         const {section} = req.params;
-        const sectionId = validSectionId(section, qRouter);
+        const currentSection = qRouter.current();
+        const questionnaire = currentSection.context;
+        const sectionId = validSectionId(section, questionnaire);
 
-        console.log('############## post: ', {
-            progress: q.progress,
-            current: qRouter.current(),
-            url: req.params.section
-        });
-
-        if (sectionId) {
-            processRequest(body);
-
-            const currentSectionId = qRouter.current();
-            const currentSchema = q.sections[currentSectionId];
-            // Ajv mutates the data it's testing when using the coerce option
-            const errors = qValidator.validationResponseAgainstSchema(currentSchema, body);
-
-            if (!errors.valid) {
-                const schema = q.sections[currentSectionId];
-                const transformation = qTransformer.transform({
-                    schemaKey: currentSectionId,
-                    schema,
-                    uiSchema,
-                    data: body,
-                    schemaErrors: errors
-                });
-                const html = getPageHTML(transformation);
-
-                logProgress(q);
-
-                res.send(html);
-            } else {
-                try {
-                    const nextSection = removeSectionIdPrefix(
-                        qRouter.next('ANSWER', body, sectionId)
-                    );
-
-                    console.log('@@@@@: ', {
-                        progress: q.progress,
-                        current: qRouter.current(),
-                        url: req.params.section
-                    });
-
-                    res.redirect(`${req.baseUrl}/${nextSection}`);
-                } catch (err) {
-                    console.error(err);
-                    logProgress(q);
-                }
-            }
-        } else {
-            res.status(404).render('404.njk');
+        try {
+            qRouter.current(sectionId);
+        } catch (err) {
+            console.error(err);
+            return res.status(404).render('404.njk');
         }
+
+        processRequest(body);
+
+
+        const currentSchema = questionnaire.sections[sectionId];
+        // Ajv mutates the data it's testing when using the coerce option
+        const errors = qValidator.validationResponseAgainstSchema(currentSchema, body);
+
+        if (!errors.valid) {
+            const schema = questionnaire.sections[sectionId];
+            const transformation = qTransformer.transform({
+                schemaKey: sectionId,
+                schema,
+                uiSchema,
+                data: body,
+                schemaErrors: errors
+            });
+            const html = getPageHTML(transformation, removeSectionIdPrefix(sectionId));
+
+            // logProgress(questionnaire);
+
+            res.send(html);
+        } else {
+            try {
+                const nextSection = removeSectionIdPrefix(
+                    qRouter.next('ANSWER', body, sectionId).id
+                );
+
+                res.redirect(`${req.baseUrl}/${nextSection}`);
+            } catch (err) {
+                console.error(err);
+                // logProgress(questionnaire);
+            }
+        }
+
     });
 
 module.exports = router;
