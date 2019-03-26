@@ -153,7 +153,7 @@ module.exports = {
                 'q--when-was-the-crime-reported-to-police': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.194Z',
+                    formatMaximum: '2019-03-26T12:07:26.566Z',
                     title: 'When was the crime reported to the police?',
                     errorMessages: {
                         required: 'Enter the date the crime was reported to the police',
@@ -211,7 +211,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-happen': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.211Z',
+                    formatMaximum: '2019-03-26T12:07:26.578Z',
                     title: 'When did the crime happen?',
                     errorMessages: {
                         required:
@@ -234,7 +234,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-start': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.216Z',
+                    formatMaximum: '2019-03-26T12:07:26.581Z',
                     title: 'When did it start?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -256,7 +256,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-stop': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.220Z',
+                    formatMaximum: '2019-03-26T12:07:26.585Z',
                     title: 'When did it stop?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -1248,8 +1248,7 @@ module.exports = {
                     },
                     title: 'Enter your date of birth',
                     errorMessages: {
-                        required: 'Enter your date of birth',
-                        format: 'Enter a real date of birth'
+                        required: 'Enter your date of birth'
                     }
                 }
             }
