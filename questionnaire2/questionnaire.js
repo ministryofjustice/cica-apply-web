@@ -153,7 +153,7 @@ module.exports = {
                 'q--when-was-the-crime-reported-to-police': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.194Z',
+                    formatMaximum: '2019-03-26T12:07:26.566Z',
                     title: 'When was the crime reported to the police?',
                     errorMessages: {
                         required: 'Enter the date the crime was reported to the police',
@@ -211,7 +211,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-happen': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.211Z',
+                    formatMaximum: '2019-03-26T12:07:26.578Z',
                     title: 'When did the crime happen?',
                     errorMessages: {
                         required:
@@ -234,7 +234,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-start': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.216Z',
+                    formatMaximum: '2019-03-26T12:07:26.581Z',
                     title: 'When did it start?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -256,7 +256,7 @@ module.exports = {
                 'q-applicant-when-did-the-crime-stop': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-13T16:12:12.220Z',
+                    formatMaximum: '2019-03-26T12:07:26.585Z',
                     title: 'When did it stop?',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
@@ -1248,8 +1248,7 @@ module.exports = {
                     },
                     title: 'Enter your date of birth',
                     errorMessages: {
-                        required: 'Enter your date of birth',
-                        format: 'Enter a real date of birth'
+                        required: 'Enter your date of birth'
                     }
                 }
             }
@@ -1381,7 +1380,7 @@ module.exports = {
                             target: 'p-applicant-redirect-to-our-other-application',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-british-citizen-or-eu-national.q-applicant-british-citizen-or-eu-national.value',
+                                '$.answers.p-applicant-british-citizen-or-eu-national.q-applicant-british-citizen-or-eu-national',
                                 false
                             ]
                         },
@@ -1389,7 +1388,7 @@ module.exports = {
                             target: 'p-applicant-are-you-18-or-over',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-british-citizen-or-eu-national.q-applicant-british-citizen-or-eu-national.value',
+                                '$.answers.p-applicant-british-citizen-or-eu-national.q-applicant-british-citizen-or-eu-national',
                                 true
                             ]
                         }
@@ -1403,7 +1402,7 @@ module.exports = {
                             target: 'p-applicant-redirect-to-our-other-application',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-are-you-18-or-over.q-applicant-are-you-18-or-over.value',
+                                '$.answers.p-applicant-are-you-18-or-over.q-applicant-are-you-18-or-over',
                                 false
                             ]
                         },
@@ -1411,7 +1410,7 @@ module.exports = {
                             target: 'p-applicant-who-are-you-applying-for',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-are-you-18-or-over.q-applicant-are-you-18-or-over.value',
+                                '$.answers.p-applicant-are-you-18-or-over.q-applicant-are-you-18-or-over',
                                 true
                             ]
                         }
@@ -1425,7 +1424,7 @@ module.exports = {
                             target: 'p-applicant-redirect-to-our-other-application',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-who-are-you-applying-for.q-applicant-who-are-you-applying-for.value',
+                                '$.answers.p-applicant-who-are-you-applying-for.q-applicant-who-are-you-applying-for',
                                 'someone-else'
                             ]
                         },
@@ -1433,7 +1432,7 @@ module.exports = {
                             target: 'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-who-are-you-applying-for.q-applicant-who-are-you-applying-for.value',
+                                '$.answers.p-applicant-who-are-you-applying-for.q-applicant-who-are-you-applying-for',
                                 'myself'
                             ]
                         }
@@ -1447,7 +1446,7 @@ module.exports = {
                             target: 'p-applicant-redirect-to-our-other-application',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-were-you-a-victim-of-sexual-assault-or-abuse.q-applicant-were-you-a-victim-of-sexual-assault-or-abuse.value',
+                                '$.answers.p-applicant-were-you-a-victim-of-sexual-assault-or-abuse.q-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
                                 false
                             ]
                         },
@@ -1455,7 +1454,7 @@ module.exports = {
                             target: 'p--before-you-continue',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-were-you-a-victim-of-sexual-assault-or-abuse.q-applicant-were-you-a-victim-of-sexual-assault-or-abuse.value',
+                                '$.answers.p-applicant-were-you-a-victim-of-sexual-assault-or-abuse.q-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
                                 true
                             ]
                         }
@@ -1478,7 +1477,7 @@ module.exports = {
                             target: 'p-applicant-redirect-to-our-other-application',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option.value',
+                                '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option',
                                 'opt2'
                             ]
                         },
@@ -1486,7 +1485,7 @@ module.exports = {
                             target: 'p--was-the-crime-reported-to-police',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option.value',
+                                '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option',
                                 'opt1'
                             ]
                         }
@@ -1500,7 +1499,7 @@ module.exports = {
                             target: 'p-applicant-you-cannot-get-compensation',
                             cond: [
                                 '==',
-                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police.value',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
                                 false
                             ]
                         },
@@ -1508,7 +1507,7 @@ module.exports = {
                             target: 'p--when-was-the-crime-reported-to-police',
                             cond: [
                                 '==',
-                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police.value',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
                                 true
                             ]
                         }
@@ -1540,7 +1539,7 @@ module.exports = {
                             target: 'p-applicant-when-did-the-crime-happen',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-did-the-crime-happen-once-or-over-time.q-applicant-did-the-crime-happen-once-or-over-time.value',
+                                '$.answers.p-applicant-did-the-crime-happen-once-or-over-time.q-applicant-did-the-crime-happen-once-or-over-time',
                                 'once'
                             ]
                         },
@@ -1548,7 +1547,7 @@ module.exports = {
                             target: 'p-applicant-when-did-the-crime-start',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-did-the-crime-happen-once-or-over-time.q-applicant-did-the-crime-happen-once-or-over-time.value',
+                                '$.answers.p-applicant-did-the-crime-happen-once-or-over-time.q-applicant-did-the-crime-happen-once-or-over-time',
                                 'over-a-period-of-time'
                             ]
                         }
@@ -1563,7 +1562,7 @@ module.exports = {
                                 'p-applicant-select-reasons-for-the-delay-in-making-your-application',
                             cond: [
                                 'dateExceedsTwoYearsFromNow',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen.value'
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -1589,7 +1588,7 @@ module.exports = {
                                 'p-applicant-select-reasons-for-the-delay-in-making-your-application',
                             cond: [
                                 'dateExceedsTwoYearsFromNow',
-                                '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop.value'
+                                '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
                             ]
                         },
                         {
@@ -1614,7 +1613,7 @@ module.exports = {
                             target: 'p-applicant-where-in-england-did-it-happen',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen.value',
+                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen',
                                 'england'
                             ]
                         },
@@ -1622,7 +1621,7 @@ module.exports = {
                             target: 'p-applicant-where-in-scotland-did-it-happen',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen.value',
+                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen',
                                 'scotland'
                             ]
                         },
@@ -1630,7 +1629,7 @@ module.exports = {
                             target: 'p-applicant-where-in-wales-did-it-happen',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen.value',
+                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen',
                                 'wales'
                             ]
                         },
@@ -1638,7 +1637,7 @@ module.exports = {
                             target: 'p--you-need-to-contact-us',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen.value',
+                                '$.answers.p-applicant-where-did-the-crime-happen.q-applicant-where-did-the-crime-happen',
                                 'somewhere-else'
                             ]
                         }
@@ -1689,8 +1688,8 @@ module.exports = {
                                 'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
-                                '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police.value',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen.value'
+                                '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -1707,8 +1706,8 @@ module.exports = {
                                 'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
-                                '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police.value',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen.value'
+                                '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -1725,8 +1724,8 @@ module.exports = {
                                 'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
-                                '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police.value',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen.value'
+                                '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -1751,7 +1750,7 @@ module.exports = {
                             target: 'p-applicant-have-you-applied-to-us-before',
                             cond: [
                                 '==',
-                                '$.answers.p-offender-do-you-know-the-name-of-the-offender.q-offender-do-you-know-the-name-of-the-offender.value',
+                                '$.answers.p-offender-do-you-know-the-name-of-the-offender.q-offender-do-you-know-the-name-of-the-offender',
                                 false
                             ]
                         },
@@ -1759,7 +1758,7 @@ module.exports = {
                             target: 'p-offender-enter-offenders-name',
                             cond: [
                                 '==',
-                                '$.answers.p-offender-do-you-know-the-name-of-the-offender.q-offender-do-you-know-the-name-of-the-offender.value',
+                                '$.answers.p-offender-do-you-know-the-name-of-the-offender.q-offender-do-you-know-the-name-of-the-offender',
                                 true
                             ]
                         }
@@ -1801,7 +1800,7 @@ module.exports = {
                             target: 'p-applicant-other-compensation-details',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-have-you-applied-for-or-received-any-other-compensation.q-applicant-have-you-applied-for-or-received-any-other-compensation.value',
+                                '$.answers.p-applicant-have-you-applied-for-or-received-any-other-compensation.q-applicant-have-you-applied-for-or-received-any-other-compensation',
                                 true
                             ]
                         },
@@ -1809,7 +1808,7 @@ module.exports = {
                             target: 'p-applicant-enter-your-name',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-have-you-applied-for-or-received-any-other-compensation.q-applicant-have-you-applied-for-or-received-any-other-compensation.value',
+                                '$.answers.p-applicant-have-you-applied-for-or-received-any-other-compensation.q-applicant-have-you-applied-for-or-received-any-other-compensation',
                                 false
                             ]
                         }
@@ -1841,7 +1840,7 @@ module.exports = {
                             target: 'p-applicant-enter-your-date-of-birth',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-have-you-been-known-by-any-other-names.q-applicant-have-you-been-known-by-any-other-names.value',
+                                '$.answers.p-applicant-have-you-been-known-by-any-other-names.q-applicant-have-you-been-known-by-any-other-names',
                                 false
                             ]
                         },
@@ -1849,7 +1848,7 @@ module.exports = {
                             target: 'p-applicant-what-other-names-have-you-used',
                             cond: [
                                 '==',
-                                '$.answers.p-applicant-have-you-been-known-by-any-other-names.q-applicant-have-you-been-known-by-any-other-names.value',
+                                '$.answers.p-applicant-have-you-been-known-by-any-other-names.q-applicant-have-you-been-known-by-any-other-names',
                                 true
                             ]
                         }
@@ -1872,7 +1871,7 @@ module.exports = {
                             target: 'p-applicant-redirect-to-our-other-application',
                             cond: [
                                 'dateLessThanEighteenYearsAgo',
-                                '$.answers.p-applicant-enter-your-date-of-birth.q-applicant-enter-your-date-of-birth.value'
+                                '$.answers.p-applicant-enter-your-date-of-birth.q-applicant-enter-your-date-of-birth'
                             ]
                         },
                         {
@@ -1945,67 +1944,5 @@ module.exports = {
                 }
             }
         }
-    },
-    answer: {
-        /*
-        'p-applicant-have-you-applied-to-us-before': {
-            'q-applicant-have-you-applied-to-us-before': {
-                value: false
-            }
-        },
-        'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
-            'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
-                value: false
-            },
-            'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
-                value: 'vccn'
-            }
-        },
-        'p-applicant-enter-your-name': {
-            'q-applicant-name-title': {
-                value: 'cvn'
-            },
-            'q-applicant-name-firstname': {
-                value: 'cbn'
-            },
-            'q-applicant-name-lastname': {
-                value: 'cvn'
-            }
-        },
-        'p-applicant-have-you-been-known-by-any-other-names': {
-            'q-applicant-have-you-been-known-by-any-other-names': {
-                value: true
-            }
-        },
-        'p-applicant-what-other-names-have-you-used': {
-            'q-applicant-what-other-names-have-you-used': {
-                value: 'cnb'
-            }
-        } */
-    },
-    progress: [
-        /* 'p-applicant-declaration',
-        'p-applicant-british-citizen-or-eu-national',
-        'p-applicant-are-you-18-or-over',
-        'p-applicant-who-are-you-applying-for',
-        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
-        'p--before-you-continue',
-        'p-applicant-select-the-option-that-applies-to-you',
-        'p--was-the-crime-reported-to-police',
-        'p--when-was-the-crime-reported-to-police',
-        'p--whats-the-crime-reference-number',
-        'p-applicant-did-the-crime-happen-once-or-over-time',
-        'p-applicant-when-did-the-crime-happen',
-        'p-applicant-select-reasons-for-the-delay-in-making-your-application',
-        'p-applicant-where-did-the-crime-happen',
-        'p-applicant-where-in-scotland-did-it-happen',
-        'p--which-police-scotland-division-is-investigating-the-crime',
-        'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
-        'p-offender-do-you-know-the-name-of-the-offender',
-        'p-applicant-have-you-applied-to-us-before',
-        'p-applicant-have-you-applied-for-or-received-any-other-compensation',
-        'p-applicant-enter-your-name',
-        'p-applicant-have-you-been-known-by-any-other-names',
-        'p-applicant-what-other-names-have-you-used' */
-    ]
+    }
 };
