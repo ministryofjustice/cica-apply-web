@@ -3,7 +3,8 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "nodemon -e .js,.json,.njk ./bin/www",
+        "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .js,.json,.njk ./bin/www",
+        "start": "node ./bin/www",
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css"
     },
     "dependencies": {
@@ -15,37 +16,9 @@
         "moment": "^2.24.0",
         "morgan": "~1.9.0",
         "nunjucks": "^3.1.7",
-        "q-router": "git+https://github.com/CriminalInjuriesCompensationAuthority/q-router.git#v2.0.0",
-        "q-transformer": "file:../q-transformer",
+        "q-router": "git+https://github.com/CriminalInjuriesCompensationAuthority/q-router.git",
+        "q-transformer": "git+https://github.com/CriminalInjuriesCompensationAuthority/q-transformer.git",
         "q-validator": "git+https://github.com/CriminalInjuriesCompensationAuthority/q-validator.git"
-    },
-    "_m0": {
-        "devDependencies": {
-            "eslint": "^5.8.0",
-            "eslint-config-airbnb-base": "^13.1.0",
-            "eslint-config-prettier": "^3.1.0",
-            "eslint-plugin-import": "^2.14.0",
-            "eslint-plugin-jest": "^22.1.3",
-            "eslint-plugin-prettier": "^3.0.0",
-            "fs-extra": "^7.0.0",
-            "husky": "^1.3.1",
-            "jest": "^23.6.0",
-            "lint-staged": "^8.0.4",
-            "prettier": "^1.14.3"
-        },
-        "blocks": [
-            ".eslintignore",
-            ".eslintrc.js",
-            ".huskyrc.js",
-            ".lintstagedrc.js",
-            ".prettierrc.js",
-            "jest.config.js",
-            ".gitignore"
-        ],
-        "files": [
-            ".editorconfig",
-            "stuff/README"
-        ]
     },
     "devDependencies": {
         "base-config": "git+https://github.com/webstacker/base-config.git",
@@ -63,5 +36,33 @@
         "nodemon": "^1.18.9",
         "prettier": "^1.14.3"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "_m0": {
+        "devDependencies": {
+            "eslint": "^5.8.0",
+            "eslint-config-airbnb-base": "^13.1.0",
+            "eslint-config-prettier": "^3.1.0",
+            "eslint-plugin-import": "^2.14.0",
+            "eslint-plugin-jest": "^22.1.3",
+            "eslint-plugin-prettier": "^3.0.0",
+            "fs-extra": "^7.0.0",
+            "husky": "^1.3.1",
+            "jest": "^23.6.0",
+            "lint-staged": "^8.0.4",
+            "prettier": "^1.14.3"
+        },
+        "blocks": [
+            ".eslintignore",
+            ".eslintrc.js",
+            ".prettierrc.js",
+            ".lintstagedrc.js",
+            ".huskyrc.js",
+            "jest.config.js",
+            ".gitignore"
+        ],
+        "files": [
+            ".editorconfig",
+            "stuff/README"
+        ]
+    }
 }

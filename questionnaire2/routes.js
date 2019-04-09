@@ -51,7 +51,7 @@ function logProgress(req, questionnaire) {
         'PROGRESS: ',
         JSON.stringify(
             {
-                answer: questionnaire.answers,
+                answers: questionnaire.answers,
                 progress: questionnaire.progress
             },
             null,
@@ -204,6 +204,8 @@ router
                         nextSectionId = removeSectionIdPrefix(nextSection.id);
                     }
                 }
+
+                logProgress(req, questionnaire);
 
                 res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
