@@ -33,8 +33,16 @@
     }) }}
 {% endblock %}
 
+{% block beforeContent %}
+{% endblock %}
+
 {% block content %}
-  <h1 class="govuk-heading-xl">Default page template 123</h1>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% block innerContent %}
+            {% endblock %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block bodyEnd %}

@@ -6,6 +6,7 @@ const createQTransformer = require('q-transformer');
 const createQValidator = require('q-validator');
 const q = require('./questionnaire');
 const uiSchema = require('./questionnaireUISchema');
+const answerHelper = require('./helpers/answerHelper');
 
 const router = express.Router();
 const qRouter = createQRouter(q);
@@ -24,11 +25,12 @@ nunjucks.configure(
     }
 );
 
-function getPageHTML(transformation, sectionId) {
+function getPageHTML(transformation, sectionId, answers) {
+    const answerObject = answerHelper.summaryFormatter(answers);
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
-            {% block content %}
+            {% block innerContent %}
                 {% from "back-link/macro.njk" import govukBackLink %}
                 {{ govukBackLink({
                     text: "Back",
@@ -36,7 +38,8 @@ function getPageHTML(transformation, sectionId) {
                 }) }}
                 ${transformation}
             {% endblock %}
-        `
+        `,
+        {answers: answerObject}
     );
 }
 
@@ -147,15 +150,14 @@ router
             const sectionId = section.id;
             const questionnaire = section.context;
             const schema = questionnaire.sections[sectionId];
-            const answers = questionnaire.answers[sectionId];
+            const {answers} = questionnaire;
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
                 uiSchema,
                 data: answers
             });
-
-            const html = getPageHTML(transformation, removeSectionIdPrefix(sectionId));
+            const html = getPageHTML(transformation, removeSectionIdPrefix(sectionId), answers);
 
             res.send(html);
         } else {

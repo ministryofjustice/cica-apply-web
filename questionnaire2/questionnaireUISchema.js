@@ -18,6 +18,13 @@ module.exports = {
                             }
                         ]
                     }
+                },
+                'q-enter-your-previous-reference-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
                 }
             }
         }
@@ -42,6 +49,13 @@ module.exports = {
                                 ]
                             }
                         ]
+                    }
+                },
+                'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
                     }
                 }
             }
@@ -75,8 +89,77 @@ module.exports = {
                             }
                         ]
                     }
+                },
+                'q-how-much-was-award': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-10'
+                        }
+                    }
+                },
+                'q-when-will-you-find-out': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
                 }
             }
+        }
+    },
+    'p-applicant-when-did-the-crime-start': {
+        options: {
+            properties: {
+                'q-applicant-when-did-the-crime-start': {
+                    options: {
+                        dateParts: {
+                            day: false,
+                            month: true,
+                            year: true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-when-did-the-crime-stop': {
+        options: {
+            properties: {
+                'q-applicant-when-did-the-crime-stop': {
+                    options: {
+                        dateParts: {
+                            day: false,
+                            month: true,
+                            year: true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-enter-your-name': {
+        options: {
+            properties: {
+                'q-applicant-name-title': {
+                    transformer: 'govukSelect'
+                }
+            }
+        }
+    },
+    'p-applicant-enter-your-date-of-birth': {
+        options: {
+            properties: {
+                'q-applicant-enter-your-date-of-birth': {
+                    options: {
+                        autoComplete: true
+                    }
+                }
+            }
+        }
+    },
+    'p--check-your-answers': {
+        options: {
+            isSummary: true
         }
     }
 };

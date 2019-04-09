@@ -9,7 +9,7 @@ module.exports = {
             properties: {
                 'applicant-declaration': {
                     description:
-                        '\n                <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>\n                {{ govukWarningText({\n                    text: "You could be prosecuted or get less compensation if you give false or misleading information.",\n                    iconFallbackText: "Warning"\n                }) }}\n            '
+                        '\n                <p class="govuk-body">By continuing you confirm that the information you will give is true as far as you know.</p>\n                {{ govukWarningText({\n                    text: "If you deliberately give false or misleading information, you may get less compensation or be prosecuted.",\n                    iconFallbackText: "Warning"\n                }) }}\n            '
                 }
             }
         },
@@ -91,7 +91,7 @@ module.exports = {
             properties: {
                 'applicant-impact-on-you': {
                     description:
-                        '\n                <p class="govuk-body">On the next page we will ask you to select an option based on how the crime affected you.</p>\n                <p class="govuk-body">We appreciate that this may be difficult for you.</p>\n                <h2 class="govuk-heading-m">If you need help or support</h2>\n                <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                <p class="govuk-body">For practical or emotional support near you <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>\n                <p class="govuk-body">There is a different website if you live in <a href="https://www.mygov.scot/victim-witness-support/">Scotland</a>.</p>\n            '
+                        '\n                <p class="govuk-body">On the next page we will ask you to select an option based on how the crime affected you.</p>\n                <p class="govuk-body">We appreciate that this may be difficult for you.</p>\n                <h2 class="govuk-heading-m">If you need help or support</h2>\n                <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                <p class="govuk-body">For practical or emotional support in England and Wales <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>\n                <p class="govuk-body">There is a different website if you live in <a href="https://www.mygov.scot/victim-witness-support/">Scotland</a>.</p>\n            '
                 }
             }
         },
@@ -112,15 +112,15 @@ module.exports = {
                     oneOf: [
                         {
                             title: 'Option 1: Sexual assault or abuse',
-                            const: 'opt1'
+                            const: 'option-1-sexual-assault-or-abuse'
                         },
                         {
                             title: 'Option 2: Sexual assault or abuse and other injuries or losses',
-                            const: 'opt2'
+                            const: 'option-2-sexual-assault-or-abuse-and-other-injuries-ro-losses'
                         }
                     ],
                     errorMessages: {
-                        required: 'Select your choice'
+                        required: 'Select either Option 1 or Option 2'
                     }
                 }
             }
@@ -153,8 +153,8 @@ module.exports = {
                 'q--when-was-the-crime-reported-to-police': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-26T12:07:26.566Z',
                     title: 'When was the crime reported to the police?',
+                    description: 'For example, 31 3 2018. You can enter an approximate date.',
                     errorMessages: {
                         required: 'Enter the date the crime was reported to the police',
                         format: 'The date the crime was reported to the police must be in the past'
@@ -171,6 +171,9 @@ module.exports = {
                 'q-whats-the-crime-reference-number': {
                     title: "What's the crime reference number?",
                     type: 'string',
+                    description:
+                        'This is the reference number the police gave the crime when it was reported.',
+                    maxLength: 30,
                     errorMessages: {
                         required: 'Enter the crime reference number'
                     }
@@ -211,8 +214,8 @@ module.exports = {
                 'q-applicant-when-did-the-crime-happen': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-26T12:07:26.578Z',
                     title: 'When did the crime happen?',
+                    description: 'For example, 31 3 2018. You can enter an approximate date.',
                     errorMessages: {
                         required:
                             'Enter the date the crime happened and include a day, month and year',
@@ -234,11 +237,11 @@ module.exports = {
                 'q-applicant-when-did-the-crime-start': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-26T12:07:26.581Z',
                     title: 'When did it start?',
+                    description: 'For example, 03 2018. You can enter an approximate date.',
                     errorMessages: {
                         required: 'Enter the date the crime started and include a month and year',
-                        format: 'The date the crime started must be in the past'
+                        format: 'Enter the date the crime started and include a month and year'
                     }
                 },
                 'i-dont-know-when-the-crime-started': {
@@ -256,11 +259,11 @@ module.exports = {
                 'q-applicant-when-did-the-crime-stop': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: '2019-03-26T12:07:26.585Z',
                     title: 'When did it stop?',
+                    description: 'For example, 31 3 2018. You can enter an approximate date.',
                     errorMessages: {
-                        required: 'Enter the date the crime started and include a month and year',
-                        format: 'The date the crime stopped must be in the past'
+                        required: 'Enter the date the crime stopped and include a month and year',
+                        format: 'Enter the date the crime stopped and include a month and year'
                     }
                 },
                 'i-dont-know-when-the-crime-stopped': {
@@ -272,7 +275,10 @@ module.exports = {
         'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
-            required: ['q-applicant-reason-for-delay-in-application'],
+            required: [
+                'q-applicant-reason-for-delay-in-application',
+                'q-applicant-explain-delay-reasons'
+            ],
             additionalProperties: false,
             properties: {
                 'q-applicant-reason-for-delay-in-application': {
@@ -301,13 +307,17 @@ module.exports = {
                         ]
                     },
                     errorMessages: {
-                        required: 'Select your choice'
+                        required:
+                            'Select if you were under 18, advised to wait, medical reasons or other reasons'
                     }
                 },
                 'q-applicant-explain-delay-reasons': {
                     title: 'Briefly explain these reasons',
                     type: 'string',
-                    maxLength: 500
+                    maxLength: 500,
+                    errorMessages: {
+                        required: 'Explain the reasons for the delay in making your application'
+                    }
                 }
             }
         },
@@ -354,6 +364,7 @@ module.exports = {
                 'q-applicant-english-town-or-city': {
                     type: 'string',
                     title: 'Town or city',
+                    maxLength: 60,
                     errorMessages: {
                         required: 'Enter the town or city where the crime happened'
                     }
@@ -361,6 +372,9 @@ module.exports = {
                 'q-applicant-english-location': {
                     type: 'string',
                     title: 'Location',
+                    description:
+                        'For example, the name of a street, business, building or nearby local landmark. You can enter more than one.',
+                    maxLength: 60,
                     errorMessages: {
                         required:
                             'Enter the name of a street, business, building or nearby local landmark'
@@ -378,6 +392,7 @@ module.exports = {
                 'q-applicant-scottish-town-or-city': {
                     type: 'string',
                     title: 'Town or city',
+                    maxLength: 60,
                     errorMessages: {
                         required: 'Enter the town or city where the crime happened'
                     }
@@ -385,6 +400,9 @@ module.exports = {
                 'q-applicant-scottish-location': {
                     type: 'string',
                     title: 'Location',
+                    description:
+                        'For example, the name of a street, business, building or nearby local landmark. You can enter more than one.',
+                    maxLength: 60,
                     errorMessages: {
                         required:
                             'Enter the name of a street, business, building or nearby local landmark'
@@ -402,6 +420,7 @@ module.exports = {
                 'q-applicant-welsh-town-or-city': {
                     type: 'string',
                     title: 'Town or city',
+                    maxLength: 60,
                     errorMessages: {
                         required: 'Enter the town or city where the crime happened'
                     }
@@ -409,6 +428,9 @@ module.exports = {
                 'q-applicant-welsh-location': {
                     type: 'string',
                     title: 'Location',
+                    description:
+                        'For example, the name of a street, business, building or nearby local landmark. You can enter more than one.',
+                    maxLength: 60,
                     errorMessages: {
                         required:
                             'Enter the name of a street, business, building or nearby local landmark'
@@ -422,7 +444,7 @@ module.exports = {
             type: 'object',
             additionalProperties: false,
             properties: {
-                'applicant-declaration': {
+                'you-need-to-ccontact-us': {
                     description:
                         '\n                <p class="govuk-body-l">You need to contact us to proceed with your application</p>\n                <p class="govuk-body">You may continue your application, but any future application for the same injuries will be refused.</p>\n            '
                 }
@@ -826,15 +848,15 @@ module.exports = {
                         },
                         {
                             title: 'North Wales',
-                            const: 'northWales'
+                            const: 'north-wales'
                         },
                         {
                             title: 'South Wales',
-                            const: 'southWales'
+                            const: 'south-wales'
                         }
                     ],
                     errorMessages: {
-                        required: 'Select a Police force'
+                        required: 'Select a police force'
                     }
                 }
             }
@@ -867,13 +889,18 @@ module.exports = {
                         ]
                     },
                     errorMessages: {
-                        required: 'Select your choice'
+                        required:
+                            'Select if you were under 18, unable to report the crime or other reasons'
                     }
                 },
                 'q-applicant-explain-delay-reasons': {
                     title: 'Briefly explain these reasons',
                     type: 'string',
-                    maxLength: 500
+                    maxLength: 500,
+                    errorMessages: {
+                        required:
+                            'Explain the reasons for the delay in reporting the crime to the police'
+                    }
                 }
             }
         },
@@ -895,12 +922,13 @@ module.exports = {
         'p-offender-enter-offenders-name': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
+            title: "Enter the offender's name",
             required: ['q-offenders-name'],
             additionalProperties: false,
             properties: {
                 'q-offenders-name': {
-                    title: 'Enter their name',
                     type: 'string',
+                    description: 'We will not contact the offender.',
                     errorMessages: {
                         required: "Enter the offender's name"
                     }
@@ -908,20 +936,16 @@ module.exports = {
             }
         },
         'p-offender-describe-contact-with-offender': {
-            $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
-            additionalProperties: false,
-            propertyNames: {
-                enum: ['q-offender-contact-description', 'q-offender-no-contact-with-offender']
-            },
             properties: {
                 'q-offender-contact-description': {
                     type: 'string',
                     title: 'If you have contact with the offender, describe it below',
+                    description:
+                        'We will not pay compensation if the offender may benefit from it.',
                     maxLength: 500,
                     errorMessages: {
-                        required:
-                            "Please describe your contact with the offender, or click 'I have no contact with the offender'"
+                        required: 'Enter details of any contact you have with the offender'
                     }
                 },
                 'q-offender-no-contact-with-offender': {
@@ -935,10 +959,6 @@ module.exports = {
                                 const: 'none'
                             }
                         ]
-                    },
-                    errorMessages: {
-                        required:
-                            "Please describe your contact with the offender, or click 'I have no contact with the offender'"
                     }
                 }
             },
@@ -952,21 +972,11 @@ module.exports = {
                 'if-not-checked-then-q-offender-contact-description-is-required': {
                     if: {
                         not: {
-                            properties: {
-                                'q-offender-no-contact-with-offender': {
-                                    const: 'none'
-                                }
-                            }
+                            required: ['q-offender-no-contact-with-offender']
                         }
                     },
                     then: {
-                        required: ['q-offender-contact-description'],
-                        propertyNames: {
-                            enum: [
-                                'q-offender-no-contact-with-offender',
-                                'q-offender-contact-description'
-                            ]
-                        }
+                        required: ['q-offender-contact-description']
                     }
                 }
             }
@@ -990,7 +1000,8 @@ module.exports = {
                 },
                 'q-enter-your-previous-reference-number': {
                     type: 'string',
-                    title: 'Enter your previous reference number if you know it (optional)'
+                    title: 'Enter your previous reference number if you know it (optional)',
+                    maxLength: 50
                 }
             },
             required: ['q-applicant-have-you-applied-to-us-before'],
@@ -1010,7 +1021,6 @@ module.exports = {
                         }
                     },
                     then: {
-                        required: ['q-enter-your-previous-reference-number'],
                         propertyNames: {
                             enum: [
                                 'q-applicant-have-you-applied-to-us-before',
@@ -1044,9 +1054,10 @@ module.exports = {
                 'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
                     type: 'string',
                     title: 'Briefly explain why not.',
+                    maxLength: 500,
                     errorMessages: {
                         required:
-                            'Select yes if you have applied for or received another form of compensation'
+                            'Explain why you did not apply for or receive any other form of compensation'
                     }
                 }
             },
@@ -1097,26 +1108,32 @@ module.exports = {
                     type: 'string',
                     title: 'Who have you applied to or received compensation from?',
                     errorMessages: {
-                        required:
-                            'Enter the source of the other compensation, for example, the name of a person, company or court'
+                        required: 'Enter who you applied to or received compensation from'
                     }
                 },
                 'q-applicant-has-a-decision-been-made': {
                     title: 'Have they made a decision?',
-                    type: 'boolean'
+                    type: 'boolean',
+                    errorMessages: {
+                        required:
+                            'Select yes if you have received a decision about the other compensation claim'
+                    }
                 },
                 'q-how-much-was-award': {
                     type: 'string',
                     title: 'How much was the award?',
                     errorMessages: {
-                        required: 'Enter the amount of compensation you got'
+                        required: 'Enter an amount'
                     }
                 },
                 'q-when-will-you-find-out': {
                     type: 'string',
                     title: 'When will you find out?',
                     description:
-                        'Enter an approximate date, for example, December 2019. If you do not know you can say so.'
+                        'Enter an approximate date, for example, December 2019. If you do not know you can say so.',
+                    errorMessages: {
+                        required: 'Enter an approximate date'
+                    }
                 }
             },
             required: ['q-applicant-who-did-you-apply-to', 'q-applicant-has-a-decision-been-made'],
@@ -1183,6 +1200,28 @@ module.exports = {
                 'q-applicant-name-title': {
                     title: 'Title',
                     type: 'string',
+                    oneOf: [
+                        {
+                            title: 'Mr',
+                            const: 'mr'
+                        },
+                        {
+                            title: 'Mrs',
+                            const: 'mrs'
+                        },
+                        {
+                            title: 'Miss',
+                            const: 'miss'
+                        },
+                        {
+                            title: 'Ms',
+                            const: 'ms'
+                        },
+                        {
+                            title: 'Dr',
+                            const: 'dr'
+                        }
+                    ],
                     errorMessages: {
                         required: 'Enter your title'
                     }
@@ -1242,11 +1281,8 @@ module.exports = {
                 'q-applicant-enter-your-date-of-birth': {
                     type: 'string',
                     format: 'date-time',
-                    formatMaximum: {
-                        $ref:
-                            "#/answers/p--when-was-the-crime-reported-to-police/q-was-the-crime-reported-to-police/value'"
-                    },
                     title: 'Enter your date of birth',
+                    description: 'For example, 31 3 2018.',
                     errorMessages: {
                         required: 'Enter your date of birth'
                     }
@@ -1262,6 +1298,9 @@ module.exports = {
                 'q-applicant-email-address': {
                     type: 'string',
                     title: 'Enter your email address',
+                    description:
+                        "We'll use this to contact you about your application for example, to request more information.",
+                    maxLength: 50,
                     errorMessages: {
                         required: 'Enter your email address'
                     }
@@ -1288,17 +1327,20 @@ module.exports = {
                 'q-applicant-town-or-city': {
                     type: 'string',
                     title: 'Town or city',
+                    maxLength: 60,
                     errorMessages: {
                         required: 'Enter the town or city where you live'
                     }
                 },
                 'q-applicant-county': {
                     type: 'string',
-                    title: 'County'
+                    title: 'County',
+                    maxLength: 60
                 },
                 'q-applicant-postcode': {
                     type: 'string',
-                    title: 'Postcode'
+                    title: 'Postcode',
+                    maxLength: 10
                 }
             }
         },
@@ -1311,6 +1353,9 @@ module.exports = {
                 'q-applicant-telephone-number': {
                     type: 'string',
                     title: 'Enter your telephone number',
+                    description:
+                        'We may use this to contact you if we need to clarify something on your application form.',
+                    maxLength: 20,
                     errorMessages: {
                         required:
                             'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'
@@ -1320,9 +1365,15 @@ module.exports = {
         },
         'p--check-your-answers': {
             $schema: 'http://json-schema.org/draft-07/schema#',
+            title: 'Check your answers',
             type: 'object',
             additionalProperties: false,
-            properties: {},
+            properties: {
+                'check-your-answers': {
+                    description:
+                        '\n              <h2 class="govuk-heading-l">Your details</h2>\n                {{ govukSummaryList({\n                  classes: \'govuk-!-margin-bottom-9\',\n                  rows: [\n                    {\n                      key: {\n                        text: "Name"\n                      },\n                      value: {\n                        text: answers.p_applicant_enter_your_name.value \n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_enter_your_name.href,\n                            text: "Change",\n                            visuallyHiddenText: "name"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Have you ever been known by any other names?"\n                      },\n                      value: {\n                        text: answers.p_applicant_have_you_been_known_by_any_other_names.value \n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_have_you_been_known_by_any_other_names.href,\n                            text: "Change",\n                            visuallyHiddenText: "other names"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Date of birth"\n                      },\n                      value: {\n                        text: answers.p_applicant_enter_your_date_of_birth.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_enter_your_date_of_birth.href,\n                            text: "Change",\n                            visuallyHiddenText: "date of birth"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Email address"\n                      },\n                      value: {\n                        text: answers.p_applicant_enter_your_email_address.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_enter_your_email_address.href,\n                            text: "Change",\n                            visuallyHiddenText: "email address"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Address"\n                      },\n                      value: {\n                        html: answers.p_applicant_enter_your_address.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_enter_your_address.href,\n                            text: "Change",\n                            visuallyHiddenText: "address"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Telephone Number"\n                      },\n                      value: {\n                        text: answers.p_applicant_enter_your_telephone_number.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_enter_your_telephone_number.href,\n                            text: "Change",\n                            visuallyHiddenText: "telephone number"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Are you a British citizen or EU national?"\n                      },\n                      value: {\n                        text: answers.p_applicant_british_citizen_or_eu_national.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_british_citizen_or_eu_national.href,\n                            text: "Change",\n                            visuallyHiddenText: "are you a British citizen or EU national"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Are you 18 or over?"\n                      },\n                      value: {\n                        text: answers.p_applicant_are_you_18_or_over.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_are_you_18_or_over.href,\n                            text: "Change",\n                            visuallyHiddenText: "are you 18 or over"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Who are you applying for?"\n                      },\n                      value: {\n                        text: answers.p_applicant_who_are_you_applying_for.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_who_are_you_applying_for.href,\n                            text: "Change",\n                            visuallyHiddenText: "who are you applying for"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Were you a victim of sexual assault or abuse?"\n                      },\n                      value: {\n                        text: answers.p_applicant_were_you_a_victim_of_sexual_assault_or_abuse.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_were_you_a_victim_of_sexual_assault_or_abuse.href,\n                            text: "Change",\n                            visuallyHiddenText: "were you a victim of sexual assault or abuse"\n                          }\n                        ]\n                      }\n                    },\n                    {\n                      key: {\n                        text: "Option you\'ve selected"\n                      },\n                      value: {\n                        text: answers.p_applicant_select_the_option_that_applies_to_you.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_select_the_option_that_applies_to_you.href,\n                            text: "Change",\n                            visuallyHiddenText: "select the option that applies to you"\n                          }\n                        ]\n                      }\n                    }\n                  ]\n                }) }}\n              <h2 class="govuk-heading-l">About the crime</h2>\n              {{ govukSummaryList({\n                classes: \'govuk-!-margin-bottom-9\',\n                rows: [\n                  {\n                    key: {\n                      text: "Did the crime happen once or over a period of time?"\n                    },\n                    value: {\n                        text: answers.p_applicant_did_the_crime_happen_once_or_over_time.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_did_the_crime_happen_once_or_over_time.href,\n                          text: "Change",\n                          visuallyHiddenText: "did the crime happen once or over a period of time"\n                        }\n                      ]\n                    }\n                  },\n                  {\n                    key: {\n                      text: "Where did the crime happen?"\n                    },\n                    value: {\n                        text: answers.p_applicant_where_did_the_crime_happen.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_where_did_the_crime_happen.href,\n                          text: "Change",\n                          visuallyHiddenText: "where did the crime happen"\n                        }\n                      ]\n                    }\n                  },\n                  {\n                    key: {\n                      text: "Do you know the name of the offender?"\n                    },\n                    value: {\n                        text: answers.p_offender_do_you_know_the_name_of_the_offender.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_offender_do_you_know_the_name_of_the_offender.href,\n                          text: "Change",\n                          visuallyHiddenText: "do you know the name of the offender"\n                        }\n                      ]\n                    }\n                  },\n                  {\n                    key: {\n                      text: "Contact with the offender"\n                    },\n                    value: {\n                        text: answers.p_offender_describe_contact_with_offender.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_offender_describe_contact_with_offender.href,\n                          text: "Change",\n                          visuallyHiddenText: "Contact with the offender"\n                        }\n                      ]\n                    }\n                  }\n                ]\n              }) }}\n        \n              <h2 class="govuk-heading-l">Police report</h2>\n        \n              {{ govukSummaryList({\n                classes: \'govuk-!-margin-bottom-9\',\n                rows: [\n                  {\n                    key: {\n                      text: "Was the crime reported to the police?"\n                    },\n                    value: {\n                        text: answers.p__was_the_crime_reported_to_police.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p__was_the_crime_reported_to_police.href,\n                          text: "Change",\n                          visuallyHiddenText: "was the crime reported to the police"\n                        }\n                      ]\n                    }\n                  },\n                  {\n                    key: {\n                      text: "When was the crime reported to police?"\n                    },\n                    value: {\n                        text: answers.p__when_was_the_crime_reported_to_police.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p__when_was_the_crime_reported_to_police.href,\n                          text: "Change",\n                          visuallyHiddenText: "when was the crime reported to police"\n                        }\n                      ]\n                    }\n                  },\n                  {\n                    key: {\n                      text: "Crime reference number?"\n                    },\n                    value: {\n                        text: answers.p__whats_the_crime_reference_number.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p__whats_the_crime_reference_number.href,\n                          text: "Change",\n                          visuallyHiddenText: "crime reference number"\n                        }\n                      ]\n                    }\n                  }\n                ]\n              }) }}\n        \n              <h2 class="govuk-heading-l">Other compensation</h2>\n        \n              {{ govukSummaryList({\n                classes: \'govuk-!-margin-bottom-9\',\n                rows: [\n                  {\n                    key: {\n                      text: "Have you applied to us before?"\n                    },\n                    value: {\n                        text: answers.p_applicant_have_you_applied_to_us_before.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_have_you_applied_to_us_before.href,\n                          text: "Change",\n                          visuallyHiddenText: "have you applied to us before"\n                        }\n                      ]\n                    }\n                  },\n                  {\n                    key: {\n                      text: "Have you applied for or received any other form of compensation?"\n                    },\n                    value: {\n                        text: answers.p_applicant_have_you_applied_for_or_received_any_other_compensation.value\n                      },\n                      actions: {\n                        items: [\n                          {\n                            href: answers.p_applicant_have_you_applied_for_or_received_any_other_compensation.href,\n                          text: "Change",\n                          visuallyHiddenText: "have you applied for or received any other form of compensation"\n                        }\n                      ]\n                    }\n                  }\n                ]\n              }) }}\n        \n              <h2 class="govuk-heading-l">Agree and submit your application</h2>\n              <p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n              <p class="govuk-body">To find out more about how we handle your data <a class="govuk-body" href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n                    '
+                }
+            },
             context: 'summary'
         },
         'p--confirmation': {
@@ -1354,7 +1405,7 @@ module.exports = {
             type: 'object',
             additionalProperties: false,
             properties: {
-                'applicant-declaration': {
+                'you-cannot-get-compensation': {
                     description:
                         '\n                <p class="govuk-body-l">If the crime has not been reported to the police we can not pay compensation.</p>\n                <p class="govuk-body">You may continue your application, but any future application for the same injuries will be refused.</p>\n            '
                 }
@@ -1478,7 +1529,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option',
-                                'opt2'
+                                'option-2-sexual-assault-or-abuse-and-other-injuries-ro-losses'
                             ]
                         },
                         {
@@ -1486,7 +1537,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option',
-                                'opt1'
+                                'option-1-sexual-assault-or-abuse'
                             ]
                         }
                     ]
@@ -1689,7 +1740,13 @@ module.exports = {
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
                                 '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
+                                [
+                                    'or',
+                                    [
+                                        'q-applicant-when-did-the-crime-happen',
+                                        '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
+                                    ]
+                                ]
                             ]
                         },
                         {
@@ -1707,7 +1764,13 @@ module.exports = {
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
                                 '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
+                                [
+                                    'or',
+                                    [
+                                        'q-applicant-when-did-the-crime-happen',
+                                        '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
+                                    ]
+                                ]
                             ]
                         },
                         {
@@ -1725,7 +1788,13 @@ module.exports = {
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
                                 '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
-                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
+                                [
+                                    'or',
+                                    [
+                                        'q-applicant-when-did-the-crime-happen',
+                                        '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
+                                    ]
+                                ]
                             ]
                         },
                         {
