@@ -48,7 +48,7 @@ function logProgress(req, questionnaire) {
         'PROGRESS: ',
         JSON.stringify(
             {
-                answer: questionnaire.answers,
+                answers: questionnaire.answers,
                 progress: questionnaire.progress
             },
             null,
@@ -148,6 +148,9 @@ router
             const questionnaire = section.context;
             const schema = questionnaire.sections[sectionId];
             const answers = questionnaire.answers[sectionId];
+
+            console.log('ANSWERS: ', sectionId, questionnaire.answers);
+
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
@@ -202,6 +205,8 @@ router
                         nextSectionId = removeSectionIdPrefix(nextSection.id);
                     }
                 }
+
+                logProgress(req, questionnaire);
 
                 res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
