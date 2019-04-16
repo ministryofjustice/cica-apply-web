@@ -20,7 +20,7 @@
 {% block header %}
     {{govukHeader({
         serviceName: "Apply for criminal injuries compensation",
-        serviceUrl: "#TODO"
+        serviceUrl: "/start-page"
     })}}
 
     {% from "phase-banner/macro.njk" import govukPhaseBanner %}
@@ -28,7 +28,7 @@
       tag: {
           text: "beta"
       },
-      html: 'This is a new service – your <a class="govuk-link" href="#TODO">feedback</a> will help us to improve it.',
+      html: 'This is a new service – your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB">feedback</a> will help us to improve it.',
       classes: 'govuk-width-container'
     }) }}
 {% endblock %}
@@ -49,4 +49,25 @@
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <script src="/govuk-frontend/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}
+
+{% block footer %}
+    {{ govukFooter({
+      meta: {
+        items: [
+          {
+            href: "/cookies",
+            text: "Cookies"
+          },
+          {
+            href: "https://www.gov.uk/guidance/cica-privacy-notice",
+            text: "Privacy notice"
+          },
+          {
+            href: "/contact-us",
+            text: "Contact us"
+          }
+        ]
+      }
+    }) }}
 {% endblock %}

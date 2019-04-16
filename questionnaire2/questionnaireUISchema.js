@@ -137,15 +137,6 @@ module.exports = {
             }
         }
     },
-    'p-applicant-enter-your-name': {
-        options: {
-            properties: {
-                'q-applicant-name-title': {
-                    transformer: 'govukSelect'
-                }
-            }
-        }
-    },
     'p-applicant-enter-your-date-of-birth': {
         options: {
             properties: {

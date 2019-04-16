@@ -51,8 +51,7 @@ function logProgress(req, questionnaire) {
         'PROGRESS: ',
         JSON.stringify(
             {
-                answers: questionnaire.answers,
-                progress: questionnaire.progress
+                answers: questionnaire.answers
             },
             null,
             4
@@ -63,7 +62,7 @@ function logProgress(req, questionnaire) {
 
 function processRequest(reqBody) {
     const body = reqBody;
-
+    console.log(JSON.stringify(reqBody));
     // Handle req.body
     Object.keys(body).forEach(property => {
         const value = body[property];
@@ -77,7 +76,9 @@ function processRequest(reqBody) {
             // 1980-02-01T00:00:00.000Z
 
             const dateParts = body[property];
-            const yearMonthDay = `${dateParts.year}-${dateParts.month}-${dateParts.day}`;
+            const yearMonthDay = dateParts.day
+                ? `${dateParts.year}-${dateParts.month}-${dateParts.day}`
+                : `${dateParts.year}-${dateParts.month}-01`;
 
             // -- indicates no date parts have been provided
             if (yearMonthDay === '--') {
@@ -193,6 +194,7 @@ router
 
                 res.send(html);
             } else {
+                console.log(qRouter.next(body, sectionId));
                 let nextSectionId = removeSectionIdPrefix(qRouter.next(body, sectionId).id);
                 const requestedNextSectionId = req.query.next;
 
@@ -205,7 +207,7 @@ router
                     }
                 }
 
-                logProgress(req, questionnaire);
+                // logProgress(req, questionnaire);
 
                 res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }

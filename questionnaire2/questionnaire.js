@@ -175,7 +175,8 @@ module.exports = {
                         'This is the reference number the police gave the crime when it was reported.',
                     maxLength: 30,
                     errorMessages: {
-                        required: 'Enter the crime reference number'
+                        required: 'Enter the crime reference number',
+                        maxLength: 'Crime reference number must be 30 characters or less'
                     }
                 }
             }
@@ -277,7 +278,7 @@ module.exports = {
             type: 'object',
             required: [
                 'q-applicant-reason-for-delay-in-application',
-                'q-applicant-explain-delay-reasons'
+                'q-applicant-select-reasons-for-the-delay-in-making-your-application'
             ],
             additionalProperties: false,
             properties: {
@@ -311,12 +312,13 @@ module.exports = {
                             'Select if you were under 18, advised to wait, medical reasons or other reasons'
                     }
                 },
-                'q-applicant-explain-delay-reasons': {
+                'q-applicant-select-reasons-for-the-delay-in-making-your-application': {
                     title: 'Briefly explain these reasons',
                     type: 'string',
                     maxLength: 500,
                     errorMessages: {
-                        required: 'Explain the reasons for the delay in making your application'
+                        required: 'Explain the reasons for the delay in making your application',
+                        maxLength: 'Explanation must be 500 characters or less'
                     }
                 }
             }
@@ -366,7 +368,8 @@ module.exports = {
                     title: 'Town or city',
                     maxLength: 60,
                     errorMessages: {
-                        required: 'Enter the town or city where the crime happened'
+                        required: 'Enter the town or city where the crime happened',
+                        maxLength: 'Town or city must be 60 characters or less'
                     }
                 },
                 'q-applicant-english-location': {
@@ -377,7 +380,8 @@ module.exports = {
                     maxLength: 60,
                     errorMessages: {
                         required:
-                            'Enter the name of a street, business, building or nearby local landmark'
+                            'Enter the name of a street, business, building or nearby local landmark',
+                        maxLength: 'Location must be 60 characters or less'
                     }
                 }
             }
@@ -394,7 +398,8 @@ module.exports = {
                     title: 'Town or city',
                     maxLength: 60,
                     errorMessages: {
-                        required: 'Enter the town or city where the crime happened'
+                        required: 'Enter the town or city where the crime happened',
+                        maxLength: 'Town or city must be 60 characters or less'
                     }
                 },
                 'q-applicant-scottish-location': {
@@ -405,7 +410,8 @@ module.exports = {
                     maxLength: 60,
                     errorMessages: {
                         required:
-                            'Enter the name of a street, business, building or nearby local landmark'
+                            'Enter the name of a street, business, building or nearby local landmark',
+                        maxLength: 'Location must be 60 characters or less'
                     }
                 }
             }
@@ -422,7 +428,8 @@ module.exports = {
                     title: 'Town or city',
                     maxLength: 60,
                     errorMessages: {
-                        required: 'Enter the town or city where the crime happened'
+                        required: 'Enter the town or city where the crime happened',
+                        maxLength: 'Town or city must be 60 characters or less'
                     }
                 },
                 'q-applicant-welsh-location': {
@@ -433,7 +440,8 @@ module.exports = {
                     maxLength: 60,
                     errorMessages: {
                         required:
-                            'Enter the name of a street, business, building or nearby local landmark'
+                            'Enter the name of a street, business, building or nearby local landmark',
+                        maxLength: 'Location must be 60 characters or less'
                     }
                 }
             }
@@ -864,7 +872,10 @@ module.exports = {
         'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
-            required: ['q-applicant-reason-for-delay-in-reporting-crime'],
+            required: [
+                'q-applicant-reason-for-delay-in-reporting-crime',
+                'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+            ],
             additionalProperties: false,
             properties: {
                 'q-applicant-reason-for-delay-in-reporting-crime': {
@@ -893,13 +904,14 @@ module.exports = {
                             'Select if you were under 18, unable to report the crime or other reasons'
                     }
                 },
-                'q-applicant-explain-delay-reasons': {
+                'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
                     title: 'Briefly explain these reasons',
                     type: 'string',
                     maxLength: 500,
                     errorMessages: {
                         required:
-                            'Explain the reasons for the delay in reporting the crime to the police'
+                            'Explain the reasons for the delay in reporting the crime to the police',
+                        maxLength: 'Explanation must be 500 characters or less'
                     }
                 }
             }
@@ -929,8 +941,10 @@ module.exports = {
                 'q-offenders-name': {
                     type: 'string',
                     description: 'We will not contact the offender.',
+                    maxLength: 120,
                     errorMessages: {
-                        required: "Enter the offender's name"
+                        required: "Enter the offender's name",
+                        maxLength: "Offender's name must be 120 characters or less"
                     }
                 }
             }
@@ -945,7 +959,8 @@ module.exports = {
                         'We will not pay compensation if the offender may benefit from it.',
                     maxLength: 500,
                     errorMessages: {
-                        required: 'Enter details of any contact you have with the offender'
+                        required: 'Enter details of any contact you have with the offender',
+                        maxLength: 'Description must be 500 characters or less'
                     }
                 },
                 'q-offender-no-contact-with-offender': {
@@ -1001,7 +1016,10 @@ module.exports = {
                 'q-enter-your-previous-reference-number': {
                     type: 'string',
                     title: 'Enter your previous reference number if you know it (optional)',
-                    maxLength: 50
+                    maxLength: 50,
+                    errorMessages: {
+                        MaxLength: 'Previous reference number must be 50 characters or less'
+                    }
                 }
             },
             required: ['q-applicant-have-you-applied-to-us-before'],
@@ -1057,7 +1075,8 @@ module.exports = {
                     maxLength: 500,
                     errorMessages: {
                         required:
-                            'Explain why you did not apply for or receive any other form of compensation'
+                            'Explain why you did not apply for or receive any other form of compensation',
+                        maxLength: 'Explanation must be 500 characters or less'
                     }
                 }
             },
@@ -1107,8 +1126,11 @@ module.exports = {
                 'q-applicant-who-did-you-apply-to': {
                     type: 'string',
                     title: 'Who have you applied to or received compensation from?',
+                    maxLength: 50,
                     errorMessages: {
-                        required: 'Enter who you applied to or received compensation from'
+                        required: 'Enter who you applied to or received compensation from',
+                        maxLength:
+                            'Who you applied to or received compensation from must be 50 characters or less'
                     }
                 },
                 'q-applicant-has-a-decision-been-made': {
@@ -1122,8 +1144,10 @@ module.exports = {
                 'q-how-much-was-award': {
                     type: 'string',
                     title: 'How much was the award?',
+                    maxLength: 50,
                     errorMessages: {
-                        required: 'Enter an amount'
+                        required: 'Enter an amount',
+                        maxLength: 'Award amount must be 50 characters or less'
                     }
                 },
                 'q-when-will-you-find-out': {
@@ -1131,8 +1155,10 @@ module.exports = {
                     title: 'When will you find out?',
                     description:
                         'Enter an approximate date, for example, December 2019. If you do not know you can say so.',
+                    maxLength: 50,
                     errorMessages: {
-                        required: 'Enter an approximate date'
+                        required: 'Enter an approximate date',
+                        maxLength: 'When will you find out must be 50 characters or less'
                     }
                 }
             },
@@ -1200,44 +1226,28 @@ module.exports = {
                 'q-applicant-name-title': {
                     title: 'Title',
                     type: 'string',
-                    oneOf: [
-                        {
-                            title: 'Mr',
-                            const: 'mr'
-                        },
-                        {
-                            title: 'Mrs',
-                            const: 'mrs'
-                        },
-                        {
-                            title: 'Miss',
-                            const: 'miss'
-                        },
-                        {
-                            title: 'Ms',
-                            const: 'ms'
-                        },
-                        {
-                            title: 'Dr',
-                            const: 'dr'
-                        }
-                    ],
+                    maxLength: 6,
                     errorMessages: {
-                        required: 'Enter your title'
+                        required: 'Enter your title',
+                        maxLength: 'Title must be 6 characters or less'
                     }
                 },
                 'q-applicant-name-firstname': {
                     title: 'First name',
                     type: 'string',
+                    maxLength: 70,
                     errorMessages: {
-                        required: 'Enter your first name'
+                        required: 'Enter your first name',
+                        maxLength: 'First name must be 70 characters or less'
                     }
                 },
                 'q-applicant-name-lastname': {
                     title: 'Last name',
                     type: 'string',
+                    maxLength: 70,
                     errorMessages: {
-                        required: 'Enter your last name'
+                        required: 'Enter your last name',
+                        maxLength: 'Last name must be 70 characters or less'
                     }
                 }
             }
@@ -1266,8 +1276,10 @@ module.exports = {
                 'q-applicant-what-other-names-have-you-used': {
                     type: 'string',
                     title: 'What other names have you used?',
+                    maxLength: 50,
                     errorMessages: {
-                        required: 'Enter the other names you have used'
+                        required: 'Enter the other names you have used',
+                        maxLength: 'Other names you have used must be 50 characters or less'
                     }
                 }
             }
@@ -1302,7 +1314,8 @@ module.exports = {
                         "We'll use this to contact you about your application for example, to request more information.",
                     maxLength: 50,
                     errorMessages: {
-                        required: 'Enter your email address'
+                        required: 'Enter your email address',
+                        maxLength: 'Email address must be 50 characters or less'
                     }
                 }
             }
@@ -1329,18 +1342,25 @@ module.exports = {
                     title: 'Town or city',
                     maxLength: 60,
                     errorMessages: {
-                        required: 'Enter the town or city where you live'
+                        required: 'Enter the town or city where you live',
+                        maxLength: 'Town or city must be 60 characters or less'
                     }
                 },
                 'q-applicant-county': {
                     type: 'string',
                     title: 'County',
-                    maxLength: 60
+                    maxLength: 60,
+                    errorMessages: {
+                        maxLength: 'County must be 60 characters or less'
+                    }
                 },
                 'q-applicant-postcode': {
                     type: 'string',
                     title: 'Postcode',
-                    maxLength: 10
+                    maxLength: 10,
+                    errorMessages: {
+                        maxLength: 'Postcode must be 10 characters or less'
+                    }
                 }
             }
         },
@@ -1358,7 +1378,8 @@ module.exports = {
                     maxLength: 20,
                     errorMessages: {
                         required:
-                            'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192'
+                            'Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192',
+                        maxLength: 'Telephone number must be 20 characters or less'
                     }
                 }
             }
@@ -2015,10 +2036,11 @@ module.exports = {
         }
     },
     answers: {
+        /*
         'p-applicant-declaration': {},
         'p-applicant-british-citizen-or-eu-national': {
             'q-applicant-british-citizen-or-eu-national': true
-        } /* ,
+        },
         'p-applicant-are-you-18-or-over': {
             'q-applicant-are-you-18-or-over': true
         },
@@ -2030,77 +2052,89 @@ module.exports = {
         },
         'p--before-you-continue': {},
         'p-applicant-select-the-option-that-applies-to-you': {
-            'q-applicant-option': 'opt1'
+            'q-applicant-option': 'option-1-sexual-assault-or-abuse'
         },
         'p--was-the-crime-reported-to-police': {
             'q-was-the-crime-reported-to-police': true
         },
         'p--when-was-the-crime-reported-to-police': {
-            'q--when-was-the-crime-reported-to-police': '2017-01-02T00:00:00.000Z'
+            'q--when-was-the-crime-reported-to-police': '2019-01-01T00:00:00.000Z'
         },
         'p--whats-the-crime-reference-number': {
-            'q-whats-the-crime-reference-number': '123456'
+            'q-whats-the-crime-reference-number': 'a'
         },
         'p-applicant-did-the-crime-happen-once-or-over-time': {
             'q-applicant-did-the-crime-happen-once-or-over-time': 'once'
         },
         'p-applicant-when-did-the-crime-happen': {
-            'q-applicant-when-did-the-crime-happen': '2017-01-01T00:00:00.000Z'
-        },
-        'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
-            'q-applicant-reason-for-delay-in-application': ['other'],
-            'q-applicant-explain-delay-reasons': 'This is the other reason'
+            'q-applicant-when-did-the-crime-happen': '2019-01-01T00:00:00.000Z'
         },
         'p-applicant-where-did-the-crime-happen': {
-            'q-applicant-where-did-the-crime-happen': 'scotland'
+            'q-applicant-where-did-the-crime-happen': 'wales'
         },
-        'p-applicant-where-in-scotland-did-it-happen': {
-            'q-applicant-scottish-town-or-city': 'Edinburgh',
-            'q-applicant-scottish-location': 'Edinburgh Castle'
+        'p-applicant-where-in-wales-did-it-happen': {
+            'q-applicant-welsh-town-or-city': 'a',
+            'q-applicant-welsh-location': 'a'
         },
-        'p--which-police-scotland-division-is-investigating-the-crime': {
-            'q--which-scottish-police-force-is-investigating-the-crime': 'edinburgh'
+        'p--which-welsh-police-force-is-investigating-the-crime': {
+            'q--which-welsh-police-force-is-investigating-the-crime': 'south-wales'
         },
         'p-offender-do-you-know-the-name-of-the-offender': {
-            'q-offender-do-you-know-the-name-of-the-offender': false
+            'q-offender-do-you-know-the-name-of-the-offender': true
+        },
+        'p-offender-enter-offenders-name': {
+            'q-offenders-name': 'a'
+        },
+        'p-offender-describe-contact-with-offender': {
+            'q-offender-contact-description': 'a',
+            'q-offender-no-contact-with-offender': ['none']
         },
         'p-applicant-have-you-applied-to-us-before': {
-            'q-applicant-have-you-applied-to-us-before': false
+            'q-applicant-have-you-applied-to-us-before': true,
+            'q-enter-your-previous-reference-number': 'a'
         },
         'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
-            'q-applicant-have-you-applied-for-or-received-any-other-compensation': false,
-            'q-applicant-applied-for-other-compensation-briefly-explain-why-not':
-                "I didn't know you could apply elsewhere "
+            'q-applicant-have-you-applied-for-or-received-any-other-compensation': true,
+            'q-applicant-applied-for-other-compensation-briefly-explain-why-not': 'a'
+        },
+        'p-applicant-other-compensation-details': {
+            'q-applicant-who-did-you-apply-to': 'a',
+            'q-applicant-has-a-decision-been-made': true,
+            'q-how-much-was-award': 'a',
+            'q-when-will-you-find-out': 'a'
         },
         'p-applicant-enter-your-name': {
-            'q-applicant-name-title': 'Mr',
-            'q-applicant-name-firstname': 'John',
-            'q-applicant-name-lastname': 'Smith'
+            'q-applicant-name-title': 'mr',
+            'q-applicant-name-firstname': 'a',
+            'q-applicant-name-lastname': 'a'
         },
         'p-applicant-have-you-been-known-by-any-other-names': {
-            'q-applicant-have-you-been-known-by-any-other-names': false
+            'q-applicant-have-you-been-known-by-any-other-names': true
+        },
+        'p-applicant-what-other-names-have-you-used': {
+            'q-applicant-what-other-names-have-you-used': 'a'
         },
         'p-applicant-enter-your-date-of-birth': {
-            'q-applicant-enter-your-date-of-birth': '1970-03-05T23:00:00.000Z'
+            'q-applicant-enter-your-date-of-birth': '1987-09-05T23:00:00.000Z'
         },
         'p-applicant-enter-your-email-address': {
-            'q-applicant-email-address': 'johnsmith@cica.gov.uk'
+            'q-applicant-email-address': 'a'
         },
         'p-applicant-enter-your-address': {
-            'q-applicant-building-and-street': 'Alexander Bain House',
-            'q-applicant-building-and-street2': '15 York Street',
-            'q-applicant-town-or-city': 'Glasgow',
-            'q-applicant-postcode': 'G2 8JQ'
+            'q-applicant-building-and-street': 'a',
+            'q-applicant-building-and-street2': 'a',
+            'q-applicant-town-or-city': 'a',
+            'q-applicant-county': 'a',
+            'q-applicant-postcode': 'a'
         },
         'p-applicant-enter-your-telephone-number': {
-            'q-applicant-telephone-number': '12345678912'
-        },
-        'p--check-your-answers': {} */
+            'q-applicant-telephone-number': 'a'
+        } */
     },
     progress: [
-        'p-applicant-declaration',
+        /* 'p-applicant-declaration',
         'p-applicant-british-citizen-or-eu-national',
-        'p-applicant-are-you-18-or-over' /* ,
+        'p-applicant-are-you-18-or-over',
         'p-applicant-who-are-you-applying-for',
         'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
         'p--before-you-continue',
@@ -2110,20 +2144,74 @@ module.exports = {
         'p--whats-the-crime-reference-number',
         'p-applicant-did-the-crime-happen-once-or-over-time',
         'p-applicant-when-did-the-crime-happen',
+        'p-applicant-when-did-the-crime-start',
+        'p-applicant-when-did-the-crime-stop',
         'p-applicant-select-reasons-for-the-delay-in-making-your-application',
         'p-applicant-where-did-the-crime-happen',
+        'p-applicant-where-in-england-did-it-happen',
         'p-applicant-where-in-scotland-did-it-happen',
+        'p-applicant-where-in-wales-did-it-happen',
+        'p--you-need-to-contact-us',
+        'p--which-english-police-force-is-investigating-the-crime',
         'p--which-police-scotland-division-is-investigating-the-crime',
+        'p--which-welsh-police-force-is-investigating-the-crime',
+        'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
         'p-offender-do-you-know-the-name-of-the-offender',
+        'p-offender-enter-offenders-name',
+        'p-offender-describe-contact-with-offender',
         'p-applicant-have-you-applied-to-us-before',
         'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+        'p-applicant-other-compensation-details',
         'p-applicant-enter-your-name',
         'p-applicant-have-you-been-known-by-any-other-names',
+        'p-applicant-what-other-names-have-you-used',
         'p-applicant-enter-your-date-of-birth',
         'p-applicant-enter-your-email-address',
         'p-applicant-enter-your-address',
         'p-applicant-enter-your-telephone-number',
         'p--check-your-answers',
-        'p--confirmation' */
+        'p--confirmation',
+        'p-applicant-redirect-to-our-other-application',
+        'p-applicant-you-cannot-get-compensation- p-applicant-declaration',
+        'p-applicant-british-citizen-or-eu-national',
+        'p-applicant-are-you-18-or-over',
+        'p-applicant-who-are-you-applying-for',
+        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+        'p--before-you-continue',
+        'p-applicant-select-the-option-that-applies-to-you',
+        'p--was-the-crime-reported-to-police',
+        'p--when-was-the-crime-reported-to-police',
+        'p--whats-the-crime-reference-number',
+        'p-applicant-did-the-crime-happen-once-or-over-time',
+        'p-applicant-when-did-the-crime-happen',
+        'p-applicant-when-did-the-crime-start',
+        'p-applicant-when-did-the-crime-stop',
+        'p-applicant-select-reasons-for-the-delay-in-making-your-application',
+        'p-applicant-where-did-the-crime-happen',
+        'p-applicant-where-in-england-did-it-happen',
+        'p-applicant-where-in-scotland-did-it-happen',
+        'p-applicant-where-in-wales-did-it-happen',
+        'p--you-need-to-contact-us',
+        'p--which-english-police-force-is-investigating-the-crime',
+        'p--which-police-scotland-division-is-investigating-the-crime',
+        'p--which-welsh-police-force-is-investigating-the-crime',
+        'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
+        'p-offender-do-you-know-the-name-of-the-offender',
+        'p-offender-enter-offenders-name',
+        'p-offender-describe-contact-with-offender',
+        'p-applicant-have-you-applied-to-us-before',
+        'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+        'p-applicant-other-compensation-details',
+        'p-applicant-enter-your-name',
+        'p-applicant-have-you-been-known-by-any-other-names',
+        'p-applicant-what-other-names-have-you-used',
+        'p-applicant-enter-your-date-of-birth',
+        'p-applicant-enter-your-email-address',
+        'p-applicant-enter-your-address',
+        'p-applicant-enter-your-telephone-number',
+        'p--check-your-answers',
+        'p--confirmation',
+        'p-applicant-redirect-to-our-other-application',
+        'p-applicant-you-cannot-get-compensation' */
     ]
 };
