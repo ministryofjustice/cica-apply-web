@@ -6,7 +6,6 @@ const createQTransformer = require('q-transformer');
 const createQValidator = require('q-validator');
 const q = require('./questionnaire');
 const uiSchema = require('./questionnaireUISchema');
-const answerHelper = require('./helpers/answerHelper');
 
 const router = express.Router();
 const qRouter = createQRouter(q);
@@ -160,12 +159,11 @@ router
             const questionnaire = section.context;
             const schema = questionnaire.sections[sectionId];
             const {answers} = questionnaire;
-            const answerObject = answerHelper.summaryFormatter(answers);
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
                 uiSchema,
-                data: answerObject
+                data: answers
             });
             const html = getPageHTML(
                 transformation,
