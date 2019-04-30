@@ -1,4 +1,5 @@
 const moment = require('moment');
+const policeLookup = require('./policeLookup');
 
 function removeSectionIdPrefix(sectionId) {
     return sectionId.replace(/p-{1,2}/, '');
@@ -17,9 +18,11 @@ function isValidDate(str) {
 function arrayFormatter(array) {
     let returnValue = '';
     array.forEach(answer => {
-        returnValue += `${answer}, `;
+        // eslint-disable-next-line no-use-before-define
+        const formattedAnswer = formatAnswer(answer);
+        returnValue += `${formattedAnswer}<br>`;
     });
-    return returnValue.substring(0, returnValue.length - 2);
+    return returnValue;
 }
 
 function textFormatter(string) {
@@ -27,10 +30,6 @@ function textFormatter(string) {
         return '';
     }
     return string.charAt(0).toUpperCase() + string.slice(1).replace(/-/g, ' ');
-}
-
-function questionNameFormatter(str) {
-    return str.replace(/-/g, '_');
 }
 
 function formatAnswer(answer) {
@@ -49,6 +48,12 @@ function formatAnswer(answer) {
             }
             if (isArray) {
                 return arrayFormatter(answer);
+            }
+            if (typeof answer === 'number') {
+                const policeRef = policeLookup(answer);
+                if (policeRef) {
+                    return policeRef;
+                }
             }
             return textFormatter(answer); // If it's a single value string
     }
@@ -76,26 +81,22 @@ function summaryFormatter(answerObject) {
     const answerIndex = {};
     if (answerObject) {
         Object.keys(answerObject).forEach(question => {
-            const correctedName = questionNameFormatter(question);
-            answerIndex[correctedName] = {};
-            answerIndex[correctedName].href = `/apply/${removeSectionIdPrefix(
+            answerIndex[question] = {};
+            answerIndex[question].href = `/apply/${removeSectionIdPrefix(
                 question
             )}?next=check-your-answers`;
             if (answerObject[question] !== {}) {
                 // Ignore non-question entries
                 if (Object.keys(answerObject[question]).length === 1) {
-                    answerIndex[correctedName].value = formatAnswer(
+                    answerIndex[question].value = formatAnswer(
                         Object.values(answerObject[question])[0]
                     );
                 } else {
-                    answerIndex[correctedName].value = multipleAnswersFormat(
-                        answerObject[question]
-                    ); // A question with more than one answer appears in a multi-line format
+                    answerIndex[question].value = multipleAnswersFormat(answerObject[question]); // A question with more than one answer appears in a multi-line format
                 }
             }
         });
     }
-
     return answerIndex;
 }
 
@@ -105,6 +106,5 @@ module.exports = {
     isValidDate,
     textFormatter,
     multipleAnswersFormat,
-    questionNameFormatter,
     arrayFormatter
 };

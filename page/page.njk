@@ -19,7 +19,7 @@
 
 {% block header %}
     {{govukHeader({
-        serviceName: "Apply for criminal injuries compensation",
+        serviceName: "Claim criminal injuries compensation",
         serviceUrl: "/start-page"
     })}}
 
@@ -31,6 +31,10 @@
       html: 'This is a new service – your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB">feedback</a> will help us to improve it.',
       classes: 'govuk-width-container'
     }) }}
+    <div class="govuk-width-container">
+        {% block innerHeader %}
+        {% endblock %}
+    </div>
 {% endblock %}
 
 {% block beforeContent %}

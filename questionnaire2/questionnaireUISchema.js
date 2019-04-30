@@ -152,5 +152,25 @@ module.exports = {
         options: {
             isSummary: true
         }
+    },
+    'p-applicant-enter-your-address': {
+        options: {
+            properties: {
+                'q-applicant-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-applicant-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            }
+        }
     }
 };
