@@ -25,29 +25,21 @@ nunjucks.configure(
 );
 
 function getPageHTML(transformation, sectionId, isNotFirst) {
+    const backLink = isNotFirst ? `/apply/previous/${sectionId}` : '/start-page';
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
             {% block innerHeader %}
-                {% if notFirstPage %}
-                    {% from "back-link/macro.njk" import govukBackLink %}
-                    {{ govukBackLink({
-                        text: "Back",
-                        href: "/apply/previous/${sectionId}"
-                    }) }}
-                {% else %}
-                     {% from "back-link/macro.njk" import govukBackLink %}
-                    {{ govukBackLink({
-                        text: "Back",
-                        href: "/start-page"
-                    }) }}   
-                {% endif %}
+                {% from "back-link/macro.njk" import govukBackLink %}
+                {{ govukBackLink({
+                    text: "Back",
+                    href: ${backLink}
+                }) }}
             {% endblock %}
             {% block innerContent %}
                 ${transformation}
             {% endblock %}
-        `,
-        {notFirstPage: isNotFirst}
+        `
     );
 }
 
