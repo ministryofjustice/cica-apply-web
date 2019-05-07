@@ -15,6 +15,18 @@ router.get('/start-page', (req, res) => {
     res.render('start-page.njk');
 });
 
+router.get('/cookies', (req, res) => {
+    res.render('cookies.njk');
+});
+
+router.get('/contact-us', (req, res) => {
+    res.render('contact-us.njk');
+});
+
+router.get('/transition', (req, res) => {
+    res.render('transition.njk');
+});
+
 router.get('/nunjucksz', (req, res) => {
     nunjucks.configure(
         [

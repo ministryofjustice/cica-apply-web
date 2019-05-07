@@ -24,16 +24,19 @@ nunjucks.configure(
     }
 );
 
-function getPageHTML(transformation, sectionId) {
+function getPageHTML(transformation, sectionId, isNotFirst) {
+    const backLink = isNotFirst ? `/apply/previous/${sectionId}` : '/start-page';
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
-            {% block content %}
+            {% block innerHeader %}
                 {% from "back-link/macro.njk" import govukBackLink %}
                 {{ govukBackLink({
                     text: "Back",
-                    href: "/apply/previous/${sectionId}"
+                    href: ${backLink}
                 }) }}
+            {% endblock %}
+            {% block innerContent %}
                 ${transformation}
             {% endblock %}
         `
@@ -48,8 +51,7 @@ function logProgress(req, questionnaire) {
         'PROGRESS: ',
         JSON.stringify(
             {
-                answers: questionnaire.answers,
-                progress: questionnaire.progress
+                answers: questionnaire.answers
             },
             null,
             4
@@ -74,14 +76,15 @@ function processRequest(reqBody) {
             // 1980-02-01T00:00:00.000Z
 
             const dateParts = body[property];
-            const yearMonthDay = `${dateParts.year}-${dateParts.month}-${dateParts.day}`;
+            const yearMonthDay = dateParts.day
+                ? `${dateParts.year}-${dateParts.month}-${dateParts.day}`
+                : `${dateParts.year}-${dateParts.month}-01`;
 
             // -- indicates no date parts have been provided
             if (yearMonthDay === '--') {
                 delete body[property];
             } else {
                 const date = moment(yearMonthDay, ['YYYY-MM-DD', 'YYYY-M-D'], true).toISOString();
-
                 if (date !== null) {
                     body[property] = date;
                 } else {
@@ -147,18 +150,18 @@ router
             const sectionId = section.id;
             const questionnaire = section.context;
             const schema = questionnaire.sections[sectionId];
-            const answers = questionnaire.answers[sectionId];
-
-            console.log('ANSWERS: ', sectionId, questionnaire.answers);
-
+            const {answers} = questionnaire;
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
                 uiSchema,
                 data: answers
             });
-
-            const html = getPageHTML(transformation, removeSectionIdPrefix(sectionId));
+            const html = getPageHTML(
+                transformation,
+                removeSectionIdPrefix(sectionId),
+                questionnaire.progress[0] !== sectionId
+            );
 
             res.send(html);
         } else {
@@ -188,7 +191,11 @@ router
                     data: body,
                     schemaErrors: errors
                 });
-                const html = getPageHTML(transformation, removeSectionIdPrefix(sectionId));
+                const html = getPageHTML(
+                    transformation,
+                    removeSectionIdPrefix(sectionId),
+                    questionnaire.progress
+                );
 
                 // logProgress(questionnaire);
 
@@ -206,7 +213,7 @@ router
                     }
                 }
 
-                logProgress(req, questionnaire);
+                // logProgress(req, questionnaire);
 
                 res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }

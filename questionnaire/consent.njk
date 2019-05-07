@@ -1,11 +1,7 @@
 {% extends "page.njk" %}
 {% from "components/button/macro.njk" import govukButton %}
 
-{% block content %}
-<main role="main" class="govuk-main-wrapper">
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+{% block innerContent %}
 
       <h1 class="govuk-heading-xl">Help us test a new criminal injuries compensation service</h1>
 
@@ -35,10 +31,4 @@
       <h2 class="govuk-heading-l">If you do not want to test the new service</h2>
       <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" target="_blank">current online service</a>.</p>
 
-
-    </div>
-
-
-  </div>
-</main>
 {% endblock %}
