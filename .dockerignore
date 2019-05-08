@@ -14,8 +14,8 @@
 !bin
 !page
 !public
+!index
 !questionnaire
-!questionnaire2
 !src
 
 !package.json
