@@ -5,9 +5,8 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 
-// const indexRouter = require('./routes/index');
-const indexRouter = require('./questionnaire/routes');
-const questionnaireRouter = require('./questionnaire2/routes');
+const indexRouter = require('./index/routes');
+const questionnaireRouter = require('./questionnaire/routes');
 
 const app = express();
 
@@ -15,6 +14,7 @@ nunjucks.configure(
     [
         'node_modules/govuk-frontend/',
         'node_modules/govuk-frontend/components/',
+        'index/',
         'questionnaire/',
         'page/'
     ],
