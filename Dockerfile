@@ -1,6 +1,10 @@
 # lets start from an image that already has nodejs installed
 FROM node:10.13.0
 
+RUN groupadd -g 1014 dc_user \
+&& useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
+USER dc_user
+
 # Essentially running mkdir <name> inside the current working
 # directory, and then cd <name>
 WORKDIR /usr/src/app
@@ -26,5 +30,6 @@ COPY . .
 # the container
 EXPOSE 3000
 
+USER 1015
 # the command line to run when the container is started
 CMD [ "npm", "start" ]
