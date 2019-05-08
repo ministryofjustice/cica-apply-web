@@ -33,7 +33,7 @@ function getPageHTML(transformation, sectionId, isNotFirst) {
                 {% from "back-link/macro.njk" import govukBackLink %}
                 {{ govukBackLink({
                     text: "Back",
-                    href: ${backLink}
+                    href: "${backLink}"
                 }) }}
             {% endblock %}
             {% block innerContent %}
@@ -151,11 +151,13 @@ router
             const questionnaire = section.context;
             const schema = questionnaire.sections[sectionId];
             const {answers} = questionnaire;
+            const scopedAnswers =
+                sectionId === 'p--check-your-answers' ? answers : answers[sectionId];
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
                 uiSchema,
-                data: answers
+                data: scopedAnswers
             });
             const html = getPageHTML(
                 transformation,

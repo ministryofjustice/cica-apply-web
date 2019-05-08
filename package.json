@@ -53,10 +53,10 @@
         },
         "blocks": [
             ".eslintignore",
-            ".eslintrc.js",
-            ".prettierrc.js",
-            ".lintstagedrc.js",
             ".huskyrc.js",
+            ".eslintrc.js",
+            ".lintstagedrc.js",
+            ".prettierrc.js",
             "jest.config.js",
             ".gitignore"
         ],
