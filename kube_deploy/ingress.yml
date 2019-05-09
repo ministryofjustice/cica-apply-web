@@ -1,27 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: dcs-ingress-uat
+  name: webapp-ingress
   namespace: claim-criminal-injuries-compensation-uat
 spec:
   tls:
   - hosts:
-    - data-capture-service.uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
-  - hosts:
-    - data-capture-service.uat.claim-criminal-injuries-compensation.service.justice.gov.uk
-    secretName: data-capture-service-cert-secret-uat
+    - uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
   rules:
-  - host: data-capture-service.uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+  - host: uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
     http:
       paths:
       - path: /
         backend:
-          serviceName: dcs-service-uat
-          servicePort: 80
-  - host: data-capture-service.uat.claim-criminal-injuries-compensation.service.justice.gov.uk
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: dcs-service-uat
-          servicePort: 80
+          serviceName: webapp-service
+          servicePort: 3000

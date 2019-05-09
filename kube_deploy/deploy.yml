@@ -1,22 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: dcs-app-uat
+  name: webapp-uat
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: dcs-app-uat
+        app: webapp-uat
     spec:
       containers:
-      - name: data-capture-service 
+      - name: webapp 
         image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-uat:latest
         ports:
-        - containerPort: 3100
-        env:
-        - name: SECRET
-          valueFrom:
-            secretKeyRef:
-              name: data-capture-service
-              key: secret
+        - containerPort: 3000
