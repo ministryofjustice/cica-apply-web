@@ -21,7 +21,6 @@
         "q-validator": "git+https://github.com/CriminalInjuriesCompensationAuthority/q-validator.git"
     },
     "devDependencies": {
-        "base-config": "git+https://github.com/webstacker/base-config.git",
         "eslint": "^5.8.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-config-prettier": "^3.1.0",
@@ -30,11 +29,12 @@
         "eslint-plugin-prettier": "^3.0.0",
         "fs-extra": "^7.0.0",
         "husky": "^1.3.1",
-        "jest": "^23.6.0",
+        "jest": "^24.1.0",
         "lint-staged": "^8.0.4",
-        "node-sass": "^4.11.0",
+        "node-sass": "^4.12.0",
         "nodemon": "^1.18.9",
-        "prettier": "^1.14.3"
+        "prettier": "^1.14.3",
+        "q-base-config": "github:CriminalInjuriesCompensationAuthority/q-base-config#semver:<1.0.0"
     },
     "license": "MIT",
     "_m0": {
@@ -47,22 +47,23 @@
             "eslint-plugin-prettier": "^3.0.0",
             "fs-extra": "^7.0.0",
             "husky": "^1.3.1",
-            "jest": "^23.6.0",
+            "jest": "^24.1.0",
             "lint-staged": "^8.0.4",
             "prettier": "^1.14.3"
         },
         "blocks": [
-            ".eslintignore",
-            ".huskyrc.js",
             ".eslintrc.js",
+            ".huskyrc.js",
             ".lintstagedrc.js",
+            ".eslintignore",
             ".prettierrc.js",
             "jest.config.js",
             ".gitignore"
         ],
         "files": [
+            "LICENSE",
             ".editorconfig",
-            "stuff/README"
+            "stuff/____README____"
         ]
     }
 }
