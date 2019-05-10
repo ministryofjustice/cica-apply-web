@@ -1516,12 +1516,12 @@ module.exports = {
         'p-applicant-redirect-to-our-other-application': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
-            title: 'You are being redirected to our other application site',
+            title: 'We are still working on this part of the service',
             additionalProperties: false,
             properties: {
                 'you-need-a-different-service': {
                     description:
-                        '<p><strong>You can continue your application using our existing service.</strong></p>'
+                        '<p class="govuk-body">To complete your application <a href="https://www.cica.gov.uk/OAS/Account/create">use our current online service</a>.</p>\n                          {{ govukDetails({\n                              summaryText: "If you need help or support",\n                              html: \'\n                                  <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                                  <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                                  <p class="govuk-body">For practical or emotional support near you <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>\n                                  <p class="govuk-body">There is a different website if you live in <a href="https://www.mygov.scot/victim-witness-support/">Scotland</a>.</p>\n                              \'\n                          }) }}'
                 }
             }
         },
@@ -1540,6 +1540,8 @@ module.exports = {
     },
     routes: {
         initial: 'p-applicant-declaration',
+        referrer: 'start-page',
+        summary: 'p--check-your-answers',
         states: {
             'p-applicant-declaration': {
                 on: {
@@ -1849,13 +1851,7 @@ module.exports = {
                 }
             },
             'p--you-need-to-contact-us': {
-                on: {
-                    ANSWER: [
-                        {
-                            target: 'p-applicant-you-cannot-get-compensation'
-                        }
-                    ]
-                }
+                type: 'final'
             },
             'p--which-english-police-force-is-investigating-the-crime': {
                 on: {
@@ -2112,31 +2108,13 @@ module.exports = {
                 }
             },
             'p--confirmation': {
-                on: {
-                    ANSWER: [
-                        {
-                            target: 'p-applicant-redirect-to-our-other-application'
-                        }
-                    ]
-                }
+                type: 'final'
             },
             'p-applicant-redirect-to-our-other-application': {
-                on: {
-                    ANSWER: [
-                        {
-                            target: 'p-applicant-redirect-to-our-other-application'
-                        }
-                    ]
-                }
+                type: 'final'
             },
             'p-applicant-you-cannot-get-compensation': {
-                on: {
-                    ANSWER: [
-                        {
-                            target: 'p-applicant-did-the-crime-happen-once-or-over-time'
-                        }
-                    ]
-                }
+                type: 'final'
             }
         }
     }
