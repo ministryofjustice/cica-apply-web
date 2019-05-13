@@ -25,7 +25,7 @@ nunjucks.configure(
     }
 );
 
-function getPageHTML(transformation, sectionId, isNotFirst) {
+function getPageHTML(transformation, sectionId, isNotFirst, csrfToken) {
     const backLink = isNotFirst ? `/apply/previous/${sectionId}` : '/start-page';
     return nunjucks.renderString(
         `
@@ -38,7 +38,10 @@ function getPageHTML(transformation, sectionId, isNotFirst) {
                 }) }}
             {% endblock %}
             {% block innerContent %}
-                ${transformation}
+                <form method="post">
+                    ${transformation}
+                    <input type="hidden" id="csrf" name="_csrf" value="${csrfToken}" /></p>
+                </form>
             {% endblock %}
         `
     );
@@ -63,6 +66,16 @@ function logProgress(req, questionnaire) {
 
 function processRequest(reqBody) {
     const body = reqBody;
+
+    // the CSRF token in not in the schemas.
+    // we don't want to pass the CSRF token in to the
+    // validator because will always fail when being
+    // checked against a schema.
+    /* eslint-disable no-underscore-dangle */
+    if (body._csrf) {
+        delete body._csrf;
+    }
+    /* eslint-enable no-underscore-dangle */
 
     // Handle req.body
     Object.keys(body).forEach(property => {
@@ -163,7 +176,8 @@ router
             const html = getPageHTML(
                 transformation,
                 removeSectionIdPrefix(sectionId),
-                questionnaire.progress[0] !== sectionId
+                questionnaire.progress[0] !== sectionId,
+                req.session.CSRFTOKEN
             );
 
             res.send(html);
@@ -197,7 +211,8 @@ router
                 const html = getPageHTML(
                     transformation,
                     removeSectionIdPrefix(sectionId),
-                    questionnaire.progress
+                    questionnaire.progress,
+                    req.session.CSRFTOKEN
                 );
 
                 // logProgress(questionnaire);
