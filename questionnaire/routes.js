@@ -25,8 +25,8 @@ nunjucks.configure(
     }
 );
 
-function getPageHTML(transformation, sectionId, isNotFirst) {
-    const backLink = isNotFirst ? `/apply/previous/${sectionId}` : '/start-page';
+function getPageHTML(transformation, isFinal, backTarget, isSummary) {
+    const buttonTitle = isSummary ? 'Agree and Submit' : 'Continue';
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
@@ -34,13 +34,22 @@ function getPageHTML(transformation, sectionId, isNotFirst) {
                 {% from "back-link/macro.njk" import govukBackLink %}
                 {{ govukBackLink({
                     text: "Back",
-                    href: "${backLink}"
+                    href: "${backTarget}"
                 }) }}
             {% endblock %}
             {% block innerContent %}
-                ${transformation}
+                <form method="post">
+                    {% from "button/macro.njk" import govukButton %}
+                        ${transformation}
+                    {% if showButton %}   
+                        {{ govukButton({
+                            text: "${buttonTitle}"
+                        }) }}
+                    {% endif %}
+                </form>
             {% endblock %}
-        `
+        `,
+        {showButton: !isFinal}
     );
 }
 
@@ -82,10 +91,10 @@ function processRequest(reqBody) {
                 : `${dateParts.year}-${dateParts.month}-01`;
 
             // -- indicates no date parts have been provided
-            if (yearMonthDay === '--') {
+            if (yearMonthDay === '--' || yearMonthDay === '--01') {
                 delete body[property];
             } else {
-                const date = moment(yearMonthDay, ['YYYY-MM-DD', 'YYYY-M-D'], true).toISOString();
+                const date = moment(yearMonthDay).format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
                 if (date !== null) {
                     body[property] = date;
                 } else {
@@ -146,25 +155,25 @@ router
     .route('/:section')
     .get((req, res) => {
         const section = getSection(req.params.section);
-
         if (section) {
             const sectionId = section.id;
             const questionnaire = section.context;
             const schema = questionnaire.sections[sectionId];
             const {answers} = questionnaire;
-            const scopedAnswers =
-                sectionId === 'p--check-your-answers' ? answers : answers[sectionId];
+            const finalSection = questionnaire.routes.states[sectionId].type === 'final';
+            const backLink =
+                sectionId === questionnaire.routes.initial
+                    ? `/${questionnaire.routes.referrer}`
+                    : `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+            const isSummary = sectionId === questionnaire.routes.summary;
+            const scopedAnswers = isSummary ? answers : answers[sectionId];
             const transformation = qTransformer.transform({
                 schemaKey: sectionId,
                 schema,
                 uiSchema,
                 data: scopedAnswers
             });
-            const html = getPageHTML(
-                transformation,
-                removeSectionIdPrefix(sectionId),
-                questionnaire.progress[0] !== sectionId
-            );
+            const html = getPageHTML(transformation, finalSection, backLink, isSummary);
 
             res.send(html);
         } else {
@@ -178,6 +187,12 @@ router
             const sectionId = section.id;
             const questionnaire = section.context;
             const {body} = req;
+            const finalSection = questionnaire.routes.states[sectionId].type === 'final';
+            const backLink =
+                sectionId === questionnaire.routes.initial
+                    ? `/${questionnaire.routes.referrer}`
+                    : `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+            const isSummary = sectionId === questionnaire.routes.summary;
 
             processRequest(body);
 
@@ -194,11 +209,7 @@ router
                     data: body,
                     schemaErrors: errors
                 });
-                const html = getPageHTML(
-                    transformation,
-                    removeSectionIdPrefix(sectionId),
-                    questionnaire.progress
-                );
+                const html = getPageHTML(transformation, finalSection, backLink, isSummary);
 
                 // logProgress(questionnaire);
 

@@ -53,16 +53,16 @@
         },
         "blocks": [
             ".eslintrc.js",
+            ".eslintignore",
             ".huskyrc.js",
             ".lintstagedrc.js",
-            ".eslintignore",
             ".prettierrc.js",
             "jest.config.js",
             ".gitignore"
         ],
         "files": [
-            "LICENSE",
             ".editorconfig",
+            "LICENSE",
             "stuff/____README____"
         ]
     }
