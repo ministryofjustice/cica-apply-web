@@ -1,0 +1,107 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: cica-repo-uat
+    docker:
+      # Image tool container
+      - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/tools:circleci 
+      # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
+jobs:
+  build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build docker image
+          command: |
+              docker build --no-cache -t cica/cica-repo-uat .
+      - run:
+          name: Archive Docker Image
+          command: |
+              docker save -o image.tar cica/cica-repo-uat
+      - persist_to_workspace:
+           root: .
+           paths:
+             - ./image.tar
+  publish_latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+#      - run:
+#          name: Install test tools
+#          command: curl -fsSL https://goss.rocks/install | sh
+      - run:
+          name: Test the container
+          command: |
+              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:latest
+              docker ps
+              docker stop cica-repo-uat
+              docker ps
+  push_image:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Authenticate and push image to ecr
+          command: |
+              echo "run aws"
+              $(aws ecr get-login --region eu-west-2 --no-include-email)
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                 docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
+                 docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
+              fi
+  deploy_to_uat:
+    executor: docker-publisher
+    steps:
+      - setup_remote_docker
+      - run:
+          name: Deploy to the cluster
+          command: |
+              echo "deploy before aws ecr" 
+              $(aws ecr get-login --region eu-west-2 --no-include-email)
+              echo "deploy after aws ecr"
+              setup-kube-auth
+              echo "deploy after setup-kube-auth" 
+              kubectl config use-context uat
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                 kubectl apply -f kube_deploy/ --namespace claim-criminal-injuries-compensation-uat
+              else
+                 echo "You cannot deploy ${CIRCLE_BRANCH} branche.. Only develop brache can be deployed!"
+              fi
+workflows:
+  version: 2
+  build-test-push-deploy:
+    jobs:
+      - build
+      - publish_latest:
+           requires:
+             - build
+      - push_image:
+           requires:
+             - publish_latest
+           filters:
+             branches:
+               only: master
+      - deploy_to_uat:
+           type: approval
+           requires:
+             - push_image
+           filters:
+             branches:
+               only: master
