@@ -91,7 +91,7 @@ module.exports = {
             properties: {
                 'applicant-impact-on-you': {
                     description:
-                        '\n                <p class="govuk-body">On the next page we will ask you to select an option based on how the crime affected you.</p>\n                <p class="govuk-body">We appreciate that this may be difficult for you.</p>\n                <h2 class="govuk-heading-m">If you need help or support</h2>\n                <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                <p class="govuk-body">For practical or emotional support in England and Wales <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>\n                <p class="govuk-body">There is a different website if you live in <a href="https://www.mygov.scot/victim-witness-support/">Scotland</a>.</p>\n            '
+                        '\n                <p class="govuk-body">On the next page we will ask you to select an option based on how the crime affected you.</p>\n                <p class="govuk-body">We appreciate that this may be difficult for you.</p>\n                <h2 class="govuk-heading-m">If you need help or support</h2>\n                <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                <p class="govuk-body">You can get practical or emotional support depending on where you live:</p>\n                <ul class="govuk-list govuk-list--bullet">\n                   <li>in England and Wales <a href="https://www.victimandwitnessinformation.org.uk/">visit the Victim and Witness Information website</a></li>\n                   <li>in Scotland <a href="https://www.mygov.scot/victim-witness-support/">visit the mygov.scot website</a></li>\n                </ul>\n            '
                 }
             }
         },
@@ -104,7 +104,7 @@ module.exports = {
             properties: {
                 'applicant-your-choices': {
                     description:
-                        '\n                <p class="govuk-body-l">We decide what enquiries to make depending on how the crime affected you.</p>\n                <h2 class="govuk-heading-m">Option 1: Sexual assault or abuse</h2>\n                <p class="govuk-body">Any compensation we pay acknowledges the emotional distress the crime caused you.</p>\n                <p class="govuk-body">We normally make a decision based on your application and the information we get from the police.</p>\n                <p class="govuk-body">We will usually make a decision within 4 months. This is because we do not normally need to see your medical records.</p>\n                <h2 class="govuk-heading-m">Option 2: Sexual assault or abuse and other injuries or losses</h2>\n                <p class="govuk-body">We can also pay compensation for:\n                <ul class="govuk-list govuk-list--bullet">\n                <li>lost earnings because you were unable to work</li>\n                <li>physical injuries</li>\n                <li>pregnancy, sexually transmitted disease or loss of foetus</li>\n                <li>disabling mental injuries that are additional to the emotional distress you already suffered</li>\n                </ul>\n                </p>\n                {{ govukDetails({\n                    summaryText: "What is a disabling mental injury?",\n                    text: "A disabling mental injury has a substantial adverse effect on your ability to carry out normal day-to-day activities. For example, reduced performance at school or work, or effects on your social or sexual relationships."\n                }) }}\n                <p class="govuk-body">We may ask a psychiatrist or clinical psychologist to confirm that you have a disabling mental injury if you do not already have a diagnosis.</p>\n                <p class="govuk-body">We will usually make a decision within 12 months. This is because we may need to examine your medical records, get medical reports and assess any losses.</p>\n                {{ govukDetails({\n                summaryText: "If you need help or support",\n                html: \'\n                    <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                    <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                    <p class="govuk-body">For practical or emotional support near you <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>\n                    <p class="govuk-body">There is a different website if you live in <a href="https://www.mygov.scot/victim-witness-support/">Scotland</a>.</p>\n                \'\n                }) }}\n            '
+                        '\n                <p class="govuk-body-l">We decide what enquiries to make depending on how the crime affected you.</p>\n                <h2 class="govuk-heading-m">Option 1: Sexual assault or abuse</h2>\n                <p class="govuk-body">Any compensation we pay acknowledges the emotional distress the crime caused you.</p>\n                <p class="govuk-body">We normally make a decision based on your application and the information we get from the police.</p>\n                <p class="govuk-body">We will usually make a decision within 4 months. This is because we do not normally need to see your medical records.</p>\n                <h2 class="govuk-heading-m">Option 2: Sexual assault or abuse and other injuries or losses</h2>\n                <p class="govuk-body">We can also pay compensation for:\n                <ul class="govuk-list govuk-list--bullet">\n                <li>lost earnings because you were unable to work</li>\n                <li>physical injuries</li>\n                <li>pregnancy, sexually transmitted disease or loss of foetus</li>\n                <li>disabling mental injuries that are additional to the emotional distress you already suffered</li>\n                </ul>\n                </p>\n                {{ govukDetails({\n                    summaryText: "What is a disabling mental injury?",\n                    text: "A disabling mental injury has a substantial adverse effect on your ability to carry out normal day-to-day activities. For example, reduced performance at school or work, or effects on your social or sexual relationships."\n                }) }}\n                <p class="govuk-body">We may ask a psychiatrist or clinical psychologist to confirm that you have a disabling mental injury if you do not already have a diagnosis.</p>\n                <p class="govuk-body">We will usually make a decision within 12 months. This is because we may need to examine your medical records, get medical reports and assess any losses.</p>\n                {{ govukDetails({\n                summaryText: "If you need help or support",\n                html: \'\n                    <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                    <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                    <p class="govuk-body">You can get practical or emotional support depending on where you live:</p>\n                    <ul class="govuk-list govuk-list--bullet">\n                       <li>in England and Wales <a href="https://www.victimandwitnessinformation.org.uk/">visit the Victim and Witness Information website</a></li>\n                       <li>in Scotland <a href="https://www.mygov.scot/victim-witness-support/">visit the mygov.scot website</a></li>\n                    </ul>\n                \'\n                }) }}\n            '
                 },
                 'q-applicant-option': {
                     title: 'Select the option that applies to you',
@@ -112,11 +112,11 @@ module.exports = {
                     oneOf: [
                         {
                             title: 'Option 1: Sexual assault or abuse',
-                            const: 'option-1-sexual-assault-or-abuse'
+                            const: 'option-1:-sexual-assault-or-abuse'
                         },
                         {
                             title: 'Option 2: Sexual assault or abuse and other injuries or losses',
-                            const: 'option-2-sexual-assault-or-abuse-and-other-injuries-ro-losses'
+                            const: 'option-2:-sexual-assault-or-abuse-and-other-injuries-ro-losses'
                         }
                     ],
                     errorMessages: {
@@ -140,7 +140,7 @@ module.exports = {
                 },
                 'dont-know-if-crime-reported': {
                     description:
-                        '\n                {{ govukDetails({\n                summaryText: "I do not know if the crime was reported to the police",\n                html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                        <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                        <p>To get information about the crime you can <a href="https://www.police.uk/contact/101/" target="_blank">contact the Police</a></p>\'\n                }) }}\n            '
+                        '\n                {{ govukDetails({\n                summaryText: "I do not know if the crime was reported to the police",\n                html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                        <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\'\n                }) }}\n            '
                 }
             }
         },
@@ -169,7 +169,7 @@ module.exports = {
             additionalProperties: false,
             properties: {
                 'q-whats-the-crime-reference-number': {
-                    title: "What's the crime reference number?",
+                    title: 'What is the crime reference number?',
                     type: 'string',
                     description:
                         'This is the reference number the police gave the crime when it was reported.',
@@ -225,7 +225,7 @@ module.exports = {
                 },
                 'when-did-the-crime-happen': {
                     description:
-                        '\n                {{ govukDetails({\n                    summaryText: "I do not know when the crime happened",\n                    html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                            <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                            <p>To get information about the crime you can <a href="https://www.police.uk/contact/101/" target="_blank">contact the Police</a></p>\'\n                }) }}\n            '
+                        '\n                {{ govukDetails({\n                    summaryText: "I do not know when the crime happened",\n                    html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                            <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\'\n                }) }}\n            '
                 }
             }
         },
@@ -247,7 +247,7 @@ module.exports = {
                 },
                 'i-dont-know-when-the-crime-started': {
                     description:
-                        '\n                {% from "components/details/macro.njk" import govukDetails %}\n                {{ govukDetails({\n                    summaryText: "I do not know when the crime started",\n                    html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                            <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                            <p>To get information about the crime you can <a href="https://www.police.uk/contact/101/" target="_blank">contact the Police</a></p>\'\n                }) }}\n            '
+                        '\n                {% from "components/details/macro.njk" import govukDetails %}\n                {{ govukDetails({\n                    summaryText: "I do not know when the crime started",\n                    html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                            <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\'\n                }) }}\n            '
                 }
             }
         },
@@ -269,7 +269,7 @@ module.exports = {
                 },
                 'i-dont-know-when-the-crime-stopped': {
                     description:
-                        '\n                {% from "components/details/macro.njk" import govukDetails %}\n                {{ govukDetails({\n                    summaryText: "I do not know when the crime stopped",\n                    html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                            <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                            <p>To get information about the crime you can <a href="https://www.police.uk/contact/101/" target="_blank">contact the Police</a></p>\'\n                }) }}\n            '
+                        '\n                {% from "components/details/macro.njk" import govukDetails %}\n                {{ govukDetails({\n                    summaryText: "I do not know when the crime stopped",\n                    html: \'<p>You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                            <p>Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\'\n                }) }}\n            '
                 }
             }
         },
@@ -287,6 +287,7 @@ module.exports = {
                     type: 'array',
                     maxItems: 4,
                     uniqueItems: true,
+                    description: 'Select all options that apply to you.',
                     items: {
                         anyOf: [
                             {
@@ -454,7 +455,7 @@ module.exports = {
             properties: {
                 'you-need-to-ccontact-us': {
                     description:
-                        '\n                <p class="govuk-body-l">You need to contact us to proceed with your application</p>\n                <p class="govuk-body">You may continue your application, but any future application for the same injuries will be refused.</p>\n            '
+                        '\n                <p class="govuk-body">We need to check if you are eligible for compensation.</p>\n                <p class="govuk-body">Call us on 0300 003 3601. Select option 8.</p>\n                <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n            '
                 }
             }
         },
@@ -761,7 +762,7 @@ module.exports = {
         },
         'p--which-police-scotland-division-is-investigating-the-crime': {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            title: 'What police force is dealing with the crime?',
+            title: 'Which Police Scotland division is investigating the crime?',
             type: 'object',
             required: ['q--which-scottish-police-force-is-investigating-the-crime'],
             additionalProperties: false,
@@ -834,7 +835,7 @@ module.exports = {
         },
         'p--which-welsh-police-force-is-investigating-the-crime': {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            title: 'What police force is dealing with the crime?',
+            title: 'Which Welsh police force is investigating the crime?',
             type: 'object',
             required: ['q--which-welsh-police-force-is-investigating-the-crime'],
             additionalProperties: false,
@@ -883,6 +884,7 @@ module.exports = {
                     type: 'array',
                     maxItems: 3,
                     uniqueItems: true,
+                    description: 'Select all options that apply to you.',
                     items: {
                         anyOf: [
                             {
@@ -934,12 +936,13 @@ module.exports = {
         'p-offender-enter-offenders-name': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
-            title: "Enter the offender's name",
+            title: 'Enter their name',
             required: ['q-offenders-name'],
             additionalProperties: false,
             properties: {
                 'q-offenders-name': {
                     type: 'string',
+                    title: 'Offenders name',
                     description: 'We will not contact the offender.',
                     maxLength: 120,
                     errorMessages: {
@@ -971,7 +974,7 @@ module.exports = {
                         anyOf: [
                             {
                                 title: 'I have no contact with the offender',
-                                const: 'none'
+                                const: 'i-have-no-contact-with-the-offender'
                             }
                         ]
                     }
@@ -1072,7 +1075,7 @@ module.exports = {
                 'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
                     type: 'string',
                     title: 'Briefly explain why not.',
-                    maxLength: 500,
+                    maxLength: 499,
                     errorMessages: {
                         required:
                             'Explain why you did not apply for or receive any other form of compensation',
@@ -1337,6 +1340,7 @@ module.exports = {
                 },
                 'q-applicant-building-and-street2': {
                     type: 'string',
+                    title: "<span class='govuk-visually-hidden'>Building and street line 2",
                     maxLength: 60,
                     errorMessages: {
                         maxLength: 'Second line of address must be less than 60 characters'
@@ -1345,7 +1349,7 @@ module.exports = {
                 'q-applicant-town-or-city': {
                     type: 'string',
                     title: 'Town or city',
-                    maxLength: 60,
+                    maxLength: 32,
                     errorMessages: {
                         required: 'Enter the town or city where you live',
                         maxLength: 'Town or city must be 60 characters or less'
@@ -1353,15 +1357,15 @@ module.exports = {
                 },
                 'q-applicant-county': {
                     type: 'string',
-                    title: 'County',
-                    maxLength: 60,
+                    title: 'County (optional)',
+                    maxLength: 32,
                     errorMessages: {
                         maxLength: 'County must be 60 characters or less'
                     }
                 },
                 'q-applicant-postcode': {
                     type: 'string',
-                    title: 'Postcode',
+                    title: 'Postcode (optional)',
                     maxLength: 10,
                     errorMessages: {
                         maxLength: 'Postcode must be 10 characters or less'
@@ -1392,6 +1396,7 @@ module.exports = {
         'p--check-your-answers': {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
+            title: 'Check your answers',
             additionalProperties: false,
             properties: {
                 'p-check-your-answers': {
@@ -1400,7 +1405,7 @@ module.exports = {
                             displayName: 'Name'
                         },
                         'p-applicant-have-you-been-known-by-any-other-names': {
-                            displayName: 'Have you been known by other names?'
+                            displayName: 'Have you been known by any other names?'
                         },
                         'p-applicant-what-other-names-have-you-used': {
                             displayName: 'Other names'
@@ -1409,13 +1414,13 @@ module.exports = {
                             displayName: 'Date of birth'
                         },
                         'p-applicant-enter-your-email-address': {
-                            displayName: 'Email'
+                            displayName: 'Email address'
                         },
                         'p-applicant-enter-your-address': {
                             displayName: 'Address'
                         },
                         'p-applicant-enter-your-telephone-number': {
-                            displayName: 'Phone Number'
+                            displayName: 'Telephone Number'
                         },
                         'p-applicant-british-citizen-or-eu-national': {
                             displayName: 'Are you a British citizen or EU National?'
@@ -1430,7 +1435,7 @@ module.exports = {
                             displayName: 'Were you a victim of sexual assault or abuse?'
                         },
                         'p-applicant-select-the-option-that-applies-to-you': {
-                            displayName: 'Select the option that applies'
+                            displayName: "Option you've selected"
                         },
                         'p-applicant-did-the-crime-happen-once-or-over-time': {
                             displayName: 'Did the crime happen once or over a period of time?'
@@ -1463,10 +1468,10 @@ module.exports = {
                             displayName: 'Do you know the name of the offender?'
                         },
                         'p-offender-enter-offenders-name': {
-                            displayName: 'Offenders name'
+                            displayName: "Offender's name"
                         },
                         'p-offender-describe-contact-with-offender': {
-                            displayName: 'Describe your contact with the offender'
+                            displayName: 'Contact with offender'
                         },
                         'p--was-the-crime-reported-to-police': {
                             displayName: 'Was the crime reported to police?'
@@ -1509,7 +1514,7 @@ module.exports = {
             properties: {
                 confirmation: {
                     description:
-                        '\n                <div class="govuk-grid-column-two-thirds">\n                    {{ govukPanel({\n                        titleText: "Application submitted",\n                        html: "**Reference Number here**"\n                    }) }}\n                    <p></p>\n                    <p class="govuk-body-l">Thank you for submitting your application.</p>\n                    <p class="govuk-body-l">We have sent a confirmation email to <strong>**Email here**</strong></p>\n                    <h2 class="govuk-heading-m">What happens next</h2>\n                    <p>We will:</p>\n                    <ul class="govuk-list govuk-list--bullet">\n                    <li>ask the police for evidence</li>\n                    <li>use the police evidence to make a decision</li>\n                    <li>send our decision to **Email here**</li>\n                    </ul>\n                    <p class="govuk-body">We will usually make a decision within 4 months.</p>\n                    {{ govukWarningText({\n                        text: "You must inform us immediately if any of the information you have given us changes, especially your address, telephone number or email address.",\n                        iconFallbackText: "Warning"\n                    }) }}\n                    <p class="govuk-body">You can contact our Customer Service Centre on 0300 003 3601. Select option 8 when the call is answered.</p>\n                    <p><a href="/application/confirmation-page-if-automatic-nil">What did you think of this service?</a> (takes 30 seconds)</p>\n                    <p><a href="/application/application-submitted-email">Check your inbox</a></p>\n                </div>\n            '
+                        '\n                <div class="govuk-grid-column-two-thirds">\n                    {{ govukPanel({\n                        titleText: "Application submitted",\n                        html: "**Reference Number here**"\n                    }) }}\n                    <p></p>\n                    <p class="govuk-body-l">Thank you for submitting your application.</p>\n                    <p class="govuk-body-l">We have sent a confirmation email to <strong>**Email here**</strong></p>\n                    <h2 class="govuk-heading-m">What happens next</h2>\n                    <p>We will:</p>\n                    <ul class="govuk-list govuk-list--bullet">\n                    <li>ask the police for evidence</li>\n                    <li>use the police evidence to make a decision</li>\n                    <li>send our decision to **Email here**</li>\n                    </ul>\n                    <p class="govuk-body">We will usually make a decision within 4 months.</p>\n                    {{ govukWarningText({\n                        text: "You must inform us immediately if any of the information you have given us changes, especially your address, telephone number or email address.",\n                        iconFallbackText: "Warning"\n                    }) }}\n                    <p class="govuk-body">You can contact our Customer Service Centre on 0300 003 3601. Select option 8 when the call is answered.</p>\n                    <p><a href="https://www.surveymonkey.com/r/Privatebetafeedback">What did you think of this service?</a> (takes 30 seconds)</p>\n                    <p><a href="/application/application-submitted-email">Check your inbox</a></p>\n                </div>\n            '
                 }
             }
         },
@@ -1521,19 +1526,19 @@ module.exports = {
             properties: {
                 'you-need-a-different-service': {
                     description:
-                        '<p class="govuk-body">To complete your application <a href="https://www.cica.gov.uk/OAS/Account/create">use our current online service</a>.</p>\n                          {{ govukDetails({\n                              summaryText: "If you need help or support",\n                              html: \'\n                                  <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                                  <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                                  <p class="govuk-body">For practical or emotional support near you <a href="https://www.victimsinformationservice.org.uk/" target="_blank">visit the Victim and Witness Information</a> website.</p>\n                                  <p class="govuk-body">There is a different website if you live in <a href="https://www.mygov.scot/victim-witness-support/">Scotland</a>.</p>\n                              \'\n                          }) }}'
+                        '<p class="govuk-body">To complete your application <a href="https://www.cica.gov.uk/OAS/Account/create">use our current online service</a>.</p>\n                          {{ govukDetails({\n                              summaryText: "If you need help or support",\n                              html: \'\n                                  <p class="govuk-body">You can contact us for help with your application on 0300 003 3601. Select option 8.</p>\n                                  <p class="govuk-body">Our phone lines are open Monday to Friday 8.30am to 5pm except Wednesday when they open at 10am.</p>\n                                  <p class="govuk-body">You can get practical or emotional support depending on where you live:</p>\n                                  <ul class="govuk-list govuk-list--bullet">\n                                     <li>in England and Wales <a href="https://www.victimandwitnessinformation.org.uk/">visit the Victim and Witness Information website</a></li>\n                                     <li>in Scotland <a href="https://www.mygov.scot/victim-witness-support/">visit the mygov.scot website</a></li>\n                                  </ul>\n                              \'\n                          }) }}'
                 }
             }
         },
         'p-applicant-you-cannot-get-compensation': {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            title: 'You can not get compensation',
+            title: 'You cannot get compensation',
             type: 'object',
             additionalProperties: false,
             properties: {
                 'you-cannot-get-compensation': {
                     description:
-                        '\n                <p class="govuk-body-l">If the crime has not been reported to the police we can not pay compensation.</p>\n                <p class="govuk-body">You may continue your application, but any future application for the same injuries will be refused.</p>\n            '
+                        '\n                <p class="govuk-body">If the crime has not been reported to the police we can not pay compensation.</p>\n                <p class="govuk-body">You may continue your application, but any future application for the same injuries will be refused.</p>\n            '
                 }
             }
         }
@@ -1657,7 +1662,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option',
-                                'option-2-sexual-assault-or-abuse-and-other-injuries-ro-losses'
+                                'option-2:-sexual-assault-or-abuse-and-other-injuries-ro-losses'
                             ]
                         },
                         {
@@ -1665,7 +1670,7 @@ module.exports = {
                             cond: [
                                 '==',
                                 '$.answers.p-applicant-select-the-option-that-applies-to-you.q-applicant-option',
-                                'option-1-sexual-assault-or-abuse'
+                                'option-1:-sexual-assault-or-abuse'
                             ]
                         }
                     ]
@@ -1827,7 +1832,20 @@ module.exports = {
                 on: {
                     ANSWER: [
                         {
-                            target: 'p--which-english-police-force-is-investigating-the-crime'
+                            target: 'p-offender-do-you-know-the-name-of-the-offender',
+                            cond: [
+                                '==',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
+                                false
+                            ]
+                        },
+                        {
+                            target: 'p--which-english-police-force-is-investigating-the-crime',
+                            cond: [
+                                '==',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
+                                true
+                            ]
                         }
                     ]
                 }
@@ -1836,7 +1854,20 @@ module.exports = {
                 on: {
                     ANSWER: [
                         {
-                            target: 'p--which-police-scotland-division-is-investigating-the-crime'
+                            target: 'p-offender-do-you-know-the-name-of-the-offender',
+                            cond: [
+                                '==',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
+                                false
+                            ]
+                        },
+                        {
+                            target: 'p--which-police-scotland-division-is-investigating-the-crime',
+                            cond: [
+                                '==',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
+                                true
+                            ]
                         }
                     ]
                 }
@@ -1845,7 +1876,20 @@ module.exports = {
                 on: {
                     ANSWER: [
                         {
-                            target: 'p--which-welsh-police-force-is-investigating-the-crime'
+                            target: 'p-offender-do-you-know-the-name-of-the-offender',
+                            cond: [
+                                '==',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
+                                false
+                            ]
+                        },
+                        {
+                            target: 'p--which-welsh-police-force-is-investigating-the-crime',
+                            cond: [
+                                '==',
+                                '$.answers.p--was-the-crime-reported-to-police.q-was-the-crime-reported-to-police',
+                                true
+                            ]
                         }
                     ]
                 }
@@ -1862,13 +1906,7 @@ module.exports = {
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
                                 '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
-                                [
-                                    'or',
-                                    [
-                                        'q-applicant-when-did-the-crime-happen',
-                                        '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
-                                    ]
-                                ]
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -1886,13 +1924,7 @@ module.exports = {
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
                                 '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
-                                [
-                                    'or',
-                                    [
-                                        'q-applicant-when-did-the-crime-happen',
-                                        '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
-                                    ]
-                                ]
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -1910,13 +1942,7 @@ module.exports = {
                             cond: [
                                 'dateDifferenceGreaterThanTwoDays',
                                 '$.answers.p--when-was-the-crime-reported-to-police.q--when-was-the-crime-reported-to-police',
-                                [
-                                    'or',
-                                    [
-                                        'q-applicant-when-did-the-crime-happen',
-                                        '$.answers.p-applicant-when-did-the-crime-stop.q-applicant-when-did-the-crime-stop'
-                                    ]
-                                ]
+                                '$.answers.p-applicant-when-did-the-crime-happen.q-applicant-when-did-the-crime-happen'
                             ]
                         },
                         {
@@ -2114,7 +2140,13 @@ module.exports = {
                 type: 'final'
             },
             'p-applicant-you-cannot-get-compensation': {
-                type: 'final'
+                on: {
+                    ANSWER: [
+                        {
+                            target: 'p-applicant-did-the-crime-happen-once-or-over-time'
+                        }
+                    ]
+                }
             }
         }
     }
