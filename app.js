@@ -5,8 +5,8 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 
-// const indexRouter = require('./routes/index');
-const indexRouter = require('./questionnaire/routes');
+const indexRouter = require('./index/routes');
+const questionnaireRouter = require('./questionnaire/routes');
 
 const app = express();
 
@@ -14,6 +14,7 @@ nunjucks.configure(
     [
         'node_modules/govuk-frontend/',
         'node_modules/govuk-frontend/components/',
+        'index/',
         'questionnaire/',
         'page/'
     ],
@@ -25,8 +26,10 @@ nunjucks.configure(
 
 app.use(helmet());
 app.use(logger('dev'));
+// https://expressjs.com/en/api.html#express.json
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+// https://expressjs.com/en/api.html#express.urlencoded
+app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -44,5 +47,6 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/all.js'))
 );
 app.use('/', indexRouter);
+app.use('/apply', questionnaireRouter);
 
 module.exports = app;

@@ -1,0 +1,24 @@
+# Disallow all files - allows for whitelist instead of blacklist
+*
+
+# Allow specific file with a !
+# e.g. !specific_file
+
+# Works with directories in Docker
+# e.g. !my_directory/
+
+# Works with directories in Npm
+# e.g. !my_directory/**/*
+
+# package.json and package-lock.json
+!bin
+!page
+!public
+!index
+!questionnaire
+!src
+
+!package.json
+!package-lock.json
+!app.js
+

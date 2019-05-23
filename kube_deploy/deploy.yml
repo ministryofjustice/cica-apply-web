@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp-uat
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webapp-uat
+    spec:
+      containers:
+      - name: webapp 
+        image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-uat:latest
+        ports:
+        - containerPort: 3000
