@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Archive Docker Image
           command: |
-              docker save -o image.tar cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker save -o image.tar cica/cica-repo-uat:latest
       - persist_to_workspace:
            root: .
            paths:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Test the container
           command: |
-              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:latest
               docker ps
               docker stop cica-repo-uat
               docker ps
@@ -63,12 +63,12 @@ jobs:
               echo "run aws"
               $(aws ecr get-login --region eu-west-2 --no-include-email)
 
-              docker tag cica/cica-repo-uat:${CIRCLE_SHA1} ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
 
               if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
-                 docker tag cica/cica-repo-uat:${CIRCLE_SHA1} ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
-                 docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
+                 docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+                 docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               fi
   deploy_to_uat:
     executor: docker-publisher
