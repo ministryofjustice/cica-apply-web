@@ -77,17 +77,23 @@ jobs:
       - run:
           name: Deploy to the cluster
           command: |
-              echo "deploy before aws ecr" 
-              $(aws ecr get-login --region eu-west-2 --no-include-email)
-              echo "deploy after aws ecr"
-              setup-kube-auth
-              echo "deploy after setup-kube-auth" 
-              kubectl config use-context uat
-              if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
-                 kubectl apply -f kube_deploy/ --namespace claim-criminal-injuries-compensation-uat
-              else
-                 echo "You cannot deploy ${CIRCLE_BRANCH} branche.. Only develop brache can be deployed!"
-              fi
+            kubectl set image -f kube_deploy/staging/deploy.yml app=${ECR_ENDPOINT}/cica/cica-repo-uat:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -f -
+            kubectl apply \
+                -f kube_deploy/staging/service.yml \
+                -f kube_deploy/staging/ingress.yml \
+                -f kube_deploy/staging/cert.yml \
+ #             echo "deploy before aws ecr" 
+ #             $(aws ecr get-login --region eu-west-2 --no-include-email)
+ #             echo "deploy after aws ecr"
+ #             setup-kube-auth
+ #             echo "deploy after setup-kube-auth" 
+ #             kubectl config use-context uat
+ #             if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
+ #                kubectl apply -f kube_deploy/ --namespace claim-criminal-injuries-compensation-uat
+ #             else
+ #                echo "You cannot deploy ${CIRCLE_BRANCH} branche.. Only develop brache can be deployed!"
+ #             fi
 workflows:
   version: 2
   build-test-push-deploy:
