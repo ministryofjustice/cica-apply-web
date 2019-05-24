@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Test the container
           command: |
-              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:latest
               docker ps
               docker stop cica-repo-uat
               docker ps
