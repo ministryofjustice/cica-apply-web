@@ -29,7 +29,7 @@ jobs:
            root: .
            paths:
              - ./image.tar
-  publish_${CIRCLE_SHA1}:
+  publish_latest:
     executor: docker-publisher
     steps:
       - attach_workspace:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Test the container
           command: |
-              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:latest
               docker ps
               docker stop cica-repo-uat
               docker ps
@@ -63,8 +63,8 @@ jobs:
               echo "run aws"
               $(aws ecr get-login --region eu-west-2 --no-include-email)
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                 docker tag cica/cica-repo-uat:${CIRCLE_SHA1} ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
-                 docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+                 docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
+                 docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
               fi
   deploy_to_uat:
     executor: docker-publisher
