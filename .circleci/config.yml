@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Archive Docker Image
           command: |
-              docker save -o image.tar cica/cica-repo-uat
+              docker save -o image.tar cica/cica-repo-uat:${CIRCLE_SHA1}
       - persist_to_workspace:
            root: .
            paths:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Test the container
           command: |
-              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:latest
+              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:${CIRCLE_SHA1}
               docker ps
               docker stop cica-repo-uat
               docker ps
@@ -66,7 +66,7 @@ jobs:
               docker tag cica/cica-repo-uat:${CIRCLE_SHA1} ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
 
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
                  docker tag cica/cica-repo-uat:${CIRCLE_SHA1} ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
                  docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:latest
               fi
@@ -83,7 +83,7 @@ jobs:
               setup-kube-auth
               echo "deploy after setup-kube-auth" 
               kubectl config use-context uat
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
                  kubectl apply -f kube_deploy/ --namespace claim-criminal-injuries-compensation-uat
               else
                  echo "You cannot deploy ${CIRCLE_BRANCH} branche.. Only develop brache can be deployed!"
@@ -101,11 +101,11 @@ workflows:
              - publish_latest
            filters:
              branches:
-               only: master
+               only: RCcircleCI
       - deploy_to_uat:
            type: approval
            requires:
              - push_image
            filters:
              branches:
-               only: master
+               only: RCcircleCI
