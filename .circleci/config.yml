@@ -73,6 +73,11 @@ jobs:
   deploy_to_uat:
     executor: docker-publisher
     steps:
+      - run:
+          name: Kubectl deployment
+          command: |
+            setup-kube-auth
+            kubectl config use-context production
       - setup_remote_docker
       - run:
           name: Deploy to the cluster
@@ -80,9 +85,9 @@ jobs:
             kubectl set image -f kube_deploy/deploy.yml app=${ECR_ENDPOINT}/cica/cica-repo-uat:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
-                -f kubernetes_deploy/service.yml \
-                -f kubernetes_deploy/ingress.yml \
-                -f kubernetes_deploy/cert.yml
+                -f kube_deploy/service.yml \
+                -f kube_deploy/ingress.yml \
+                -f kube_deploy/cert.yml
  #             echo "deploy before aws ecr" 
  #             $(aws ecr get-login --region eu-west-2 --no-include-email)
  #             echo "deploy after aws ecr"
