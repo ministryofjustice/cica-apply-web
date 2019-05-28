@@ -67,7 +67,7 @@ jobs:
               docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
 
               if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
-                 docker tag app ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+                 docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
                  docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               fi
   deploy_to_uat:
@@ -82,7 +82,7 @@ jobs:
       - deploy:
           name: Deploy to the cluster
           command: |
-            kubectl set image -f kube_deploy/deploy.yml app=webapp --local -o yaml \
+            kubectl set image ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1} -f kube_deploy/deploy.yml  --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/service.yml \
