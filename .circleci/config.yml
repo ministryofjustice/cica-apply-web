@@ -67,7 +67,7 @@ jobs:
               docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
 
               if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
-                 docker tag ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+                 docker tag app ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
                  docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               fi
   deploy_to_uat:
