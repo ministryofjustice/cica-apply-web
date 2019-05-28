@@ -24,12 +24,12 @@ jobs:
       - run:
           name: Archive Docker Image
           command: |
-              docker save -o image.tar cica/cica-repo-uat
+              docker save -o image.tar cica/cica-repo-uat:latest
       - persist_to_workspace:
            root: .
            paths:
              - ./image.tar
-  publish_${CIRCLE_SHA1}:
+  publish_latest:
     executor: docker-publisher
     steps:
       - attach_workspace:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Test the container
           command: |
-              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker run -d -p 3001:3001 --restart=always --name cica-repo-uat cica/cica-repo-uat:latest
               docker ps
               docker stop cica-repo-uat
               docker ps
@@ -62,8 +62,12 @@ jobs:
           command: |
               echo "run aws"
               $(aws ecr get-login --region eu-west-2 --no-include-email)
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                 docker tag cica/cica-repo-uat:${CIRCLE_SHA1} ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+
+              docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+              docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
+
+              if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
+                 docker tag cica/cica-repo-uat:latest ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
                  docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               fi
   deploy_to_uat:
@@ -79,17 +83,17 @@ jobs:
                 -f kubernetes_deploy/service.yml \
                 -f kubernetes_deploy/ingress.yml \
                 -f kubernetes_deploy/cert.yml
-#              echo "deploy before aws ecr" 
-#              $(aws ecr get-login --region eu-west-2 --no-include-email)
-#              echo "deploy after aws ecr"
-#              setup-kube-auth
-#              echo "deploy after setup-kube-auth" 
-#              kubectl config use-context uat
-#              if [ "${CIRCLE_BRANCH}" == "master" ]; then
-#                 kubectl apply -f kube_deploy/ --namespace claim-criminal-injuries-compensation-uat
-#              else
-#                 echo "You cannot deploy ${CIRCLE_BRANCH} branche.. Only develop brache can be deployed!"
-#              fi
+ #             echo "deploy before aws ecr" 
+ #             $(aws ecr get-login --region eu-west-2 --no-include-email)
+ #             echo "deploy after aws ecr"
+ #             setup-kube-auth
+ #             echo "deploy after setup-kube-auth" 
+ #             kubectl config use-context uat
+ #             if [ "${CIRCLE_BRANCH}" == "RCcircleCI" ]; then
+ #                kubectl apply -f kube_deploy/ --namespace claim-criminal-injuries-compensation-uat
+ #             else
+ #                echo "You cannot deploy ${CIRCLE_BRANCH} branche.. Only develop brache can be deployed!"
+ #             fi
 workflows:
   version: 2
   build-test-push-deploy:
@@ -103,11 +107,11 @@ workflows:
              - publish_latest
            filters:
              branches:
-               only: master
+               only: RCcircleCI
       - deploy_to_uat:
            type: approval
            requires:
              - push_image
            filters:
              branches:
-               only: master
+               only: RCcircleCI
