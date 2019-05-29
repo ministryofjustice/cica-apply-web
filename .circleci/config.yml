@@ -105,9 +105,8 @@ workflows:
              branches:
                only: RCcircleCI
       - deploy_to_uat:
-           type: approval
+#          type: approval
            requires:
-             - build
              - push_image
            filters:
              branches:
