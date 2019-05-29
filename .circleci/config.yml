@@ -71,14 +71,12 @@ jobs:
                  docker push ${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1}
               fi
   deploy_to_uat:
-    executor: docker-publisher
     steps:
       - run:
           name: Kubectl deployment
           command: |
             setup-kube-auth
             kubectl config use-context uat
-      - setup_remote_docker
       - deploy:
           name: Deploy to the cluster
           command: |
