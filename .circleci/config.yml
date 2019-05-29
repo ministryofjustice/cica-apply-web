@@ -82,7 +82,7 @@ jobs:
       - deploy:
           name: Deploy to the cluster
           command: |
-            kubectl set image -f kube_deploy/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/deploy.yml webapp-uat=${ECR_REPOSITORY}/cica/cica-repo-uat:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/service.yml \
