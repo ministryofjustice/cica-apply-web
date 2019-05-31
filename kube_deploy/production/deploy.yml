@@ -1,13 +1,13 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: webapp-uat
+  name: webapp-prod
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: webapp-uat
+        app: webapp-prod
     spec:
       containers:
       - name: webapp 
