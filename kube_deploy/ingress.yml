@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  namespace: claim-criminal-injuries-compensation-uat
+spec:
+  tls:
+  - hosts:
+    - uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+  - hosts:
+    - uat.claim-criminal-injuries-compensation.service.justice.gov.uk
+    secretName: uat-claim-criminal-injuries-compensation-cert-secret
+  rules:
+  - host: uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webapp-service
+          servicePort: 3000
+  - host: uat.claim-criminal-injuries-compensation.service.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webapp-service
+          servicePort: 3000
