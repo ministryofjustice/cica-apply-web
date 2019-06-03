@@ -8,14 +8,10 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
+  commonName: uat.claim-criminal-injuries-compensation.service.justice.gov.uk
   acme:
     config:
     - dns01:
         provider: route53-cloud-platform
       domains:
-      - claim-criminal-injuries-compensation.service.justice.gov.uk
-      - uat-claim-criminal-injuries-compensation.service.justice.gov.uk
-  commonName: claim-criminal-injuries-compensation.service.justice.gov.uk
-  dnsNames:
-  - claim-criminal-injuries-compensation.service.justice.gov.uk
-  - uat-claim-criminal-injuries-compensation.service.justice.gov.uk
+      - uat.claim-criminal-injuries-compensation.service.justice.gov.uk
