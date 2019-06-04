@@ -9,6 +9,7 @@ spec:
     - claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
   - hosts:
     - claim-criminal-injuries-compensation.service.justice.gov.uk
+    secretName: claim-criminal-injuries-compensation-cert-secret
   rules:
   - host: claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
     http:
