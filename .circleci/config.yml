@@ -132,7 +132,7 @@ workflows:
              branches:
                only: RCcircleCI
       - deploy_to_prod:
-#           type: approval
+           type: approval
            requires:
              - push_image
              - deploy_to_uat
