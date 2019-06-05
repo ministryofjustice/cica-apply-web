@@ -112,7 +112,7 @@ jobs:
                 -f kube_deploy/Production/cert.yml
 workflows:
   version: 2
-  build-test-push-deployuat-deployprod:
+  build-test-push-deployuat-deploytoprodapproval_deployprod:
     jobs:
       - build
       - publish_latest:
@@ -131,11 +131,17 @@ workflows:
            filters:
              branches:
                only: RCcircleCI
-      - deploy_to_prod:
+      - deploy_to_prod_approval:
            type: approval
            requires:
              - push_image
              - deploy_to_uat
+           filters:
+             branches:
+               only: RCcircleCI
+      - deploy_to_prod:
+            requires:
+             - deploy_to_prod_approval
            filters:
              branches:
                only: RCcircleCI
