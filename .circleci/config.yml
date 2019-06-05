@@ -140,7 +140,7 @@ workflows:
              branches:
                only: RCcircleCI
       - deploy_to_prod:
-            requires:
+           requires:
              - deploy_to_prod_approval
            filters:
              branches:
