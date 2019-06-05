@@ -70,8 +70,29 @@ function logProgress(req, questionnaire) {
     console.log('-------------------\n\n\n');
 }
 
-function processRequest(reqBody) {
+function processRequest(reqBody, section) {
     const body = reqBody;
+    if (section in uiSchema && uiSchema[section].options.properties) {
+        Object.keys(uiSchema[section].options.properties).forEach(question => {
+            let convertedAnswer = body[question];
+            if (body[question] === 'true') {
+                convertedAnswer = true;
+            } else if (body[question] === 'false') {
+                convertedAnswer = false;
+            }
+            if (uiSchema[section].options.properties[question].options.conditionalComponentMap) {
+                uiSchema[section].options.properties[
+                    question
+                ].options.conditionalComponentMap.forEach(mapping => {
+                    if (convertedAnswer !== mapping.itemValue) {
+                        mapping.componentIds.forEach(id => {
+                            delete body[id];
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     // Handle req.body
     Object.keys(body).forEach(property => {
@@ -194,7 +215,7 @@ router
                     : `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
             const isSummary = sectionId === questionnaire.routes.summary;
 
-            processRequest(body);
+            processRequest(body, sectionId);
 
             const currentSchema = questionnaire.sections[sectionId];
             // Ajv mutates the data it's testing when using the coerce option
