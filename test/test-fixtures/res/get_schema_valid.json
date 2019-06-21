@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "type": "section",
+            "id": "p-applicant-british-citizen-or-eu-national",
+            "attributes": {
+                "required": ["q-applicant-british-citizen-or-eu-national"],
+                "errorMessage": {
+                    "required": {
+                        "q-applicant-british-citizen-or-eu-national": "Select yes if you are a British citizen or EU national"
+                    }
+                },
+                "additionalProperties": false,
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                    "q-applicant-british-citizen-or-eu-national": {
+                        "type": "boolean",
+                        "title": "Are you a British citizen or EU national?"
+                    }
+                }
+            }
+        }
+    ]
+}
