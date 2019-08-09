@@ -15,7 +15,7 @@ router.route('/').get(async (req, res, next) => {
         );
         res.redirect(`${req.baseUrl}/${initialSection}`);
     } catch (err) {
-        res.status(404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk');
         next(err);
     }
 });
@@ -31,9 +31,9 @@ router.route('/previous/:section').get(async (req, res, next) => {
             const prev = `${req.baseUrl}/${formHelper.removeSectionIdPrefix(sectionId)}`;
             return res.redirect(prev);
         }
-        return res.redirect(`/${sectionId}`);
+        return res.redirect(`/apply/${sectionId}`);
     } catch (err) {
-        res.status(404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk');
         return next(err);
     }
 });
@@ -46,11 +46,10 @@ router
                 req.cicaSession.questionnaireId,
                 req.params.section
             );
-            console.log(sectionDetails.body);
-            const html = formHelper.getSectionHtml(sectionDetails.body);
+            const html = formHelper.getSectionHtml(sectionDetails);
             res.send(html);
         } catch (err) {
-            res.status(404).render('404.njk');
+            res.status(err.statusCode || 404).render('404.njk');
             next(err);
         }
     })
@@ -79,9 +78,31 @@ router
                 res.send(html);
             }
         } catch (err) {
-            res.status(404).render('404.njk');
+            res.status(err.statusCode || 404).render('404.njk');
             next(err);
         }
     });
+
+router.route('/submission/confirm').post(async (req, res, next) => {
+    try {
+        await qService.postSubmission(req.cicaSession.questionnaireId);
+        const response = await qService.getSubmissionStatus(
+            req.cicaSession.questionnaireId,
+            Date.now()
+        );
+        if (response.submitted) {
+            return res.redirect('/apply/confirmation');
+        }
+        const err = Error(`The service is currently unavailable`);
+        err.name = 'HTTPError';
+        err.statusCode = 503;
+        err.error = '503 Service unavailable';
+        res.status(err.statusCode).render('503.njk');
+        return next(err);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
 
 module.exports = router;

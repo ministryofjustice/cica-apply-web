@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -42,8 +44,8 @@ app.use(
         activeDuration: 15 * 60 * 1000, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
         cookie: {
             ephemeral: false, // when true, cookie expires when the browser closes
-            httpOnly: true, // when true, cookie is not accessible from javascript
-            proxySecure: true // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
+            httpOnly: false, // when true, cookie is not accessible from javascript
+            proxySecure: false // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
         }
     })
 );
