@@ -72,12 +72,69 @@ function questionnaireService() {
         return service.get(opts);
     }
 
+    function getSubmission(questionnaireId) {
+        const opts = {
+            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/submissions`,
+            headers: {
+                Authorization: `Bearer ${process.env.DCS_JWT}`
+            }
+        };
+        return service.get(opts);
+    }
+
+    function postSubmission(questionnaireId) {
+        const opts = {
+            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/submissions`,
+            headers: {
+                Authorization: `Bearer ${process.env.DCS_JWT}`
+            },
+            body: {
+                data: [
+                    {
+                        type: 'submissions',
+                        attributes: {
+                            questionnaireId
+                        }
+                    }
+                ]
+            }
+        };
+        return service.post(opts);
+    }
+
+    function timeout(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function getSubmissionStatus(questionnaireId, startingDate) {
+        if (Date.now() - startingDate >= 15000) {
+            const err = Error(`The upstream server took too long to respond`);
+            err.name = 'HTTPError';
+            err.statusCode = 504;
+            err.error = '504 Gateway Timeout';
+            throw err;
+        }
+        const result = await getSubmission(questionnaireId);
+        const {submitted} = result.data.attributes;
+
+        if (submitted) {
+            return {submitted: true};
+        }
+
+        // check again.
+        await timeout(1000);
+        return getSubmissionStatus(questionnaireId, startingDate);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
         postSection,
         getPrevious,
-        getCurrentSection
+        getCurrentSection,
+        getSubmissionStatus,
+        postSubmission,
+        getSubmission
     });
 }
 

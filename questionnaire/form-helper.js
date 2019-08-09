@@ -2,6 +2,7 @@
 
 const nunjucks = require('nunjucks');
 const moment = require('moment');
+// const merge = require('lodash.merge');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 
@@ -18,23 +19,33 @@ nunjucks.configure(
     }
 );
 
-function render(transformation, isFinal, backTarget, isSummary) {
+function renderSection(
+    transformation,
+    isFinal,
+    backTarget,
+    isSummary,
+    variables = {},
+    showBackLink = true
+) {
     const buttonTitle = isSummary ? 'Agree and Submit' : 'Continue';
+    const showButton = !isFinal;
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
             {% block innerHeader %}
-                {% from "back-link/macro.njk" import govukBackLink %}
-                {{ govukBackLink({
-                    text: "Back",
-                    href: "${backTarget}"
-                }) }}
+                {% if ${showBackLink} %}
+                    {% from "back-link/macro.njk" import govukBackLink %}
+                    {{ govukBackLink({
+                        text: "Back",
+                        href: "${backTarget}"
+                    }) }}
+                {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post">
+                <form method="post" {%- if ${isSummary} %} action="/apply/submission/confirm"{% endif %}>
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation}
-                    {% if showButton %}   
+                    {% if ${showButton} %}   
                         {{ govukButton({
                             text: "${buttonTitle}"
                         }) }}
@@ -42,7 +53,7 @@ function render(transformation, isFinal, backTarget, isSummary) {
                 </form>
             {% endblock %}
         `,
-        {showButton: !isFinal}
+        variables
     );
 }
 
@@ -182,7 +193,7 @@ function getSectionHtml(sectionData, body = {}, errors = {valid: true}) {
         data: answers,
         schemaErrors: errorObject
     });
-    return render(transformation, display.final, backLink, summary);
+    return renderSection(transformation, display.final, backLink, summary);
 }
 
 function getNextSection(nextSectionId, requestedNextSectionId = undefined) {
@@ -195,7 +206,7 @@ function getNextSection(nextSectionId, requestedNextSectionId = undefined) {
 }
 
 module.exports = {
-    render,
+    renderSection,
     processRequest,
     removeSectionIdPrefix,
     getSectionHtml,

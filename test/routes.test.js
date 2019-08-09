@@ -1,25 +1,131 @@
 'use strict';
 
 const request = require('supertest');
+const formHelper = require('../questionnaire/form-helper');
+
+let agent;
+let app;
 
 const createQuestionnaire = require('./test-fixtures/res/get_questionnaire.json');
 const createQuestionnaireInvalid = require('./test-fixtures/res/get_invalid_questionnaire.json');
 const getSectionValid = require('./test-fixtures/res/get_schema_valid');
 const getPreviousValid = require('./test-fixtures/res/get_previous_valid');
+const getPreviousNameValid = require('./test-fixtures/res/get_previous_name_valid');
+const postValidSubmission = require('./test-fixtures/res/post_valid_submission');
+const getSectionHtmlValid = require('./test-fixtures/transformations/resolved html/p-some-section');
+const getCurrentSection = require('./test-fixtures/res/get_current_section_valid');
 
 // const questionnaireService = require('../questionnaire/questionnaire-service');
 
-let app;
-
-/**
- * Testing Data capture service endpoints
- */
-
 describe('Data capture service endpoints', () => {
-    describe('Cica-web routes', () => {
+    describe('Cica-web static routes', () => {
+        beforeAll(() => {
+            // eslint-disable-next-line global-require
+            app = require('../app');
+        });
         describe('/', () => {
             describe('GET', () => {
-                describe('302', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the consent heading', async () => {
+                        const response = await request(app).get('/');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Help us test a new criminal injuries compensation service</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/start-page', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/start-page');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the start page heading', async () => {
+                        const response = await request(app).get('/start-page');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/cookies', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/cookies');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the start page heading', async () => {
+                        const response = await request(app).get('/cookies');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Cookies</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/contact-us', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/contact-us');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the start page heading', async () => {
+                        const response = await request(app).get('/contact-us');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Contact us</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/transition', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the start page heading', async () => {
+                        const response = await request(app).get('/transition');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">We are still working on this part of the service</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+    });
+    describe('Cica-web /apply routes', () => {
+        beforeEach(() => {
+            jest.resetModules();
+        });
+        describe('/', () => {
+            describe('GET', () => {
+                /* describe('302', () => {
                     beforeAll(() => {
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
@@ -30,31 +136,62 @@ describe('Data capture service endpoints', () => {
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
-                    it('Should respond with a Found status', async () => {
-                        const response = await request(app).get('/apply');
-                        expect(response.statusCode).toBe(302);
-                    });
-
-                    it('Should respond by redirecting the user', async () => {
-                        const response = await request(app).get('/apply');
-                        expect(response.res.text).toBe(
-                            'Found. Redirecting to /apply/applicant-declaration'
-                        );
-                    });
-
-                    it('Should set a cookie called cicaSession', async () => {
-                        const response = await request(app)
-                            .get('/apply')
-                            .set('Accept', 'application/json');
-
-                        let cookiePresent = false;
-                        const cookies = response.header['set-cookie'];
-                        cookies.forEach(cookie => {
-                            cookiePresent = cookie.startsWith('cicaSession=')
-                                ? true
-                                : cookiePresent;
+                    it('Should respond with a Found status', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(response => {
+                            expect(response.statusCode).toBe(302);
                         });
-                        expect(cookiePresent).toBe(true);
+                    });
+                }); */
+                describe('302', () => {
+                    beforeAll(() => {
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
+                            // return a modified factory function, that returns an object with a method, that returns a valid created response
+                            jest.fn(() => ({
+                                createQuestionnaire: () => createQuestionnaire,
+                                getCurrentSection: () => getCurrentSection
+                            }))
+                        );
+                        // eslint-disable-next-line global-require
+                        app = require('../app');
+                    });
+                    it('Should respond with a found status', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() => {
+                            formHelper.removeSectionIdPrefix = jest.fn(
+                                () => 'applicant-enter-your-address'
+                            );
+                            return agent
+                                .get('/apply/')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(302);
+                                });
+                        });
+                    });
+                    it('Should redirect the user', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(response => {
+                            expect(response.res.text).toBe(
+                                'Found. Redirecting to /apply/applicant-enter-your-address'
+                            );
+                        });
+                    });
+                    it('Should set a cicaSession cookie', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(response => {
+                            let cookiePresent = false;
+                            const cookies = response.header['set-cookie'];
+                            cookies.forEach(cookie => {
+                                cookiePresent = cookie.startsWith('cicaSession=')
+                                    ? true
+                                    : cookiePresent;
+                            });
+                            expect(cookiePresent).toBe(true);
+                        });
                     });
                 });
                 describe('404', () => {
@@ -69,22 +206,11 @@ describe('Data capture service endpoints', () => {
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
-                    it('Should fail gracefully', async () => {
-                        const response = await request(app).get('/apply');
-                        expect(response.statusCode).toBe(404);
-                    });
-                    it('Should not set a cookie', async () => {
-                        const response = await request(app).get('/apply');
-                        let cookiePresent = false;
-                        const cookies = response.header['set-cookie'];
-                        if (cookies) {
-                            cookies.forEach(cookie => {
-                                cookiePresent = cookie.startsWith('cicaSession=')
-                                    ? true
-                                    : cookiePresent;
-                            });
-                        }
-                        expect(cookiePresent).toBe(false);
+                    it('Should fail gracefully', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply').then(response => {
+                            expect(response.statusCode).toBe(404);
+                        });
                     });
                 });
             });
@@ -93,83 +219,106 @@ describe('Data capture service endpoints', () => {
             describe('GET', () => {
                 describe('200', () => {
                     beforeAll(() => {
+                        jest.resetModules();
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
-                                getSection: () => getSectionValid
+                                getSection: () => getSectionValid,
+                                createQuestionnaire: () => createQuestionnaire
                             }))
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
-                        app.use('/apply', (req, res, next) => {
-                            req.cicaSession.questionnaireId = 'SomeCookie';
-                            next(); // <-- important!
+                    });
+                    it('Should respond with a success status', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() => {
+                            formHelper.getSectionHtml = jest.fn(() => getSectionHtmlValid);
+                            return agent
+                                .get('/apply/applicant-enter-your-name')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(200);
+                                });
                         });
                     });
-                    it('Should respond with a success status', async () => {
-                        const response = await request(app).get('/apply/applicant-enter-your-name');
-                        expect(response.statusCode).toBe(200);
-                    });
-
-                    it('Should display the section to the user', async () => {
-                        const response = await request(app).get('/apply');
-                        expect(response.res.text).toBe(
-                            'Found. Redirecting to /apply/applicant-declaration'
-                        );
+                    it('Should respond with a valid page', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() => {
+                            formHelper.getSectionHtml = jest.fn(() => getSectionHtmlValid);
+                            return agent
+                                .get('/apply/applicant-enter-your-name')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.res.text).toContain(
+                                        '<p>This is a valid page</p>'
+                                    );
+                                });
+                        });
                     });
                 });
                 describe('404', () => {
                     beforeAll(() => {
-                        jest.resetModules();
-                        jest.doMock('../questionnaire/request-service', () =>
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
-                                post: () => createQuestionnaireInvalid
+                                getSection: () => getSectionValid,
+                                createQuestionnaire: () => createQuestionnaire
                             }))
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
                     it('Should fail gracefully', async () => {
-                        const response = await request(app).get(
-                            '/apply/p-applicant-enter-your-name'
-                        );
-                        expect(response.statusCode).toBe(404);
-                    });
-                    it('Should not set a cookie', async () => {
-                        const response = await request(app).get(
-                            '/apply/p-applicant-enter-your-name'
-                        );
-                        let cookiePresent = false;
-                        const cookies = response.header['set-cookie'];
-                        if (cookies) {
-                            cookies.forEach(cookie => {
-                                cookiePresent = cookie.startsWith('cicaSession=')
-                                    ? true
-                                    : cookiePresent;
-                            });
-                        }
-                        expect(cookiePresent).toBe(false);
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() => {
+                            formHelper.getSectionHtml = jest.fn(() => 404);
+                            return agent
+                                .get('/apply/applicant-enter-your-name')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(404);
+                                });
+                        });
                     });
                 });
             });
-            describe('POST', () => {
+            /* describe('POST', () => {
                 describe('200', () => {
                     beforeAll(() => {
-                        jest.doMock('../questionnaire/request-service', () =>
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
-                                post: () => createQuestionnaire
+                                getSection: () => getSectionValid,
+                                createQuestionnaire: () => createQuestionnaire
                             }))
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
-                    it('Should respond with a success status', async () => {
-                        const response = await request(app)
-                            .get('/apply/p-applicant-declaration')
-                            .set('Cookie', 'cicaSession=CookiesAreKewl');
-                        expect(response.statusCode).toBe(200);
+                    it('Should respond with a success status', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() => {
+                            formHelper.getSectionHtml = jest.fn(() => getSectionHtml);
+                            return agent
+                                .get('/apply/applicant-enter-your-name')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(200);
+                                });
+                        });
                     });
 
                     it('Should display the section to the user', async () => {
@@ -209,86 +358,259 @@ describe('Data capture service endpoints', () => {
                         expect(cookiePresent).toBe(false);
                     });
                 });
-            });
+            }); */
         });
         describe('/apply/previous/:section', () => {
             describe('GET', () => {
                 describe('200', () => {
+                    describe('Given a section ID', () => {
+                        beforeAll(() => {
+                            jest.doMock('../questionnaire/questionnaire-service', () =>
+                                // return a modified factory function, that returns an object with a method, that returns a valid created response
+                                jest.fn(() => ({
+                                    getPrevious: () => getPreviousValid,
+                                    createQuestionnaire: () => createQuestionnaire
+                                }))
+                            );
+                            // eslint-disable-next-line global-require
+                            app = require('../app');
+                        });
+                        it('Should respond with a found status', () => {
+                            agent = request.agent(app);
+                            return agent.get('/apply/').then(() => {
+                                formHelper.removeSectionIdPrefix = jest.fn(
+                                    () => 'applicant-declaration'
+                                );
+                                return agent
+                                    .get('/apply/previous/applicant-enter-your-name')
+                                    .set(
+                                        'Cookie',
+                                        'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                    )
+                                    .then(response => {
+                                        expect(response.statusCode).toBe(302);
+                                    });
+                            });
+                        });
+                        it('Should redirect the user', () => {
+                            agent = request.agent(app);
+                            return agent.get('/apply/').then(() => {
+                                formHelper.removeSectionIdPrefix = jest.fn(
+                                    () => 'applicant-declaration'
+                                );
+                                return agent
+                                    .get('/apply/previous/applicant-enter-your-name')
+                                    .set(
+                                        'Cookie',
+                                        'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                    )
+                                    .then(response => {
+                                        expect(response.res.text).toBe(
+                                            'Found. Redirecting to /apply/applicant-declaration'
+                                        );
+                                    });
+                            });
+                        });
+                    });
+                    describe('Given a section name', () => {
+                        beforeAll(() => {
+                            jest.doMock('../questionnaire/questionnaire-service', () =>
+                                // return a modified factory function, that returns an object with a method, that returns a valid created response
+                                jest.fn(() => ({
+                                    getPrevious: () => getPreviousNameValid,
+                                    createQuestionnaire: () => createQuestionnaire
+                                }))
+                            );
+                            // eslint-disable-next-line global-require
+                            app = require('../app');
+                        });
+                        it('Should respond with a found status', () => {
+                            agent = request.agent(app);
+                            return agent.get('/apply/').then(() => {
+                                formHelper.removeSectionIdPrefix = jest.fn(
+                                    () => 'applicant-enter-your-date-of-birth'
+                                );
+                                return agent
+                                    .get('/apply/previous/applicant-enter-your-name')
+                                    .set(
+                                        'Cookie',
+                                        'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                    )
+                                    .then(response => {
+                                        expect(response.statusCode).toBe(302);
+                                    });
+                            });
+                        });
+                        it('Should redirect the user', () => {
+                            agent = request.agent(app);
+                            return agent.get('/apply/').then(() => {
+                                formHelper.removeSectionIdPrefix = jest.fn(
+                                    () => 'applicant-enter-your-date-of-birth'
+                                );
+                                return agent
+                                    .get('/apply/previous/applicant-enter-your-name')
+                                    .set(
+                                        'Cookie',
+                                        'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                    )
+                                    .then(response => {
+                                        expect(response.res.text).toBe(
+                                            'Found. Redirecting to /apply/applicant-enter-your-date-of-birth'
+                                        );
+                                    });
+                            });
+                        });
+                    });
+                });
+                describe('404', () => {
                     beforeAll(() => {
-                        jest.doMock('../questionnaire/request-service', () =>
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
-                                getPrevious: () => getPreviousValid
+                                createQuestionnaire: () => createQuestionnaire,
+                                getPrevious() {
+                                    const err = Error(`The page was not found`);
+                                    err.name = 'HTTPError';
+                                    err.statusCode = 404;
+                                    err.error = '404 Not Found';
+                                    throw err;
+                                }
                             }))
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
-                    it('Should respond with a found status', async () => {
-                        /* const mockRequest = () => ({
-                            cicaSession: {questionnaireId: 'CookiesAreKewl'}
-                        }); */
-                        const response = await request(app)
-                            .get('/apply/p-applicant-declaration')
-                            .set('Set-Cookie', 'cicaSession=CookiesAreKewl');
-                        expect(response.statusCode).toBe(302);
+                    it('Should fail gracefully', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() => {
+                            formHelper.removeSectionIdPrefix = jest.fn(
+                                () => 'applicant-declaration'
+                            );
+                            return agent
+                                .get('/apply/previous/applicant-enter-your-name')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(404);
+                                });
+                        });
                     });
-
-                    it('Should display the section to the user', async () => {
-                        const response = await request(app).get('/apply');
-                        expect(response.res.text).toBe(
-                            'Found. Redirecting to /apply/applicant-declaration'
+                });
+            });
+        });
+        describe('/apply/submission/confirm', () => {
+            describe('POST', () => {
+                describe('201', () => {
+                    beforeAll(() => {
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
+                            // return a modified factory function, that returns an object with a method, that returns a valid created response
+                            jest.fn(() => ({
+                                postSubmission: () => {},
+                                getSubmissionStatus: () => postValidSubmission,
+                                createQuestionnaire: () => createQuestionnaire
+                            }))
+                        );
+                        // eslint-disable-next-line global-require
+                        app = require('../app');
+                    });
+                    it('Should respond with a found status', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() =>
+                            agent
+                                .post('/apply/submission/confirm')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(302);
+                                })
+                        );
+                    });
+                    it('Should redirect the user to the confirmation page', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() =>
+                            agent
+                                .post('/apply/submission/confirm')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.res.text).toBe(
+                                        'Found. Redirecting to /apply/confirmation'
+                                    );
+                                })
                         );
                     });
                 });
                 describe('404', () => {
                     beforeAll(() => {
-                        jest.resetModules();
-                        jest.doMock('../questionnaire/request-service', () =>
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
-                                post: () => createQuestionnaireInvalid
+                                postSubmission: () => {},
+                                getSubmissionStatus: () => {},
+                                createQuestionnaire: () => createQuestionnaire
                             }))
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
-                    it('Should fail gracefully', async () => {
-                        const response = await request(app).get('/apply');
-                        expect(response.statusCode).toBe(404);
+                    it('Should fail gracefully', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() =>
+                            agent
+                                .post('/apply/submission/confirm')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(404);
+                                })
+                        );
                     });
-                    it('Should not set a cookie', async () => {
-                        const response = await request(app).get('/apply');
-                        let cookiePresent = false;
-                        const cookies = response.header['set-cookie'];
-                        if (cookies) {
-                            cookies.forEach(cookie => {
-                                cookiePresent = cookie.startsWith('cicaSession=')
-                                    ? true
-                                    : cookiePresent;
-                            });
-                        }
-                        expect(cookiePresent).toBe(false);
+                });
+                describe('503', () => {
+                    beforeAll(() => {
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
+                            // return a modified factory function, that returns an object with a method, that returns a valid created response
+                            jest.fn(() => ({
+                                postSubmission: () => {},
+                                getSubmissionStatus() {
+                                    const err = Error(
+                                        `The upstream server took too long to respond`
+                                    );
+                                    err.name = 'HTTPError';
+                                    err.statusCode = 504;
+                                    err.error = '504 Gateway Timeout';
+                                    throw err;
+                                },
+                                createQuestionnaire: () => createQuestionnaire
+                            }))
+                        );
+                        // eslint-disable-next-line global-require
+                        app = require('../app');
+                    });
+                    it('Should throw a 504 if the service times out', () => {
+                        agent = request.agent(app);
+                        return agent.get('/apply/').then(() =>
+                            agent
+                                .post('/apply/submission/confirm')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(504);
+                                })
+                        );
                     });
                 });
             });
-        });
-    });
-    describe('questionnaire service routes', () => {
-        it('Should create a new questionnaire', async () => {
-            jest.doMock('../questionnaire/questionnaire-service', () =>
-                jest.fn(() => ({
-                    createQuestionnaire: () => createQuestionnaire
-                }))
-            );
-            jest.resetModules();
-
-            // eslint-disable-next-line no-shadow,global-require
-            const questionnaireService = require('../questionnaire/questionnaire-service')();
-
-            const response = await questionnaireService.createQuestionnaire();
-
-            expect(JSON.stringify(response)).toMatch(JSON.stringify(createQuestionnaire));
         });
     });
 });
