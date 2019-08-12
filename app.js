@@ -9,7 +9,6 @@ const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
-
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 

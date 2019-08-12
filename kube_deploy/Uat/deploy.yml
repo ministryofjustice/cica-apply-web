@@ -1,17 +1,30 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: webapp-uat
+    name: webapp-uat
 spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: webapp-uat
-    spec:
-      containers:
-      - name: webapp 
-        image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-uat:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: webapp-uat
+        spec:
+            containers:
+                - name: webapp
+                  image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-uat:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 3000
+                  env:
+                      - name: CW_DCS_URL
+                        value: https://uat.claim-criminal-injuries-compensation.service.justice.gov.uk/api/v1
+                      - name: CW_DCS_JWT
+                        valueFrom:
+                            secretKeyRef:
+                                name: cw-dcs-jwt
+                                key: secret
+                      - name: CW_COOKIE_SECRET
+                        valueFrom:
+                            secretKeyRef:
+                                name: cw-cookie-secret
+                                key: secret

@@ -153,55 +153,172 @@ describe('form-helper functions', () => {
 
     describe('Process errors', () => {
         it('Should return a correctly formatted error', () => {
-            const error = [
-                {
-                    type: 'errors',
-                    attributes: [
-                        {
-                            title: 'q-applicant-british-citizen-or-eu-national',
-                            detail: 'Select yes if you are a British citizen or EU national'
+            const error = {
+                errors: [
+                    {
+                        status: 400,
+                        title: '400 Bad Request',
+                        detail: 'Select yes if you are a British citizen or EU national',
+                        code: 'errorMessage',
+                        source: {
+                            pointer: '/data/attributes'
+                        },
+                        meta: {
+                            raw: {
+                                keyword: 'errorMessage',
+                                dataPath: '',
+                                schemaPath: '#/errorMessage',
+                                params: {
+                                    errors: [
+                                        {
+                                            keyword: 'required',
+                                            dataPath: '',
+                                            schemaPath: '#/required',
+                                            params: {
+                                                missingProperty:
+                                                    'q-applicant-british-citizen-or-eu-national'
+                                            },
+                                            message:
+                                                "should have required property 'q-applicant-british-citizen-or-eu-national'"
+                                        }
+                                    ]
+                                },
+                                message: 'Select yes if you are a British citizen or EU national'
+                            }
                         }
-                    ]
+                    }
+                ],
+                meta: {
+                    schema: {
+                        type: 'object',
+                        $schema: 'http://json-schema.org/draft-07/schema#',
+                        required: ['q-applicant-british-citizen-or-eu-national'],
+                        properties: {
+                            'q-applicant-british-citizen-or-eu-national': {
+                                type: 'boolean',
+                                title: 'Are you a British citizen or EU national?'
+                            }
+                        },
+                        errorMessage: {
+                            required: {
+                                'q-applicant-british-citizen-or-eu-national':
+                                    'Select yes if you are a British citizen or EU national'
+                            }
+                        },
+                        additionalProperties: false
+                    },
+                    answers: {}
                 }
-            ];
+            };
             const expected = {
                 'q-applicant-british-citizen-or-eu-national':
                     'Select yes if you are a British citizen or EU national'
             };
-            const actual = formHelper.processErrors(error);
+            const actual = formHelper.processErrors(error.errors);
 
             expect(actual).toMatchObject(expected);
         });
 
         it('Should return a list of correctly formatted errors given more than one', () => {
-            const error = [
-                {
-                    type: 'errors',
-                    attributes: [
-                        {
-                            title: 'question-one',
-                            detail: 'error-one'
+            const error = {
+                errors: [
+                    {
+                        status: 400,
+                        title: '400 Bad Request',
+                        detail: 'Enter your title',
+                        code: 'errorMessage',
+                        source: {
+                            pointer: '/data/attributes'
                         },
-                        {
-                            title: 'question-two',
-                            detail: 'error-two'
+                        meta: {
+                            raw: {
+                                keyword: 'errorMessage',
+                                dataPath: '',
+                                schemaPath: '#/errorMessage',
+                                params: {
+                                    errors: [
+                                        {
+                                            keyword: 'required',
+                                            dataPath: '',
+                                            schemaPath: '#/required',
+                                            params: {
+                                                missingProperty: 'q-applicant-name-title'
+                                            },
+                                            message:
+                                                "should have required property 'q-applicant-name-title'"
+                                        }
+                                    ]
+                                },
+                                message: 'Enter your title'
+                            }
                         }
-                    ]
+                    },
+                    {
+                        status: 400,
+                        title: '400 Bad Request',
+                        detail: 'Enter your forename',
+                        code: 'errorMessage',
+                        source: {
+                            pointer: '/data/attributes'
+                        },
+                        meta: {
+                            raw: {
+                                keyword: 'errorMessage',
+                                dataPath: '',
+                                schemaPath: '#/errorMessage',
+                                params: {
+                                    errors: [
+                                        {
+                                            keyword: 'required',
+                                            dataPath: '',
+                                            schemaPath: '#/required',
+                                            params: {
+                                                missingProperty: 'q-applicant-enter-your-firstname'
+                                            },
+                                            message:
+                                                "should have required property 'q-applicant-enter-your-firstname'"
+                                        }
+                                    ]
+                                },
+                                message: 'Enter your name'
+                            }
+                        }
+                    }
+                ],
+                meta: {
+                    schema: {
+                        type: 'object',
+                        $schema: 'http://json-schema.org/draft-07/schema#',
+                        required: [
+                            'q-applicant-enter-your-firstname',
+                            'q-applicant-enter-your-title'
+                        ],
+                        properties: {
+                            'q-applicant-enter-your-title': {
+                                type: 'string',
+                                title: 'Enter your title'
+                            },
+                            'q-applicant-enter-your-firstname': {
+                                type: 'string',
+                                title: 'Enter your name'
+                            }
+                        },
+                        errorMessage: {
+                            required: {
+                                'q-applicant-enter-your-firstname': 'Enter your name',
+                                'q-applicant-enter-your-title': 'Enter your title'
+                            }
+                        },
+                        additionalProperties: false
+                    },
+                    answers: {}
                 }
-            ];
-            const expected = {
-                'question-one': 'error-one',
-                'question-two': 'error-two'
             };
-            const actual = formHelper.processErrors(error);
-
-            expect(actual).toMatchObject(expected);
-        });
-
-        it('Should return valid if the default value is passed in', () => {
-            const error = {valid: true};
-            const expected = {valid: true};
-            const actual = formHelper.processErrors(error);
+            const expected = {
+                'q-applicant-name-title': 'Enter your title',
+                'q-applicant-enter-your-firstname': 'Enter your forename'
+            };
+            const actual = formHelper.processErrors(error.errors);
 
             expect(actual).toMatchObject(expected);
         });
@@ -223,7 +340,7 @@ describe('form-helper functions', () => {
             const expected = {
                 'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true
             };
-            const actual = formHelper.processPreviousAnswers(answerObject, {});
+            const actual = formHelper.processPreviousAnswers(answerObject);
 
             expect(actual).toMatchObject(expected);
         });
@@ -245,15 +362,6 @@ describe('form-helper functions', () => {
                 'question-two': 'answer-two'
             };
             const actual = formHelper.processPreviousAnswers(answerObject, {});
-
-            expect(actual).toMatchObject(expected);
-        });
-
-        it('Should return valid if the default value is passed in', () => {
-            const answerObject = [];
-            const body = {'question-one': 'answer-one'};
-            const expected = {'question-one': 'answer-one'};
-            const actual = formHelper.processPreviousAnswers(answerObject, body);
 
             expect(actual).toMatchObject(expected);
         });

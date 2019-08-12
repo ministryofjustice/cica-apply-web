@@ -173,7 +173,7 @@ module.exports = {
                         }
                     }
                 },
-                'q-applicant-building-and-street2': {
+                'q-applicant-building-and-street-2': {
                     options: {
                         macroOptions: {
                             classes: ''
@@ -183,7 +183,7 @@ module.exports = {
             },
             outputOrder: [
                 'q-applicant-building-and-street',
-                'q-applicant-building-and-street2',
+                'q-applicant-building-and-street-2',
                 'q-applicant-town-or-city',
                 'q-applicant-county',
                 'q-applicant-postcode'
@@ -192,22 +192,18 @@ module.exports = {
     },
     'p--was-the-crime-reported-to-police': {
         options: {
-            outputOrder: ['q-was-the-crime-reported-to-police', 'dont-know-if-crime-reported']
+            outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported']
         }
     },
     'p-applicant-enter-your-name': {
         options: {
-            outputOrder: [
-                'q-applicant-name-title',
-                'q-applicant-name-firstname',
-                'q-applicant-name-lastname'
-            ]
+            outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name']
         }
     },
     'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
         options: {
             outputOrder: [
-                'q-applicant-reason-for-delay-in-application',
+                'q-applicant-explain-reason-for-delay-application',
                 'q-applicant-select-reasons-for-the-delay-in-making-your-application'
             ]
         }
@@ -215,7 +211,7 @@ module.exports = {
     'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
         options: {
             outputOrder: [
-                'q-applicant-reason-for-delay-in-reporting-crime',
+                'q-applicant-explain-reason-for-delay-reporting',
                 'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
             ]
         }
@@ -247,7 +243,10 @@ module.exports = {
     },
     'p-offender-describe-contact-with-offender': {
         options: {
-            outputOrder: ['q-offender-contact-description', 'q-offender-no-contact-with-offender']
+            outputOrder: [
+                'q-offender-describe-contact-with-offender',
+                'q-offender-i-have-no-contact-with-offender'
+            ]
         }
     }
 };
