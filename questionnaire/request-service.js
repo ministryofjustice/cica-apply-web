@@ -12,10 +12,11 @@ function requestService() {
                 'Content-Type': 'application/vnd.api+json'
             },
             json: true,
-            body: options.body
+            body: options.body,
+            throwHttpErrors: false
         };
         opts = merge(opts, options);
-        return got(options.url, opts);
+        return got(opts.url, opts);
     }
 
     function get(options) {
@@ -25,11 +26,11 @@ function requestService() {
                 accept: 'application/json',
                 'Content-Type': 'application/json'
             },
-            json: true
+            json: true,
+            throwHttpErrors: false
         };
         opts = merge(opts, options);
-        const {query} = opts || {};
-        return got(opts.url, opts, {query});
+        return got(opts.url, opts);
     }
 
     return Object.freeze({

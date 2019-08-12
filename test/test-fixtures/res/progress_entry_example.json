@@ -1,18 +1,22 @@
 {
-    "data": {
-        "type": "progress-entries",
-        "id": "08dbd0d2-6cee-49e5-a55f-35b31ac4aa9e",
-        "attributes": {
-            "sectionId": "p-applicant-declaration"
-        },
-        "relationships": {
-            "section": {
-                "data": {
-                    "type": "sections",
-                    "id": "p-applicant-declaration"
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "08dbd0d2-6cee-49e5-a55f-35b31ac4aa9e",
+                "attributes": {
+                    "sectionId": "p-applicant-declaration"
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p-applicant-declaration"
+                        }
+                    }
                 }
             }
-        },
+        ],
         "links": {
             "prev": "questionnaires/{questionnaireId}/progress-entries?page[before]=p-applicant-declaration"
         },

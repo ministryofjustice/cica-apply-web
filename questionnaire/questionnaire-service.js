@@ -5,9 +5,9 @@ const service = require('./request-service')();
 function questionnaireService() {
     function createQuestionnaire() {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires`,
+            url: `${process.env.CW_DCS_URL}/questionnaires`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
             body: {
                 data: {
@@ -23,9 +23,9 @@ function questionnaireService() {
 
     function getSection(questionnaireId, section) {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/sections/${section}`,
+            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
         };
         return service.get(opts);
@@ -33,27 +33,25 @@ function questionnaireService() {
 
     function postSection(questionnaireId, section, body) {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/sections/${section}/answers`,
+            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
             body: {
-                data: [
-                    {
-                        type: 'answers',
-                        attributes: body
-                    }
-                ]
+                data: {
+                    type: 'answers',
+                    attributes: body
+                }
             }
         };
         return service.post(opts);
     }
 
-    function getPrevious(questionnaireId, section) {
+    function getPrevious(questionnaireId, sectionId) {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/sections/${section}/previous`,
+            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
         };
         return service.get(opts);
@@ -61,12 +59,9 @@ function questionnaireService() {
 
     function getCurrentSection(currentQuestionnaireId) {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/progress-entries`,
+            url: `${process.env.CW_DCS_URL}/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
-            },
-            query: {
-                questionnaireId: currentQuestionnaireId
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
         };
         return service.get(opts);
@@ -74,9 +69,9 @@ function questionnaireService() {
 
     function getSubmission(questionnaireId) {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/submissions`,
+            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/submissions`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
         };
         return service.get(opts);
@@ -84,19 +79,17 @@ function questionnaireService() {
 
     function postSubmission(questionnaireId) {
         const opts = {
-            url: `${process.env.DATA_CAPTURE_SERVICE}/questionnaires/${questionnaireId}/submissions`,
+            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/submissions`,
             headers: {
-                Authorization: `Bearer ${process.env.DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
             body: {
-                data: [
-                    {
-                        type: 'submissions',
-                        attributes: {
-                            questionnaireId
-                        }
+                data: {
+                    type: 'submissions',
+                    attributes: {
+                        questionnaireId
                     }
-                ]
+                }
             }
         };
         return service.post(opts);
@@ -115,10 +108,9 @@ function questionnaireService() {
             throw err;
         }
         const result = await getSubmission(questionnaireId);
-        const {submitted} = result.data.attributes;
-
+        const {submitted} = result.body.data.attributes;
         if (submitted) {
-            return {submitted: true};
+            return result.body.data.attributes;
         }
 
         // check again.
@@ -132,9 +124,10 @@ function questionnaireService() {
         postSection,
         getPrevious,
         getCurrentSection,
-        getSubmissionStatus,
+        getSubmission,
         postSubmission,
-        getSubmission
+        timeout,
+        getSubmissionStatus
     });
 }
 

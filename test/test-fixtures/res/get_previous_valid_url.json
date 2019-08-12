@@ -1,0 +1,14 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "referrer",
+                "attributes": {
+                    "sectionId": null,
+                    "url": "http://www.google.com/"
+                }
+            }
+        ]
+    }
+}

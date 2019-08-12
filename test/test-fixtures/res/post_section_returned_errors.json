@@ -1,0 +1,54 @@
+{
+    "errors": [
+        {
+            "status": 400,
+            "title": "400 Bad Request",
+            "detail": "Select yes if you are a British citizen or EU national",
+            "code": "errorMessage",
+            "source": {
+                "pointer": "/data/attributes"
+            },
+            "meta": {
+                "raw": {
+                    "keyword": "errorMessage",
+                    "dataPath": "",
+                    "schemaPath": "#/errorMessage",
+                    "params": {
+                        "errors": [
+                            {
+                                "keyword": "required",
+                                "dataPath": "",
+                                "schemaPath": "#/required",
+                                "params": {
+                                    "missingProperty": "q-applicant-british-citizen-or-eu-national"
+                                },
+                                "message": "should have required property 'q-applicant-british-citizen-or-eu-national'"
+                            }
+                        ]
+                    },
+                    "message": "Select yes if you are a British citizen or EU national"
+                }
+            }
+        }
+    ],
+    "meta": {
+        "schema": {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "required": ["q-applicant-british-citizen-or-eu-national"],
+            "properties": {
+                "q-applicant-british-citizen-or-eu-national": {
+                    "type": "boolean",
+                    "title": "Are you a British citizen or EU national?"
+                }
+            },
+            "errorMessage": {
+                "required": {
+                    "q-applicant-british-citizen-or-eu-national": "Select yes if you are a British citizen or EU national"
+                }
+            },
+            "additionalProperties": false
+        },
+        "answers": {}
+    }
+}

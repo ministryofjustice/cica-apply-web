@@ -5,6 +5,7 @@ const moment = require('moment');
 // const merge = require('lodash.merge');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
+const sectionList = require('./non-complex-sexual-assault-id-mapper');
 
 nunjucks.configure(
     [
@@ -129,7 +130,7 @@ function correctPartialDates(body, property) {
 }
 
 function processRequest(rawBody, section) {
-    // Handle conditionally revealing routes
+    // // Handle conditionally revealing routes
     let body = rawBody;
     const sectionId = inUiSchema(section);
     if (sectionId && uiSchema[sectionId].options.properties) {
@@ -145,21 +146,8 @@ function processRequest(rawBody, section) {
     return {};
 }
 
-function processErrors(errors) {
-    let errorObject = errors;
-    if (!errorObject.valid) {
-        errorObject = errorObject.reduce((acc, {attributes}) => {
-            attributes.forEach(err => {
-                acc[err.title] = err.detail;
-            });
-            return acc;
-        }, {});
-    }
-    return errorObject;
-}
-
-function processPreviousAnswers(answersObject, body) {
-    let answers = body;
+function processPreviousAnswers(answersObject) {
+    let answers = {};
     if (answersObject.length) {
         answers = answersObject.reduce((acc, {attributes}) => {
             Object.keys(attributes).forEach(question => {
@@ -171,18 +159,12 @@ function processPreviousAnswers(answersObject, body) {
     return answers;
 }
 
-function getSectionHtml(sectionData, body = {}, errors = {valid: true}) {
-    const schema =
-        sectionData.data[0].type === 'answers'
-            ? sectionData.included[0].attributes
-            : sectionData.data[0].attributes;
-    const sectionId =
-        sectionData.data[0].type === 'answers'
-            ? sectionData.included[0].id
-            : sectionData.data[0].id;
+function getSectionHtml(sectionData) {
+    const {sectionId} = sectionData.data[0].attributes;
+    const schema = sectionData.included.filter(section => section.type === 'sections')[0]
+        .attributes;
     const answersObject = sectionData.included.filter(answer => answer.type === 'answers');
-    const answers = processPreviousAnswers(answersObject, body);
-    const errorObject = processErrors(errors);
+    const answers = processPreviousAnswers(answersObject);
     const display = sectionData.meta;
     const summary = display.summary === sectionId;
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -190,7 +172,43 @@ function getSectionHtml(sectionData, body = {}, errors = {valid: true}) {
         schemaKey: sectionId,
         schema,
         uiSchema,
-        data: answers,
+        data: answers
+    });
+    return renderSection(transformation, display.final, backLink, summary);
+}
+
+function processErrors(errors) {
+    const errorObject = {};
+    if (!errors.valid) {
+        errors.forEach(err => {
+            if (
+                err.meta.raw.params.errors &&
+                err.meta.raw.params.errors[0].params.missingProperty
+            ) {
+                errorObject[err.meta.raw.params.errors[0].params.missingProperty] = err.detail;
+            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.limit) {
+                const questionId = err.meta.raw.dataPath.substring(1);
+                errorObject[questionId] = err.detail;
+            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.format) {
+                const questionId = err.meta.raw.dataPath.substring(1);
+                errorObject[questionId] = err.detail;
+            }
+        });
+    }
+    return errorObject;
+}
+
+function getSectionHtmlWithErrors(sectionData, body = {}, sectionId) {
+    const {schema} = sectionData.meta;
+    const errorObject = processErrors(sectionData.errors);
+    const display = {final: false}; // sectionData.meta; // ToDo: Add these to meta for POST answers
+    const summary = false; // display.summary === sectionId;
+    const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+    const transformation = qTransformer.transform({
+        schemaKey: sectionId,
+        schema,
+        uiSchema,
+        data: body,
         schemaErrors: errorObject
     });
     return renderSection(transformation, display.final, backLink, summary);
@@ -205,16 +223,22 @@ function getNextSection(nextSectionId, requestedNextSectionId = undefined) {
     return nextSection;
 }
 
+function addPrefix(section) {
+    return sectionList[section];
+}
+
 module.exports = {
     renderSection,
-    processRequest,
     removeSectionIdPrefix,
+    inUiSchema,
+    processRequest,
     getSectionHtml,
     getNextSection,
     removeEmptyAnswers,
     removeUnwantedHiddenAnswers,
     correctPartialDates,
-    inUiSchema,
     processErrors,
-    processPreviousAnswers
+    processPreviousAnswers,
+    getSectionHtmlWithErrors,
+    addPrefix
 };
