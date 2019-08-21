@@ -1,0 +1,13 @@
+{
+    "body": {
+        "data": {
+            "type": "submissions",
+            "attributes": {
+                "questionnaireId": "2c3c6ecd-aa68-4a00-8093-300cae6cbfcb",
+                "submitted": true,
+                "status": "COMPLETE",
+                "caseReferenceNumber": null
+            }
+        }
+    }
+}

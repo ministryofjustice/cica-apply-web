@@ -1,0 +1,14 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "referrer",
+                "attributes": {
+                    "sectionId": "p-applicant-enter-your-address",
+                    "url": null
+                }
+            }
+        ]
+    }
+}
