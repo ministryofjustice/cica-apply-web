@@ -118,6 +118,16 @@ function questionnaireService() {
         return getSubmissionStatus(questionnaireId, startingDate);
     }
 
+    function getAnswers(questionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/sections/answers`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -127,7 +137,8 @@ function questionnaireService() {
         getSubmission,
         postSubmission,
         timeout,
-        getSubmissionStatus
+        getSubmissionStatus,
+        getAnswers
     });
 }
 

@@ -2,7 +2,6 @@
 
 const nunjucks = require('nunjucks');
 const moment = require('moment');
-// const merge = require('lodash.merge');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
@@ -149,23 +148,28 @@ function processRequest(rawBody, section) {
 function processPreviousAnswers(answersObject) {
     let answers = {};
     if (answersObject.length) {
-        answers = answersObject.reduce((acc, {attributes}) => {
-            Object.keys(attributes).forEach(question => {
-                acc[question] = attributes[question];
-            });
+        answers = answersObject.reduce((acc, answer) => {
+            acc[answer.id] = answer.attributes;
             return acc;
         }, {});
     }
     return answers;
 }
 
-function getSectionHtml(sectionData) {
+function getSectionHtml(sectionData, allAnswers) {
     const {sectionId} = sectionData.data[0].attributes;
+    const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
-    const answersObject = sectionData.included.filter(answer => answer.type === 'answers');
-    const answers = processPreviousAnswers(answersObject);
-    const display = sectionData.meta;
+    let answers;
+    if (Object.entries(allAnswers).length === 0 && allAnswers.constructor === Object) {
+        const answersObject = processPreviousAnswers(
+            sectionData.included.filter(answer => answer.type === 'answers')
+        );
+        answers = answersObject[sectionId];
+    } else {
+        answers = processPreviousAnswers(allAnswers.body.data);
+    }
     const summary = display.summary === sectionId;
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
     const transformation = qTransformer.transform({
@@ -181,7 +185,6 @@ function processErrors(errors) {
     const errorObject = {};
     if (!errors.valid) {
         errors.forEach(err => {
-            console.log(JSON.stringify(err, null, 4));
             if (
                 err.meta.raw.params.errors &&
                 err.meta.raw.params.errors[0].params.missingProperty
@@ -200,7 +203,6 @@ function processErrors(errors) {
 }
 
 function getSectionHtmlWithErrors(sectionData, body = {}, sectionId) {
-    console.log(body);
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const display = {final: false}; // sectionData.meta; // ToDo: Add these to meta for POST answers

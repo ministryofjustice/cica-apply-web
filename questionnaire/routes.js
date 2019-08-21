@@ -42,9 +42,16 @@ router
     .route('/:section')
     .get(async (req, res, next) => {
         try {
+            let answers = {};
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await qService.getSection(req.cicaSession.questionnaireId, sectionId);
-            const html = formHelper.getSectionHtml(response.body);
+            if (
+                response.body.data &&
+                response.body.data[0].attributes.sectionId === response.body.meta.summary
+            ) {
+                answers = await qService.getAnswers(req.cicaSession.questionnaireId);
+            }
+            const html = formHelper.getSectionHtml(response.body, answers);
             res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
