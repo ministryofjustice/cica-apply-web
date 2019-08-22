@@ -67,9 +67,7 @@ function renderSection(
                             text: "${buttonTitle}"
                         }) }}
                     {% endif %}
-                    {% if ${csrfToken} %}
-                        <input type="hidden" name="_csrf" value="${csrfToken}">
-                    {% endif %}
+                    <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
         `

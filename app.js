@@ -45,7 +45,7 @@ app.use('/apply', async (req, res, next) => {
     if (cookie === undefined) {
         // no: set it and redirect.
         try {
-            const response = await qService.createQuestionnaire(req.cicaSession.csrfSecret);
+            const response = await qService.createQuestionnaire();
             req.cicaSession.questionnaireId = response.body.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial

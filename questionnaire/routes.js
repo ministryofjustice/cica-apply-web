@@ -62,17 +62,13 @@ router
         try {
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
-            // cache the token for posting to the DCS.
-            // eslint-disable-next-line no-underscore-dangle
-            const csrf = body._csrf;
             // delete the token from the body to allow AJV to validate the request.
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
             const response = await qService.postSection(
                 req.cicaSession.questionnaireId,
                 sectionId,
-                body,
-                csrf
+                body
             );
             if (response.body && response.body.data) {
                 const progressEntry = await qService.getCurrentSection(
@@ -99,7 +95,7 @@ router
 
 router.route('/submission/confirm').post(async (req, res, next) => {
     try {
-        await qService.postSubmission(req.cicaSession.questionnaireId, req.cicaSession.csrfSecret);
+        await qService.postSubmission(req.cicaSession.questionnaireId);
         const response = await qService.getSubmissionStatus(
             req.cicaSession.questionnaireId,
             Date.now()
