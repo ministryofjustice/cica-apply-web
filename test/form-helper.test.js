@@ -144,7 +144,7 @@ describe('form-helper functions', () => {
             const expected = validResolvedHtml.replace(/\s+/g, '');
 
             const actual = formHelper
-                .renderSection(transformation, isFinal, backTarget, isSummary)
+                .renderSection({transformation, isFinal, backTarget, isSummary})
                 .replace(/\s+/g, '');
 
             expect(actual).toMatch(expected);

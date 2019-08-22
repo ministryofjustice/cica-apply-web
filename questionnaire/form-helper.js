@@ -40,8 +40,8 @@ function renderSection(
     isFinal,
     backTarget,
     sectionId,
-    variables = {},
-    showBackLink = true
+    showBackLink = true,
+    csrfToken
 ) {
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
@@ -67,10 +67,12 @@ function renderSection(
                             text: "${buttonTitle}"
                         }) }}
                     {% endif %}
+                    {% if ${csrfToken} %}
+                        <input type="hidden" name="_csrf" value="${csrfToken}">
+                    {% endif %}
                 </form>
             {% endblock %}
-        `,
-        variables
+        `
     );
 }
 
@@ -173,7 +175,7 @@ function processPreviousAnswers(answersObject) {
     return answers;
 }
 
-function getSectionHtml(sectionData, allAnswers) {
+function getSectionHtml(sectionData, allAnswers, csrfToken) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -194,7 +196,7 @@ function getSectionHtml(sectionData, allAnswers) {
         uiSchema,
         data: answers
     });
-    return renderSection(transformation, display.final, backLink, sectionId);
+    return renderSection(transformation, display.final, backLink, sectionId, csrfToken);
 }
 
 function processErrors(errors) {
@@ -218,7 +220,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const display = {final: false}; // sectionData.meta; // ToDo: Add these to meta for POST answers
@@ -231,7 +233,7 @@ function getSectionHtmlWithErrors(sectionData, sectionId) {
         data: answers,
         schemaErrors: errorObject
     });
-    return renderSection(transformation, display.final, backLink, sectionId);
+    return renderSection(transformation, display.final, backLink, sectionId, csrfToken);
 }
 
 function getNextSection(nextSectionId, requestedNextSectionId = undefined) {

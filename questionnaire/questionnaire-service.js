@@ -3,7 +3,7 @@
 const service = require('./request-service')();
 
 function questionnaireService() {
-    function createQuestionnaire() {
+    function createQuestionnaire(csrfToken) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/questionnaires`,
             headers: {
@@ -15,7 +15,8 @@ function questionnaireService() {
                     attributes: {
                         templateName: 'sexual-assault'
                     }
-                }
+                },
+                _csrf: csrfToken
             }
         };
         return service.post(opts);
@@ -31,7 +32,7 @@ function questionnaireService() {
         return service.get(opts);
     }
 
-    function postSection(questionnaireId, section, body) {
+    function postSection(questionnaireId, section, body, csrfToken) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
@@ -41,7 +42,8 @@ function questionnaireService() {
                 data: {
                     type: 'answers',
                     attributes: body
-                }
+                },
+                _csrf: csrfToken
             }
         };
         return service.post(opts);
@@ -77,7 +79,7 @@ function questionnaireService() {
         return service.get(opts);
     }
 
-    function postSubmission(questionnaireId) {
+    function postSubmission(questionnaireId, csrfToken) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/submissions`,
             headers: {
@@ -89,7 +91,8 @@ function questionnaireService() {
                     attributes: {
                         questionnaireId
                     }
-                }
+                },
+                _csrf: csrfToken
             }
         };
         return service.post(opts);
@@ -109,6 +112,7 @@ function questionnaireService() {
         }
         const result = await getSubmission(questionnaireId);
         const {submitted} = result.body.data.attributes;
+
         if (submitted) {
             return result.body.data.attributes;
         }
