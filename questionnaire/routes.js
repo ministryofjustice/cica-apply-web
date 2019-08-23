@@ -94,7 +94,12 @@ router.route('/submission/confirm').post(async (req, res, next) => {
             Date.now()
         );
         if (response.status !== 'FAILED') {
-            return res.redirect('/apply/confirmation');
+            const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
+            const responseBody = resp.body;
+            const nextSection = formHelper.removeSectionIdPrefix(
+                responseBody.data[0].attributes.sectionId
+            );
+            return res.redirect(`${req.baseUrl}/${nextSection}`);
         }
         const err = Error(`The service is currently unavailable`);
         err.name = 'HTTPError';
