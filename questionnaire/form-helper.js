@@ -218,16 +218,17 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, body = {}, sectionId) {
+function getSectionHtmlWithErrors(sectionData, sectionId) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const display = {final: false}; // sectionData.meta; // ToDo: Add these to meta for POST answers
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+    const {answers} = sectionData.meta;
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema,
         uiSchema,
-        data: body,
+        data: answers,
         schemaErrors: errorObject
     });
     return renderSection(transformation, display.final, backLink, sectionId);

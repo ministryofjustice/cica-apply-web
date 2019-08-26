@@ -266,16 +266,16 @@ module.exports = {
     'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
         options: {
             outputOrder: [
-                'q-applicant-explain-reason-for-delay-application',
-                'q-applicant-select-reasons-for-the-delay-in-making-your-application'
+                'q-applicant-select-reasons-for-the-delay-in-making-your-application',
+                'q-applicant-explain-reason-for-delay-application'
             ]
         }
     },
     'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
         options: {
             outputOrder: [
-                'q-applicant-explain-reason-for-delay-reporting',
-                'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+                'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
+                'q-applicant-explain-reason-for-delay-reporting'
             ]
         }
     },
@@ -310,6 +310,11 @@ module.exports = {
                 'q-offender-describe-contact-with-offender',
                 'q-offender-i-have-no-contact-with-offender'
             ]
+        }
+    },
+    'p--confirmation': {
+        options: {
+            showBackButton: false
         }
     }
 };
