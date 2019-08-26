@@ -19,16 +19,33 @@ nunjucks.configure(
     }
 );
 
+function getButtonText(sectionId) {
+    return sectionId in uiSchema &&
+        uiSchema[sectionId].options &&
+        uiSchema[sectionId].options.buttonText
+        ? uiSchema[sectionId].options.buttonText
+        : 'Continue';
+}
+
+function checkIsSummary(sectionId) {
+    return sectionId in uiSchema &&
+        uiSchema[sectionId].options &&
+        uiSchema[sectionId].options.isSummary
+        ? uiSchema[sectionId].options.isSummary
+        : false;
+}
+
 function renderSection(
     transformation,
     isFinal,
     backTarget,
-    isSummary,
+    sectionId,
     variables = {},
     showBackLink = true
 ) {
-    const buttonTitle = isSummary ? 'Agree and Submit' : 'Continue';
     const showButton = !isFinal;
+    const isSummary = checkIsSummary(sectionId);
+    const buttonTitle = getButtonText(sectionId);
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
@@ -170,7 +187,6 @@ function getSectionHtml(sectionData, allAnswers) {
     } else {
         answers = processPreviousAnswers(allAnswers.body.data);
     }
-    const summary = display.summary === sectionId;
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
@@ -178,7 +194,7 @@ function getSectionHtml(sectionData, allAnswers) {
         uiSchema,
         data: answers
     });
-    return renderSection(transformation, display.final, backLink, summary);
+    return renderSection(transformation, display.final, backLink, sectionId);
 }
 
 function processErrors(errors) {
@@ -206,7 +222,6 @@ function getSectionHtmlWithErrors(sectionData, body = {}, sectionId) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const display = {final: false}; // sectionData.meta; // ToDo: Add these to meta for POST answers
-    const summary = false; // display.summary === sectionId;
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
@@ -215,7 +230,7 @@ function getSectionHtmlWithErrors(sectionData, body = {}, sectionId) {
         data: body,
         schemaErrors: errorObject
     });
-    return renderSection(transformation, display.final, backLink, summary);
+    return renderSection(transformation, display.final, backLink, sectionId);
 }
 
 function getNextSection(nextSectionId, requestedNextSectionId = undefined) {
@@ -232,6 +247,8 @@ function addPrefix(section) {
 }
 
 module.exports = {
+    getButtonText,
+    checkIsSummary,
     renderSection,
     removeSectionIdPrefix,
     inUiSchema,
