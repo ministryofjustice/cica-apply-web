@@ -642,15 +642,20 @@ describe('Data capture service endpoints', () => {
             describe('POST', () => {
                 describe('302', () => {
                     beforeAll(() => {
+                        const sectionIdNoPrefix = 'confirmation';
                         jest.resetModules();
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
                                 postSubmission: () => {},
                                 getSubmissionStatus: () => postValidSubmission,
-                                createQuestionnaire: () => createQuestionnaire
+                                createQuestionnaire: () => createQuestionnaire,
+                                getCurrentSection: () => getCurrentSection
                             }))
                         );
+                        jest.doMock('../questionnaire/form-helper', () => ({
+                            removeSectionIdPrefix: () => sectionIdNoPrefix
+                        }));
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
