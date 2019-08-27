@@ -206,10 +206,7 @@ function processErrors(errors) {
                 err.meta.raw.params.errors[0].params.missingProperty
             ) {
                 errorObject[err.meta.raw.params.errors[0].params.missingProperty] = err.detail;
-            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.limit) {
-                const questionId = err.meta.raw.dataPath.substring(1);
-                errorObject[questionId] = err.detail;
-            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.format) {
+            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params) {
                 const questionId = err.meta.raw.dataPath.substring(1);
                 errorObject[questionId] = err.detail;
             }
