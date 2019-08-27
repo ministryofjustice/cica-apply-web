@@ -140,14 +140,15 @@ describe('form-helper functions', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
-            const isSummary = false;
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const expected = validResolvedHtml.replace(/\s+/g, '');
+            const csrfToken = 'some token';
 
             const actual = formHelper
-                .renderSection({transformation, isFinal, backTarget, isSummary})
+                .renderSection({transformation, isFinal, backTarget, sectionId, csrfToken})
                 .replace(/\s+/g, '');
 
-            expect(actual).toMatch(expected);
+            expect(expected).toMatch(actual);
         });
     });
 

@@ -109,7 +109,6 @@ function questionnaireService() {
         }
         const result = await getSubmission(questionnaireId);
         const {submitted} = result.body.data.attributes;
-
         if (submitted) {
             return result.body.data.attributes;
         }

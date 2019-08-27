@@ -35,14 +35,14 @@ function checkIsSummary(sectionId) {
         : false;
 }
 
-function renderSection(
+function renderSection({
     transformation,
     isFinal,
     backTarget,
     sectionId,
     showBackLink = true,
     csrfToken
-) {
+}) {
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
     const buttonTitle = getButtonText(sectionId);
@@ -175,7 +175,7 @@ function processPreviousAnswers(answersObject) {
 
 function getSectionHtml(sectionData, allAnswers, csrfToken) {
     const {sectionId} = sectionData.data[0].attributes;
-    const display = sectionData.meta;
+    const {final} = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
     let answers;
@@ -194,7 +194,7 @@ function getSectionHtml(sectionData, allAnswers, csrfToken) {
         uiSchema,
         data: answers
     });
-    return renderSection(transformation, display.final, backLink, sectionId, csrfToken);
+    return renderSection({transformation, final, backLink, sectionId, csrfToken});
 }
 
 function processErrors(errors) {
@@ -221,7 +221,7 @@ function processErrors(errors) {
 function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
-    const display = {final: false}; // sectionData.meta; // ToDo: Add these to meta for POST answers
+    const {final} = false; // sectionData.meta; // ToDo: Add these to meta for POST answers
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
     const {answers} = sectionData.meta;
     const transformation = qTransformer.transform({
@@ -231,7 +231,7 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
         data: answers,
         schemaErrors: errorObject
     });
-    return renderSection(transformation, display.final, backLink, sectionId, csrfToken);
+    return renderSection({transformation, final, backLink, sectionId, csrfToken});
 }
 
 function getNextSection(nextSectionId, requestedNextSectionId = undefined) {

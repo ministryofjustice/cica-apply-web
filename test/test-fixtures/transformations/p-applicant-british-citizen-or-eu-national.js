@@ -1,3 +1,5 @@
+'use strict';
+
 const transform = `
 {% from "radios/macro.njk" import govukRadios %}
 
