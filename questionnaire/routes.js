@@ -74,10 +74,10 @@ router
                 const nextSectionId = formHelper.removeSectionIdPrefix(
                     progressEntry.body.data[0].attributes.sectionId
                 );
-                const nextSection = formHelper.getNextSection(nextSectionId, req.query.redirect);
+                const nextSection = formHelper.getNextSection(nextSectionId, req.query.next);
                 res.redirect(`${req.baseUrl}/${nextSection}`);
             } else {
-                const html = formHelper.getSectionHtmlWithErrors(response.body, body, sectionId);
+                const html = formHelper.getSectionHtmlWithErrors(response.body, sectionId);
                 res.send(html);
             }
         } catch (err) {

@@ -338,7 +338,9 @@ describe('form-helper functions', () => {
                 }
             ];
             const expected = {
-                'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true
+                'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
+                    'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true
+                }
             };
             const actual = formHelper.processPreviousAnswers(answerObject);
 
@@ -358,8 +360,10 @@ describe('form-helper functions', () => {
                 }
             ];
             const expected = {
-                'question-one': 'answer-one',
-                'question-two': 'answer-two'
+                'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
+                    'question-one': 'answer-one',
+                    'question-two': 'answer-two'
+                }
             };
             const actual = formHelper.processPreviousAnswers(answerObject, {});
 
@@ -392,6 +396,44 @@ describe('form-helper functions', () => {
             const actual = formHelper.inUiSchema(sectionName);
 
             expect(actual).toBeUndefined();
+        });
+    });
+
+    describe('Get button text', () => {
+        it('Should return the button text if specificed in the UISchema', () => {
+            const sectionName = 'p--check-your-answers';
+            const expected = 'Agree and Submit';
+
+            const actual = formHelper.getButtonText(sectionName);
+
+            expect(actual).toMatch(expected);
+        });
+
+        it('Should return the default button text if nothing specific is specificed in the UISchema', () => {
+            const sectionName = 'p-applicant-declaration';
+            const expected = 'Continue';
+
+            const actual = formHelper.getButtonText(sectionName);
+
+            expect(actual).toMatch(expected);
+        });
+    });
+
+    describe('Check is summary', () => {
+        it('Should return true if a section has `isSummary: true` in the UISchema', () => {
+            const sectionName = 'p--check-your-answers';
+
+            const actual = formHelper.checkIsSummary(sectionName);
+
+            expect(actual).toEqual(true);
+        });
+
+        it('Should return false if a section has no `isSummary` value in the UISchema', () => {
+            const sectionName = 'p-applicant-declaration';
+
+            const actual = formHelper.checkIsSummary(sectionName);
+
+            expect(actual).toEqual(false);
         });
     });
 });
