@@ -6,7 +6,8 @@
         "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .js,.json,.njk ./bin/www",
         "start": "node ./bin/www",
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
-        "test": "jest"
+        "test": "jest",
+        "coverage": "jest --coverage"
     },
     "dependencies": {
         "client-sessions": "^0.8.0",
