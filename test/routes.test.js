@@ -348,21 +348,17 @@ describe('Data capture service endpoints', () => {
                             // eslint-disable-next-line global-require
                             app = require('../app');
                         });
-                        it('Should respond with a found status if there are no errors', () => {
+                        it('Should respond with a found status if there are no errors', async () => {
                             agent = request.agent(app);
-                            return agent.get('/apply/').then(() =>
-                                agent
-                                    .post('/apply/applicant-enter-your-name')
-                                    .set(
-                                        'Cookie',
-                                        'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                                    )
-                                    .then(response => {
-                                        expect(response.statusCode).toBe(302);
-                                        expect(response.res.text).toBe(
-                                            'Found. Redirecting to /apply/applicant-enter-your-name'
-                                        );
-                                    })
+
+                            // Hit this url to set the session cookie. Agent will remember it for subsequent requests.
+                            await agent.get('/apply/');
+
+                            const response = await agent.post('/apply/applicant-enter-your-name');
+
+                            expect(response.statusCode).toBe(302);
+                            expect(response.res.text).toBe(
+                                'Found. Redirecting to /apply/applicant-enter-your-name'
                             );
                         });
                         it('Should redirect the user if there are no errors', () => {
@@ -785,6 +781,122 @@ describe('Data capture service endpoints', () => {
                         );
                     });
                 });
+            });
+        });
+        describe('/apply/:section?next=<some section id>', () => {
+            beforeEach(() => {
+                // tidy up from previous tests
+                jest.resetModules();
+                jest.unmock('../questionnaire/questionnaire-service');
+                jest.unmock('../questionnaire/form-helper');
+                jest.unmock('client-sessions');
+
+                // mock cookie
+                jest.doMock('client-sessions', () => () => (req, res, next) => {
+                    req.cicaSession = {
+                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd'
+                    };
+
+                    next();
+                });
+            });
+
+            it('should redirect to the prescribed next section id if available', async () => {
+                jest.doMock('../questionnaire/request-service', () => {
+                    const api = `${process.env.CW_DCS_URL}/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+
+                    return () => ({
+                        post: options => {
+                            const responses = {
+                                [`${api}/sections/p-applicant-enter-your-name/answers`]: {
+                                    statusCode: 201
+                                }
+                            };
+
+                            return responses[options.url];
+                        },
+                        get: options => {
+                            const responses = {
+                                [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
+                                    statusCode: 200,
+                                    body: {
+                                        data: [
+                                            {
+                                                attributes: {
+                                                    sectionId: 'p--check-your-answers'
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            };
+
+                            return responses[options.url];
+                        }
+                    });
+                });
+
+                // eslint-disable-next-line global-require
+                app = require('../app');
+
+                const response = await request(app).post(
+                    '/apply/applicant-enter-your-name?next=check-your-answers'
+                );
+
+                expect(response.statusCode).toBe(302);
+                expect(response.res.text).toBe('Found. Redirecting to /apply/check-your-answers');
+            });
+
+            it('should redirect to the current section if the prescribed next section id is not available', async () => {
+                jest.doMock('../questionnaire/request-service', () => {
+                    const api = `${process.env.CW_DCS_URL}/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+
+                    return () => ({
+                        post: options => {
+                            const responses = {
+                                [`${api}/sections/p-applicant-are-you-18-or-over/answers`]: {
+                                    statusCode: 201
+                                }
+                            };
+
+                            return responses[options.url];
+                        },
+                        get: options => {
+                            const responses = {
+                                [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
+                                    statusCode: 404
+                                },
+                                [`${api}/progress-entries?filter[position]=current`]: {
+                                    statusCode: 200,
+                                    body: {
+                                        data: [
+                                            {
+                                                attributes: {
+                                                    sectionId:
+                                                        'p-applicant-redirect-to-our-other-application'
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            };
+
+                            return responses[options.url];
+                        }
+                    });
+                });
+
+                // eslint-disable-next-line global-require
+                app = require('../app');
+
+                const response = await request(app).post(
+                    '/apply/applicant-are-you-18-or-over?next=check-your-answers'
+                );
+
+                expect(response.statusCode).toBe(302);
+                expect(response.res.text).toBe(
+                    'Found. Redirecting to /apply/applicant-redirect-to-our-other-application'
+                );
             });
         });
     });
