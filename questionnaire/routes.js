@@ -67,22 +67,37 @@ router
                 sectionId,
                 body
             );
-            if (response.body && response.body.data) {
-                const progressEntry = await qService.getCurrentSection(
+            if (response.statusCode === 201) {
+                // is there a forced redirect
+                if ('next' in req.query) {
+                    const progressEntryResponse = await qService.getSection(
+                        req.cicaSession.questionnaireId,
+                        formHelper.addPrefix(req.query.next)
+                    );
+
+                    if (progressEntryResponse.statusCode === 200) {
+                        const nextSectionId = formHelper.removeSectionIdPrefix(
+                            progressEntryResponse.body.data[0].attributes.sectionId
+                        );
+
+                        return res.redirect(`${req.baseUrl}/${nextSectionId}`);
+                    }
+                }
+
+                const progressEntryResponse = await qService.getCurrentSection(
                     req.cicaSession.questionnaireId
                 );
                 const nextSectionId = formHelper.removeSectionIdPrefix(
-                    progressEntry.body.data[0].attributes.sectionId
+                    progressEntryResponse.body.data[0].attributes.sectionId
                 );
-                const nextSection = formHelper.getNextSection(nextSectionId, req.query.next);
-                res.redirect(`${req.baseUrl}/${nextSection}`);
-            } else {
-                const html = formHelper.getSectionHtmlWithErrors(response.body, sectionId);
-                res.send(html);
+                return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
+
+            const html = formHelper.getSectionHtmlWithErrors(response.body, sectionId);
+            return res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
-            next(err);
+            return next(err);
         }
     });
 
