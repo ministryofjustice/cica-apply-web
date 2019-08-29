@@ -312,9 +312,16 @@ module.exports = {
             ]
         }
     },
+
     'p--confirmation': {
         options: {
             showBackButton: false
+        }
+    },
+
+    'p-applicant-you-cannot-get-compensation': {
+        options: {
+            buttonText: 'Continue anyway'
         }
     }
 };
