@@ -5,6 +5,80 @@ const validTransformation = require('./test-fixtures/transformations/p-applicant
 const validResolvedHtml = require('./test-fixtures/transformations/resolved html/p-applicant-british-citizen-or-eu-national');
 
 describe('form-helper functions', () => {
+    describe('Add prefix', () => {
+        it('Should return a correctly prefixed sectionId, given a valid section name', () => {
+            const section = 'applicant-enter-your-name';
+            const expected = 'p-applicant-enter-your-name';
+
+            const actual = formHelper.addPrefix(section);
+
+            expect(expected).toEqual(actual);
+        });
+
+        it('Should return undefined, given an invalid section name', () => {
+            const section = 'applicant-not-a-section';
+            const expected = undefined;
+
+            const actual = formHelper.addPrefix(section);
+
+            expect(expected).toEqual(actual);
+        });
+    });
+
+    describe('Get button text', () => {
+        it('Should return the button text if specificed in the UISchema', () => {
+            const sectionName = 'p--check-your-answers';
+            const expected = 'Agree and Submit';
+
+            const actual = formHelper.getButtonText(sectionName);
+
+            expect(actual).toMatch(expected);
+        });
+
+        it('Should return the default button text if nothing specific is specificed in the UISchema', () => {
+            const sectionName = 'p-applicant-declaration';
+            const expected = 'Continue';
+
+            const actual = formHelper.getButtonText(sectionName);
+
+            expect(actual).toMatch(expected);
+        });
+    });
+
+    describe('Check is summary', () => {
+        it('Should return true if a section has `isSummary: true` in the UISchema', () => {
+            const sectionName = 'p--check-your-answers';
+
+            const actual = formHelper.checkIsSummary(sectionName);
+
+            expect(actual).toEqual(true);
+        });
+
+        it('Should return false if a section has no `isSummary` value in the UISchema', () => {
+            const sectionName = 'p-applicant-declaration';
+
+            const actual = formHelper.checkIsSummary(sectionName);
+
+            expect(actual).toEqual(false);
+        });
+    });
+
+    describe('Render page html', () => {
+        it('Should return html given a valid transformation', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
+            const isSummary = false;
+            const expected = validResolvedHtml.replace(/\s+/g, '');
+
+            const actual = formHelper
+                .renderSection(transformation, isFinal, backTarget, isSummary)
+                .replace(/\s+/g, '');
+
+            expect(actual).toMatch(expected);
+        });
+    });
+
     describe('Remove sectionId prefix', () => {
         it('Should remove p- or p-- from the beginning of a valid sectionId', () => {
             const sectionId1 = 'p-applicant-some-section';
@@ -26,24 +100,6 @@ describe('form-helper functions', () => {
             const expected = formHelper.removeSectionIdPrefix(sectionId);
 
             expect(expected).toEqual('problem-id-does-not-match-pattern');
-        });
-    });
-
-    describe('Remove "empty" answers from an answer object', () => {
-        it('Should return a valid sectionId given a section name exists in the questionnaire', () => {
-            let body = {
-                Q1: 'true',
-                Q2: ''
-            };
-            const expected = {
-                Q1: 'true'
-            };
-
-            Object.keys(body).forEach(property => {
-                body = formHelper.removeEmptyAnswers(body, property);
-            });
-
-            expect(body).toEqual(expected);
         });
     });
 
@@ -86,8 +142,27 @@ describe('form-helper functions', () => {
         });
     });
 
+    describe('Remove "empty" answers from an answer object', () => {
+        it('Should return a valid sectionId given a section name exists in the questionnaire', () => {
+            let body = {
+                Q1: 'true',
+                Q2: ''
+            };
+            const expected = {
+                Q1: 'true'
+            };
+
+            Object.keys(body).forEach(property => {
+                body = formHelper.removeEmptyAnswers(body, property);
+            });
+
+            expect(body).toEqual(expected);
+        });
+    });
+
     describe('Transform partial dates into isoStrings in an answer object', () => {
         it('Should convert date parts into IsoStrings', () => {
+            const sectionId = 'p-applicant-when-did-the-crime-happen';
             let body = {
                 'q-applicant-when-did-the-crime-happen': {day: '06', month: '09', year: '1987'}
             };
@@ -95,59 +170,72 @@ describe('form-helper functions', () => {
             const expected = {'q-applicant-when-did-the-crime-happen': `1987-09-06T00:00:00.000Z`};
 
             Object.keys(body).forEach(property => {
-                body = formHelper.correctPartialDates(body, property);
+                body = formHelper.correctPartialDates(body, property, sectionId);
             });
 
             expect(body).toEqual(expected);
         });
 
-        it('Should set partial dates to the first of the entered month', () => {
-            let body = {'q-applicant-when-did-the-crime-start': {month: '05', year: '2018'}};
+        it('Should convert partial dates into complete isoStrings', () => {
+            const sectionId = 'p-applicant-when-did-the-crime-start';
+            let body = {
+                'q-applicant-when-did-the-crime-start': {month: '05', year: '2018'}
+            };
 
             const expected = {'q-applicant-when-did-the-crime-start': `2018-05-01T00:00:00.000Z`};
 
             Object.keys(body).forEach(property => {
-                body = formHelper.correctPartialDates(body, property);
+                body = formHelper.correctPartialDates(body, property, sectionId);
             });
 
             expect(body).toEqual(expected);
         });
     });
 
-    describe('Get next section', () => {
-        it('Should return the next secion name', () => {
-            const nextSectionId = 'p-applicant-enter-your-name';
-            const expected = 'applicant-enter-your-name';
+    describe('Process existing answers', () => {
+        it('Should return a correctly formatted answer', () => {
+            const answerObject = [
+                {
+                    links: {
+                        self:
+                            '/api/v1/questionnaires/d5aafe9b-5824-40e4-a05e-ae0203668168/sections/p-applicant-were-you-a-victim-of-sexual-assault-or-abuse/answers'
+                    },
+                    type: 'answers',
+                    id: 'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+                    attributes: {'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true}
+                }
+            ];
+            const expected = {
+                'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
+                    'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true
+                }
+            };
+            const actual = formHelper.processPreviousAnswers(answerObject);
 
-            const actual = formHelper.getNextSection(nextSectionId);
-
-            expect(actual).toEqual(expected);
+            expect(actual).toMatchObject(expected);
         });
 
-        it('Should return the overriding section name, if it is present and valid', () => {
-            const nextSectionId = 'p-applicant-enter-your-name';
-            const overridingId = 'p-applicant-enter-your-address';
-            const expected = 'applicant-enter-your-address';
+        it('Should return a list of correctly formatted errors given more than one', () => {
+            const answerObject = [
+                {
+                    links: {
+                        self:
+                            '/api/v1/questionnaires/d5aafe9b-5824-40e4-a05e-ae0203668168/sections/p-applicant-were-you-a-victim-of-sexual-assault-or-abuse/answers'
+                    },
+                    type: 'answers',
+                    id: 'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+                    attributes: {'question-one': 'answer-one', 'question-two': 'answer-two'}
+                }
+            ];
+            const expected = {
+                'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
+                    'question-one': 'answer-one',
+                    'question-two': 'answer-two'
+                }
+            };
+            const actual = formHelper.processPreviousAnswers(answerObject, {});
 
-            const actual = formHelper.getNextSection(nextSectionId, overridingId);
-
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('Render page html', () => {
-        it('Should return html given a valid transformation', () => {
-            const transformation = validTransformation;
-            const isFinal = false;
-            const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
-            const isSummary = false;
-            const expected = validResolvedHtml.replace(/\s+/g, '');
-
-            const actual = formHelper
-                .renderSection(transformation, isFinal, backTarget, isSummary)
-                .replace(/\s+/g, '');
-
-            expect(actual).toMatch(expected);
+            expect(actual).toMatchObject(expected);
         });
     });
 
@@ -324,116 +412,24 @@ describe('form-helper functions', () => {
         });
     });
 
-    describe('Process existing answers', () => {
-        it('Should return a correctly formatted answer', () => {
-            const answerObject = [
-                {
-                    links: {
-                        self:
-                            '/api/v1/questionnaires/d5aafe9b-5824-40e4-a05e-ae0203668168/sections/p-applicant-were-you-a-victim-of-sexual-assault-or-abuse/answers'
-                    },
-                    type: 'answers',
-                    id: 'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
-                    attributes: {'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true}
-                }
-            ];
-            const expected = {
-                'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
-                    'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true
-                }
-            };
-            const actual = formHelper.processPreviousAnswers(answerObject);
+    describe('Get next section', () => {
+        it('Should return the next secion name', () => {
+            const nextSectionId = 'p-applicant-enter-your-name';
+            const expected = 'applicant-enter-your-name';
 
-            expect(actual).toMatchObject(expected);
+            const actual = formHelper.getNextSection(nextSectionId);
+
+            expect(actual).toEqual(expected);
         });
 
-        it('Should return a list of correctly formatted errors given more than one', () => {
-            const answerObject = [
-                {
-                    links: {
-                        self:
-                            '/api/v1/questionnaires/d5aafe9b-5824-40e4-a05e-ae0203668168/sections/p-applicant-were-you-a-victim-of-sexual-assault-or-abuse/answers'
-                    },
-                    type: 'answers',
-                    id: 'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
-                    attributes: {'question-one': 'answer-one', 'question-two': 'answer-two'}
-                }
-            ];
-            const expected = {
-                'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
-                    'question-one': 'answer-one',
-                    'question-two': 'answer-two'
-                }
-            };
-            const actual = formHelper.processPreviousAnswers(answerObject, {});
+        it('Should return the overriding section name, if it is present and valid', () => {
+            const nextSectionId = 'p-applicant-enter-your-name';
+            const overridingId = 'p-applicant-enter-your-address';
+            const expected = 'applicant-enter-your-address';
 
-            expect(actual).toMatchObject(expected);
-        });
-    });
+            const actual = formHelper.getNextSection(nextSectionId, overridingId);
 
-    describe('In UI Schema', () => {
-        it('Should return the sectionId given a section name which exists in the UISchema', () => {
-            const sectionName = 'applicant-other-compensation-details';
-            const expected = 'p-applicant-other-compensation-details';
-
-            const actual = formHelper.inUiSchema(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-
-        it('Should return the sectionId given a sectionId which exists in the UISchema', () => {
-            const sectionName = 'p-applicant-other-compensation-details';
-            const expected = 'p-applicant-other-compensation-details';
-
-            const actual = formHelper.inUiSchema(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-
-        it('Should return undefined given a section name which does not exist in the UISchema', () => {
-            const sectionName = 'not-a-section';
-
-            const actual = formHelper.inUiSchema(sectionName);
-
-            expect(actual).toBeUndefined();
-        });
-    });
-
-    describe('Get button text', () => {
-        it('Should return the button text if specificed in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
-            const expected = 'Agree and Submit';
-
-            const actual = formHelper.getButtonText(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-
-        it('Should return the default button text if nothing specific is specificed in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
-            const expected = 'Continue';
-
-            const actual = formHelper.getButtonText(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-    });
-
-    describe('Check is summary', () => {
-        it('Should return true if a section has `isSummary: true` in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
-
-            const actual = formHelper.checkIsSummary(sectionName);
-
-            expect(actual).toEqual(true);
-        });
-
-        it('Should return false if a section has no `isSummary` value in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
-
-            const actual = formHelper.checkIsSummary(sectionName);
-
-            expect(actual).toEqual(false);
+            expect(actual).toEqual(expected);
         });
     });
 });

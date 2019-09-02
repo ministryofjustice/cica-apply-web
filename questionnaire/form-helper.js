@@ -19,6 +19,10 @@ nunjucks.configure(
     }
 );
 
+function addPrefix(section) {
+    return sectionList[section];
+}
+
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
         uiSchema[sectionId].options &&
@@ -78,19 +82,6 @@ function removeSectionIdPrefix(sectionId) {
     return sectionId.replace(/p-{1,2}/, '');
 }
 
-function inUiSchema(section) {
-    if (uiSchema[section]) {
-        return section;
-    }
-    if (uiSchema[`p-${section}`]) {
-        return `p-${section}`;
-    }
-    if (uiSchema[`p--${section}`]) {
-        return `p--${section}`;
-    }
-    return undefined;
-}
-
 function removeUnwantedHiddenAnswers(body, sectionId) {
     const answers = body;
     Object.keys(uiSchema[sectionId].options.properties).forEach(question => {
@@ -122,40 +113,81 @@ function removeEmptyAnswers(body, property) {
     return answers;
 }
 
-function correctPartialDates(body, property) {
-    const answers = body;
-    const value = answers[property];
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-        const yearMonthDay = value.day
-            ? `${value.year}-${value.month}-${value.day}`
-            : `${value.year}-${value.month}-01`;
-
-        // -- indicates no date parts have been provided
-        if (yearMonthDay === '--' || yearMonthDay === '--01') {
-            delete answers[property];
-        } else {
-            const date = moment(yearMonthDay).format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
-            if (date !== null) {
-                answers[property] = date;
+function correctPartialDates(body, property, sectionId) {
+    const answerObject = body;
+    const answer = answerObject[property];
+    const defaultDate = {
+        day: '01',
+        month: '01',
+        year: '1970'
+    };
+    const correctedDateParts = {};
+    let yearMonthDay = `${answer.year}-${answer.month}-${answer.day}`;
+    // If it's a date answer
+    if (
+        answer &&
+        typeof answer === 'object' &&
+        !Array.isArray(answer) &&
+        ('year' in answer || 'month' in answer || 'day')
+    ) {
+        // If partial dates are allowed
+        if (
+            uiSchema[sectionId] &&
+            uiSchema[sectionId].options &&
+            uiSchema[sectionId].options.properties &&
+            uiSchema[sectionId].options.properties[property] &&
+            uiSchema[sectionId].options.properties[property].options.dateParts
+        ) {
+            const {dateParts} = uiSchema[sectionId].options.properties[property].options;
+            Object.keys(dateParts).forEach(part => {
+                if (dateParts[part] && answer[part] === '') {
+                    // Date part is required but missing
+                    correctedDateParts[part] = null;
+                } else if (!dateParts[part] && answer[part] === undefined) {
+                    // Date part is not required, and empty so give it a default
+                    correctedDateParts[part] = defaultDate[part];
+                } else {
+                    // Date part is valid
+                    correctedDateParts[part] = answer[part];
+                }
+            });
+            if (Object.values(correctedDateParts).includes(null)) {
+                // if any are null, date object is null
+                yearMonthDay = null;
             } else {
-                answers[property] = `${yearMonthDay}T00:00:00.000Z`;
+                yearMonthDay = `${correctedDateParts.year}-${correctedDateParts.month}-${correctedDateParts.day}`;
             }
+        } else {
+            // Else, partial dates are not allowed, each part is required.
+            Object.keys(answer).forEach(datePart => {
+                if (answer[datePart] === '') {
+                    yearMonthDay = null;
+                }
+            });
+        }
+        if (yearMonthDay !== null) {
+            const date = moment(`${yearMonthDay}T00:00:00.000Z`, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+            if (date !== null) {
+                answerObject[property] = `${yearMonthDay}T00:00:00.000Z`;
+            }
+        } else {
+            delete answerObject[property];
         }
     }
-    return answers;
+    return answerObject;
 }
 
 function processRequest(rawBody, section) {
     // Handle conditionally revealing routes
     let body = rawBody;
-    const sectionId = inUiSchema(section);
-    if (sectionId && uiSchema[sectionId].options.properties) {
+    const sectionId = addPrefix(section) || '';
+    if (uiSchema[sectionId] && uiSchema[sectionId].options.properties) {
         body = removeUnwantedHiddenAnswers(rawBody, sectionId);
     }
     if (Object.entries(body).length > 0 && body.constructor === Object) {
         Object.keys(body).forEach(question => {
             body = removeEmptyAnswers(body, question);
-            body = correctPartialDates(body, question);
+            body = correctPartialDates(body, question, sectionId);
         });
         return body;
     }
@@ -240,24 +272,19 @@ function getNextSection(nextSectionId, requestedNextSectionId = undefined) {
     return nextSection;
 }
 
-function addPrefix(section) {
-    return sectionList[section];
-}
-
 module.exports = {
+    addPrefix,
     getButtonText,
     checkIsSummary,
     renderSection,
     removeSectionIdPrefix,
-    inUiSchema,
-    processRequest,
-    getSectionHtml,
-    getNextSection,
-    removeEmptyAnswers,
     removeUnwantedHiddenAnswers,
+    removeEmptyAnswers,
     correctPartialDates,
-    processErrors,
+    processRequest,
     processPreviousAnswers,
+    getSectionHtml,
+    processErrors,
     getSectionHtmlWithErrors,
-    addPrefix
+    getNextSection
 };
