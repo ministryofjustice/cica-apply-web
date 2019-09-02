@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: maintenance-page
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maintenance-page
+    spec:
+      containers:
+      - name: maintenance-page
+        image: 926803513772.dkr.ecr.eu-west-1.amazonaws.com/cloud-platform-maintenance-page:latest
+        ports:
+        - containerPort: 80
