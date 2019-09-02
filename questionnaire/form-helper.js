@@ -122,7 +122,7 @@ function correctPartialDates(body, property, sectionId) {
         year: '1970'
     };
     const correctedDateParts = {};
-    let yearMonthDay = `${answer.year}-${answer.month}-${answer.day}`;
+    let yearMonthDay = [];
     // If it's a date answer
     if (
         answer &&
@@ -140,9 +140,9 @@ function correctPartialDates(body, property, sectionId) {
         ) {
             const {dateParts} = uiSchema[sectionId].options.properties[property].options;
             Object.keys(dateParts).forEach(part => {
-                if (dateParts[part] && answer[part] === '') {
+                if (dateParts[part] && (answer[part] === '' || undefined)) {
                     // Date part is required but missing
-                    correctedDateParts[part] = null;
+                    yearMonthDay = null;
                 } else if (!dateParts[part] && answer[part] === undefined) {
                     // Date part is not required, and empty so give it a default
                     correctedDateParts[part] = defaultDate[part];
@@ -151,24 +151,23 @@ function correctPartialDates(body, property, sectionId) {
                     correctedDateParts[part] = answer[part];
                 }
             });
-            if (Object.values(correctedDateParts).includes(null)) {
-                // if any are null, date object is null
-                yearMonthDay = null;
-            } else {
-                yearMonthDay = `${correctedDateParts.year}-${correctedDateParts.month}-${correctedDateParts.day}`;
-            }
+            yearMonthDay =
+                yearMonthDay === null
+                    ? null
+                    : [correctedDateParts.year, correctedDateParts.month, correctedDateParts.day];
         } else {
             // Else, partial dates are not allowed, each part is required.
             Object.keys(answer).forEach(datePart => {
-                if (answer[datePart] === '') {
+                if (answer[datePart] === '' || answer[datePart] === undefined) {
                     yearMonthDay = null;
                 }
             });
+            yearMonthDay = yearMonthDay === null ? null : [answer.year, answer.month, answer.day];
         }
         if (yearMonthDay !== null) {
-            const date = moment(`${yearMonthDay}T00:00:00.000Z`, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+            const date = moment(yearMonthDay, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
             if (date !== null) {
-                answerObject[property] = `${yearMonthDay}T00:00:00.000Z`;
+                answerObject[property] = date;
             }
         } else {
             delete answerObject[property];
@@ -220,6 +219,9 @@ function getSectionHtml(sectionData, allAnswers) {
         answers = processPreviousAnswers(allAnswers.body.data);
     }
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+    console.log(
+        `2222222222222222222222222222222222222222222222222222 ${JSON.stringify(answers, null, 4)}`
+    );
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema,
