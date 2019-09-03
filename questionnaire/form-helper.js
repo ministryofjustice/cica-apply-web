@@ -219,9 +219,6 @@ function getSectionHtml(sectionData, allAnswers) {
         answers = processPreviousAnswers(allAnswers.body.data);
     }
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-    console.log(
-        `2222222222222222222222222222222222222222222222222222 ${JSON.stringify(answers, null, 4)}`
-    );
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema,
