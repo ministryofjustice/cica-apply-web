@@ -124,7 +124,7 @@ const html = `<!DOCTYPE html>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-                <form method="post">
+                <form method="post" novalidate>
 
 
 

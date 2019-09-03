@@ -348,5 +348,19 @@ module.exports = {
                 }
             }
         }
+    },
+    'p-applicant-enter-your-email-address': {
+        options: {
+            properties: {
+                'q-applicant-enter-your-email-address': {
+                    options: {
+                        autocomplete: 'email',
+                        attributes: {
+                            spellcheck: 'false'
+                        }
+                    }
+                }
+            }
+        }
     }
 };
