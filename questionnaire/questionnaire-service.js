@@ -23,7 +23,9 @@ function questionnaireService() {
 
     function getSection(questionnaireId, section) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
+            url: `${
+                process.env.CW_DCS_URL
+            }/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -33,7 +35,9 @@ function questionnaireService() {
 
     function postSection(questionnaireId, section, body) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/sections/${section}/answers`,
+            url: `${
+                process.env.CW_DCS_URL
+            }/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
@@ -49,7 +53,9 @@ function questionnaireService() {
 
     function getPrevious(questionnaireId, sectionId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
+            url: `${
+                process.env.CW_DCS_URL
+            }/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -59,7 +65,9 @@ function questionnaireService() {
 
     function getCurrentSection(currentQuestionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
+            url: `${
+                process.env.CW_DCS_URL
+            }/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -101,10 +109,10 @@ function questionnaireService() {
 
     async function getSubmissionStatus(questionnaireId, startingDate) {
         if (Date.now() - startingDate >= 15000) {
-            const err = Error(`The upstream server took too long to respond`);
+            const err = Error(`Unable to retrieve questionnaire submission status`);
             err.name = 'HTTPError';
-            err.statusCode = 504;
-            err.error = '504 Gateway Timeout';
+            err.statusCode = 500;
+            err.error = '500 Internal Server Error';
             throw err;
         }
         const result = await getSubmission(questionnaireId);
