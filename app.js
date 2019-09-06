@@ -11,6 +11,7 @@ const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const middleware = require('./middleware');
+const errorHandler = require('./middleware/error-handler');
 
 const app = express();
 
@@ -76,5 +77,7 @@ app.use(
 );
 app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
+
+app.use(errorHandler);
 
 module.exports = app;
