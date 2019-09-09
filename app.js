@@ -7,11 +7,11 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
-const csrf = require('csurf');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
+const middleware = require('./middleware');
 
 const app = express();
 
@@ -50,11 +50,7 @@ app.use(
     })
 );
 
-const csrfProtection = csrf({
-    cookie: false,
-    sessionKey: 'cicaSession'
-});
-app.use(csrfProtection);
+app.use(middleware);
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
