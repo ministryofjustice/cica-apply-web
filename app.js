@@ -6,12 +6,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
+const clientSessions = require('client-sessions');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const middleware = require('./middleware');
-const errorHandler = require('./middleware/error-handler');
 
 const app = express();
 
@@ -36,6 +36,20 @@ app.use(express.json());
 // https://expressjs.com/en/api.html#express.urlencoded
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(
+    clientSessions({
+        cookieName: 'cicaSession', // cookie name dictates the key name added to the request object
+        secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
+        duration: 15 * 60 * 1000, // how long the session will stay valid in ms
+        activeDuration: 15 * 60 * 1000, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+        cookie: {
+            ephemeral: false, // when true, cookie expires when the browser closes
+            httpOnly: false, // when true, cookie is not accessible from javascript
+            proxySecure: false // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
+        }
+    })
+);
+
 app.use(middleware);
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
@@ -78,6 +92,12 @@ app.use(
 app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
 
-app.use(errorHandler);
+app.use((err, req, res, next) => {
+    if (err.name === 'EBADCSRFTOKEN') {
+        return res.status(403).render('404.njk');
+    }
+
+    return next(err);
+});
 
 module.exports = app;
