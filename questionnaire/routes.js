@@ -118,8 +118,8 @@ router.route('/submission/confirm').post(async (req, res, next) => {
         }
         const err = Error(`The service is currently unavailable`);
         err.name = 'HTTPError';
-        err.statusCode = 503;
-        err.error = '503 Service unavailable';
+        err.statusCode = 500;
+        err.error = '500 Internal Server Error';
         res.status(err.statusCode).render('503.njk');
         return next(err);
     } catch (err) {

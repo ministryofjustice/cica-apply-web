@@ -101,10 +101,10 @@ function questionnaireService() {
 
     async function getSubmissionStatus(questionnaireId, startingDate) {
         if (Date.now() - startingDate >= 15000) {
-            const err = Error(`The upstream server took too long to respond`);
+            const err = Error(`Unable to retrieve questionnaire submission status`);
             err.name = 'HTTPError';
-            err.statusCode = 504;
-            err.error = '504 Gateway Timeout';
+            err.statusCode = 500;
+            err.error = '500 Internal Server Error';
             throw err;
         }
         const result = await getSubmission(questionnaireId);
