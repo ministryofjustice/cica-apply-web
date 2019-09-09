@@ -7,6 +7,7 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
+const csrf = require('csurf');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
@@ -49,6 +50,12 @@ app.use(
     })
 );
 
+const csrfProtection = csrf({
+    cookie: false,
+    sessionKey: 'cicaSession'
+});
+app.use(csrfProtection);
+
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
 app.use('/apply', async (req, res, next) => {
@@ -88,5 +95,13 @@ app.use(
 );
 app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
+
+// error handler
+app.use((err, req, res, next) => {
+    if (err.code === 'EBADCSRFTOKEN') {
+        return res.status(403).render('404.njk');
+    }
+    return next(err);
+});
 
 module.exports = app;

@@ -140,14 +140,15 @@ describe('form-helper functions', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
-            const isSummary = false;
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const expected = validResolvedHtml.replace(/\s+/g, '');
+            const csrfToken = 'some token';
 
             const actual = formHelper
-                .renderSection(transformation, isFinal, backTarget, isSummary)
+                .renderSection({transformation, isFinal, backTarget, sectionId, csrfToken})
                 .replace(/\s+/g, '');
 
-            expect(actual).toMatch(expected);
+            expect(expected).toMatch(actual);
         });
     });
 
@@ -434,77 +435,6 @@ describe('form-helper functions', () => {
             const actual = formHelper.checkIsSummary(sectionName);
 
             expect(actual).toEqual(false);
-        });
-    });
-
-    describe('Dates', () => {
-        it('Should delete empty date answers', () => {
-            const emptyObject = {};
-
-            expect(
-                formHelper.correctPartialDates({'q-date': {day: '', month: '', year: ''}}, 'q-date')
-            ).toEqual(emptyObject);
-
-            expect(
-                formHelper.correctPartialDates({'q-date': {month: '', year: ''}}, 'q-date')
-            ).toEqual(emptyObject);
-
-            expect(formHelper.correctPartialDates({'q-date': {year: ''}}, 'q-date')).toEqual(
-                emptyObject
-            );
-
-            expect(
-                formHelper.correctPartialDates({'q-date': {day: '', year: ''}}, 'q-date')
-            ).toEqual(emptyObject);
-        });
-
-        it('Should convert answers with all date parts to ISO date string', () => {
-            expect(
-                formHelper.correctPartialDates(
-                    {'q-date': {day: '01', month: '01', year: '1970'}},
-                    'q-date'
-                )
-            ).toEqual({
-                'q-date': '1970-01-01T00:00:00.000Z'
-            });
-        });
-
-        it('Should convert answers with missing day part to ISO date string', () => {
-            expect(
-                formHelper.correctPartialDates({'q-date': {month: '01', year: '1970'}}, 'q-date')
-            ).toEqual({
-                'q-date': '1970-01-01T00:00:00.000Z'
-            });
-        });
-
-        it('Should convert answers with missing month part to ISO date string', () => {
-            expect(
-                formHelper.correctPartialDates({'q-date': {day: '01', year: '1970'}}, 'q-date')
-            ).toEqual({
-                'q-date': '1970-01-01T00:00:00.000Z'
-            });
-        });
-
-        it('Should convert answers with single digit integer day part to ISO date string', () => {
-            expect(
-                formHelper.correctPartialDates(
-                    {'q-date': {day: '1', month: '01', year: '1970'}},
-                    'q-date'
-                )
-            ).toEqual({
-                'q-date': '1970-01-01T00:00:00.000Z'
-            });
-        });
-
-        it('Should convert answers with single digit integer month part to ISO date string', () => {
-            expect(
-                formHelper.correctPartialDates(
-                    {'q-date': {day: '1', month: '1', year: '1970'}},
-                    'q-date'
-                )
-            ).toEqual({
-                'q-date': '1970-01-01T00:00:00.000Z'
-            });
         });
     });
 });

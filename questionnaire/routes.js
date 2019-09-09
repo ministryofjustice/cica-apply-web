@@ -51,7 +51,7 @@ router
             ) {
                 answers = await qService.getAnswers(req.cicaSession.questionnaireId);
             }
-            const html = formHelper.getSectionHtml(response.body, answers);
+            const html = formHelper.getSectionHtml(response.body, answers, req.csrfToken());
             res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
@@ -62,6 +62,9 @@ router
         try {
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
+            // delete the token from the body to allow AJV to validate the request.
+            // eslint-disable-next-line no-underscore-dangle
+            delete body._csrf;
             const response = await qService.postSection(
                 req.cicaSession.questionnaireId,
                 sectionId,
@@ -93,7 +96,11 @@ router
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
 
-            const html = formHelper.getSectionHtmlWithErrors(response.body, sectionId);
+            const html = formHelper.getSectionHtmlWithErrors(
+                response.body,
+                sectionId,
+                req.csrfToken()
+            );
             return res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
