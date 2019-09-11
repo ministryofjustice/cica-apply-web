@@ -16,8 +16,8 @@ const app = express();
 
 nunjucks.configure(
     [
-        'node_modules/govuk-frontend/',
-        'node_modules/govuk-frontend/components/',
+        'node_modules/govuk-frontend/govuk/',
+        'node_modules/govuk-frontend/govuk/components/',
         'index/',
         'questionnaire/',
         'page/'
@@ -73,7 +73,10 @@ app.use('/apply', async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
+app.use(
+    '/assets',
+    express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets'))
+);
 app.use(
     '/govuk-frontend/all.css',
     express.static(path.join(__dirname, '/public/stylesheets/all.css'))
@@ -84,7 +87,7 @@ app.use(
 );
 app.use(
     '/govuk-frontend/all.js',
-    express.static(path.join(__dirname, '/node_modules/govuk-frontend/all.js'))
+    express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
 app.use('/', indexRouter);
 app.use('/apply', applicationRouter);

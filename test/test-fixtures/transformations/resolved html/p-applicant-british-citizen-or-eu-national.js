@@ -49,7 +49,7 @@ const html = `<!DOCTYPE html>
 
 
 
-    <header class="govuk-header " role="banner" data-module="header">
+    <header class="govuk-header " role="banner" data-module="govuk-header">
   <div class="govuk-header__container govuk-width-container">
 
     <div class="govuk-header__logo">
@@ -62,7 +62,7 @@ const html = `<!DOCTYPE html>
             class="govuk-header__logotype-crown"
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 132 97"
-            height="32"
+            height="30"
             width="36"
           >
             <path
@@ -158,8 +158,8 @@ const html = `<!DOCTYPE html>
 
 
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="q-applicant-british-citizen-or-eu-national-1" name="q-applicant-british-citizen-or-eu-national" type="radio" value="true">
-      <label class="govuk-label govuk-radios__label" for="q-applicant-british-citizen-or-eu-national-1">
+      <input class="govuk-radios__input" id="q-applicant-british-citizen-or-eu-national" name="q-applicant-british-citizen-or-eu-national" type="radio" value="true">
+      <label class="govuk-label govuk-radios__label" for="q-applicant-british-citizen-or-eu-national">
         Yes
       </label>
     </div>
@@ -191,7 +191,7 @@ const html = `<!DOCTYPE html>
 
 
 
-<button type="submit" class="govuk-button">
+<button class="govuk-button" data-module="govuk-button">
   Continue
 </button>
 

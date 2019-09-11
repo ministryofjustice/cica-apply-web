@@ -7,8 +7,8 @@ const sectionList = require('./non-complex-sexual-assault-id-mapper');
 
 nunjucks.configure(
     [
-        'node_modules/govuk-frontend/',
-        'node_modules/govuk-frontend/components/',
+        'node_modules/govuk-frontend/govuk/',
+        'node_modules/govuk-frontend/govuk/components/',
         'index/',
         'questionnaire/',
         'page/'
