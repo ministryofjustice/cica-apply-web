@@ -40,7 +40,7 @@ function renderSection({
     backTarget,
     sectionId,
     variables = {},
-    showBackLink
+    showBackLink = true
 }) {
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
