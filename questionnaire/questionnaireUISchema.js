@@ -281,7 +281,20 @@ module.exports = {
     },
     'p-applicant-select-the-option-that-applies-to-you': {
         options: {
-            outputOrder: ['applicant-your-choices', 'q-applicant-option']
+            outputOrder: ['applicant-your-choices', 'q-applicant-option'],
+            properties: {
+                'q-applicant-option': {
+                    options: {
+                        macroOptions: {
+                            fieldset: {
+                                legend: {
+                                    classes: 'govuk-fieldset__legend--m'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     'p-applicant-when-did-the-crime-happen': {
@@ -315,6 +328,39 @@ module.exports = {
     'p--confirmation': {
         options: {
             showBackButton: false
+        }
+    },
+    'p-applicant-you-cannot-get-compensation': {
+        options: {
+            buttonText: 'Continue anyway'
+        }
+    },
+    'p--which-english-police-force-is-investigating-the-crime': {
+        options: {
+            properties: {
+                'q--which-english-police-force-is-investigating-the-crime': {
+                    options: {
+                        defaultItem: {
+                            value: '',
+                            text: 'Select police force'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-enter-your-email-address': {
+        options: {
+            properties: {
+                'q-applicant-enter-your-email-address': {
+                    options: {
+                        autocomplete: 'email',
+                        attributes: {
+                            spellcheck: 'false'
+                        }
+                    }
+                }
+            }
         }
     }
 };

@@ -1,15 +1,14 @@
 'use strict';
 
 const nunjucks = require('nunjucks');
-const moment = require('moment');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
 
 nunjucks.configure(
     [
-        'node_modules/govuk-frontend/',
-        'node_modules/govuk-frontend/components/',
+        'node_modules/govuk-frontend/govuk/',
+        'node_modules/govuk-frontend/govuk/components/',
         'index/',
         'questionnaire/',
         'page/'
@@ -59,10 +58,10 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" {%- if ${isSummary} %} action="/apply/submission/confirm"{% endif %}>
+                <form method="post" {%- if ${isSummary} %} action="/apply/submission/confirm"{% endif %} novalidate>
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation}
-                    {% if ${showButton} %}   
+                    {% if ${showButton} %}
                         {{ govukButton({
                             text: "${buttonTitle}"
                         }) }}
@@ -122,26 +121,44 @@ function removeEmptyAnswers(body, property) {
     return answers;
 }
 
-function correctPartialDates(body, property) {
+function correctPartialDates(body, questionId) {
     const answers = body;
-    const value = answers[property];
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-        const yearMonthDay = value.day
-            ? `${value.year}-${value.month}-${value.day}`
-            : `${value.year}-${value.month}-01`;
+    const dateParts = answers[questionId];
 
-        // -- indicates no date parts have been provided
-        if (yearMonthDay === '--' || yearMonthDay === '--01') {
-            delete answers[property];
-        } else {
-            const date = moment(yearMonthDay).format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
-            if (date !== null) {
-                answers[property] = date;
-            } else {
-                answers[property] = `${yearMonthDay}T00:00:00.000Z`;
-            }
+    if (
+        dateParts &&
+        typeof dateParts === 'object' &&
+        !Array.isArray(dateParts) &&
+        ('year' in dateParts || 'month' in dateParts || 'day' in dateParts)
+    ) {
+        // If no date parts are supplied delete the answer to trigger required error
+        if (Object.values(dateParts).every(datePart => datePart === '')) {
+            delete answers[questionId];
+            return answers;
         }
+
+        // Default omitted day/month object properties to "01"
+        if (!('day' in dateParts)) {
+            dateParts.day = '01';
+        }
+
+        if (!('month' in dateParts)) {
+            dateParts.month = '01';
+        }
+
+        // Users can enter day/month as "7" or "07". Prefix single integer digits with "0"
+        if (dateParts.day.match(/^[1-9]$/) !== null) {
+            dateParts.day = `0${dateParts.day}`;
+        }
+
+        if (dateParts.month.match(/^[1-9]$/) !== null) {
+            dateParts.month = `0${dateParts.month}`;
+        }
+
+        // Create an ISODateish string
+        answers[questionId] = `${dateParts.year}-${dateParts.month}-${dateParts.day}T00:00:00.000Z`;
     }
+
     return answers;
 }
 
@@ -206,10 +223,7 @@ function processErrors(errors) {
                 err.meta.raw.params.errors[0].params.missingProperty
             ) {
                 errorObject[err.meta.raw.params.errors[0].params.missingProperty] = err.detail;
-            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.limit) {
-                const questionId = err.meta.raw.dataPath.substring(1);
-                errorObject[questionId] = err.detail;
-            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.format) {
+            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params) {
                 const questionId = err.meta.raw.dataPath.substring(1);
                 errorObject[questionId] = err.detail;
             }

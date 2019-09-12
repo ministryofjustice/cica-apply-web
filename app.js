@@ -17,8 +17,8 @@ const app = express();
 
 nunjucks.configure(
     [
-        'node_modules/govuk-frontend/',
-        'node_modules/govuk-frontend/components/',
+        'node_modules/govuk-frontend/govuk/',
+        'node_modules/govuk-frontend/govuk/components/',
         'index/',
         'questionnaire/',
         'page/'
@@ -43,7 +43,7 @@ app.use(
         duration: 15 * 60 * 1000, // how long the session will stay valid in ms
         activeDuration: 15 * 60 * 1000, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
         cookie: {
-            ephemeral: false, // when true, cookie expires when the browser closes
+            ephemeral: true, // when true, cookie expires when the browser closes
             httpOnly: false, // when true, cookie is not accessible from javascript
             proxySecure: false // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
         }
@@ -76,7 +76,10 @@ app.use('/apply', async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
+app.use(
+    '/assets',
+    express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets'))
+);
 app.use(
     '/govuk-frontend/all.css',
     express.static(path.join(__dirname, '/public/stylesheets/all.css'))
@@ -87,7 +90,7 @@ app.use(
 );
 app.use(
     '/govuk-frontend/all.js',
-    express.static(path.join(__dirname, '/node_modules/govuk-frontend/all.js'))
+    express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
 app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
