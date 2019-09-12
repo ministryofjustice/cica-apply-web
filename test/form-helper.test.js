@@ -114,37 +114,17 @@ describe('form-helper functions', () => {
         });
     });
 
-    describe('Get next section', () => {
-        it('Should return the next secion name', () => {
-            const nextSectionId = 'p-applicant-enter-your-name';
-            const expected = 'applicant-enter-your-name';
-
-            const actual = formHelper.getNextSection(nextSectionId);
-
-            expect(actual).toEqual(expected);
-        });
-
-        it('Should return the overriding section name, if it is present and valid', () => {
-            const nextSectionId = 'p-applicant-enter-your-name';
-            const overridingId = 'p-applicant-enter-your-address';
-            const expected = 'applicant-enter-your-address';
-
-            const actual = formHelper.getNextSection(nextSectionId, overridingId);
-
-            expect(actual).toEqual(expected);
-        });
-    });
-
     describe('Render page html', () => {
         it('Should return html given a valid transformation', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
-            const isSummary = false;
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
+            const showBackLink = true;
             const expected = validResolvedHtml.replace(/\s+/g, '');
 
             const actual = formHelper
-                .renderSection(transformation, isFinal, backTarget, isSummary)
+                .renderSection({transformation, isFinal, backTarget, sectionId, showBackLink})
                 .replace(/\s+/g, '');
 
             expect(actual).toMatch(expected);
@@ -368,34 +348,6 @@ describe('form-helper functions', () => {
             const actual = formHelper.processPreviousAnswers(answerObject, {});
 
             expect(actual).toMatchObject(expected);
-        });
-    });
-
-    describe('In UI Schema', () => {
-        it('Should return the sectionId given a section name which exists in the UISchema', () => {
-            const sectionName = 'applicant-other-compensation-details';
-            const expected = 'p-applicant-other-compensation-details';
-
-            const actual = formHelper.inUiSchema(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-
-        it('Should return the sectionId given a sectionId which exists in the UISchema', () => {
-            const sectionName = 'p-applicant-other-compensation-details';
-            const expected = 'p-applicant-other-compensation-details';
-
-            const actual = formHelper.inUiSchema(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-
-        it('Should return undefined given a section name which does not exist in the UISchema', () => {
-            const sectionName = 'not-a-section';
-
-            const actual = formHelper.inUiSchema(sectionName);
-
-            expect(actual).toBeUndefined();
         });
     });
 
