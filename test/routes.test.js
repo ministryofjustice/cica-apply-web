@@ -20,6 +20,35 @@ const postValidSubmissionFailed = require('./test-fixtures/res/post_valid_submis
 
 let app;
 
+function replaceCsrfMiddlwareForTest(expressApp) {
+    // TODO: find a better way to do this
+    // because I cannot alter the contents of the variable that
+    // is passed in to the `app.use()` method within the app.js,
+    // I need to butcher the stack from the outside so that the
+    // csrf stuff is altered after initialisation. If the csrf
+    // stuff was extracted out its own middleware then we could
+    // just that js file instead.
+    // eslint-disable-next-line no-underscore-dangle
+    const middlewareStack = expressApp._router.stack;
+    let csrfMiddlewareStackIndex = -1;
+    middlewareStack.forEach((layer, index) => {
+        if (layer.name === 'csrf') {
+            csrfMiddlewareStackIndex = index;
+        }
+    });
+    if (csrfMiddlewareStackIndex > -1) {
+        // eslint-disable-next-line no-underscore-dangle
+        expressApp._router.stack.splice(csrfMiddlewareStackIndex, 1);
+    }
+
+    const csrfProtection = csrf({
+        cookie: false,
+        sessionKey: 'cicaSession',
+        ignoreMethods: ['HEAD', 'OPTIONS']
+    });
+    expressApp.use(csrfProtection);
+}
+
 function setUpCommonMocks() {
     jest.resetModules();
     jest.doMock('../questionnaire/questionnaire-service', () =>
@@ -28,15 +57,16 @@ function setUpCommonMocks() {
             getCurrentSection: () => getCurrentSection
         }))
     );
-
     // eslint-disable-next-line global-require
     app = require('../app');
+    replaceCsrfMiddlwareForTest(app);
 }
 
 describe('Data capture service endpoints', () => {
     describe('Cica-web static routes', () => {
         // eslint-disable-next-line global-require
         app = require('../app');
+        replaceCsrfMiddlwareForTest(app);
 
         describe('/', () => {
             describe('GET', () => {
@@ -194,6 +224,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                         return request
                             .agent(app)
                             .get('/apply')
@@ -214,6 +245,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply').then(() =>
                             currentAgent
@@ -308,6 +340,7 @@ describe('Data capture service endpoints', () => {
                         }));
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                     });
 
                     it('Should fail gracefully', async () => {
@@ -354,6 +387,7 @@ describe('Data capture service endpoints', () => {
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
+                            replaceCsrfMiddlwareForTest(app);
                         });
 
                         it('Should respond with a found status if there are no errors', () => {
@@ -415,6 +449,7 @@ describe('Data capture service endpoints', () => {
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
+                            replaceCsrfMiddlwareForTest(app);
                         });
 
                         it('Should render the schema again with errors', () => {
@@ -434,7 +469,6 @@ describe('Data capture service endpoints', () => {
                                             'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
                                         )
                                         .then(() =>
-                                            // console.log({response});
                                             currentAgent
                                                 // then post to the page with the token.
                                                 .post('/apply/applicant-enter-your-name')
@@ -473,6 +507,7 @@ describe('Data capture service endpoints', () => {
                         }));
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                     });
 
                     it('Should fail gracefully', async () => {
@@ -524,6 +559,7 @@ describe('Data capture service endpoints', () => {
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
+                            replaceCsrfMiddlwareForTest(app);
                         });
                         it('Should redirect to a section', () => {
                             const currentAgent = request.agent(app);
@@ -590,6 +626,7 @@ describe('Data capture service endpoints', () => {
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
+                            replaceCsrfMiddlwareForTest(app);
                         });
                         it('Should respond with a found status', () => {
                             const currentAgent = request.agent(app);
@@ -641,6 +678,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() => {
                             formHelper.removeSectionIdPrefix = jest.fn(
@@ -671,6 +709,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() => {
                             formHelper.removeSectionIdPrefix = jest.fn(
@@ -709,18 +748,12 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             removeSectionIdPrefix: () => sectionIdNoPrefix
                         }));
-
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                     });
 
-                    it.only('Should respond with a found status', () => {
-                        request
-                            .agent(app)
-                            .get('/apply/confirmation')
-                            .then(res => {
-                                console.log({res});
-                            });
+                    it('Should respond with a found status', () => {
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() =>
                             currentAgent
@@ -765,6 +798,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                     });
 
                     it('Should fail gracefully', () => {
@@ -795,6 +829,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                     });
 
                     it('Should tell the user the service is unavailable', () => {
@@ -833,6 +868,7 @@ describe('Data capture service endpoints', () => {
                         );
                         // eslint-disable-next-line global-require
                         app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
                     });
 
                     it('Should throw a 504 if the service times out', () => {
@@ -907,6 +943,7 @@ describe('Data capture service endpoints', () => {
 
                 // eslint-disable-next-line global-require
                 app = require('../app');
+                replaceCsrfMiddlwareForTest(app);
 
                 const response = await request(app).post(
                     '/apply/applicant-enter-your-name?next=check-your-answers'
@@ -957,6 +994,7 @@ describe('Data capture service endpoints', () => {
 
                 // eslint-disable-next-line global-require
                 app = require('../app');
+                replaceCsrfMiddlwareForTest(app);
 
                 const response = await request(app).post(
                     '/apply/applicant-are-you-18-or-over?next=check-your-answers'

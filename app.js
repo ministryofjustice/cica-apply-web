@@ -49,12 +49,13 @@ app.use(
         }
     })
 );
-const csrfProtection = csrf({
-    cookie: false,
-    sessionKey: 'cicaSession'
-});
 
-app.use(csrfProtection);
+app.use(
+    csrf({
+        cookie: false,
+        sessionKey: 'cicaSession'
+    })
+);
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
