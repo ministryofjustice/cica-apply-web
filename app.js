@@ -49,7 +49,6 @@ app.use(
         }
     })
 );
-
 const csrfProtection = csrf({
     cookie: false,
     sessionKey: 'cicaSession'

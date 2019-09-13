@@ -1,6 +1,7 @@
 'use strict';
 
 const request = require('supertest');
+const csrf = require('csurf');
 
 const formHelper = require('../questionnaire/form-helper');
 
@@ -18,6 +19,7 @@ const postValidSubmission = require('./test-fixtures/res/post_valid_submission')
 const postValidSubmissionFailed = require('./test-fixtures/res/post_valid_submission_service_down');
 
 let app;
+
 function setUpCommonMocks() {
     jest.resetModules();
     jest.doMock('../questionnaire/questionnaire-service', () =>
@@ -26,6 +28,7 @@ function setUpCommonMocks() {
             getCurrentSection: () => getCurrentSection
         }))
     );
+
     // eslint-disable-next-line global-require
     app = require('../app');
 }
@@ -349,10 +352,6 @@ describe('Data capture service endpoints', () => {
                                 processRequest: () => processedAnswer,
                                 getNextSection: () => section
                             }));
-                            jest.doMock('../middleware/csrf/index', () => (req, res, next) => {
-                                req.csrfToken = () => '1234567890';
-                                next();
-                            });
                             // eslint-disable-next-line global-require
                             app = require('../app');
                         });
@@ -414,10 +413,6 @@ describe('Data capture service endpoints', () => {
                                 getNextSection: () => section,
                                 getSectionHtml: () => getSectionHtmlValid
                             }));
-                            jest.doMock('../middleware/csrf/index', () => (req, res, next) => {
-                                req.csrfToken = () => '1234567890';
-                                next();
-                            });
                             // eslint-disable-next-line global-require
                             app = require('../app');
                         });
@@ -476,10 +471,6 @@ describe('Data capture service endpoints', () => {
                             processRequest: () => processedAnswer,
                             getNextSection: () => section
                         }));
-                        jest.doMock('../middleware/csrf/index', () => (req, res, next) => {
-                            req.csrfToken = () => '1234567890';
-                            next();
-                        });
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
@@ -718,11 +709,18 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             removeSectionIdPrefix: () => sectionIdNoPrefix
                         }));
+
                         // eslint-disable-next-line global-require
                         app = require('../app');
                     });
 
-                    it('Should respond with a found status', () => {
+                    it.only('Should respond with a found status', () => {
+                        request
+                            .agent(app)
+                            .get('/apply/confirmation')
+                            .then(res => {
+                                console.log({res});
+                            });
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() =>
                             currentAgent
@@ -732,9 +730,13 @@ describe('Data capture service endpoints', () => {
                                     'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
                                 )
                                 .then(response => {
+                                    // const csrfReqTokenMock = jest.spyOn(response, 'csrfToken');
+                                    // // override the implementation
+                                    // csrfReqTokenMock.mockImplementation(() => () => '123456789');
+                                    // // console.log({response});
+                                    // console.log({HELLLLLOOOOO: response.csrfToken});
                                     expect(response.statusCode).toBe(302);
-                                })
-                        );
+                            }));
                     });
 
                     it('Should redirect the user to the confirmation page', () => {
