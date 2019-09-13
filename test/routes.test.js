@@ -730,13 +730,9 @@ describe('Data capture service endpoints', () => {
                                     'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
                                 )
                                 .then(response => {
-                                    // const csrfReqTokenMock = jest.spyOn(response, 'csrfToken');
-                                    // // override the implementation
-                                    // csrfReqTokenMock.mockImplementation(() => () => '123456789');
-                                    // // console.log({response});
-                                    // console.log({HELLLLLOOOOO: response.csrfToken});
                                     expect(response.statusCode).toBe(302);
-                            }));
+                                })
+                        );
                     });
 
                     it('Should redirect the user to the confirmation page', () => {
