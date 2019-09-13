@@ -101,7 +101,7 @@ app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
 
 app.use((err, req, res, next) => {
-    if (err.name === 'EBADCSRFTOKEN') {
+    if (err.code === 'EBADCSRFTOKEN') {
         return res.status(403).render('503.njk');
     }
 
