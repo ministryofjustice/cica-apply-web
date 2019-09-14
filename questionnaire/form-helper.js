@@ -198,9 +198,7 @@ function getSectionHtml(sectionData, allAnswers) {
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
 
     const showBackLink = !(
-        uiSchema[sectionId] &&
-        uiSchema[sectionId].options.showBackButton &&
-        uiSchema[sectionId].options.showBackButton === false
+        uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
     );
 
     const transformation = qTransformer.transform({
