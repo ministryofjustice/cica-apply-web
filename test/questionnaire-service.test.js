@@ -188,4 +188,20 @@ describe('Questionnaire service', () => {
             expect(response).toThrow('The upstream server took too long to respond');
         }); */
     });
+
+    describe('getFirstSection', () => {
+        it('Should get the first section', async () => {
+            jest.doMock('../questionnaire/request-service', () =>
+                jest.fn(() => ({
+                    get: () => getValidSection
+                }))
+            );
+            jest.resetModules();
+            // eslint-disable-next-line global-require
+            const questionnaireService = require('../questionnaire/questionnaire-service')();
+            const response = await questionnaireService.getFirstSection('questionnaire-id');
+
+            expect(response).toEqual(getValidSection);
+        });
+    });
 });

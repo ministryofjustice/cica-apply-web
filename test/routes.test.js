@@ -134,7 +134,7 @@ describe('Data capture service endpoints', () => {
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
                                 createQuestionnaire: () => createQuestionnaire,
-                                getCurrentSection: () => getCurrentSection
+                                getFirstSection: () => getCurrentSection
                             }))
                         );
                         // eslint-disable-next-line global-require
@@ -203,7 +203,7 @@ describe('Data capture service endpoints', () => {
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
                                 createQuestionnaire: () => createQuestionnaire,
-                                getCurrentSection: () => {
+                                getFirstSection: () => {
                                     throw new Error();
                                 }
                             }))
