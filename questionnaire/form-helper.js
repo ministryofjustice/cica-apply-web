@@ -77,19 +77,6 @@ function removeSectionIdPrefix(sectionId) {
     return sectionId.replace(/p-{1,2}/, '');
 }
 
-function inUiSchema(section) {
-    if (uiSchema[section]) {
-        return section;
-    }
-    if (uiSchema[`p-${section}`]) {
-        return `p-${section}`;
-    }
-    if (uiSchema[`p--${section}`]) {
-        return `p--${section}`;
-    }
-    return undefined;
-}
-
 function removeUnwantedHiddenAnswers(body, sectionId) {
     const answers = body;
     Object.keys(uiSchema[sectionId].options.properties).forEach(question => {
@@ -162,11 +149,15 @@ function correctPartialDates(body, questionId) {
     return answers;
 }
 
+function addPrefix(section) {
+    return sectionList[section];
+}
+
 function processRequest(rawBody, section) {
     // Handle conditionally revealing routes
     let body = rawBody;
-    const sectionId = inUiSchema(section);
-    if (sectionId && uiSchema[sectionId].options.properties) {
+    const sectionId = addPrefix(section);
+    if (uiSchema[sectionId] && uiSchema[sectionId].options.properties) {
         body = removeUnwantedHiddenAnswers(rawBody, sectionId);
     }
     if (Object.entries(body).length > 0 && body.constructor === Object) {
@@ -192,7 +183,7 @@ function processPreviousAnswers(answersObject) {
 
 function getSectionHtml(sectionData, allAnswers, csrfToken) {
     const {sectionId} = sectionData.data[0].attributes;
-    const {final} = sectionData.meta;
+    const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
     let answers;
@@ -205,13 +196,26 @@ function getSectionHtml(sectionData, allAnswers, csrfToken) {
         answers = processPreviousAnswers(allAnswers.body.data);
     }
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+
+    const showBackLink = !(
+        uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
+    );
+
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema,
         uiSchema,
         data: answers
     });
-    return renderSection({transformation, final, backLink, sectionId, csrfToken});
+
+    return renderSection({
+        transformation,
+        isFinal: display.final,
+        backTarget: backLink,
+        sectionId,
+        showBackLink,
+        csrfToken
+    });
 }
 
 function processErrors(errors) {
@@ -235,7 +239,6 @@ function processErrors(errors) {
 function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
-    const {final} = false; // sectionData.meta; // ToDo: Add these to meta for POST answers
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
     const {answers} = sectionData.meta;
     const transformation = qTransformer.transform({
@@ -245,20 +248,13 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
         data: answers,
         schemaErrors: errorObject
     });
-    return renderSection({transformation, final, backLink, sectionId, csrfToken});
-}
-
-function getNextSection(nextSectionId, requestedNextSectionId = undefined) {
-    // Is there an override for the next section
-    let nextSection = removeSectionIdPrefix(nextSectionId);
-    if (requestedNextSectionId) {
-        nextSection = removeSectionIdPrefix(requestedNextSectionId);
-    }
-    return nextSection;
-}
-
-function addPrefix(section) {
-    return sectionList[section];
+    return renderSection({
+        transformation,
+        isFinal: false,
+        backTarget: backLink,
+        sectionId,
+        csrfToken
+    });
 }
 
 module.exports = {
@@ -266,10 +262,8 @@ module.exports = {
     checkIsSummary,
     renderSection,
     removeSectionIdPrefix,
-    inUiSchema,
     processRequest,
     getSectionHtml,
-    getNextSection,
     removeEmptyAnswers,
     removeUnwantedHiddenAnswers,
     correctPartialDates,
