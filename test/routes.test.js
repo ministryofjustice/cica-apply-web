@@ -31,6 +31,8 @@ function replaceCsrfMiddlwareForTest(expressApp) {
     // eslint-disable-next-line no-underscore-dangle
     const middlewareStack = expressApp._router.stack;
     let csrfMiddlewareStackIndex = -1;
+    let newCsrfMiddlewareStackItem = [];
+    let newCsrfMiddlewareStackIndex = -1;
     middlewareStack.forEach((layer, index) => {
         if (layer.name === 'csrf') {
             csrfMiddlewareStackIndex = index;
@@ -44,9 +46,23 @@ function replaceCsrfMiddlwareForTest(expressApp) {
     const csrfProtection = csrf({
         cookie: false,
         sessionKey: 'cicaSession',
-        ignoreMethods: ['HEAD', 'OPTIONS']
+        ignoreMethods: ['GET', 'POST']
     });
     expressApp.use(csrfProtection);
+
+    // look for the new csrf middleware. it should be the last item.
+    middlewareStack.forEach((layer, index) => {
+        if (layer.name === 'csrf') {
+            // get a copy of the new middleware.
+            newCsrfMiddlewareStackItem = layer;
+            newCsrfMiddlewareStackIndex = index;
+            // remove it from the stack.
+            // eslint-disable-next-line no-underscore-dangle
+            expressApp._router.stack.splice(newCsrfMiddlewareStackIndex, 1);
+        }
+    });
+    // eslint-disable-next-line no-underscore-dangle
+    expressApp._router.stack.splice(csrfMiddlewareStackIndex, 0, newCsrfMiddlewareStackItem);
 }
 
 function setUpCommonMocks() {
