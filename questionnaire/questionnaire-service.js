@@ -128,6 +128,16 @@ function questionnaireService() {
         return service.get(opts);
     }
 
+    function getFirstSection(currentQuestionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -138,7 +148,8 @@ function questionnaireService() {
         postSubmission,
         timeout,
         getSubmissionStatus,
-        getAnswers
+        getAnswers,
+        getFirstSection
     });
 }
 

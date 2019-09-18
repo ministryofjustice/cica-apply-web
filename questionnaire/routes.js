@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route('/').get(async (req, res, next) => {
     try {
-        const response = await qService.getCurrentSection(req.cicaSession.questionnaireId);
+        const response = await qService.getFirstSection(req.cicaSession.questionnaireId);
         const responseBody = response.body;
         const initialSection = formHelper.removeSectionIdPrefix(
             responseBody.data[0].attributes.sectionId

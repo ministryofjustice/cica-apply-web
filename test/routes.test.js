@@ -254,7 +254,7 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
                                 createQuestionnaire: () => createQuestionnaire,
-                                getCurrentSection: () => {
+                                getFirstSection: () => {
                                     throw new Error();
                                 }
                             }))
