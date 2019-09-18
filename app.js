@@ -30,6 +30,15 @@ nunjucks.configure(
 );
 
 app.use(helmet());
+// explicity set the Content Security Policy.
+// not set in Helmet by default.
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: ["'self'"]
+        }
+    })
+);
 app.use(logger('dev'));
 // https://expressjs.com/en/api.html#express.json
 app.use(express.json());
