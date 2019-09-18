@@ -39,8 +39,8 @@ function renderSection({
     isFinal,
     backTarget,
     sectionId,
-    variables = {},
-    showBackLink = true
+    showBackLink = true,
+    csrfToken
 }) {
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
@@ -66,10 +66,10 @@ function renderSection({
                             text: "${buttonTitle}"
                         }) }}
                     {% endif %}
+                    <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
-        `,
-        variables
+        `
     );
 }
 
@@ -181,7 +181,7 @@ function processPreviousAnswers(answersObject) {
     return answers;
 }
 
-function getSectionHtml(sectionData, allAnswers) {
+function getSectionHtml(sectionData, allAnswers, csrfToken) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -207,12 +207,14 @@ function getSectionHtml(sectionData, allAnswers) {
         uiSchema,
         data: answers
     });
+
     return renderSection({
         transformation,
         isFinal: display.final,
         backTarget: backLink,
         sectionId,
-        showBackLink
+        showBackLink,
+        csrfToken
     });
 }
 
@@ -234,7 +236,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -246,7 +248,13 @@ function getSectionHtmlWithErrors(sectionData, sectionId) {
         data: answers,
         schemaErrors: errorObject
     });
-    return renderSection({transformation, isFinal: false, backTarget: backLink, sectionId});
+    return renderSection({
+        transformation,
+        isFinal: false,
+        backTarget: backLink,
+        sectionId,
+        csrfToken
+    });
 }
 
 module.exports = {

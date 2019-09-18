@@ -7,6 +7,7 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
+const csrf = require('csurf');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
@@ -46,6 +47,13 @@ app.use(
             httpOnly: false, // when true, cookie is not accessible from javascript
             proxySecure: false // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
         }
+    })
+);
+
+app.use(
+    csrf({
+        cookie: false,
+        sessionKey: 'cicaSession'
     })
 );
 
@@ -91,5 +99,13 @@ app.use(
 );
 app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
+
+app.use((err, req, res, next) => {
+    if (err.code === 'EBADCSRFTOKEN') {
+        return res.status(403).render('503.njk');
+    }
+
+    return next(err);
+});
 
 module.exports = app;

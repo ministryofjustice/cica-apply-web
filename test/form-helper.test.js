@@ -122,9 +122,17 @@ describe('form-helper functions', () => {
             const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const showBackLink = true;
             const expected = validResolvedHtml.replace(/\s+/g, '');
+            const csrfToken = 'sometoken';
 
             const actual = formHelper
-                .renderSection({transformation, isFinal, backTarget, sectionId, showBackLink})
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken
+                })
                 .replace(/\s+/g, '');
 
             expect(actual).toMatch(expected);

@@ -194,7 +194,7 @@ const html = `<!DOCTYPE html>
 <button class="govuk-button" data-module="govuk-button">
   Continue
 </button>
-
+<input type="hidden" name="_csrf" value="sometoken">
 
                 </form>
 
