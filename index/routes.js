@@ -24,4 +24,8 @@ router.get('/transition', (req, res) => {
     res.render('transition.njk');
 });
 
+router.get('*', (req, res) => {
+    res.render('404.njk');
+});
+
 module.exports = router;

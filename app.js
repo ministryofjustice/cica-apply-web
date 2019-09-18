@@ -97,8 +97,8 @@ app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
-app.use('/', indexRouter);
 app.use('/apply', applicationRouter);
+app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.code === 'EBADCSRFTOKEN') {
