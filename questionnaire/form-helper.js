@@ -181,6 +181,14 @@ function processPreviousAnswers(answersObject) {
     return answers;
 }
 
+function escapeSchemaContent(schema) {
+    // Double escape any "\\" to work around this issue: https://github.com/mozilla/nunjucks/issues/625
+    const schemaAsJson = JSON.stringify(schema);
+    const schemaWithEscapedContent = JSON.parse(schemaAsJson.replace(/\\\\/g, '\\\\\\\\'));
+
+    return schemaWithEscapedContent;
+}
+
 function getSectionHtml(sectionData, allAnswers, csrfToken) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
@@ -203,7 +211,7 @@ function getSectionHtml(sectionData, allAnswers, csrfToken) {
 
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
-        schema,
+        schema: escapeSchemaContent(schema),
         uiSchema,
         data: answers
     });
@@ -270,5 +278,6 @@ module.exports = {
     processErrors,
     processPreviousAnswers,
     getSectionHtmlWithErrors,
-    addPrefix
+    addPrefix,
+    escapeSchemaContent
 };
