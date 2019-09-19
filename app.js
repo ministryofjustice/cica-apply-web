@@ -47,7 +47,11 @@ app.use(logger('dev'));
 app.use(express.json());
 // https://expressjs.com/en/api.html#express.urlencoded
 app.use(express.urlencoded({extended: true}));
-app.use(cookieParser());
+app.use(
+    cookieParser(null, {
+        httpOnly: true
+    })
+);
 app.use(
     clientSessions({
         cookieName: 'cicaSession', // cookie name dictates the key name added to the request object

@@ -32,7 +32,7 @@ const html = `<!DOCTYPE html>
 
 
     <!--[if lt IE 9]>
-    <script src="/html5-shiv/html5shiv.js"></script>
+    <script src="/js/html5shiv.js"></script>
     <![endif]-->
 
 
