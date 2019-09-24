@@ -41,6 +41,11 @@ app.use(
         }
     })
 );
+app.use(
+    helmet.hsts({
+        maxAge: 60 * 60 * 24 * 365 // the units is seconds.
+    })
+);
 app.use(logger('dev'));
 // https://expressjs.com/en/api.html#express.json
 app.use(express.json());
