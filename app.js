@@ -29,23 +29,25 @@ nunjucks.configure(
     }
 );
 
-app.use(helmet());
-// explicity set the Content Security Policy.
-// not set in Helmet by default.
 app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
-            imgSrc: ["'self'", 'data:']
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: [
+                    "'self'",
+                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+                    "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='"
+                ],
+                imgSrc: ["'self'", 'data:']
+            }
+        },
+        hsts: {
+            maxAge: 60 * 60 * 24 * 365 // the units is seconds.
         }
     })
 );
-app.use(
-    helmet.hsts({
-        maxAge: 60 * 60 * 24 * 365 // the units is seconds.
-    })
-);
+
 app.use(logger('dev'));
 // https://expressjs.com/en/api.html#express.json
 app.use(express.json());
