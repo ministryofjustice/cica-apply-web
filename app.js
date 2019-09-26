@@ -58,6 +58,10 @@ app.use(
         httpOnly: true
     })
 );
+app.use((req, res, next) => {
+    req.connection.proxySecure = true;
+    next();
+});
 app.use(
     clientSessions({
         cookieName: 'cicaSession', // cookie name dictates the key name added to the request object
@@ -67,7 +71,7 @@ app.use(
         cookie: {
             ephemeral: true, // when true, cookie expires when the browser closes
             httpOnly: true, // when true, cookie is not accessible from javascript
-            proxySecure: false // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
+            proxySecure: true // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
         }
     })
 );
