@@ -6,6 +6,7 @@ const getValidPreviousSection = require('./test-fixtures/res/get_previous_valid_
 const getValidSubmission = require('./test-fixtures/res/get_submission_not_started');
 const getValidCompletedSubmission = require('./test-fixtures/res/get_submission_valid');
 const postValidSubmission = require('./test-fixtures/res/post_valid_submission');
+const getAnswersValid = require('./test-fixtures/res/get_answers_valid');
 
 const validPostResponse = {valid: true};
 
@@ -159,34 +160,37 @@ describe('Questionnaire service', () => {
 
             expect(expected).toEqual(response);
         });
-        /*  it('Returns continues to check for 15 seconds', async () => {
-            jest.useFakeTimers();
+
+        it('Should return a 504 error if it is called with a time older than 15 seconds ago.', async () => {
             jest.doMock('../questionnaire/request-service', () =>
                 jest.fn(() => ({
-                    get: () => getValidSubmission
+                    get: () => getValidCompletedSubmission
                 }))
             );
             jest.resetModules();
             // eslint-disable-next-line global-require
             const questionnaireService = require('../questionnaire/questionnaire-service')();
-            await questionnaireService.getSubmissionStatus(
-                'questionnaire-id',
-                Date.now()
-            );
-
-            expect(setTimeout).toHaveBeenCalledTimes(15);
+            function getSub() {
+                questionnaireService.getSubmissionStatus('questionnaire-id', Date.now() - 16000);
+            }
+            expect(getSub).toThrow(`Unable to retrieve questionnaire submission status`);
         });
-        it('Should return a 504 error if it is called with a time older than 15 seconds ago.', async () => {
+    });
+
+    describe('getAnswers', () => {
+        it('Should get the answer object', async () => {
+            jest.doMock('../questionnaire/request-service', () =>
+                jest.fn(() => ({
+                    get: () => getAnswersValid
+                }))
+            );
             jest.resetModules();
             // eslint-disable-next-line global-require
             const questionnaireService = require('../questionnaire/questionnaire-service')();
-            const response = await questionnaireService.getSubmissionStatus(
-                'questionnaire-id',
-                Date.now() - 16000
-            );
+            const response = await questionnaireService.getAnswers('questionnaire-id');
 
-            expect(response).toThrow('The upstream server took too long to respond');
-        }); */
+            expect(response).toEqual(getAnswersValid);
+        });
     });
 
     describe('getFirstSection', () => {

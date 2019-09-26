@@ -1,0 +1,20 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "answers",
+                "id": "p-applicant-british-citizen-or-eu-national",
+                "attributes": {
+                    "q-applicant-british-citizen-or-eu-national": true
+                }
+            },
+            {
+                "type": "answers",
+                "id": "p-applicant-are-you-18-or-over",
+                "attributes": {
+                    "q-applicant-are-you-18-or-over": true
+                }
+            }
+        ]
+    }
+}

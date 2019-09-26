@@ -178,9 +178,27 @@ describe('Data capture service endpoints', () => {
                     });
                 });
             });
+            describe('/*', () => {
+                describe('GET', () => {
+                    describe('200', () => {
+                        it('Should respond with a 200 status', async () => {
+                            const response = await request(app).get('/not-a-page');
+                            expect(response.statusCode).toBe(200);
+                        });
+                        it('Should render a page with the page not found heading', async () => {
+                            const response = await request(app).get('/not-a-page');
+                            const actual = response.res.text.replace(/\s+/g, '');
+                            const pageHeading = `<h1 class="govuk-heading-xl">Page not found</h1>`.replace(
+                                /\s+/g,
+                                ''
+                            );
+                            expect(actual).toContain(pageHeading);
+                        });
+                    });
+                });
+            });
         });
     });
-
     describe('Cica-web /apply routes', () => {
         describe('/', () => {
             describe('GET', () => {
