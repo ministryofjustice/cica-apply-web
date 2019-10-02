@@ -1,34 +1,100 @@
 {% extends "page.njk" %}
 {% from "components/button/macro.njk" import govukButton %}
+{% from "components/inset-text/macro.njk" import govukInsetText %}
+{% from "components/table/macro.njk" import govukTable %}
 
 {% block innerContent %}
 
-      <h1 class="govuk-heading-xl">Help us test a new criminal injuries compensation service</h1>
+    <h1 class="govuk-heading-xl">Help us improve this service</h1>
+    <p class="govuk-body-l">We'd like to ask you some questions after you've made your claim.</p>
+    <p class="govuk-body">Your feedback will help us make it easier to claim in future.</p>
 
-      <p class="govuk-body-l">We need to test our new service to help improve it. Taking part is voluntary and will not affect your claim.</p>
+    <h2 class="govuk-heading-l">What we'll do</h2>
+    <p class="govuk-body">We may:</p>
 
-      <h2 class="govuk-heading-l">Your feedback</h2>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>phone or email you after you've made your claim</li>
+        <li>ask you what was easy or hard about it</li>
+        <li>use your feedback to improve the service</li>
+    </ul>
 
-      <p class="govuk-body">We will use your telephone number or email to get feedback from you.  Your experience of the new service will help us find out what works and what does not work.</p>
-      <p class="govuk-body">We will keep your information private, and you do not have to give feedback if you do not want to.</p>
+    <h2 class="govuk-heading-l">Your consent</h2>
+    <p class="govuk-body">By selecting 'Agree and continue' you give us consent to contact you for feedback</p>
 
-      <h2 class="govuk-heading-l">Help and support</h2>
+    <a class="govuk-button govuk-button--start" style="margin-bottom:40px" href="/start-page" role="button">Agree and continue</a>
 
-      <p class="govuk-body">If you have any questions, or need help, you can call us on 0300 003 3601 and select option 8.</p>
-      <p class="govuk-body">Phone lines are open Monday to Friday 8.30am to 5pm, except Wednesday when they open at 10am.</p>
+    <h2 class="govuk-heading-l">If you do not want to consent</h2>
+    <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" class="govuk-link" target="_blank">current online service</a> if you do not want to consent.</p>
 
-      <h2 class="govuk-heading-l">Your consent</h2>
+    <h2 class="govuk-heading-l">Contact us</h2>
+    <p class="govuk-body">You can contact us if you have any questions</p>
 
-      <p class="govuk-body">By selecting 'Agree and apply' you:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>agree to test our new service</li>
-        <li>consent to us contacting you for feedback</li>
-      </ul>
+    {# {{ govukInsetText({
+    html: '<p class="govuk-body">Email:</p><p class="govuk-body"><a href="mailto:info@cica.gov.uk">info@cica.gov.uk</a></p><p class="govuk-body">Telephone:</p><p class="govuk-body">0300 003 3601</p>'
+    }) }} #}
 
-      <a class="govuk-button govuk-button--start" style="margin-bottom:40px" href="/start-page" role="button">Agree and apply</a>
+    <div class="govuk-inset-text">
+        <p class="govuk-body">Email:</p>
+        <p class="govuk-body govuk-!-font-weight-bold"><a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></p>
+        <p class="govuk-body">Telephone:</p>
+        <p class="govuk-body"><span class="govuk-!-font-weight-bold">0300 003 3601</span> option 8</p>
+    </div>
 
+    {{ govukTable({
+        caption: "Opening times",
+        firstCellIsHeader: true,
+        head: [
+            {
+            text: "Day"
+            },
+            {
+            text: "Opening times"
+            }
+        ],
+        rows: [
+            [
+                {
+                    text: "Monday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Tuesday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Wednesday"
+                },
+                {
+                    text: "10am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Thursday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Friday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ]
+        ]
+    }) }}
 
-      <h2 class="govuk-heading-l">If you do not want to test the new service</h2>
-      <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" target="_blank">current online service</a>.</p>
+    <p class="govuk-body"><a href="https://www.gov.uk/call-charges" class="govuk-link" target="_blank">Find out about call charges</a></p>
 
 {% endblock %}
