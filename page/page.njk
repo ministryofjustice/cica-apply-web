@@ -1,5 +1,5 @@
 {% extends "template.njk" %}
-
+{% block pageTitle %}{% if hasValidationErrors %}Error - {% endif %}GOV.UK - The best place to find government services and information{% endblock %}
 {% block head %}
   <!--[if !IE 8]><!-->
     <link href="/govuk-frontend/all.css" rel="stylesheet" />

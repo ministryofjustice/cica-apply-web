@@ -40,7 +40,8 @@ function renderSection({
     backTarget,
     sectionId,
     showBackLink = true,
-    csrfToken
+    csrfToken,
+    hasValidationErrors = false
 }) {
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
@@ -69,7 +70,10 @@ function renderSection({
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
-        `
+        `,
+        {
+            hasValidationErrors
+        }
     );
 }
 
@@ -256,12 +260,14 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
         data: answers,
         schemaErrors: errorObject
     });
+
     return renderSection({
         transformation,
         isFinal: false,
         backTarget: backLink,
         sectionId,
-        csrfToken
+        csrfToken,
+        hasValidationErrors: true
     });
 }
 
