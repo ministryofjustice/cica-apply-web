@@ -1,1 +1,5 @@
 @import "node_modules/govuk-frontend/govuk/all";
+
+.govuk-panel--confirmation strong {
+    white-space: nowrap;
+}
