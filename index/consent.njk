@@ -33,12 +33,12 @@
     html: '<p class="govuk-body">Email:</p><p class="govuk-body"><a href="mailto:info@cica.gov.uk">info@cica.gov.uk</a></p><p class="govuk-body">Telephone:</p><p class="govuk-body">0300 003 3601</p>'
     }) }} #}
 
-    <div class="govuk-inset-text">
-        <p class="govuk-body">Email:</p>
-        <p class="govuk-body govuk-!-font-weight-bold"><a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></p>
-        <p class="govuk-body">Telephone:</p>
-        <p class="govuk-body"><span class="govuk-!-font-weight-bold">0300 003 3601</span> option 8</p>
-    </div>
+    <p class="govuk-body">
+        Email:<br>
+        <strong class="govuk-!-font-weight-bold"><a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></strong><br /><br />
+        Telephone:<br>
+        <strong class="govuk-!-font-weight-bold">0300 003 3601</strong> option 8
+    </p>
 
     {{ govukTable({
         caption: "Opening times",
