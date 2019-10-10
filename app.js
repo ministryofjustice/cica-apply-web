@@ -29,18 +29,26 @@ nunjucks.configure(
     }
 );
 
-app.use(helmet());
-// explicity set the Content Security Policy.
-// not set in Helmet by default.
 app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
-            imgSrc: ["'self'", 'data:']
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: [
+                    "'self'",
+                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+                    "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='"
+                ],
+                imgSrc: ["'self'", 'data:'],
+                objectSrc: ["'none'"]
+            }
+        },
+        hsts: {
+            maxAge: 60 * 60 * 24 * 365 // the units is seconds.
         }
     })
 );
+
 app.use(logger('dev'));
 // https://expressjs.com/en/api.html#express.json
 app.use(express.json());
@@ -60,7 +68,9 @@ app.use(
         cookie: {
             ephemeral: true, // when true, cookie expires when the browser closes
             httpOnly: true, // when true, cookie is not accessible from javascript
-            proxySecure: false // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
+            // TODO: create a proper environment variable for this situation.
+            // TODO: replace all instances of process.env.NODE_ENV conditions with their own env vars.
+            secureProxy: process.env.NODE_ENV === 'production' // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
         }
     })
 );
