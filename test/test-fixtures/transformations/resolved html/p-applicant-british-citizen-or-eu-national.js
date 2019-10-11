@@ -4,7 +4,7 @@ const html = `<!DOCTYPE html>
 <html lang="en" class="govuk-template ">
   <head>
     <meta charset="utf-8" />
-    <title>GOV.UK - The best place to find government services and information</title>
+    <title>Are you 18 or over? - claim criminal injuries compensation - GOV.UK</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#0b0c0c" />
 
