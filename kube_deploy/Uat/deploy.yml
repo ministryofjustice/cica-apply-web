@@ -21,10 +21,10 @@ spec:
             - name: CW_DCS_JWT
               valueFrom:
                 secretKeyRef:
-                  name: cw-dcs-jwt
-                  key: secret
+                  name: cica-web-secrets
+                  key: cw_dcs_jwt
             - name: CW_COOKIE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: cw-cookie-secret
-                  key: secret
+                  name: cica-web-secrets
+                  key: cw_cookie_secret
