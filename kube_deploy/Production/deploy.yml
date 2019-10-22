@@ -10,8 +10,21 @@ spec:
         app: webapp-prod
     spec:
       containers:
-      - name: webapp 
-        image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-uat:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
+        - name: webapp
+          image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-prod:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: CW_DCS_URL
+              value: https://data-capture-service.claim-criminal-injuries-compensation.service.justice.gov.uk
+            - name: CW_DCS_JWT
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_dcs_jwt
+            - name: CW_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_cookie_secret
