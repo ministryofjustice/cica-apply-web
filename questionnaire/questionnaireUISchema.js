@@ -152,7 +152,7 @@ module.exports = {
             properties: {
                 'q-applicant-enter-your-date-of-birth': {
                     options: {
-                        autoComplete: true
+                        autoComplete: 'bday'
                     }
                 }
             }
@@ -233,14 +233,31 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: ''
-                        }
+                        },
+                        autoComplete: 'address-line1'
                     }
                 },
                 'q-applicant-building-and-street-2': {
                     options: {
                         macroOptions: {
                             classes: ''
-                        }
+                        },
+                        autoComplete: 'address-line2'
+                    }
+                },
+                'q-applicant-town-or-city': {
+                    options: {
+                        autoComplete: 'address-level2'
+                    }
+                },
+                'q-applicant-county': {
+                    options: {
+                        autoComplete: 'address-level1'
+                    }
+                },
+                'q-applicant-postcode': {
+                    options: {
+                        autoComplete: 'postal-code'
                     }
                 }
             },
@@ -260,7 +277,24 @@ module.exports = {
     },
     'p-applicant-enter-your-name': {
         options: {
-            outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name']
+            outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name'],
+            properties: {
+                'q-applicant-title': {
+                    options: {
+                        autoComplete: 'honorific-prefix'
+                    }
+                },
+                'q-applicant-first-name': {
+                    options: {
+                        autoComplete: 'given-name'
+                    }
+                },
+                'q-applicant-last-name': {
+                    options: {
+                        autoComplete: 'family-name'
+                    }
+                }
+            }
         }
     },
     'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
@@ -354,10 +388,21 @@ module.exports = {
             properties: {
                 'q-applicant-enter-your-email-address': {
                     options: {
-                        autocomplete: 'email',
+                        autoComplete: 'email',
                         attributes: {
                             spellcheck: 'false'
                         }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-enter-your-telephone-number': {
+        options: {
+            properties: {
+                'q-applicant-enter-your-telephone-number': {
+                    options: {
+                        autoComplete: 'tel'
                     }
                 }
             }
