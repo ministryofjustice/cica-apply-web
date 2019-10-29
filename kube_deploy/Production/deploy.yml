@@ -17,7 +17,7 @@ spec:
             - containerPort: 3000
           env:
             - name: CW_DCS_URL
-              value: https://data-capture-service.claim-criminal-injuries-compensation.service.justice.gov.uk
+              value: http://dcs-service-prod
             - name: CW_DCS_JWT
               valueFrom:
                 secretKeyRef:
