@@ -5,7 +5,7 @@ const service = require('./request-service')();
 function questionnaireService() {
     function createQuestionnaire() {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
@@ -23,7 +23,7 @@ function questionnaireService() {
 
     function getSection(questionnaireId, section) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -33,7 +33,7 @@ function questionnaireService() {
 
     function postSection(questionnaireId, section, body) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/sections/${section}/answers`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
@@ -49,7 +49,7 @@ function questionnaireService() {
 
     function getPrevious(questionnaireId, sectionId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -59,7 +59,7 @@ function questionnaireService() {
 
     function getCurrentSection(currentQuestionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -69,7 +69,7 @@ function questionnaireService() {
 
     function getSubmission(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/submissions`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -79,7 +79,7 @@ function questionnaireService() {
 
     function postSubmission(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/submissions`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
@@ -120,7 +120,7 @@ function questionnaireService() {
 
     function getAnswers(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${questionnaireId}/sections/answers`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/answers`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -130,7 +130,7 @@ function questionnaireService() {
 
     function getFirstSection(currentQuestionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }

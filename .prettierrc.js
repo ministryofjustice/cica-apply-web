@@ -7,6 +7,15 @@ const config = {
 };
 /*! m0-end */
 
+config.overrides = [
+    {
+        files: ['*.yaml', '*.yml'],
+        options: {
+            tabWidth: 2
+        }
+    }
+];
+
 /*! m0-start */
 module.exports = config;
 /*! m0-end */
