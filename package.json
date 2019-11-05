@@ -22,7 +22,7 @@
         "moment": "^2.24.0",
         "morgan": "~1.9.0",
         "nunjucks": "^3.1.7",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.6.1"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.1"
     },
     "devDependencies": {
         "eslint": "^5.8.0",

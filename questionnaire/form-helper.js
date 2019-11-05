@@ -48,6 +48,10 @@ function renderSection({
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
+            {% set titleErrorPrefix = "Error - " %}
+            {% block pageTitle %}
+                ${transformation.pageTitle}{{ super() }}
+            {% endblock %}
             {% block innerHeader %}
                 {% if ${showBackLink} %}
                     {% from "back-link/macro.njk" import govukBackLink %}
@@ -60,7 +64,7 @@ function renderSection({
             {% block innerContent %}
                 <form method="post" {%- if ${isSummary} %} action="/apply/submission/confirm"{% endif %} novalidate>
                     {% from "button/macro.njk" import govukButton %}
-                        ${transformation}
+                        ${transformation.content}
                     {% if ${showButton} %}
                         {{ govukButton({
                             text: "${buttonTitle}"
