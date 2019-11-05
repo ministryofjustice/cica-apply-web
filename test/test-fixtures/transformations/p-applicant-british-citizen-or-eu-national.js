@@ -2,6 +2,7 @@
 
 const transform = {
     pageTitle: 'Are you a British citizen or EU national?',
+    hasErrors: false,
     content: `
     {% from "radios/macro.njk" import govukRadios %}
     

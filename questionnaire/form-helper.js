@@ -45,11 +45,12 @@ function renderSection({
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
     const buttonTitle = getButtonText(sectionId);
+    const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
             {% block pageTitle %}
-                {%- if ${transformation.hasErrors} %}Error: {% endif %}${transformation.pageTitle}{{ super() }}
+                {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle}{{ super() }}
             {% endblock %}
             {% block innerHeader %}
                 {% if ${showBackLink} %}
