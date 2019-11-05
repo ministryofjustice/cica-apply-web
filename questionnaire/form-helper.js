@@ -48,9 +48,8 @@ function renderSection({
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
-            {% set titleErrorPrefix = "Error - " %}
             {% block pageTitle %}
-                ${transformation.pageTitle}{{ super() }}
+                {%- if ${transformation.hasErrors} %}Error: {% endif %}${transformation.pageTitle}{{ super() }}
             {% endblock %}
             {% block innerHeader %}
                 {% if ${showBackLink} %}
