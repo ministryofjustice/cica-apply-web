@@ -45,9 +45,13 @@ function renderSection({
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
     const buttonTitle = getButtonText(sectionId);
+    const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
+            {% block pageTitle %}
+                {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle}{{ super() }}
+            {% endblock %}
             {% block innerHeader %}
                 {% if ${showBackLink} %}
                     {% from "back-link/macro.njk" import govukBackLink %}
@@ -60,7 +64,7 @@ function renderSection({
             {% block innerContent %}
                 <form method="post" {%- if ${isSummary} %} action="/apply/submission/confirm"{% endif %} novalidate>
                     {% from "button/macro.njk" import govukButton %}
-                        ${transformation}
+                        ${transformation.content}
                     {% if ${showButton} %}
                         {{ govukButton({
                             text: "${buttonTitle}"
