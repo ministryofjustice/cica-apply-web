@@ -50,7 +50,7 @@ function renderSection({
         `
             {% extends "page.njk" %}
             {% block pageTitle %}
-                {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle}{{ super() }}
+                {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle} - {{ super() }}
             {% endblock %}
             {% block innerHeader %}
                 {% if ${showBackLink} %}
