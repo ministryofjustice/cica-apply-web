@@ -1,7 +1,7 @@
 'use strict';
 
 const nunjucks = require('nunjucks');
-const qTransformer = require('q-transformer')();
+const qTransformer = require('../../q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
 
@@ -50,7 +50,7 @@ function renderSection({
         `
             {% extends "page.njk" %}
             {% block pageTitle %}
-                {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle}{{ super() }}
+                {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle} - {{ super() }}
             {% endblock %}
             {% block innerHeader %}
                 {% if ${showBackLink} %}
