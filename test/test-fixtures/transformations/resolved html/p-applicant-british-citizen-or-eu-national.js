@@ -277,7 +277,17 @@ const html = `<!DOCTYPE html>
 
   <script src="/govuk-frontend/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
-
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){
+          dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', '');
+  </script>
+  <script src="/js/scripts.js"></script>
   </body>
 </html>
 `;

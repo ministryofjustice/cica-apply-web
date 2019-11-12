@@ -28,3 +28,5 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_cookie_secret
+            - name: CW_GA_TRACKING_ID
+              value: UA-136710388-2

@@ -15,19 +15,21 @@ const applicationRouter = require('./questionnaire/routes');
 
 const app = express();
 
-nunjucks.configure(
-    [
-        'node_modules/govuk-frontend/govuk/',
-        'node_modules/govuk-frontend/govuk/components/',
-        'index/',
-        'questionnaire/',
-        'page/'
-    ],
-    {
-        autoescape: true,
-        express: app
-    }
-);
+nunjucks
+    .configure(
+        [
+            'node_modules/govuk-frontend/govuk/',
+            'node_modules/govuk-frontend/govuk/components/',
+            'index/',
+            'questionnaire/',
+            'page/'
+        ],
+        {
+            autoescape: true,
+            express: app
+        }
+    )
+    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID);
 
 app.use(
     helmet({
