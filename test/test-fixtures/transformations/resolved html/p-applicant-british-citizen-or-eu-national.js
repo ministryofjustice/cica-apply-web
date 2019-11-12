@@ -43,6 +43,16 @@ const html = `<!DOCTYPE html>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '');
+    </script>
 
       <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
@@ -277,17 +287,6 @@ const html = `<!DOCTYPE html>
 
   <script src="/govuk-frontend/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
-  <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){
-          dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', '');
-  </script>
-  <script src="/js/scripts.js"></script>
   </body>
 </html>
 `;
