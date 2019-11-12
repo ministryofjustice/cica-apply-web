@@ -10,12 +10,17 @@
         }
     };
 
+    // old IE support.
     function addEventListener(element, eventType, handler) {
         if (window.addEventListener) {
             element.addEventListener(eventType, handler, false);
         } else if (window.attachEvent) {
             window.attachEvent(eventType, handler);
         }
+    }
+
+    function hasClass(elem, classToCheck) {
+        return (' ' + elem.className + ' ' ).indexOf( ' ' + classToCheck + ' ' ) > -1;
     }
 
     function CicaGa() {
@@ -45,6 +50,10 @@
 
     }
 
+    /* ******************************************** **/
+    /* ** TRACKING HANDLERS START                 * **/
+    /* ******************************************** **/
+
     function detailsElement(element) {
         addEventListener(element, 'click', function() {
             // the open attribute is added when the user reveals
@@ -68,9 +77,39 @@
         });
     }
 
+    function scrollToElement(element) {
+        var windowHeight = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
+        var hasReachedBottom = false;
+        addEventListener(document, 'scroll', function() {
+            var elementBoundingRects = element.getBoundingClientRect();
+            if (!hasReachedBottom && elementBoundingRects.top < windowHeight) {
+                var eventAction = element.getAttribute('ga-event-action');
+                var eventCategory = element.getAttribute('ga-event-category');
+                var eventLabel = element.getAttribute('ga-event-label');
+                var _ = new CicaGa();
+                _.send({
+                    action: eventAction,
+                    category: eventCategory,
+                    label: eventLabel
+                });
+                hasReachedBottom = true;
+            }
+        });
+    }
+
+    /* ******************************************** **/
+    /* ** TRACKING HANDLERS END                   * **/
+    /* ******************************************** **/
+
     function setUpGAEventTracking() {
-        var trackableElements = document.querySelectorAll('[data-module]');
+        var trackableElements = document.querySelectorAll('[data-module], .ga-event');
         forEach(trackableElements, function (index, element) {
+
+            if (hasClass(element, 'ga-event--scrollto')) {
+                scrollToElement(element);
+                return;
+            }
+
             var dataModuleId = element.getAttribute('data-module');
             if (dataModuleId === 'govuk-details') {
                 detailsElement(element);
