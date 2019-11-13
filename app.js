@@ -42,7 +42,9 @@ app.use(
                     "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
                     'www.googletagmanager.com',
                     'www.google-analytics.com',
-                    "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='"
+                    "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='", // dev GA snippet.
+                    "'sha256-ermYSxbi60F3/5U4IyGQfDG8MVCruApSsLGflZgi/hI='", // uat GA snippet.
+                    "'sha256-BwoS0Vk+k/0h25L0FbnUDAixzeoMqxOACmUr4jEPXhE='" // prod GA snippet
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]
