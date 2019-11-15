@@ -47,14 +47,8 @@ app.use(
                     "'self'",
                     'www.googletagmanager.com',
                     'www.google-analytics.com',
-                    (req, res) => `'nonce-${res.locals.nonce}'`
-                    // "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
-                    // "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
-                    // 'www.googletagmanager.com',
-                    // "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='", // dev GA snippet.
-                    // "'sha256-ermYSxbi60F3/5U4IyGQfDG8MVCruApSsLGflZgi/hI='", // uat GA snippet.
-                    // "'sha256-BwoS0Vk+k/0h25L0FbnUDAixzeoMqxOACmUr4jEPXhE='", // prod GA snippet
-                    // "'sha256-BgcsAQFwOfy+OZw4KY7ntxsITZOCW0XxV9hITf0k9GE='" // guaTrackLinks snippet
+                    (req, res) => `'nonce-${res.locals.nonce}'`,
+                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='" // `template.njk` inline script.
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]
