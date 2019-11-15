@@ -40,7 +40,8 @@ function renderSection({
     backTarget,
     sectionId,
     showBackLink = true,
-    csrfToken
+    csrfToken,
+    cspNonce
 }) {
     const showButton = !isFinal;
     const isSummary = checkIsSummary(sectionId);
@@ -73,7 +74,8 @@ function renderSection({
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
-        `
+        `,
+        {nonce: cspNonce}
     );
 }
 
@@ -193,7 +195,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, allAnswers, csrfToken) {
+function getSectionHtml(sectionData, allAnswers, csrfToken, cspNonce) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -226,7 +228,8 @@ function getSectionHtml(sectionData, allAnswers, csrfToken) {
         backTarget: backLink,
         sectionId,
         showBackLink,
-        csrfToken
+        csrfToken,
+        cspNonce
     });
 }
 
@@ -248,7 +251,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -265,7 +268,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken) {
         isFinal: false,
         backTarget: backLink,
         sectionId,
-        csrfToken
+        csrfToken,
+        cspNonce
     });
 }
 

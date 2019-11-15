@@ -21,7 +21,7 @@
 {% block bodyStart %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ gaTrackingId }}"></script>
-    <script>
+    <script nonce="{{ nonce }}">
         window.dataLayer = window.dataLayer || [];
         function gtag(){
             dataLayer.push(arguments);
@@ -66,10 +66,10 @@
 {% block bodyEnd %}
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
     <script src="/govuk-frontend/all.js"></script>
-    <script>window.GOVUKFrontend.initAll()</script>
+    <script nonce="{{ nonce }}">window.GOVUKFrontend.initAll()</script>
     <script src="/js/gua-anchor.min.js"></script>
     <script src="/js/scripts.js"></script>
-    <script>guaTrackLinks('{{cwUrl}}', window)</script>
+    <script nonce="{{ nonce }}">guaTrackLinks('{{cwUrl}}', window)</script>
 {% endblock %}
 
 {% block footer %}
