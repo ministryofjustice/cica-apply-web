@@ -67,7 +67,9 @@
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
     <script src="/govuk-frontend/all.js"></script>
     <script>window.GOVUKFrontend.initAll()</script>
+    <script src="/js/gua-anchor.min.js"></script>
     <script src="/js/scripts.js"></script>
+    <script>guaTrackLinks('{{cwUrl}}', window)</script>
 {% endblock %}
 
 {% block footer %}

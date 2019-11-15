@@ -21,7 +21,11 @@
     <h2 class="govuk-heading-l">Your consent</h2>
     <p class="govuk-body">By selecting 'Agree and continue' you give us consent to contact you for feedback</p>
 
-    <a class="govuk-button govuk-button--start" style="margin-bottom:40px" href="/start-page" role="button">Agree and continue</a>
+    {{ govukButton({
+        text: "Agree and continue",
+        href: "/start-page",
+        classes: "govuk-button--start"
+    }) }}
 
     <h2 class="govuk-heading-l">If you do not want to consent</h2>
     <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" class="govuk-link" target="_blank">current online service</a> if you do not want to consent.</p>

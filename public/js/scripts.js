@@ -82,7 +82,8 @@
             gtag(gtagOptions.type, gtagOptions.action, {
                 'event_category': gtagOptions.category,
                 'event_label': gtagOptions.label,
-                'value': gtagOptions.value
+                'value': gtagOptions.value,
+                'event_callback': gtagOptions.callback
             });
         }
 
@@ -92,7 +93,7 @@
     /* ** TRACKING HANDLERS START                 * **/
     /* ******************************************** **/
 
-    function detailsElement(element) {
+    function detailsElementHandler(element) {
         addEventListener(element, 'click', function() {
             // the open attribute is added when the user reveals
             // the content of the details element.
@@ -115,12 +116,12 @@
         });
     }
 
-    function scrollToElement(element) {
+    function scrollToElementHandler(element) {
         var windowHeight = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
-        var hasReachedBottom = false;
+        var hasReachedElement = false;
         addEventListener(document, 'scroll', function() {
             var elementBoundingRects = element.getBoundingClientRect();
-            if (!hasReachedBottom && elementBoundingRects.top < windowHeight) {
+            if (!hasReachedElement && elementBoundingRects.top < windowHeight) {
                 var eventAction = element.getAttribute('ga-event-action');
                 var eventCategory = element.getAttribute('ga-event-category');
                 var eventLabel = element.getAttribute('ga-event-label');
@@ -130,7 +131,7 @@
                     category: eventCategory,
                     label: eventLabel
                 });
-                hasReachedBottom = true;
+                hasReachedElement = true;
             }
         });
     }
@@ -141,16 +142,17 @@
 
     function setUpGAEventTracking() {
         var trackableElements = document.querySelectorAll('[data-module], .ga-event');
+        // GOVUK modules, and custom events tracking.
         forEach(trackableElements, function (index, element) {
 
             if (hasClass(element, 'ga-event--scrollto')) {
-                scrollToElement(element);
+                scrollToElementHandler(element);
                 return;
             }
 
             var dataModuleId = element.getAttribute('data-module');
             if (dataModuleId === 'govuk-details') {
-                detailsElement(element);
+                detailsElementHandler(element);
             }
         });
     }

@@ -29,7 +29,8 @@ nunjucks
             express: app
         }
     )
-    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID);
+    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID)
+    .addGlobal('cwUrl', process.env.CW_URL);
 
 app.use(
     helmet({
@@ -44,7 +45,8 @@ app.use(
                     'www.google-analytics.com',
                     "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='", // dev GA snippet.
                     "'sha256-ermYSxbi60F3/5U4IyGQfDG8MVCruApSsLGflZgi/hI='", // uat GA snippet.
-                    "'sha256-BwoS0Vk+k/0h25L0FbnUDAixzeoMqxOACmUr4jEPXhE='" // prod GA snippet
+                    "'sha256-BwoS0Vk+k/0h25L0FbnUDAixzeoMqxOACmUr4jEPXhE='", // prod GA snippet
+                    "'sha256-BgcsAQFwOfy+OZw4KY7ntxsITZOCW0XxV9hITf0k9GE='" // guaTrackLinks snippet
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]
