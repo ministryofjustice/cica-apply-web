@@ -16,7 +16,7 @@ const getPreviousValid = require('./test-fixtures/res/get_previous_valid_section
 const getPreviousValidUrl = require('./test-fixtures/res/get_previous_valid_url');
 
 const postValidSubmission = require('./test-fixtures/res/post_valid_submission');
-const postValidSubmissionFailed = require('./test-fixtures/res/post_valid_submission_service_down');
+// const postValidSubmissionFailed = require('./test-fixtures/res/post_valid_submission_service_down');
 
 let app;
 
@@ -234,7 +234,9 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
                                 createQuestionnaire: () => {
-                                    throw new Error();
+                                    const err = new Error('404 Not Found');
+                                    err.statusCode = 404;
+                                    throw err;
                                 }
                             }))
                         );
@@ -255,7 +257,9 @@ describe('Data capture service endpoints', () => {
                             jest.fn(() => ({
                                 createQuestionnaire: () => createQuestionnaire,
                                 getFirstSection: () => {
-                                    throw new Error();
+                                    const err = new Error('404 Not Found');
+                                    err.statusCode = 404;
+                                    throw err;
                                 }
                             }))
                         );
@@ -350,7 +354,9 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             addPrefix: () => prefixedSection,
                             getSectionHtml: () => {
-                                throw new Error();
+                                const err = new Error('404 Not Found');
+                                err.statusCode = 404;
+                                throw err;
                             },
                             removeSectionIdPrefix: () => initial
                         }));
@@ -363,7 +369,9 @@ describe('Data capture service endpoints', () => {
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() => {
                             formHelper.getSectionHtml = jest.fn(() => {
-                                throw new Error();
+                                const err = new Error('404 Not Found');
+                                err.statusCode = 404;
+                                throw err;
                             });
                             return currentAgent
                                 .get('/apply/applicant-enter-your-name')
@@ -508,7 +516,9 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
                                 postSection: () => {
-                                    throw new Error();
+                                    const err = new Error('404 Not Found');
+                                    err.statusCode = 404;
+                                    throw err;
                                 },
                                 createQuestionnaire: () => createQuestionnaire,
                                 getCurrentSection: () => getCurrentSection
@@ -530,7 +540,9 @@ describe('Data capture service endpoints', () => {
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() => {
                             formHelper.getSectionHtml = jest.fn(() => {
-                                throw new Error();
+                                const err = new Error('404 Not Found');
+                                err.statusCode = 404;
+                                throw err;
                             });
                             return currentAgent
                                 .post('/apply/applicant-enter-your-name')
@@ -719,7 +731,9 @@ describe('Data capture service endpoints', () => {
                             jest.fn(() => ({
                                 createQuestionnaire: () => createQuestionnaire,
                                 getPrevious() {
-                                    throw new Error();
+                                    const err = new Error('404 Not Found');
+                                    err.statusCode = 404;
+                                    throw err;
                                 }
                             }))
                         );
@@ -808,7 +822,15 @@ describe('Data capture service endpoints', () => {
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
                                 postSubmission: () => {},
-                                getSubmissionStatus: () => {},
+                                getSubmissionStatus: () => {
+                                    const err = Error(
+                                        `Unable to retrieve questionnaire submission status`
+                                    );
+                                    err.name = 'CRNNotRetrieved';
+                                    err.statusCode = 500;
+                                    err.error = '500 Internal Server Error';
+                                    throw err;
+                                },
                                 createQuestionnaire: () => createQuestionnaire
                             }))
                         );
@@ -827,19 +849,25 @@ describe('Data capture service endpoints', () => {
                                     'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
                                 )
                                 .then(response => {
-                                    expect(response.statusCode).toBe(404);
+                                    expect(response.statusCode).toBe(500);
                                 })
                         );
                     });
                 });
-                describe('503', () => {
+                describe('500', () => {
                     beforeAll(() => {
                         jest.resetModules();
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             // return a modified factory function, that returns an object with a method, that returns a valid created response
                             jest.fn(() => ({
                                 postSubmission: () => {},
-                                getSubmissionStatus: () => postValidSubmissionFailed,
+                                getSubmissionStatus: () => {
+                                    const err = Error(`The service is currently unavailable`);
+                                    err.name = 'DCSUnavailable';
+                                    err.statusCode = 500;
+                                    err.error = '500 Internal Server Error';
+                                    throw err;
+                                },
                                 createQuestionnaire: () => createQuestionnaire
                             }))
                         );

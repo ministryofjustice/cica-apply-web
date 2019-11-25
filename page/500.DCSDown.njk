@@ -1,33 +1,14 @@
 {% extends "page.njk" %}
-{% from "components/button/macro.njk" import govukButton %}
 {% from "components/table/macro.njk" import govukTable %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
 
 {% block innerContent %}
-
-    <h1 class="govuk-heading-xl">Help us improve this service</h1>
-    <p class="govuk-body-l">We'd like to ask you some questions after you've made your claim.</p>
-    <p class="govuk-body">Your feedback will help us make it easier to claim in future.</p>
-
-    <h2 class="govuk-heading-l">What we'll do</h2>
-    <p class="govuk-body">We may:</p>
-
-    <ul class="govuk-list govuk-list--bullet">
-        <li>phone or email you after you've made your claim</li>
-        <li>ask you what was easy or hard about it</li>
-        <li>use your feedback to improve the service</li>
-    </ul>
-
-    <h2 class="govuk-heading-l">Your consent</h2>
-    <p class="govuk-body">By selecting 'Agree and continue' you give us consent to contact you for feedback</p>
-
-    <a class="govuk-button govuk-button--start" style="margin-bottom:40px" href="/start-page" role="button">Agree and continue</a>
-
-    <h2 class="govuk-heading-l">If you do not want to consent</h2>
-    <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" class="govuk-link" target="_blank">current online service</a> if you do not want to consent.</p>
-
-    <h2 class="govuk-heading-l">Contact us</h2>
-    <p class="govuk-body">You can contact us if you have any questions</p>
-
+    <h1 class="govuk-heading-xl">There has been a problem</h1>
+    <p class="govuk-body">Your application may not have been submitted.</p>
+    <p class="govuk-body">You'll get an email from us within 30 minutes if your application has been submitted.</p>
+    <h2 class="govuk-heading-l">Contact</h2>
+    <p class="govuk-body">Contact us if you do not get a confirmation email.</p>
     <p class="govuk-body">
         Email:<br>
         <strong class="govuk-!-font-weight-bold"><a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></strong><br /><br />
@@ -91,5 +72,4 @@
     }) }}
 
     <p class="govuk-body"><a href="https://www.gov.uk/call-charges" class="govuk-link" target="_blank">Find out about call charges</a></p>
-
 {% endblock %}

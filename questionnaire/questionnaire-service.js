@@ -102,14 +102,24 @@ function questionnaireService() {
     async function getSubmissionStatus(questionnaireId, startingDate) {
         if (Date.now() - startingDate >= 15000) {
             const err = Error(`Unable to retrieve questionnaire submission status`);
-            err.name = 'HTTPError';
+            err.name = 'CRNNotRetrieved';
             err.statusCode = 500;
             err.error = '500 Internal Server Error';
             throw err;
         }
         const result = await getSubmission(questionnaireId);
+
+        // dcs down...
+        if (result.body.errors && result.body.errors[0].status === 404) {
+            const err = Error(`The service is currently unavailable`);
+            err.name = 'DCSUnavailable';
+            err.statusCode = 500;
+            err.error = '500 Internal Server Error';
+            throw err;
+        }
+
         const {submitted} = result.body.data.attributes;
-        if (submitted) {
+        if (submitted === true) {
             return result.body.data.attributes;
         }
 

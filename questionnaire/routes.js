@@ -15,7 +15,6 @@ router.route('/').get(async (req, res, next) => {
         );
         res.redirect(`${req.baseUrl}/${initialSection}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
         next(err);
     }
 });
@@ -33,7 +32,6 @@ router.route('/previous/:section').get(async (req, res, next) => {
         );
         return res.redirect(`${req.baseUrl}/${previousSectionId}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
         return next(err);
     }
 });
@@ -54,7 +52,6 @@ router
             const html = formHelper.getSectionHtml(response.body, answers, req.csrfToken());
             res.send(html);
         } catch (err) {
-            res.status(err.statusCode || 404).render('404.njk');
             next(err);
         }
     })
@@ -103,7 +100,6 @@ router
             );
             return res.send(html);
         } catch (err) {
-            res.status(err.statusCode || 404).render('404.njk');
             return next(err);
         }
     });
@@ -115,22 +111,22 @@ router.route('/submission/confirm').post(async (req, res, next) => {
             req.cicaSession.questionnaireId,
             Date.now()
         );
-        if (response.status !== 'FAILED') {
-            const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
-            const responseBody = resp.body;
-            const nextSection = formHelper.removeSectionIdPrefix(
-                responseBody.data[0].attributes.sectionId
-            );
-            return res.redirect(`${req.baseUrl}/${nextSection}`);
+
+        if (response.status === 'FAILED') {
+            const err = Error(`Unable to retrieve questionnaire submission status`);
+            err.name = 'CRNNotRetrieved';
+            err.statusCode = 500;
+            err.error = '500 Internal Server Error';
+            throw err;
         }
-        const err = Error(`The service is currently unavailable`);
-        err.name = 'HTTPError';
-        err.statusCode = 500;
-        err.error = '500 Internal Server Error';
-        res.status(err.statusCode).render('503.njk');
-        return next(err);
+
+        const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
+        const responseBody = resp.body;
+        const nextSection = formHelper.removeSectionIdPrefix(
+            responseBody.data[0].attributes.sectionId
+        );
+        return res.redirect(`${req.baseUrl}/${nextSection}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('503.njk');
         return next(err);
     }
 });

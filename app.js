@@ -12,6 +12,7 @@ const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
+const createErrorHandler = require('./services/error-handler');
 
 const app = express();
 
@@ -90,23 +91,22 @@ app.use(
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
 app.use('/apply', async (req, res, next) => {
-    // check if client sent cookie
-    const cookie = req.cicaSession.questionnaireId;
-    if (cookie === undefined) {
-        // no: set it and redirect.
-        try {
+    // no: set it and redirect.
+    try {
+        // check if client sent cookie
+        const cookie = req.cicaSession.questionnaireId;
+        if (cookie === undefined) {
             const response = await qService.createQuestionnaire();
             req.cicaSession.questionnaireId = response.body.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial
             );
             return res.redirect(`${req.baseUrl}/${initialSection}`);
-        } catch (err) {
-            res.status(404).render('404.njk');
-            next(err);
         }
+        next(); // <-- important!
+    } catch (err) {
+        next(err);
     }
-    next(); // <-- important!
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -130,12 +130,13 @@ app.use(
 app.use('/apply', applicationRouter);
 app.use('/', indexRouter);
 
-app.use((err, req, res, next) => {
-    if (err.code === 'EBADCSRFTOKEN') {
-        return res.status(403).render('503.njk');
-    }
-
-    return next(err);
+// Central error handler
+// https://www.joyent.com/node-js/production/design/errors
+// https://github.com/i0natan/nodebestpractices/blob/master/sections/errorhandling/centralizedhandling.md
+app.use((err, req, res) => {
+    const errorHandler = createErrorHandler();
+    const {status, templateName} = errorHandler.processError(err);
+    return res.status(status).render(`${templateName}.njk`);
 });
 
 module.exports = app;
