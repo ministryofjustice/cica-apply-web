@@ -5,7 +5,6 @@
   <!--[if !IE 8]><!-->
     <link href="/govuk-frontend/all.css" rel="stylesheet" />
   <!--<![endif]-->
-
   {# For Internet Explorer 8, you need to compile specific stylesheet #}
   {# see https://github.com/alphagov/govuk-frontend/blob/master/docs/installation/supporting-internet-explorer-8.md #}
   <!--[if IE 8]>
@@ -16,6 +15,9 @@
   <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/accessible-autocomplete/accessible-autocomplete.css" />
+  <link rel="stylesheet" type="text/css" href="/accessible-autocomplete/accessible-autocomplete-wrapper.css" />
 {% endblock %}
 
 {% block bodyStart %}
@@ -67,6 +69,7 @@
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
     <script src="/govuk-frontend/all.js"></script>
     <script>window.GOVUKFrontend.initAll()</script>
+    <script type="text/javascript" src="/accessible-autocomplete/autocomplete.js"></script>
 {% endblock %}
 
 {% block footer %}

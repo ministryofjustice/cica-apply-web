@@ -43,7 +43,7 @@ app.use(
                     "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
                     'www.googletagmanager.com',
                     'www.google-analytics.com',
-                    "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='"
+                    "'sha256-x0YFSL2O65yQY5jvOzV/I8f75nUxIl+U5VAkVXxrYrw='"
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]
@@ -127,6 +127,23 @@ app.use(
 app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
+);
+app.use(
+    '/accessible-autocomplete/autocomplete.js',
+    express.static(path.join(__dirname, '/src/js/autoComplete.js'))
+);
+app.use(
+    '/accessible-autocomplete/accessible-autocomplete.css',
+    express.static(
+        path.join(
+            __dirname,
+            '/node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.css'
+        )
+    )
+);
+app.use(
+    '/accessible-autocomplete/accessible-autocomplete-wrapper.css',
+    express.static(path.join(__dirname, '/src/css/autoComplete.css'))
 );
 app.use('/apply', applicationRouter);
 app.use('/', indexRouter);

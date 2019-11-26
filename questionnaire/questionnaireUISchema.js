@@ -230,6 +230,8 @@ module.exports = {
                                     'p--whats-the-crime-reference-number': 'Crime reference number',
                                     'p--which-english-police-force-is-investigating-the-crime':
                                         'Which police force is investigating?',
+                                    'p--which-police-force-is-investigating-the-crime':
+                                        'Which police force is investigating?',
                                     'p--which-police-scotland-division-is-investigating-the-crime':
                                         'Which police force is investigating?',
                                     'p--which-welsh-police-force-is-investigating-the-crime':
@@ -477,10 +479,10 @@ module.exports = {
             buttonText: 'Continue anyway'
         }
     },
-    'p--which-english-police-force-is-investigating-the-crime': {
+    'p--which-police-force-is-investigating-the-crime': {
         options: {
             properties: {
-                'q--which-english-police-force-is-investigating-the-crime': {
+                'q-police-force-id': {
                     options: {
                         defaultItem: {
                             value: '',
@@ -488,7 +490,8 @@ module.exports = {
                         }
                     }
                 }
-            }
+            },
+            outputOrder: ['q-police-force-id', 'list-of-police-forces']
         }
     },
     'p-applicant-enter-your-email-address': {

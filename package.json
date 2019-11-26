@@ -10,6 +10,7 @@
         "coverage": "jest --coverage"
     },
     "dependencies": {
+        "accessible-autocomplete": "^2.0.1",
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
         "cookie-parser": "~1.4.3",
         "csurf": "^1.10.0",

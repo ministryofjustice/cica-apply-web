@@ -34,7 +34,8 @@ const html = `<!DOCTYPE html>
   <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
-
+  <link rel="stylesheet" type="text/css" href="/accessible-autocomplete/accessible-autocomplete.css" />
+  <link rel="stylesheet" type="text/css" href="/accessible-autocomplete/accessible-autocomplete-wrapper.css" />
 
 
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
@@ -287,6 +288,7 @@ const html = `<!DOCTYPE html>
 
   <script src="/govuk-frontend/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
+      <script type="text/javascript" src="/accessible-autocomplete/autocomplete.js"></script>
   </body>
 </html>
 `;
