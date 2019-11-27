@@ -23,7 +23,8 @@ nunjucks
             'node_modules/govuk-frontend/govuk/components/',
             'index/',
             'questionnaire/',
-            'page/'
+            'page/',
+            'partials/'
         ],
         {
             autoescape: true,

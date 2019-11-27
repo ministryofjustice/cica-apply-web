@@ -25,71 +25,7 @@
     <h2 class="govuk-heading-l">If you do not want to consent</h2>
     <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" class="govuk-link" target="_blank">current online service</a> if you do not want to consent.</p>
 
-    <h2 class="govuk-heading-l">Contact us</h2>
     <p class="govuk-body">You can contact us if you have any questions</p>
-
-    <p class="govuk-body">
-        Email:<br>
-        <strong class="govuk-!-font-weight-bold"><a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></strong><br /><br />
-        Telephone:<br>
-        <strong class="govuk-!-font-weight-bold">0300 003 3601</strong> option 8
-    </p>
-
-    {{ govukTable({
-        caption: "Opening times",
-        firstCellIsHeader: true,
-        head: [
-            {
-            text: "Day"
-            },
-            {
-            text: "Opening times"
-            }
-        ],
-        rows: [
-            [
-                {
-                    text: "Monday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Tuesday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Wednesday"
-                },
-                {
-                    text: "10am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Thursday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Friday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ]
-        ]
-    }) }}
-
-    <p class="govuk-body"><a href="https://www.gov.uk/call-charges" class="govuk-link" target="_blank">Find out about call charges</a></p>
+    {% include "contact.njk" %}
 
 {% endblock %}
