@@ -22,7 +22,8 @@ nunjucks
             'node_modules/govuk-frontend/govuk/components/',
             'index/',
             'questionnaire/',
-            'page/'
+            'page/',
+            'partials/'
         ],
         {
             autoescape: true,
@@ -131,8 +132,14 @@ app.use('/apply', applicationRouter);
 app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
+    if (err.name === 'CRNNotRetrieved') {
+        return res.status(500).render('500.MBDown.njk');
+    }
+    if (err.name === 'DCSUnavailable') {
+        return res.status(500).render('500.DCSDown.njk');
+    }
     if (err.code === 'EBADCSRFTOKEN') {
-        return res.status(403).render('503.njk');
+        return res.status(403).render('500.badToken.njk');
     }
 
     return next(err);

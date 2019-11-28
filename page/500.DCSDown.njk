@@ -1,0 +1,12 @@
+{% extends "page.njk" %}
+{% from "components/table/macro.njk" import govukTable %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">There has been a problem</h1>
+    <p class="govuk-body">Your application may not have been submitted.</p>
+    <p class="govuk-body">You'll get an email from us within 30 minutes if your application has been submitted.</p>
+    <p class="govuk-body">Contact us if you do not get a confirmation email.</p>
+    {% include "contact.njk" %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "page.njk" %}
+{% from "components/table/macro.njk" import govukTable %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">Sorry, there is a problem with the service</h1>
+    <p class="govuk-body">Try again later.</p>
+    <p class="govuk-body">You may be able to continue with your application if you go back to the previous page.</p>
+    <p class="govuk-body">You can apply by telephone.</p>
+    {% include "contact.njk" %}
+{% endblock %}
