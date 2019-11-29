@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .js,.json,.njk ignore public/dist/* --exec npm run build:dev & node ./bin/www",
+        "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .js,.json,.njk --ignore public/dist/* --exec npm run build:dev & node ./bin/www",
         "start": "npm run build && node ./bin/www",
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "jest",
