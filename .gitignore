@@ -69,5 +69,3 @@ typings/
 .vscode
 
 .config
-
-public/dist/js/bundle.js
