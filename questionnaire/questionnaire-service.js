@@ -23,9 +23,7 @@ function questionnaireService() {
 
     function getSection(questionnaireId, section) {
         const opts = {
-            url: `${
-                process.env.CW_DCS_URL
-            }/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -35,9 +33,7 @@ function questionnaireService() {
 
     function postSection(questionnaireId, section, body) {
         const opts = {
-            url: `${
-                process.env.CW_DCS_URL
-            }/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
@@ -53,9 +49,7 @@ function questionnaireService() {
 
     function getPrevious(questionnaireId, sectionId) {
         const opts = {
-            url: `${
-                process.env.CW_DCS_URL
-            }/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -65,9 +59,7 @@ function questionnaireService() {
 
     function getCurrentSection(currentQuestionnaireId) {
         const opts = {
-            url: `${
-                process.env.CW_DCS_URL
-            }/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -118,7 +110,13 @@ function questionnaireService() {
         const result = await getSubmission(questionnaireId);
 
         // dcs down...
-        if (result.body.errors && result.body.errors[0].status === 404) {
+        if (
+            !result ||
+            !result.body ||
+            !result.body.data ||
+            !result.body.data.attributes ||
+            (result.body.errors && result.body.errors[0].status === 404)
+        ) {
             const err = Error(`The service is currently unavailable`);
             err.name = 'DCSUnavailable';
             err.statusCode = 500;
@@ -138,9 +136,7 @@ function questionnaireService() {
 
     function getAnswers(questionnaireId) {
         const opts = {
-            url: `${
-                process.env.CW_DCS_URL
-            }/api/v1/questionnaires/${questionnaireId}/sections/answers`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/answers`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
@@ -150,9 +146,7 @@ function questionnaireService() {
 
     function getFirstSection(currentQuestionnaireId) {
         const opts = {
-            url: `${
-                process.env.CW_DCS_URL
-            }/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }
