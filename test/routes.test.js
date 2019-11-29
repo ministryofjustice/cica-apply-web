@@ -827,7 +827,7 @@ describe('Data capture service endpoints', () => {
                                     'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
                                 )
                                 .then(response => {
-                                    expect(response.statusCode).toBe(404);
+                                    expect(response.statusCode).toBe(500);
                                 })
                         );
                     });
@@ -924,7 +924,9 @@ describe('Data capture service endpoints', () => {
 
             it('should redirect to the prescribed next section id if available', async () => {
                 jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+                    const api = `${
+                        process.env.CW_DCS_URL
+                    }/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
 
                     return () => ({
                         post: options => {
@@ -971,7 +973,9 @@ describe('Data capture service endpoints', () => {
 
             it('should redirect to the current section if the prescribed next section id is not available', async () => {
                 jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+                    const api = `${
+                        process.env.CW_DCS_URL
+                    }/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
 
                     return () => ({
                         post: options => {
