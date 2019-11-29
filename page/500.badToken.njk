@@ -3,6 +3,7 @@
 {% from "components/button/macro.njk" import govukButton %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
+{% block pageTitle %}Your application has timed out - {{ super() }}{% endblock %}
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Your application has timed out</h1>

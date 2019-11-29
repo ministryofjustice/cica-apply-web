@@ -2,6 +2,7 @@
 {% from "components/table/macro.njk" import govukTable %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
+{% block pageTitle %}There has been a problem - {{ super() }}{% endblock %}
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Sorry, there is a problem with the service</h1>

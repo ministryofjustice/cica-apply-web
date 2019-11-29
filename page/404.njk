@@ -1,6 +1,8 @@
 {% extends "page.njk" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
+{% block pageTitle %}Page not found - {{ super() }}{% endblock %}
+
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Page not found</h1>
     <p class="govuk-body">If you typed the web address, check it is correct.</p>
