@@ -24,7 +24,14 @@ const config = {
 };
 /*! m0-end */
 
+config.parserOptions.sourceType = 'module';
+config.parserOptions.ecmaFeatures.modules = true;
+config.globals = {
+    window: true,
+    document: true,
+    gtag: true
+}
+
 /*! m0-start */
 module.exports = config;
 /*! m0-end */
-
