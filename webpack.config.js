@@ -25,7 +25,7 @@ module.exports = {
                                     '@babel/preset-env',
                                     {
                                         targets:
-                                            'last 1 version, ie >= 11, Safari >= 12, > 0.25%, not dead'
+                                            'last 1 version, ie >= 11, Safari >= 12, ios_saf >= 10, iOS >= 10, > 0.25%, not dead'
                                     }
                                 ]
                             ]
