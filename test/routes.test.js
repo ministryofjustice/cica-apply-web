@@ -924,14 +924,12 @@ describe('Data capture service endpoints', () => {
 
             it('should redirect to the prescribed next section id if available', async () => {
                 jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${
-                        process.env.CW_DCS_URL
-                    }/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
 
                     return () => ({
                         post: options => {
                             const responses = {
-                                [`${api}/sections/p-applicant-enter-your-name/answers`]: {
+                                [`${api}/sections/p-applicant-name/answers`]: {
                                     statusCode: 201
                                 }
                             };
@@ -964,18 +962,15 @@ describe('Data capture service endpoints', () => {
                 replaceCsrfMiddlwareForTest(app);
 
                 const response = await request(app).post(
-                    '/apply/applicant-enter-your-name?next=check-your-answers'
+                    '/apply/applicant-name?next=check-your-answers'
                 );
-
                 expect(response.statusCode).toBe(302);
                 expect(response.res.text).toBe('Found. Redirecting to /apply/check-your-answers');
             });
 
             it('should redirect to the current section if the prescribed next section id is not available', async () => {
                 jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${
-                        process.env.CW_DCS_URL
-                    }/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
 
                     return () => ({
                         post: options => {

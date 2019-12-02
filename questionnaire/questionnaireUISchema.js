@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    'p-applicant-have-you-applied-to-us-before': {
+    'p-applicant-previous-application': {
         // transformer: 'form',
         options: {
             transformOrder: [
@@ -15,7 +15,7 @@ module.exports = {
                     options: {
                         conditionalComponentMap: [
                             {
-                                itemValue: true,
+                                itemValue: false,
                                 componentIds: ['q-enter-your-previous-reference-number']
                             }
                         ]
@@ -31,7 +31,7 @@ module.exports = {
             }
         }
     },
-    'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
+    'p-applicant-other-compensation': {
         // transformer: 'form',
         options: {
             transformOrder: [
@@ -147,7 +147,7 @@ module.exports = {
             ]
         }
     },
-    'p-applicant-enter-your-date-of-birth': {
+    'p-applicant-date-of-birth': {
         options: {
             properties: {
                 'q-applicant-enter-your-date-of-birth': {
@@ -169,12 +169,12 @@ module.exports = {
                             {
                                 title: 'Your details',
                                 questions: {
-                                    'p-applicant-enter-your-name': 'Name',
+                                    'p-applicant-name': 'Name',
 
                                     'p-applicant-have-you-been-known-by-any-other-names':
                                         'Have you been known by any other names?',
-                                    'p-applicant-what-other-names-have-you-used': 'Other names',
-                                    'p-applicant-enter-your-date-of-birth': 'Date of birth',
+                                    'p-applicant-other-names': 'Other names',
+                                    'p-applicant-date-of-birth': 'Date of birth',
                                     'p-applicant-enter-your-email-address': 'Email address',
                                     'p-applicant-enter-your-address': 'Address',
                                     'p-applicant-enter-your-telephone-number': 'Telephone Number',
@@ -187,8 +187,7 @@ module.exports = {
                                         'Who are you applying for?',
                                     'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse':
                                         'Were you a victim of sexual assault or abuse?',
-                                    'p-applicant-select-the-option-that-applies-to-you':
-                                        "Option you've selected"
+                                    'p-applicant-select-option': "Option you've selected"
                                 }
                             },
                             {
@@ -216,8 +215,7 @@ module.exports = {
                                         'Do you know the name of the offender?',
                                     'p-offender-enter-offenders-name': "Offender's name",
 
-                                    'p-offender-describe-contact-with-offender':
-                                        'Contact with offender'
+                                    'p-offender-contact': 'Contact with offender'
                                 }
                             },
                             {
@@ -228,12 +226,7 @@ module.exports = {
                                     'p--when-was-the-crime-reported-to-police':
                                         'When was the crime reported?',
                                     'p--whats-the-crime-reference-number': 'Crime reference number',
-                                    'p--which-english-police-force-is-investigating-the-crime':
-                                        'Which police force is investigating?',
-                                    'p--which-police-scotland-division-is-investigating-the-crime':
-                                        'Which police force is investigating?',
-                                    'p--which-welsh-police-force-is-investigating-the-crime':
-                                        'Which police force is investigating?',
+                                    'p-police-force': 'Which police force is investigating?',
                                     'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police':
                                         'Reasons for delay in reporting crime'
                                 }
@@ -241,12 +234,30 @@ module.exports = {
                             {
                                 title: 'Other compensation',
                                 questions: {
-                                    'p-applicant-have-you-applied-to-us-before':
-                                        'Have you applied before?',
-                                    'p-applicant-have-you-applied-for-or-received-any-other-compensation':
+                                    'p-applicant-previous-application': 'Have you applied before?',
+                                    'p-applicant-other-compensation':
                                         'Have you received other compensation?',
                                     'p-applicant-other-compensation-details':
                                         'Details of other compensation received'
+                                }
+                            },
+                            {
+                                title: 'New minor journey',
+                                questions: {
+                                    'p-applicant-british-citizen-or-eu-national-main':
+                                        'British Citizen or EU National',
+                                    'p-applicant-date-of-birth-main': 'Childs date of birth',
+                                    'p-applicant-have-you-been-known-by-any-other-names-main':
+                                        'Childs has other names',
+                                    'p-applicant-name-main': 'Childs name',
+                                    'p-applicant-other-compensation-details-main':
+                                        'Other Compensation Deets',
+                                    'p-applicant-other-compensation-main':
+                                        'Has applied for other Compensation',
+                                    'p-applicant-other-names-main': 'Childs other names',
+                                    'p-applicant-select-option-main': 'Childs option',
+                                    'p-main-applying-for-child': 'Main app applying for a child',
+                                    'p-offender-contact-main': 'Childs contact with offender'
                                 }
                             }
                         ],
@@ -400,7 +411,7 @@ module.exports = {
             outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported']
         }
     },
-    'p-applicant-enter-your-name': {
+    'p-applicant-name': {
         options: {
             outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name']
         }
@@ -421,7 +432,7 @@ module.exports = {
             ]
         }
     },
-    'p-applicant-select-the-option-that-applies-to-you': {
+    'p-applicant-select-option': {
         options: {
             outputOrder: ['applicant-your-choices', 'q-applicant-option'],
             properties: {
@@ -459,7 +470,7 @@ module.exports = {
             outputOrder: ['q-applicant-scottish-town-or-city', 'q-applicant-scottish-location']
         }
     },
-    'p-offender-describe-contact-with-offender': {
+    'p-offender-contact': {
         options: {
             outputOrder: [
                 'q-offender-describe-contact-with-offender',
@@ -477,10 +488,10 @@ module.exports = {
             buttonText: 'Continue anyway'
         }
     },
-    'p--which-english-police-force-is-investigating-the-crime': {
+    'p-police-force': {
         options: {
             properties: {
-                'q--which-english-police-force-is-investigating-the-crime': {
+                'q-police-force-id': {
                     options: {
                         defaultItem: {
                             value: '',
@@ -488,7 +499,8 @@ module.exports = {
                         }
                     }
                 }
-            }
+            },
+            outputOrder: ['q-police-force-id', 'list-of-police-forces']
         }
     },
     'p-applicant-enter-your-email-address': {
@@ -499,6 +511,115 @@ module.exports = {
                         autocomplete: 'email',
                         attributes: {
                             spellcheck: 'false'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-select-option-main': {
+        options: {
+            outputOrder: ['main-your-choices', 'q-applicant-option'],
+            properties: {
+                'q-applicant-option': {
+                    options: {
+                        macroOptions: {
+                            fieldset: {
+                                legend: {
+                                    classes: 'govuk-fieldset__legend--m'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-offender-contact-main': {
+        options: {
+            outputOrder: [
+                'q-offender-describe-contact-with-offender',
+                'q-offender-i-have-no-contact-with-offender'
+            ]
+        }
+    },
+    'p-applicant-name-main': {
+        options: {
+            outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name']
+        }
+    },
+    'p-applicant-other-compensation-main': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-applied-for-other-compensation-briefly-explain-why-not',
+                'q-applicant-have-you-applied-for-or-received-any-other-compensation'
+            ],
+            outputOrder: ['q-applicant-have-you-applied-for-or-received-any-other-compensation'],
+            properties: {
+                'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
+                    // transformer: 'govukRadios',
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: false,
+                                componentIds: [
+                                    'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
+                                ]
+                            }
+                        ]
+                    }
+                },
+                'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-other-compensation-details-main': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-who-did-you-apply-to',
+                'q-how-much-was-award',
+                'q-when-will-you-find-out',
+                'q-applicant-has-a-decision-been-made'
+            ],
+            outputOrder: [
+                'q-applicant-who-did-you-apply-to',
+                'q-applicant-has-a-decision-been-made'
+            ],
+            properties: {
+                'q-applicant-has-a-decision-been-made': {
+                    // transformer: 'govukRadios',
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: false,
+                                componentIds: ['q-when-will-you-find-out']
+                            },
+                            {
+                                itemValue: true,
+                                componentIds: ['q-how-much-was-award']
+                            }
+                        ]
+                    }
+                },
+                'q-how-much-was-award': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-10'
+                        }
+                    }
+                },
+                'q-when-will-you-find-out': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
                         }
                     }
                 }
