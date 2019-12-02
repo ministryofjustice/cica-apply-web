@@ -1,0 +1,13 @@
+{% extends "page.njk" %}
+{% from "components/table/macro.njk" import govukTable %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block pageTitle %}There has been a problem - {{ super() }}{% endblock %}
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">There has been a problem</h1>
+    <p class="govuk-body">Your application may not have been submitted.</p>
+    <p class="govuk-body">You'll get an email from us if we can fix the problem.</p>
+    <p class="govuk-body">Contact us after 2 days if you have not got an email from us.</p>
+    {% include "contact.njk" %}
+{% endblock %}
