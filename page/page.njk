@@ -16,6 +16,10 @@
   <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
+
+  {# TODO: use webpack to generate/copy these from the src/autocomplete folder. #}
+  <link rel="stylesheet" type="text/css" href="/dist/css/accessible-autocomplete.css" />
+  <link rel="stylesheet" type="text/css" href="/dist/css/accessible-autocomplete-wrapper.css" />
 {% endblock %}
 
 {% block bodyStart %}
@@ -67,6 +71,7 @@
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
     <script src="/govuk-frontend/all.js"></script>
     <script>window.GOVUKFrontend.initAll()</script>
+    <script src="/dist/js/autocomplete.min.js"></script>
     <script src="/dist/js/bundle.js"></script>
 {% endblock %}
 
