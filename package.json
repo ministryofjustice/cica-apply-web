@@ -9,7 +9,7 @@
         "test": "jest",
         "coverage": "jest --coverage",
         "build:dev": "webpack --mode development",
-        "build": "webpack --config --mode production",
+        "build": "webpack --mode production",
         "postinstall": "npm run build"
     },
     "dependencies": {
