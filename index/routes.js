@@ -24,6 +24,10 @@ router.get('/transition', (req, res) => {
     res.render('transition.njk');
 });
 
+router.get('/police', (req, res) => {
+    res.render('police.njk');
+});
+
 router.get('*', (req, res) => {
     res.render('404.njk');
 });

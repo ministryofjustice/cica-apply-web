@@ -69,3 +69,5 @@ typings/
 .vscode
 
 .config
+
+/public/dist/

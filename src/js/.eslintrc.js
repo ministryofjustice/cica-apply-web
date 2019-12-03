@@ -11,7 +11,8 @@ config.parserOptions = {
 config.globals = {
     window: true,
     document: true,
-    gtag: true
+    gtag: true,
+    accessibleAutocomplete: true
 };
 
 module.exports = config;
