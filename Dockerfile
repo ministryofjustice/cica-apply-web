@@ -13,6 +13,9 @@ WORKDIR /usr/src/app
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
+# required for the `postinstall` npm script.
+COPY webpack.config*.js ./
+COPY src/js/ ./src/js/
 
 # Defult to production. npm will ignore devDependencies in production mode
 ARG NODE_ENV=production

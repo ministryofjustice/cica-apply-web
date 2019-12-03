@@ -22,3 +22,4 @@
 !package-lock.json
 !app.js
 !webpack.config.js
+!webpack.config.prod.js
