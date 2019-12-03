@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        app: './srblahc/js/scripts.js'
+        app: './src/js/scripts.js'
     },
     output: {
         filename: 'bundle.js',
