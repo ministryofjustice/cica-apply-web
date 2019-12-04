@@ -35,8 +35,8 @@ const html = `<!DOCTYPE html>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
 
-  <link rel="stylesheet" type="text/css" href="/dist/css/accessible-autocomplete.css" />
-  <link rel="stylesheet" type="text/css" href="/dist/css/accessible-autocomplete-wrapper.css" />
+  <link rel="stylesheet" type="text/css" href="/css/accessible-autocomplete.css" />
+  <link rel="stylesheet" type="text/css" href="/css/accessible-autocomplete-wrapper.css" />
 
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
   </head>
@@ -288,7 +288,7 @@ const html = `<!DOCTYPE html>
 
   <script src="/govuk-frontend/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
-  <script src="/dist/js/autocomplete.min.js"></script>
+  <script src="/js/autocomplete.min.js"></script>
   <script src="/dist/js/bundle.js"></script>
   </body>
 </html>
