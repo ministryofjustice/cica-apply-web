@@ -477,10 +477,10 @@ module.exports = {
             buttonText: 'Continue anyway'
         }
     },
-    'p--which-english-police-force-is-investigating-the-crime': {
+    'p--which-police-force-is-investigating-the-crime': {
         options: {
             properties: {
-                'q--which-english-police-force-is-investigating-the-crime': {
+                'q--which-police-force-is-investigating-the-crime': {
                     options: {
                         defaultItem: {
                             value: '',
@@ -488,7 +488,11 @@ module.exports = {
                         }
                     }
                 }
-            }
+            },
+            outputOrder: [
+                'q--which-police-force-is-investigating-the-crime',
+                'list-of-police-forces'
+            ]
         }
     },
     'p-applicant-enter-your-email-address': {
