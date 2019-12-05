@@ -1,4 +1,4 @@
-const config = require('../../.eslintrc.js');
+const config = require('../.eslintrc.js');
 
 config.parserOptions = {
     ecmaVersion: 9,

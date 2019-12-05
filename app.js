@@ -30,7 +30,8 @@ nunjucks
             express: app
         }
     )
-    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID);
+    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID)
+    .addGlobal('cwUrl', process.env.CW_URL);
 
 app.use(
     helmet({
@@ -43,7 +44,8 @@ app.use(
                     "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
                     'www.googletagmanager.com',
                     'www.google-analytics.com',
-                    "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='"
+                    "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='",
+                    "'sha256-BgcsAQFwOfy+OZw4KY7ntxsITZOCW0XxV9hITf0k9GE='"
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]
