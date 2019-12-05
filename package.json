@@ -3,16 +3,18 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .js,.json,.njk --ignore public/dist/ --exec 'npm run build:dev & node ./bin/www'",
+        "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --exec 'npm run build:dev & node ./bin/www'",
         "start": "node ./bin/www",
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
         "test:node": "jest --config=jest.config.js",
         "coverage": "jest --coverage",
-        "build:dev": "webpack --config webpack.config.js --mode development",
+        "build:dev": "npm run copy:css && npm run copy:js && webpack --config webpack.config.js --mode development",
         "build": "webpack --config webpack.config.prod.js --mode production",
-        "postinstall": "npm run build"
+        "postinstall": "npm run build",
+        "copy:css": "rm -rf public/dist/css && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
+        "copy:js": "rm -rf public/dist/js && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
     },
     "dependencies": {
         "@babel/core": "^7.7.4",
@@ -71,8 +73,8 @@
             ".eslintrc.js",
             ".huskyrc.js",
             ".lintstagedrc.js",
-            "jest.config.js",
             ".prettierrc.js",
+            "jest.config.js",
             ".gitignore"
         ],
         "files": [

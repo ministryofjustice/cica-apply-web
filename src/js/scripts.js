@@ -1,4 +1,4 @@
-import {createAutocomplete} from './autocomplete/autocomplete';
+import {createAutocomplete} from '../modules/autocomplete/autocomplete';
 
 (() => {
     const autocomplete = createAutocomplete();
