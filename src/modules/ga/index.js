@@ -1,7 +1,3 @@
-import {createPolyfills} from '../polyfills';
-
-const polyfills = createPolyfills();
-
 function createCicaGa() {
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events
     // gtag('event', <action>, {
@@ -32,8 +28,7 @@ function createCicaGa() {
     /* * ******************************************* * */
 
     function detailsElementHandler(element) {
-        polyfills.addEventListener(
-            element,
+        element.addEventListener(
             'click',
             () => {
                 // the open attribute is added when the user reveals
@@ -65,8 +60,7 @@ function createCicaGa() {
             document.documentElement.clientHeight ||
             document.body.clientHeight;
         let hasReachedElement = false;
-        polyfills.addEventListener(
-            document,
+        document.addEventListener(
             'scroll',
             () => {
                 const elementBoundingRects = element.getBoundingClientRect();
@@ -93,8 +87,8 @@ function createCicaGa() {
     function setUpGAEventTracking() {
         const trackableElements = document.querySelectorAll('[data-module], .ga-event');
         // GOVUK modules, and custom events tracking.
-        polyfills.forEach(trackableElements, element => {
-            if (polyfills.hasClass(element, 'ga-event--scrollto')) {
+        trackableElements.forEach(element => {
+            if (element.classList.contains('ga-event--scrollto')) {
                 scrollToElementHandler(element);
                 return;
             }
