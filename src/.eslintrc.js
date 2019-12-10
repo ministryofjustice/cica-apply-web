@@ -9,9 +9,7 @@ config.parserOptions = {
 };
 
 config.globals = {
-    window: true,
-    document: true,
-    gtag: true
+    window: true
 };
 
 module.exports = config;

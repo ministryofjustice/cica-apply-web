@@ -111,3 +111,6 @@ function guaTrackLinks(domain, window) {
         ? body.addEventListener('click', handler)
         : body.attachEvent('onclick', handler);
 }
+
+// eslint-disable-next-line import/prefer-default-export
+export {guaTrackLinks};

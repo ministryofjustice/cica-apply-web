@@ -1,4 +1,7 @@
-function createCicaGa() {
+import {guaTrackLinks} from './vendor/gua-anchor';
+
+function createCicaGa(window) {
+    guaTrackLinks('http://localhost:3000', window);
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events
     // gtag('event', <action>, {
     //     'event_category': <category>,
@@ -15,7 +18,7 @@ function createCicaGa() {
 
     function send(options) {
         const gtagOptions = Object.assign({}, defaultOptions, options);
-        gtag(gtagOptions.type, gtagOptions.action, {
+        window.gtag(gtagOptions.type, gtagOptions.action, {
             event_category: gtagOptions.category,
             event_label: gtagOptions.label,
             value: gtagOptions.value,
@@ -57,10 +60,10 @@ function createCicaGa() {
     function scrollToElementHandler(element) {
         const windowHeight =
             window.innerHeight ||
-            document.documentElement.clientHeight ||
-            document.body.clientHeight;
+            window.document.documentElement.clientHeight ||
+            window.document.body.clientHeight;
         let hasReachedElement = false;
-        document.addEventListener(
+        window.document.addEventListener(
             'scroll',
             () => {
                 const elementBoundingRects = element.getBoundingClientRect();
@@ -85,7 +88,7 @@ function createCicaGa() {
     /* * ******************************************* * */
 
     function setUpGAEventTracking() {
-        const trackableElements = document.querySelectorAll('[data-module], .ga-event');
+        const trackableElements = window.document.querySelectorAll('[data-module], .ga-event');
         // GOVUK modules, and custom events tracking.
         trackableElements.forEach(element => {
             if (element.classList.contains('ga-event--scrollto')) {
