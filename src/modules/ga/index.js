@@ -78,7 +78,6 @@ function createCicaGa(window) {
                 // because we are measuring from the bottom, not the top.
                 documentScrollPosition += Math.floor((window.screen.height / documentHeight) * 100);
                 scrollDepthTargets.forEach((target, index) => {
-                    console.log(documentScrollPosition, target);
                     if (documentScrollPosition >= target) {
                         send({
                             category: 'scrolling',
@@ -99,7 +98,6 @@ function createCicaGa(window) {
 
     function setUpGAEventTracking() {
         const trackableElements = window.document.querySelectorAll('[data-module], .ga-event');
-        console.log(trackableElements);
         // GOVUK modules, and custom events tracking.
         trackableElements.forEach(element => {
             if (element.classList.contains('ga-event--scrollthreshold')) {
