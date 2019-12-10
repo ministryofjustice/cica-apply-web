@@ -1,4 +1,5 @@
 import {guaTrackLinks} from './vendor/gua-anchor';
+import * as util from '../util';
 
 function createCicaGa(window) {
     guaTrackLinks('http://localhost:3000', window);
@@ -57,28 +58,37 @@ function createCicaGa(window) {
         );
     }
 
-    function scrollToElementHandler(element) {
-        const windowHeight =
-            window.innerHeight ||
-            window.document.documentElement.clientHeight ||
-            window.document.body.clientHeight;
-        let hasReachedElement = false;
+    function scrollThresholdHandler() {
+        const {body} = window.document;
+        const html = window.document.documentElement;
+        const documentHeight = Math.max(
+            body.scrollHeight,
+            body.offsetHeight,
+            html.clientHeight,
+            html.scrollHeight,
+            html.offsetHeight
+        );
+        const scrollDepthTargets = [10, 25, 50, 75, 90, 100];
         window.document.addEventListener(
             'scroll',
-            () => {
-                const elementBoundingRects = element.getBoundingClientRect();
-                if (!hasReachedElement && elementBoundingRects.top < windowHeight) {
-                    const eventAction = element.getAttribute('ga-event-action');
-                    const eventCategory = element.getAttribute('ga-event-category');
-                    const eventLabel = element.getAttribute('ga-event-label');
-                    send({
-                        action: eventAction,
-                        category: eventCategory,
-                        label: eventLabel
-                    });
-                    hasReachedElement = true;
-                }
-            },
+            util.debounce(() => {
+                const currentScrollTop = window.document.documentElement.scrollTop;
+                let documentScrollPosition = Math.floor((currentScrollTop / documentHeight) * 100);
+                // add on the equivalent percentage for an entire screen length
+                // because we are measuring from the bottom, not the top.
+                documentScrollPosition += Math.floor((window.screen.height / documentHeight) * 100);
+                scrollDepthTargets.forEach((target, index) => {
+                    console.log(documentScrollPosition, target);
+                    if (documentScrollPosition >= target) {
+                        send({
+                            category: 'scrolling',
+                            action: `${target}%`,
+                            label: window.location.href
+                        });
+                        scrollDepthTargets.splice(index, 1);
+                    }
+                });
+            }, 100),
             false
         );
     }
@@ -89,10 +99,11 @@ function createCicaGa(window) {
 
     function setUpGAEventTracking() {
         const trackableElements = window.document.querySelectorAll('[data-module], .ga-event');
+        console.log(trackableElements);
         // GOVUK modules, and custom events tracking.
         trackableElements.forEach(element => {
-            if (element.classList.contains('ga-event--scrollto')) {
-                scrollToElementHandler(element);
+            if (element.classList.contains('ga-event--scrollthreshold')) {
+                scrollThresholdHandler();
                 return;
             }
             const dataModuleId = element.getAttribute('data-module');
