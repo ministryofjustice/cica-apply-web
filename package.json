@@ -13,6 +13,7 @@
         "build:dev": "npm run copy:css && npm run copy:js && webpack --config webpack.config.js --mode development",
         "build": "webpack --config webpack.config.prod.js --mode production",
         "buildRun:dev": "npm run build:dev && node ./bin/www",
+        "postinstall": "npm run build",
         "copy:css": "rm -rf public/dist/css && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/ || :",
         "copy:js": "rm -rf public/dist/js && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/ || :"
     },
