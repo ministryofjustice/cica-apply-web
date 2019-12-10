@@ -13,7 +13,6 @@
         "build:dev": "npm run copy:css && npm run copy:js && webpack --config webpack.config.js --mode development",
         "build": "webpack --config webpack.config.prod.js --mode production",
         "buildRun:dev": "npm run build:dev && node ./bin/www",
-        "postinstall": "npm run build",
         "copy:css": "rm -rf public/dist/css && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/ || :",
         "copy:js": "rm -rf public/dist/js && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/ || :"
     },
@@ -23,7 +22,6 @@
         "babel-loader": "^8.0.6",
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
         "cookie-parser": "~1.4.3",
-        "core-js": "^3.4.8",
         "csurf": "^1.10.0",
         "debug": "~2.6.9",
         "express": "~4.16.0",
@@ -39,6 +37,7 @@
         "webpack-cli": "^3.3.10"
     },
     "devDependencies": {
+        "core-js": "^3.4.8",
         "eslint": "^5.8.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-config-prettier": "^3.1.0",
