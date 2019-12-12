@@ -30,8 +30,7 @@ nunjucks
             express: app
         }
     )
-    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID)
-    .addGlobal('cwUrl', process.env.CW_URL);
+    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID);
 
 app.use(
     helmet({

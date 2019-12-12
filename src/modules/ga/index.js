@@ -2,7 +2,8 @@ import {guaTrackLinks} from './vendor/gua-anchor';
 import * as util from '../util';
 
 function createCicaGa(window) {
-    guaTrackLinks('http://localhost:3000', window);
+    // eslint-disable-next-line no-undef
+    guaTrackLinks(SERVICE_URL, window);
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events
     // gtag('event', <action>, {
     //     'event_category': <category>,
