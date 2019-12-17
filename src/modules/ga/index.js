@@ -1,5 +1,5 @@
-import {guaTrackLinks} from './vendor/gua-anchor';
-import * as util from '../util';
+import guaTrackLinks from './vendor/gua-anchor';
+import util from '../util';
 
 function createCicaGa(window) {
     // eslint-disable-next-line no-undef
@@ -117,5 +117,4 @@ function createCicaGa(window) {
     });
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export {createCicaGa};
+export default createCicaGa;

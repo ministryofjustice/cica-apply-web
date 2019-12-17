@@ -75,8 +75,8 @@
             ".eslintrc.js",
             ".huskyrc.js",
             ".lintstagedrc.js",
-            "jest.config.js",
             ".prettierrc.js",
+            "jest.config.js",
             ".gitignore"
         ],
         "files": [

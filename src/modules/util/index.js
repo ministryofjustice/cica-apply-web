@@ -1,10 +1,10 @@
 function debounce(func, wait, immediate) {
     let timeout;
-    return function() {
+    return () => {
         const context = this;
         // eslint-disable-next-line prefer-rest-params
         const args = arguments;
-        const later = function() {
+        const later = () => {
             timeout = null;
             if (!immediate) {
                 func.apply(context, args);
@@ -19,5 +19,4 @@ function debounce(func, wait, immediate) {
     };
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export {debounce};
+export default {debounce};

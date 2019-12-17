@@ -1,4 +1,4 @@
-import {createCicaGa} from '../modules/ga';
+import createCicaGa from '../modules/ga';
 
 (() => {
     const cicaGa = createCicaGa(window);

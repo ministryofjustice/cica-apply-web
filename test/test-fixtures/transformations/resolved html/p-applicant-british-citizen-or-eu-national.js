@@ -287,9 +287,7 @@ const html = `<!DOCTYPE html>
 
   <script src="/govuk-frontend/all.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
-  <script src="/dist/js/gua-anchor.js"></script>
   <script src="/dist/js/bundle.js"></script>
-  <script>guaTrackLinks('', window)</script>
   </body>
 </html>
 `;
