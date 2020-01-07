@@ -30,3 +30,5 @@ spec:
                   key: cw_cookie_secret
             - name: CW_GA_TRACKING_ID
               value: UA-136710388-3
+            - name: CW_URL
+              value: https://uat.claim-criminal-injuries-compensation.service.justice.gov.uk
