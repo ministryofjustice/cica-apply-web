@@ -32,4 +32,8 @@ router.get('*', (req, res) => {
     res.render('404.njk');
 });
 
+router.get('/police-forces', (req, res) => {
+    res.render('police-forces.njk');
+});
+
 module.exports = router;
