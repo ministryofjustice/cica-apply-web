@@ -476,7 +476,7 @@ module.exports = {
     'p--which-police-force-is-investigating-the-crime': {
         options: {
             properties: {
-                'q--which-english-police-force-is-investigating-the-crime': {
+                'q-police-force-id': {
                     options: {
                         defaultItem: {
                             value: '',
@@ -485,10 +485,7 @@ module.exports = {
                     }
                 }
             },
-            outputOrder: [
-                'q--which-police-force-is-investigating-the-crime',
-                'list-of-police-forces'
-            ]
+            outputOrder: ['q-police-force-id', 'list-of-police-forces']
         }
     },
     'p-applicant-enter-your-email-address': {
