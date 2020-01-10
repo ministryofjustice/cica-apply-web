@@ -28,12 +28,12 @@ router.get('/new-claim', (req, res) => {
     res.render('new-claim.njk');
 });
 
-router.get('*', (req, res) => {
-    res.render('404.njk');
-});
-
 router.get('/police-forces', (req, res) => {
     res.render('police-forces.njk');
+});
+
+router.get('*', (req, res) => {
+    res.render('404.njk');
 });
 
 module.exports = router;
