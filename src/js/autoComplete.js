@@ -14,9 +14,10 @@ function inputValueTemplate(result) {
 
 function suggestionTemplate(result) {
     if (typeof result === 'string') {
-        return `<strong>${result.name}</strong>`;
+        return '<strong>'.concat(result.name, '</strong>');
     }
-    return result && `<strong>${result.name}</strong>`;
+
+    return result && '<strong>'.concat(result.name, '</strong>');
 }
 
 function onConfirm(result) {
@@ -46,7 +47,7 @@ function formatResults(optionArray) {
     }));
 }
 
-(() => {
+(function() {
     // eslint-disable-next-line no-undef
     const selectElement = document.querySelector('.govuk-select');
 
@@ -54,7 +55,7 @@ function formatResults(optionArray) {
         selectElement.parentNode.classList.add('autocomplete__wrapper');
 
         const placeHolder = '';
-        const source = (query, syncResults) => {
+        const source = function source(query, syncResults) {
             const resultsArray = htmlCollectionToArray(selectElement);
             const results = formatResults(resultsArray);
 
