@@ -228,13 +228,7 @@ module.exports = {
                                     'p--when-was-the-crime-reported-to-police':
                                         'When was the crime reported?',
                                     'p--whats-the-crime-reference-number': 'Crime reference number',
-                                    'p--which-english-police-force-is-investigating-the-crime':
-                                        'Which police force is investigating?',
                                     'p--which-police-force-is-investigating-the-crime':
-                                        'Which police force is investigating?',
-                                    'p--which-police-scotland-division-is-investigating-the-crime':
-                                        'Which police force is investigating?',
-                                    'p--which-welsh-police-force-is-investigating-the-crime':
                                         'Which police force is investigating?',
                                     'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police':
                                         'Reasons for delay in reporting crime'
