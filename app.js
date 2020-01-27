@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
 const csrf = require('csurf');
+const nanoid = require('nanoid');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
@@ -32,6 +33,12 @@ nunjucks
     )
     .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID);
 
+app.use((req, res, next) => {
+    res.locals.nonce = nanoid();
+
+    next();
+});
+
 app.use(
     helmet({
         contentSecurityPolicy: {
@@ -39,11 +46,13 @@ app.use(
                 defaultSrc: ["'self'"],
                 scriptSrc: [
                     "'self'",
-                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
-                    "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
-                    'www.googletagmanager.com',
-                    'www.google-analytics.com',
-                    "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='"
+                    (req, res) => `'nonce-${res.locals.nonce}'`,
+                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='"
+                    // "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+                    // "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
+                    // 'www.googletagmanager.com',
+                    // 'www.google-analytics.com',
+                    // "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='"
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]

@@ -198,7 +198,7 @@ const html = `<!DOCTYPE html>
 
 
 <script src="/govuk-frontend/all.js"></script>
-<script>window.GOVUKFrontend.initAll()</script>
+<script nonce="">window.GOVUKFrontend.initAll()</script>
 
 </body>
 </html>`;
