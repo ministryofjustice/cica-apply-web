@@ -21,6 +21,7 @@
         "lodash.merge": "^4.6.1",
         "moment": "^2.24.0",
         "morgan": "~1.9.0",
+        "nanoid": "^2.1.10",
         "nunjucks": "^3.1.7",
         "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.2"
     },

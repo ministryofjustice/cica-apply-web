@@ -45,7 +45,7 @@ const html = `<!DOCTYPE html>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
-    <script>
+    <script nonce="somenonce">
         window.dataLayer = window.dataLayer || [];
         function gtag(){
             dataLayer.push(arguments);
@@ -286,7 +286,7 @@ const html = `<!DOCTYPE html>
 
 
   <script src="/govuk-frontend/all.js"></script>
-  <script>window.GOVUKFrontend.initAll()</script>
+  <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
   </body>
 </html>
 `;
