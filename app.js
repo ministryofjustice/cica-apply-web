@@ -48,11 +48,7 @@ app.use(
                     "'self'",
                     (req, res) => `'nonce-${res.locals.nonce}'`,
                     "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
-                    // "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
-                    // "'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='",
                     'www.googletagmanager.com'
-                    // 'www.google-analytics.com',
-                    // "'sha256-JxKc3PDEbftP82Sl3MQrbaCswLzpU6eLZP8RfGY2xKk='"
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"]
