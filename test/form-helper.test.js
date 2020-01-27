@@ -123,6 +123,7 @@ describe('form-helper functions', () => {
             const showBackLink = true;
             const expected = validResolvedHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
+            const nonce = 'somenonce';
 
             const actual = formHelper
                 .renderSection({
@@ -131,7 +132,8 @@ describe('form-helper functions', () => {
                     backTarget,
                     sectionId,
                     showBackLink,
-                    csrfToken
+                    csrfToken,
+                    nonce
                 })
                 .replace(/\s+/g, '');
 

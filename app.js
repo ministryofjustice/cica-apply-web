@@ -47,7 +47,7 @@ app.use(
                 scriptSrc: [
                     "'self'",
                     (req, res) => `'nonce-${res.locals.nonce}'`,
-                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='", // hash of the inline script in frontend template.njk.
                     'www.googletagmanager.com'
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
