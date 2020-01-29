@@ -16,6 +16,7 @@ COPY package*.json ./
 # required for the `postinstall` npm script.
 COPY webpack.config*.js ./
 COPY src/js/ ./src/js/
+COPY src/modules/ ./src/modules/
 
 # Defult to production. npm will ignore devDependencies in production mode
 ARG NODE_ENV=production
