@@ -178,7 +178,7 @@ module.exports = {
                                     'p-applicant-enter-your-email-address': 'Email address',
                                     'p-applicant-enter-your-address': 'Address',
                                     'p-applicant-enter-your-telephone-number': 'Telephone Number',
-
+                                    'p-applicant-confirmation-method': 'Confirmation method',
                                     'p-applicant-british-citizen-or-eu-national':
                                         'Are you a British citizen or EU National?',
                                     'p-applicant-are-you-18-or-over': 'Are you 18 or over?',
@@ -270,6 +270,8 @@ module.exports = {
                             'somewhere-else': 'Somewhere else',
                             'i-have-no-contact-with-the-offender':
                                 'I have no contact with the offender',
+                            email: 'Email to ',
+                            sms: 'Text message to',
                             10000033: 'Avon And Somerset Constabulary',
                             10000035: 'Bedfordshire Police',
                             10000001: 'British Transport Police',
@@ -542,6 +544,46 @@ module.exports = {
                 'q-applicant-enter-your-telephone-number': {
                     options: {
                         autoComplete: 'tel'
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-confirmation-method': {
+        options: {
+            transformOrder: [
+                'q-applicant-enter-your-email-address',
+                'q-applicant-enter-your-telephone-number',
+                'q-applicant-confirmation-method'
+            ],
+            outputOrder: ['q-applicant-confirmation-method'],
+            properties: {
+                'q-applicant-confirmation-method': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'email',
+                                componentIds: ['q-applicant-enter-your-email-address']
+                            },
+                            {
+                                itemValue: 'sms',
+                                componentIds: ['q-applicant-enter-your-telephone-number']
+                            }
+                        ]
+                    }
+                },
+                'q-applicant-enter-your-email-address': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
+                },
+                'q-applicant-enter-your-telephone-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
                     }
                 }
             }
