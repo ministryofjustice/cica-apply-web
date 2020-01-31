@@ -67,7 +67,7 @@ function createAutocomplete(window) {
                     minLength: 2,
                     defaultValue: '',
                     autoselect: true,
-                    confirmOnBlur: true,
+                    confirmOnBlur: false,
                     showAllValues: true,
                     displayMenu: 'overlay',
                     onConfirm,
