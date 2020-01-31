@@ -11,7 +11,7 @@
         "test:node": "jest --config=jest.config.js",
         "coverage": "jest --coverage",
         "build:dev": "npm run copy:css && npm run copy:js && webpack --config webpack.config.js --mode development",
-        "build": "webpack --config webpack.config.prod.js --mode production",
+        "build": "npm run copy:css && npm run copy:js && webpack --config webpack.config.prod.js --mode production",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "buildRun:dev": "npm run build:dev && node ./bin/www",
