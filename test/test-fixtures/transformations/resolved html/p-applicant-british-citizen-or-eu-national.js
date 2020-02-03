@@ -287,6 +287,7 @@ const html = `<!DOCTYPE html>
 
   <script src="/govuk-frontend/all.js"></script>
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
+  <script src="/dist/js/bundle.js"></script>
   </body>
 </html>
 `;
