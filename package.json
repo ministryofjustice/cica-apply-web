@@ -19,13 +19,8 @@
         "copy:js": "rm -rf public/dist/js && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/ || :"
     },
     "dependencies": {
-        "@babel/core": "^7.7.4",
-        "@babel/preset-env": "^7.7.4",
-        "babel-loader": "^8.0.6",
-        "clamav.js": "^0.12.0",
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
         "cookie-parser": "~1.4.3",
-        "core-js": "^3.5.0",
         "csurf": "^1.10.0",
         "debounce": "^1.2.0",
         "debug": "~2.6.9",
@@ -38,14 +33,13 @@
         "morgan": "~1.9.0",
         "nanoid": "^2.1.10",
         "nunjucks": "^3.1.7",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.2",
-        "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.10"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.2"
     },
     "devDependencies": {
         "@babel/core": "^7.7.4",
         "@babel/preset-env": "^7.7.4",
         "babel-loader": "^8.0.6",
+        "core-js": "^3.5.0",
         "eslint": "^5.8.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-config-prettier": "^3.1.0",
