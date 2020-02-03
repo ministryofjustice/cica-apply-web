@@ -924,9 +924,7 @@ describe('Data capture service endpoints', () => {
 
             it('should redirect to the prescribed next section id if available', async () => {
                 jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${
-                        process.env.CW_DCS_URL
-                    }/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
 
                     return () => ({
                         post: options => {
@@ -973,9 +971,7 @@ describe('Data capture service endpoints', () => {
 
             it('should redirect to the current section if the prescribed next section id is not available', async () => {
                 jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${
-                        process.env.CW_DCS_URL
-                    }/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
+                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
 
                     return () => ({
                         post: options => {

@@ -3,3 +3,4 @@ coverage
 stuff
 #! m0-end
 
+/public/dist/js
