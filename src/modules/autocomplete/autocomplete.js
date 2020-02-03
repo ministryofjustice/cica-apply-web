@@ -1,3 +1,4 @@
+/* global accessibleAutocomplete */
 function createAutocomplete(window) {
     function inputValueTemplate(result) {
         if (typeof result === 'string') {

@@ -1,3 +1,4 @@
+/* globals document */
 import {createAutocomplete} from './autocomplete';
 
 describe('autoComplete', () => {
