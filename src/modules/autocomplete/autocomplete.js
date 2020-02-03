@@ -8,14 +8,14 @@ function createAutocomplete(window) {
     }
 
     function suggestionTemplate(result) {
+        const templateString = `<strong>${result.name}</strong>`;
         if (typeof result === 'string') {
-            return `<strong>${result.name}</strong>`;
+            return templateString;
         }
-        return result && `<strong>${result.name}</strong>`;
+        return result && templateString;
     }
 
     function onConfirm(result) {
-        // eslint-disable-next-line no-undef
         const element = window.document.querySelector('.govuk-select');
         if (result) {
             const valueToSelect = result.code;
@@ -27,8 +27,7 @@ function createAutocomplete(window) {
 
     function htmlCollectionToArray(ddElement) {
         // Turn the array-like html collection into an array
-        // eslint-disable-next-line prefer-spread
-        return Array.apply(null, ddElement.options);
+        return [...ddElement.options];
     }
 
     function formatResults(optionArray) {
