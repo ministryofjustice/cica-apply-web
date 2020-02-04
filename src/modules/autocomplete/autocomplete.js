@@ -8,11 +8,14 @@ function createAutocomplete(window) {
     }
 
     function suggestionTemplate(result) {
-        const templateString = `<strong>${result.name}</strong>`;
+        let templateString;
         if (typeof result === 'string') {
-            return templateString;
+            // on page load.
+            templateString = `<strong>${result}</strong>`;
+        } else {
+            templateString = `<strong>${result.name}</strong>`;
         }
-        return result && templateString;
+        return templateString;
     }
 
     function onConfirm(result) {
