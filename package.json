@@ -5,7 +5,7 @@
     "scripts": {
         "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .js,.json,.njk --ignore public/dist/ --exec npm run build:dev & node ./bin/www",
         "start": "node ./bin/www",
-        "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
+        "sass": "node-sass src/sass/styles.scss public/stylesheets/all.css && node-sass src/sass/styles-ie8.scss public/stylesheets/all-ie8.css",
         "test": "jest",
         "coverage": "jest --coverage",
         "build:dev": "webpack --config webpack.config.js --mode development",
@@ -14,6 +14,7 @@
         "lint:fix": "eslint --fix ."
     },
     "dependencies": {
+        "@ministryofjustice/frontend": "0.0.17-alpha",
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
         "cookie-parser": "~1.4.3",
         "csurf": "^1.10.0",

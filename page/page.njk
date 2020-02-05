@@ -1,4 +1,5 @@
 {% extends "template.njk" %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
 
 {% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}
 {% block head %}
@@ -45,6 +46,7 @@
       html: 'This is a new service – your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">feedback <span class="govuk-visually-hidden">(opens in new window)</span></a> will help us to improve it.',
       classes: 'govuk-width-container'
     }) }}
+
     <div class="govuk-width-container">
         {% block innerHeader %}
         {% endblock %}
@@ -57,6 +59,18 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+          
+            {% if maintenanceMessage %}
+                {% set bannerHtml %}
+                  <h2 class="govuk-heading-m">{{ maintenanceMessage }} </h2>
+                {% endset %}
+
+                {{ mojBanner({
+                  type: 'information',
+                  html: bannerHtml
+                }) }}
+            {% endif %}
+
             {% block innerContent %}
             {% endblock %}
         </div>
