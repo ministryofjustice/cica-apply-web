@@ -30,5 +30,3 @@ spec:
                   key: cw_cookie_secret
             - name: CW_GA_TRACKING_ID
               value: UA-136710388-3
-            - name: CW_MAINTENANCE_MESSAGE
-              value: This service will be unavailable on 6 February 2020 from 4pm to 6pm
