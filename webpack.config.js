@@ -1,10 +1,11 @@
 'use strict';
 
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        app: './src/js/scripts.js'
+        app: path.resolve(__dirname, 'src/js/scripts.js')
     },
     output: {
         path: path.resolve(__dirname, 'public/dist/js'),
@@ -25,9 +26,11 @@ module.exports = {
                                 [
                                     '@babel/preset-env',
                                     {
+                                        useBuiltIns: 'usage',
+                                        corejs: 3,
                                         // https://github.com/browserslist/browserslist
                                         targets:
-                                            'last 1 version, ie >= 11, Safari >= 12, ios_saf >= 10, iOS >= 10, > 0.25%, not dead'
+                                            'last 1 version, ie >= 11, Safari >= 12, ios_saf >= 10, iOS >= 10'
                                     }
                                 ]
                             ]
@@ -36,5 +39,10 @@ module.exports = {
                 ]
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            SERVICE_URL: JSON.stringify(process.env.CW_URL)
+        })
+    ]
 };
