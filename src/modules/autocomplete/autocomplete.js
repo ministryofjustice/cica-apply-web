@@ -66,7 +66,7 @@ function createAutocomplete(window) {
 
                 accessibleAutocomplete.enhanceSelectElement({
                     selectElement: selectElements[i],
-                    id: 'enhanced-dropdown-id',
+                    id: selectElements[i].id,
                     minLength: 2,
                     defaultValue: '',
                     autoselect: true,
