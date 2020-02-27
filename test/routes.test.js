@@ -255,6 +255,25 @@ describe('Data capture service endpoints', () => {
                 });
             });
         });
+        describe('/transition-option2', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition-option2');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the under option 2 page heading', async () => {
+                        const response = await request(app).get('/transition-option2');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">You must use another service if your claim is for sexual assault or abuse and other injuries or losses</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
     });
 
     describe('Cica-web /apply routes', () => {

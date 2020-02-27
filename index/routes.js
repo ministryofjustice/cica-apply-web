@@ -48,6 +48,10 @@ router.get('/transition-under-18', (req, res) => {
     res.render('transition-under-18.njk');
 });
 
+router.get('/transition-option2', (req, res) => {
+    res.render('transition-option2.njk');
+});
+
 router.get('*', (req, res) => {
     res.render('404.njk');
 });
