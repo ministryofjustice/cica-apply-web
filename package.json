@@ -1,6 +1,6 @@
 {
     "name": "cica-web",
-    "version": "0.0.0",
+    "version": "0.0.5",
     "private": true,
     "scripts": {
         "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --exec npm run buildRun:dev",
@@ -15,8 +15,8 @@
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "buildRun:dev": "npm run build:dev && node ./bin/www",
-        "copy:css": "rm -rf public/dist/css && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/ || :",
-        "copy:js": "rm -rf public/dist/js && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/ || :"
+        "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
+        "copy:js": "rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
     },
     "dependencies": {
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
@@ -33,7 +33,7 @@
         "morgan": "~1.9.0",
         "nanoid": "^2.1.10",
         "nunjucks": "^3.1.7",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.2"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.3"
     },
     "devDependencies": {
         "@babel/core": "^7.7.4",
