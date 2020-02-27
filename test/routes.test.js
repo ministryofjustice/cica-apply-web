@@ -102,79 +102,174 @@ describe('Data capture service endpoints', () => {
                     });
                 });
             });
-            describe('/start-page', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/start-page');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/start-page');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/start-page', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/start-page');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the start page heading', async () => {
+                        const response = await request(app).get('/start-page');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
-            describe('/cookies', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/cookies');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/cookies');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Cookies</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/cookies', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/cookies');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the cookies page heading', async () => {
+                        const response = await request(app).get('/cookies');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Cookies</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
-            describe('/contact-us', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/contact-us');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/contact-us');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Contact us</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/contact-us', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/contact-us');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the contact us heading', async () => {
+                        const response = await request(app).get('/contact-us');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Contact us</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
-            describe('/transition', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/transition');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/transition');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">We are still working on this part of the service</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/transition', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the transition page heading', async () => {
+                        const response = await request(app).get('/transition');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">We are still working on this part of the service</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/transition-not-british-citizen', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition-not-british-citizen');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the british citizen transition page heading', async () => {
+                        const response = await request(app).get('/transition-not-british-citizen');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">You must use another service if you’re not a British citizen or EU national</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/transition-not-sa', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition-not-sa');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the not sexual assault page heading page heading', async () => {
+                        const response = await request(app).get('/transition-not-sa');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">You must use another service if your claim is not for sexual assault or abuse</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/transition-someone-else', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition-someone-else');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the someone else page heading', async () => {
+                        const response = await request(app).get('/transition-someone-else');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">You must use another service if you’re applying for someone else</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/transition-under-18', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition-under-18');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the under 18 transition page heading', async () => {
+                        const response = await request(app).get('/transition-under-18');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">You must use another service if you’re under 18</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
+                    });
+                });
+            });
+        });
+        describe('/transition-option2', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/transition-option2');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the under option 2 page heading', async () => {
+                        const response = await request(app).get('/transition-option2');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">You must use another service if your claim is for sexual assault or abuse and other injuries or losses</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
