@@ -1,0 +1,63 @@
+{
+    "body": {
+        "errors": [
+            {
+                "status": 400,
+                "title": "400 Bad Request",
+                "detail": "Enter the date the crime was reported to police and include a day, month and year",
+                "code": "errorMessage",
+                "source": {
+                    "pointer": "/data/attributes/q--when-was-the-crime-reported-to-police"
+                },
+                "meta": {
+                    "raw": {
+                        "keyword": "errorMessage",
+                        "dataPath": "/q--when-was-the-crime-reported-to-police",
+                        "schemaPath": "#/properties/q--when-was-the-crime-reported-to-police/errorMessage",
+                        "params": {
+                            "errors": [
+                                {
+                                    "keyword": "format",
+                                    "dataPath": "/q--when-was-the-crime-reported-to-police",
+                                    "schemaPath": "#/properties/q--when-was-the-crime-reported-to-police/format",
+                                    "params": {
+                                        "format": "date-time"
+                                    },
+                                    "message": "should match format \"date-time\""
+                                }
+                            ]
+                        },
+                        "message": "Enter the date the crime was reported to police and include a day, month and year"
+                    }
+                }
+            }
+        ],
+        "meta": {
+            "schema": {
+                "type": "object",
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "required": ["q--when-was-the-crime-reported-to-police"],
+                "properties": {
+                    "q--when-was-the-crime-reported-to-police": {
+                        "type": "string",
+                        "title": "When was the crime reported to the police?",
+                        "format": "date-time",
+                        "description": "For example, 31 3 2018. You can enter an approximate date.",
+                        "errorMessage": {
+                            "format": "Enter the date the crime was reported to police and include a day, month and year"
+                        }
+                    }
+                },
+                "errorMessage": {
+                    "required": {
+                        "q--when-was-the-crime-reported-to-police": "Enter the date the crime was reported to the police"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "answers": {
+                "q--when-was-the-crime-reported-to-police": "9999-99-99T00:00:00.000Z"
+            }
+        }
+    }
+}

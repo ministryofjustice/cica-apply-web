@@ -1,0 +1,104 @@
+{
+    "body": {
+        "errors": [
+            {
+                "status": 400,
+                "title": "400 Bad Request",
+                "detail": "Location must be 60 characters or less",
+                "code": "errorMessage",
+                "source": {
+                    "pointer": "/data/attributes/q-applicant-scottish-location"
+                },
+                "meta": {
+                    "raw": {
+                        "keyword": "errorMessage",
+                        "dataPath": "/q-applicant-scottish-location",
+                        "schemaPath": "#/properties/q-applicant-scottish-location/errorMessage",
+                        "params": {
+                            "errors": [
+                                {
+                                    "keyword": "maxLength",
+                                    "dataPath": "/q-applicant-scottish-location",
+                                    "schemaPath": "#/properties/q-applicant-scottish-location/maxLength",
+                                    "params": {
+                                        "limit": 60
+                                    },
+                                    "message": "should NOT be longer than 60 characters"
+                                }
+                            ]
+                        },
+                        "message": "Location must be 60 characters or less"
+                    }
+                }
+            },
+            {
+                "status": 400,
+                "title": "400 Bad Request",
+                "detail": "Town or city must be 60 characters or less",
+                "code": "errorMessage",
+                "source": {
+                    "pointer": "/data/attributes/q-applicant-scottish-town-or-city"
+                },
+                "meta": {
+                    "raw": {
+                        "keyword": "errorMessage",
+                        "dataPath": "/q-applicant-scottish-town-or-city",
+                        "schemaPath": "#/properties/q-applicant-scottish-town-or-city/errorMessage",
+                        "params": {
+                            "errors": [
+                                {
+                                    "keyword": "maxLength",
+                                    "dataPath": "/q-applicant-scottish-town-or-city",
+                                    "schemaPath": "#/properties/q-applicant-scottish-town-or-city/maxLength",
+                                    "params": {
+                                        "limit": 60
+                                    },
+                                    "message": "should NOT be longer than 60 characters"
+                                }
+                            ]
+                        },
+                        "message": "Town or city must be 60 characters or less"
+                    }
+                }
+            }
+        ],
+        "meta": {
+            "schema": {
+                "type": "object",
+                "title": "Where in Scotland did it happen?",
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "required": ["q-applicant-scottish-town-or-city", "q-applicant-scottish-location"],
+                "properties": {
+                    "q-applicant-scottish-location": {
+                        "type": "string",
+                        "title": "Location",
+                        "maxLength": 60,
+                        "description": "For example, the name of a street, business, building or nearby local landmark. You can enter more than one.",
+                        "errorMessage": {
+                            "maxLength": "Location must be 60 characters or less"
+                        }
+                    },
+                    "q-applicant-scottish-town-or-city": {
+                        "type": "string",
+                        "title": "Town or city",
+                        "maxLength": 60,
+                        "errorMessage": {
+                            "maxLength": "Town or city must be 60 characters or less"
+                        }
+                    }
+                },
+                "errorMessage": {
+                    "required": {
+                        "q-applicant-scottish-location": "Enter the name of a street, business, building or nearby local landmark",
+                        "q-applicant-scottish-town-or-city": "Enter the town or city where the crime happened"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "answers": {
+                "q-applicant-scottish-town-or-city": "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
+                "q-applicant-scottish-location": "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
+            }
+        }
+    }
+}

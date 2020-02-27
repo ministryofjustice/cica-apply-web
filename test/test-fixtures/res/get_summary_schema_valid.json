@@ -1,0 +1,57 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p--when-was-the-crime-reported-to-police",
+                "attributes": {
+                    "sectionId": "p--check-your-answers",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p--when-was-the-crime-reported-to-police"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p--when-was-the-crime-reported-to-police",
+                "attributes": {
+                    "type": "object",
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "required": ["q--when-was-the-crime-reported-to-police"],
+                    "properties": {
+                        "q--when-was-the-crime-reported-to-police": {
+                            "type": "string",
+                            "title": "When was the crime reported to the police?",
+                            "format": "date-time",
+                            "description": "For example, 31 3 2018. You can enter an approximate date.",
+                            "errorMessage": {
+                                "format": "The date the crime was reported to the police must be in the past"
+                            }
+                        }
+                    },
+                    "errorMessage": {
+                        "required": {
+                            "q--when-was-the-crime-reported-to-police": "Enter the date the crime was reported to the police"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            }
+        ],
+        "links": {
+            "prev": "undefined/api/v1/questionnaires/b826e4e1-b6a0-4a1f-8c8d-7600433beaa0/progress-entries?filter[sectionId]=p--was-the-crime-reported-to-police"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}

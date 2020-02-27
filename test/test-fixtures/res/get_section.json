@@ -1,0 +1,59 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p-applicant-are-you-18-or-over",
+                "attributes": {
+                    "sectionId": "p-applicant-are-you-18-or-over",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p-applicant-are-you-18-or-over"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p-applicant-are-you-18-or-over",
+                "attributes": {
+                    "type": "object",
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "required": ["q-applicant-are-you-18-or-over"],
+                    "properties": {
+                        "q-applicant-are-you-18-or-over": {
+                            "type": "boolean",
+                            "title": "Are you 18 or over?"
+                        }
+                    },
+                    "errorMessage": {
+                        "required": {
+                            "q-applicant-are-you-18-or-over": "Select yes if you are 18 or over"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            {
+                "type": "answers",
+                "id": "p-applicant-are-you-18-or-over",
+                "attributes": {
+                    "q-applicant-are-you-18-or-over": true
+                }
+            }
+        ],
+        "links": {
+            "prev": "https://data-capture-service.uat.claim-criminal-injuries-compensation.service.justice.gov.uk/api/v1/questionnaires/e682e1ff-23cc-4b91-a9d6-d2d43c58dd60/progress-entries?filter[sectionId]=p-applicant-british-citizen-or-eu-national"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}

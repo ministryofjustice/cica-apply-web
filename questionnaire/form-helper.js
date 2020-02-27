@@ -122,7 +122,7 @@ function correctPartialDates(body, questionId) {
         dateParts &&
         typeof dateParts === 'object' &&
         !Array.isArray(dateParts) &&
-        ('year' in dateParts || 'month' in dateParts || 'day' in dateParts)
+        'year' in dateParts
     ) {
         // If no date parts are supplied delete the answer to trigger required error
         if (Object.values(dateParts).every(datePart => datePart === '')) {
@@ -235,19 +235,14 @@ function getSectionHtml(sectionData, allAnswers, csrfToken, cspNonce) {
 
 function processErrors(errors) {
     const errorObject = {};
-    if (!errors.valid) {
-        errors.forEach(err => {
-            if (
-                err.meta.raw.params.errors &&
-                err.meta.raw.params.errors[0].params.missingProperty
-            ) {
-                errorObject[err.meta.raw.params.errors[0].params.missingProperty] = err.detail;
-            } else if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params) {
-                const questionId = err.meta.raw.dataPath.substring(1);
-                errorObject[questionId] = err.detail;
-            }
-        });
-    }
+    errors.forEach(err => {
+        if (err.meta.raw.params.errors && err.meta.raw.params.errors[0].params.missingProperty) {
+            errorObject[err.meta.raw.params.errors[0].params.missingProperty] = err.detail;
+        } else {
+            const questionId = err.meta.raw.dataPath.substring(1);
+            errorObject[questionId] = err.detail;
+        }
+    });
     return errorObject;
 }
 

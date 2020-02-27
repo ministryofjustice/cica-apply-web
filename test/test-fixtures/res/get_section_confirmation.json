@@ -1,0 +1,44 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p--confirmation",
+                "attributes": {
+                    "sectionId": "p--confirmation",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p--confirmation"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p--confirmation",
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "confirmation": {
+                            "description": "Removed string for tidiness"
+                        }
+                    }
+                }
+            }
+        ],
+        "links": {
+            "prev": "https://data-capture-service.uat.claim-criminal-injuries-compensation.service.justice.gov.uk/api/v1/questionnaires/e682e1ff-23cc-4b91-a9d6-d2d43c58dd60/progress-entries?filter[sectionId]=p-applicant-british-citizen-or-eu-national"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}

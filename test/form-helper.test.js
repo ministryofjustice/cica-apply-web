@@ -3,6 +3,11 @@
 const formHelper = require('../questionnaire/form-helper');
 const validTransformation = require('./test-fixtures/transformations/p-applicant-british-citizen-or-eu-national');
 const validResolvedHtml = require('./test-fixtures/transformations/resolved html/p-applicant-british-citizen-or-eu-national');
+const sectionDataWithErrors = require('./test-fixtures/res/post_section_returned_errors');
+const sectionDataValid = require('./test-fixtures/res/get_section');
+const sectionDataConfirmation = require('./test-fixtures/res/get_section_confirmation');
+const sectionDataWithNonRequiredErrors = require('./test-fixtures/res/post_section_returned_errors_not_required');
+const sectionDataWithManyNonRequiredErrors = require('./test-fixtures/res/post_section_returned_multiple_errors_not_required');
 
 describe('form-helper functions', () => {
     describe('Remove sectionId prefix', () => {
@@ -101,10 +106,14 @@ describe('form-helper functions', () => {
             expect(body).toEqual(expected);
         });
 
-        it('Should set partial dates to the first of the entered month', () => {
-            let body = {'q-applicant-when-did-the-crime-start': {month: '05', year: '2018'}};
+        it('Should set partial dates to their default value', () => {
+            let body = {
+                'q-applicant-when-did-the-crime-start': {month: '05', year: '2018'}
+            };
 
-            const expected = {'q-applicant-when-did-the-crime-start': `2018-05-01T00:00:00.000Z`};
+            const expected = {
+                'q-applicant-when-did-the-crime-start': `2018-05-01T00:00:00.000Z`
+            };
 
             Object.keys(body).forEach(property => {
                 body = formHelper.correctPartialDates(body, property);
@@ -142,175 +151,146 @@ describe('form-helper functions', () => {
     });
 
     describe('Process errors', () => {
-        it('Should return a correctly formatted error', () => {
-            const error = {
-                errors: [
-                    {
-                        status: 400,
-                        title: '400 Bad Request',
-                        detail: 'Select yes if you are a British citizen or EU national',
-                        code: 'errorMessage',
-                        source: {
-                            pointer: '/data/attributes'
-                        },
-                        meta: {
-                            raw: {
-                                keyword: 'errorMessage',
-                                dataPath: '',
-                                schemaPath: '#/errorMessage',
-                                params: {
-                                    errors: [
-                                        {
-                                            keyword: 'required',
-                                            dataPath: '',
-                                            schemaPath: '#/required',
-                                            params: {
-                                                missingProperty:
-                                                    'q-applicant-british-citizen-or-eu-national'
-                                            },
-                                            message:
-                                                "should have required property 'q-applicant-british-citizen-or-eu-national'"
-                                        }
-                                    ]
-                                },
-                                message: 'Select yes if you are a British citizen or EU national'
-                            }
-                        }
-                    }
-                ],
-                meta: {
-                    schema: {
-                        type: 'object',
-                        $schema: 'http://json-schema.org/draft-07/schema#',
-                        required: ['q-applicant-british-citizen-or-eu-national'],
-                        properties: {
-                            'q-applicant-british-citizen-or-eu-national': {
-                                type: 'boolean',
-                                title: 'Are you a British citizen or EU national?'
-                            }
-                        },
-                        errorMessage: {
-                            required: {
-                                'q-applicant-british-citizen-or-eu-national':
-                                    'Select yes if you are a British citizen or EU national'
-                            }
-                        },
-                        additionalProperties: false
-                    },
-                    answers: {}
-                }
-            };
-            const expected = {
-                'q-applicant-british-citizen-or-eu-national':
-                    'Select yes if you are a British citizen or EU national'
-            };
-            const actual = formHelper.processErrors(error.errors);
+        describe('Missing property errors - User has not entered a required value', () => {
+            it('Should return a correctly formatted error', () => {
+                const error = sectionDataWithErrors.body;
+                const expected = {
+                    'q-applicant-british-citizen-or-eu-national':
+                        'Select yes if you are a British citizen or EU national'
+                };
+                const actual = formHelper.processErrors(error.errors);
 
-            expect(actual).toMatchObject(expected);
-        });
+                expect(actual).toMatchObject(expected);
+            });
 
-        it('Should return a list of correctly formatted errors given more than one', () => {
-            const error = {
-                errors: [
-                    {
-                        status: 400,
-                        title: '400 Bad Request',
-                        detail: 'Enter your title',
-                        code: 'errorMessage',
-                        source: {
-                            pointer: '/data/attributes'
-                        },
-                        meta: {
-                            raw: {
-                                keyword: 'errorMessage',
-                                dataPath: '',
-                                schemaPath: '#/errorMessage',
-                                params: {
-                                    errors: [
-                                        {
-                                            keyword: 'required',
-                                            dataPath: '',
-                                            schemaPath: '#/required',
-                                            params: {
-                                                missingProperty: 'q-applicant-name-title'
-                                            },
-                                            message:
-                                                "should have required property 'q-applicant-name-title'"
-                                        }
-                                    ]
-                                },
-                                message: 'Enter your title'
-                            }
-                        }
-                    },
-                    {
-                        status: 400,
-                        title: '400 Bad Request',
-                        detail: 'Enter your forename',
-                        code: 'errorMessage',
-                        source: {
-                            pointer: '/data/attributes'
-                        },
-                        meta: {
-                            raw: {
-                                keyword: 'errorMessage',
-                                dataPath: '',
-                                schemaPath: '#/errorMessage',
-                                params: {
-                                    errors: [
-                                        {
-                                            keyword: 'required',
-                                            dataPath: '',
-                                            schemaPath: '#/required',
-                                            params: {
-                                                missingProperty: 'q-applicant-enter-your-firstname'
-                                            },
-                                            message:
-                                                "should have required property 'q-applicant-enter-your-firstname'"
-                                        }
-                                    ]
-                                },
-                                message: 'Enter your name'
-                            }
-                        }
-                    }
-                ],
-                meta: {
-                    schema: {
-                        type: 'object',
-                        $schema: 'http://json-schema.org/draft-07/schema#',
-                        required: [
-                            'q-applicant-enter-your-firstname',
-                            'q-applicant-enter-your-title'
-                        ],
-                        properties: {
-                            'q-applicant-enter-your-title': {
-                                type: 'string',
-                                title: 'Enter your title'
+            it('Should return a list of correctly formatted errors given more than one', () => {
+                const error = {
+                    errors: [
+                        {
+                            status: 400,
+                            title: '400 Bad Request',
+                            detail: 'Enter your title',
+                            code: 'errorMessage',
+                            source: {
+                                pointer: '/data/attributes'
                             },
-                            'q-applicant-enter-your-firstname': {
-                                type: 'string',
-                                title: 'Enter your name'
+                            meta: {
+                                raw: {
+                                    keyword: 'errorMessage',
+                                    dataPath: '',
+                                    schemaPath: '#/errorMessage',
+                                    params: {
+                                        errors: [
+                                            {
+                                                keyword: 'required',
+                                                dataPath: '',
+                                                schemaPath: '#/required',
+                                                params: {
+                                                    missingProperty: 'q-applicant-name-title'
+                                                },
+                                                message:
+                                                    "should have required property 'q-applicant-name-title'"
+                                            }
+                                        ]
+                                    },
+                                    message: 'Enter your title'
+                                }
                             }
                         },
-                        errorMessage: {
-                            required: {
-                                'q-applicant-enter-your-firstname': 'Enter your name',
-                                'q-applicant-enter-your-title': 'Enter your title'
+                        {
+                            status: 400,
+                            title: '400 Bad Request',
+                            detail: 'Enter your forename',
+                            code: 'errorMessage',
+                            source: {
+                                pointer: '/data/attributes'
+                            },
+                            meta: {
+                                raw: {
+                                    keyword: 'errorMessage',
+                                    dataPath: '',
+                                    schemaPath: '#/errorMessage',
+                                    params: {
+                                        errors: [
+                                            {
+                                                keyword: 'required',
+                                                dataPath: '',
+                                                schemaPath: '#/required',
+                                                params: {
+                                                    missingProperty:
+                                                        'q-applicant-enter-your-firstname'
+                                                },
+                                                message:
+                                                    "should have required property 'q-applicant-enter-your-firstname'"
+                                            }
+                                        ]
+                                    },
+                                    message: 'Enter your name'
+                                }
                             }
+                        }
+                    ],
+                    meta: {
+                        schema: {
+                            type: 'object',
+                            $schema: 'http://json-schema.org/draft-07/schema#',
+                            required: [
+                                'q-applicant-enter-your-firstname',
+                                'q-applicant-enter-your-title'
+                            ],
+                            properties: {
+                                'q-applicant-enter-your-title': {
+                                    type: 'string',
+                                    title: 'Enter your title'
+                                },
+                                'q-applicant-enter-your-firstname': {
+                                    type: 'string',
+                                    title: 'Enter your name'
+                                }
+                            },
+                            errorMessage: {
+                                required: {
+                                    'q-applicant-enter-your-firstname': 'Enter your name',
+                                    'q-applicant-enter-your-title': 'Enter your title'
+                                }
+                            },
+                            additionalProperties: false
                         },
-                        additionalProperties: false
-                    },
-                    answers: {}
-                }
-            };
-            const expected = {
-                'q-applicant-name-title': 'Enter your title',
-                'q-applicant-enter-your-firstname': 'Enter your forename'
-            };
-            const actual = formHelper.processErrors(error.errors);
+                        answers: {}
+                    }
+                };
+                const expected = {
+                    'q-applicant-name-title': 'Enter your title',
+                    'q-applicant-enter-your-firstname': 'Enter your forename'
+                };
+                const actual = formHelper.processErrors(error.errors);
 
-            expect(actual).toMatchObject(expected);
+                expect(actual).toMatchObject(expected);
+            });
+        });
+        describe('All other types of error', () => {
+            it('Should return a correctly formatted error', () => {
+                const error = sectionDataWithNonRequiredErrors.body;
+                const expected = {
+                    'q--when-was-the-crime-reported-to-police':
+                        'Enter the date the crime was reported to police and include a day, month and year'
+                };
+                const actual = formHelper.processErrors(error.errors);
+
+                expect(actual).toMatchObject(expected);
+            });
+
+            it('Should return a list of correctly formatted errors given more than one', () => {
+                const error = sectionDataWithManyNonRequiredErrors.body;
+                const expected = {
+                    'q-applicant-scottish-location': 'Location must be 60 characters or less',
+                    'q-applicant-scottish-town-or-city':
+                        'Town or city must be 60 characters or less'
+                };
+                const actual = formHelper.processErrors(error.errors);
+
+                expect(actual).toMatchObject(expected);
+            });
         });
     });
 
@@ -497,6 +477,111 @@ describe('form-helper functions', () => {
             };
 
             expect(formHelper.escapeSchemaContent(schema)).toEqual(expected);
+        });
+    });
+
+    describe('Get section HTML with errors', () => {
+        it('Should return the section HTML with user error messages', () => {
+            const sectionData = sectionDataWithErrors.body;
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
+            const csrfToken = 'YH7tcDzK-Q8ZfXG5bIZlM2xhN5-x8phJjJoI';
+
+            const actual = formHelper.getSectionHtmlWithErrors(sectionData, sectionId, csrfToken);
+            const expected =
+                '<div class="govuk-error-summary__body"><ul class="govuk-list govuk-error-summary__list"><li><a href="#q-applicant-british-citizen-or-eu-national">Select yes if you are a British citizen or EU national</a></li></ul></div>';
+
+            expect(actual.replace(/\s+/g, '')).toMatch(expected.replace(/\s+/g, ''));
+        });
+    });
+
+    describe('Get section HTML', () => {
+        describe('Given a regular section with a single answer', () => {
+            it('Should return the section HTML', () => {
+                const sectionData = sectionDataValid.body;
+                const allAnswers = {};
+                const csrfToken = 'SrLylopP-JRn9c4qE_iFBzltrMT2XQDj2gqU';
+
+                const actual = formHelper.getSectionHtml(sectionData, allAnswers, csrfToken);
+                const expected =
+                    '<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl"><h1 class="govuk-fieldset__heading">Are you 18 or over?</h1></legend>';
+
+                expect(actual.replace(/\s+/g, '')).toMatch(expected.replace(/\s+/g, ''));
+            });
+        });
+        describe('Given a page without a back button', () => {
+            it('Should return the section HTML', () => {
+                const sectionData = sectionDataConfirmation.body;
+                const allAnswers = {};
+                const csrfToken = 'SrLylopP-JRn9c4qE_iFBzltrMT2XQDj2gqU';
+
+                const actual = formHelper.getSectionHtml(sectionData, allAnswers, csrfToken);
+                const expected = 'class="govuk-back-link"';
+
+                expect(actual.replace(/\s+/g, '')).not.toMatch(expected.replace(/\s+/g, ''));
+            });
+        });
+        describe('Given a summary page with all answers', () => {
+            it('Should return the summary HTML', () => {
+                const sectionData = sectionDataValid.body;
+                const allAnswers = {
+                    body: {
+                        data: {
+                            'q-applicant-are-you-18-or-over': 'true',
+                            'q-some-more-answers': 'cool'
+                        }
+                    }
+                };
+                const csrfToken = 'SrLylopP-JRn9c4qE_iFBzltrMT2XQDj2gqU';
+
+                const actual = formHelper.getSectionHtml(sectionData, allAnswers, csrfToken);
+                const expected =
+                    '<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl"><h1 class="govuk-fieldset__heading">Are you 18 or over?</h1></legend>';
+
+                expect(actual.replace(/\s+/g, '')).toMatch(expected.replace(/\s+/g, ''));
+            });
+        });
+    });
+
+    describe('Process Request', () => {
+        it('Should remove unused hidden answers', () => {
+            const rawBody = {
+                'q-applicant-have-you-applied-for-or-received-any-other-compensation': 'true',
+                'q-applicant-applied-for-other-compensation-briefly-explain-why-not': "Didn't know"
+            };
+            const section = 'applicant-have-you-applied-for-or-received-any-other-compensation';
+            const actual = formHelper.processRequest(rawBody, section);
+
+            expect(actual).toEqual({
+                'q-applicant-have-you-applied-for-or-received-any-other-compensation': 'true'
+            });
+        });
+
+        it('Should remove empty answers', () => {
+            const rawBody = {
+                'q-applicant-have-you-applied-to-us-before': 'true',
+                'q-enter-your-previous-reference-number': ''
+            };
+            const section = 'applicant-have-you-applied-to-us-before';
+            const actual = formHelper.processRequest(rawBody, section);
+
+            expect(actual).toEqual({
+                'q-applicant-have-you-applied-to-us-before': 'true'
+            });
+        });
+
+        it('Should correct partial dates to ISO format', () => {
+            const rawBody = {
+                'q-applicant-when-did-the-crime-start': {
+                    month: '05',
+                    year: '1990'
+                }
+            };
+            const section = 'applicant-when-did-the-crime-start';
+            const actual = formHelper.processRequest(rawBody, section);
+
+            expect(actual).toEqual({
+                'q-applicant-when-did-the-crime-start': '1990-05-01T00:00:00.000Z'
+            });
         });
     });
 });

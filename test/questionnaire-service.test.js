@@ -159,36 +159,83 @@ describe('Questionnaire service', () => {
 
             expect(expected).toEqual(response);
         });
-        /*  it('Returns continues to check for 15 seconds', async () => {
-            jest.useFakeTimers();
-            jest.doMock('../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => getValidSubmission
-                }))
-            );
+        it('Returns continues to check for 15 seconds', async () => {
+            jest.useRealTimers();
             jest.resetModules();
+            jest.doMock('../questionnaire/request-service', () => {
+                // all instances get the same mock
+                const get = jest.fn(() => ({
+                    body: {
+                        data: {
+                            type: 'submissions',
+                            attributes: {
+                                questionnaireId: '2c3c6ecd-aa68-4a00-8093-300cae6cbfcb',
+                                submitted: false,
+                                status: 'NOT_STARTED',
+                                caseReferenceNumber: null
+                            }
+                        }
+                    }
+                }));
+
+                return () => ({
+                    get
+                });
+            });
+
+            // eslint-disable-next-line global-require
+            const req = require('../questionnaire/request-service')();
+
             // eslint-disable-next-line global-require
             const questionnaireService = require('../questionnaire/questionnaire-service')();
-            await questionnaireService.getSubmissionStatus(
-                'questionnaire-id',
-                Date.now()
-            );
 
-            expect(setTimeout).toHaveBeenCalledTimes(15);
+            await expect(
+                questionnaireService.getSubmissionStatus('questionnaire-id', Date.now())
+            ).rejects.toEqual(new Error('Unable to retrieve questionnaire submission status'));
+
+            expect(req.get).toHaveBeenCalledTimes(15);
         });
         it('Should return a 504 error if it is called with a time older than 15 seconds ago.', async () => {
+            jest.dontMock('../questionnaire/request-service');
             jest.resetModules();
             // eslint-disable-next-line global-require
             const questionnaireService = require('../questionnaire/questionnaire-service')();
-            const response = await questionnaireService.getSubmissionStatus(
-                'questionnaire-id',
-                Date.now() - 16000
-            );
+            await expect(
+                questionnaireService.getSubmissionStatus('questionnaire-id', Date.now() - 16000)
+            ).rejects.toEqual(new Error('Unable to retrieve questionnaire submission status'));
+        });
+        describe('DCS is unavailable', () => {
+            it('Should return a 500 error if the DCS returns a 404', async () => {
+                const error = {body: {errors: [{status: 404}]}};
+                jest.doMock('../questionnaire/request-service', () =>
+                    jest.fn(() => ({
+                        get: () => error
+                    }))
+                );
+                jest.resetModules();
+                // eslint-disable-next-line global-require
+                const questionnaireService = require('../questionnaire/questionnaire-service')();
+                await expect(
+                    questionnaireService.getSubmissionStatus('questionnaire-id', Date.now())
+                ).rejects.toEqual(new Error('The service is currently unavailable'));
+            });
 
-            expect(response).toThrow('The upstream server took too long to respond');
-        }); */
+            it('Should return a 500 error if the DCS responds without body key', async () => {
+                const noBodyResponse = {otherStuff: true};
+                jest.doMock('../questionnaire/request-service', () =>
+                    jest.fn(() => ({
+                        get: () => noBodyResponse
+                    }))
+                );
+                jest.resetModules();
+                // eslint-disable-next-line global-require
+                const questionnaireService = require('../questionnaire/questionnaire-service')();
+                await expect(
+                    questionnaireService.getSubmissionStatus('questionnaire-id', Date.now())
+                ).rejects.toEqual(new Error('The service is currently unavailable'));
+            });
+        });
     });
-
     describe('getFirstSection', () => {
         it('Should get the first section', async () => {
             jest.doMock('../questionnaire/request-service', () =>
@@ -202,6 +249,22 @@ describe('Questionnaire service', () => {
             const response = await questionnaireService.getFirstSection('questionnaire-id');
 
             expect(response).toEqual(getValidSection);
+        });
+    });
+    describe('getAnswers', () => {
+        it('Should get all answers given a questionnaireID', async () => {
+            const answers = {body: [{'q-question-id': 'answer'}]};
+            jest.doMock('../questionnaire/request-service', () =>
+                jest.fn(() => ({
+                    get: () => answers
+                }))
+            );
+            jest.resetModules();
+            // eslint-disable-next-line global-require
+            const questionnaireService = require('../questionnaire/questionnaire-service')();
+            const response = await questionnaireService.getAnswers('questionnaire-id');
+
+            expect(response).toEqual({body: [{'q-question-id': 'answer'}]});
         });
     });
 });
