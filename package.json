@@ -1,6 +1,6 @@
 {
     "name": "cica-web",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "private": true,
     "scripts": {
         "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --exec npm run buildRun:dev",
