@@ -32,26 +32,6 @@ router.get('/police-forces', (req, res) => {
     res.render('police-forces.njk');
 });
 
-router.get('/transition-not-british-citizen', (req, res) => {
-    res.render('transition-not-british-citizen.njk');
-});
-
-router.get('/transition-not-sa', (req, res) => {
-    res.render('transition-not-sa.njk');
-});
-
-router.get('/transition-someone-else', (req, res) => {
-    res.render('transition-someone-else.njk');
-});
-
-router.get('/transition-under-18', (req, res) => {
-    res.render('transition-under-18.njk');
-});
-
-router.get('/transition-option2', (req, res) => {
-    res.render('transition-option2.njk');
-});
-
 router.get('*', (req, res) => {
     res.render('404.njk');
 });
