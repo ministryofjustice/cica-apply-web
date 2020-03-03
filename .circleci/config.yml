@@ -64,7 +64,7 @@ jobs:
               $(aws ecr get-login --region eu-west-2 --no-include-email)
               docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
               docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-              if [ "${CIRCLE_BRANCH}" ==  "RCcircleCI" ]; then
+              if [ "${CIRCLE_BRANCH}" ==  "cw-deploy" ]; then
                  docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
                  docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
               fi
@@ -141,13 +141,13 @@ workflows:
              - publish_latest
            filters:
              branches:
-               only: RCcircleCI
+               only: cw-deploy
       - deploy_to_dev:
            requires:
              - push_image
            filters:
              branches:
-               only: RCcircleCI       
+               only: cw-deploy       
       - deploy_to_uat:
 #          type: approval
            requires:
@@ -155,7 +155,7 @@ workflows:
              - deploy_to_dev
            filters:
              branches:
-               only: RCcircleCI
+               only: cw-deploy
       - deploy_to_prod_approval:
            type: approval
            requires:
@@ -163,11 +163,10 @@ workflows:
              - deploy_to_uat
            filters:
              branches:
-               only: RCcircleCI
+               only: cw-deploy
       - deploy_to_prod:
            requires:
              - deploy_to_prod_approval
            filters:
              branches:
-               only: RCcircleCI
-
+               only: cw-deploy
