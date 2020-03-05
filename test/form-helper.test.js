@@ -50,39 +50,18 @@ describe('form-helper functions', () => {
     describe('Remove unused hidden answers from an answer object', () => {
         it('Should remove answers to conditionally revealing questions, given they should be hidden', () => {
             const body1 = {
-                'q-applicant-who-did-you-apply-to': 'Another type of compo',
-                'q-how-much-was-award': '5000',
-                'q-applicant-has-a-decision-been-made': 'false',
-                'q-when-will-you-find-out': "Don't know"
-            };
-            const body2 = {
-                'q-applicant-who-did-you-apply-to': 'Another type of compo',
-                'q-how-much-was-award': '5000',
-                'q-applicant-has-a-decision-been-made': 'true',
-                'q-when-will-you-find-out': "Don't know"
+                'q-applicant-have-you-applied-to-us-before': false,
+                'q-enter-your-previous-reference-number': '11/111111'
             };
             const expected1 = {
-                'q-applicant-who-did-you-apply-to': 'Another type of compo',
-                'q-applicant-has-a-decision-been-made': 'false',
-                'q-when-will-you-find-out': "Don't know"
+                'q-applicant-have-you-applied-to-us-before': false
             };
-            const expected2 = {
-                'q-applicant-who-did-you-apply-to': 'Another type of compo',
-                'q-how-much-was-award': '5000',
-                'q-applicant-has-a-decision-been-made': 'true'
-            };
-
             const actual1 = formHelper.removeUnwantedHiddenAnswers(
                 body1,
-                'p-applicant-other-compensation-details'
-            );
-            const actual2 = formHelper.removeUnwantedHiddenAnswers(
-                body2,
-                'p-applicant-other-compensation-details'
+                'p-applicant-have-you-applied-to-us-before'
             );
 
             expect(actual1).toEqual(expected1);
-            expect(actual2).toEqual(expected2);
         });
     });
 
@@ -363,16 +342,16 @@ describe('form-helper functions', () => {
 
     describe('Get button text', () => {
         it('Should return the button text if specificed in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
-            const expected = 'Agree and Submit';
+            const sectionName = 'p-applicant-declaration';
+            const expected = 'Agree and submit';
 
             const actual = formHelper.getButtonText(sectionName);
 
             expect(actual).toMatch(expected);
         });
 
-        it('Should return the default button text if nothing specific is specificed in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
+        it('Should return the default button text if nothing specific is specified in the UISchema', () => {
+            const sectionName = 'p--check-your-answers';
             const expected = 'Continue';
 
             const actual = formHelper.getButtonText(sectionName);
@@ -383,7 +362,7 @@ describe('form-helper functions', () => {
 
     describe('Check is summary', () => {
         it('Should return true if a section has `isSummary: true` in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
+            const sectionName = 'p-applicant-declaration';
 
             const actual = formHelper.checkIsSummary(sectionName);
 
@@ -391,7 +370,7 @@ describe('form-helper functions', () => {
         });
 
         it('Should return false if a section has no `isSummary` value in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
+            const sectionName = 'p--check-your-answers';
 
             const actual = formHelper.checkIsSummary(sectionName);
 
