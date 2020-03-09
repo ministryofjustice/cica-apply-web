@@ -94,7 +94,7 @@ describe('Data capture service endpoints', () => {
                     it('Should render a page with the consent heading', async () => {
                         const response = await request(app).get('/');
                         const actual = response.res.text.replace(/\s+/g, '');
-                        const pageHeading = `<h1 class="govuk-heading-xl">Help us improve this service</h1>`.replace(
+                        const pageHeading = `<h1 class="govuk-heading-xl">A new way to claim</h1>`.replace(
                             /\s+/g,
                             ''
                         );

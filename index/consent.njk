@@ -3,22 +3,20 @@
 {% from "components/table/macro.njk" import govukTable %}
 
 {% block innerContent %}
+    <h1 class="govuk-heading-xl">A new way to claim</h1>
 
-    <h1 class="govuk-heading-xl">Help us improve this service</h1>
-    <p class="govuk-body-l">We'd like to ask you some questions after you've made your claim.</p>
-    <p class="govuk-body">Your feedback will help us make it easier to claim in future.</p>
+    <p class="govuk-body-l">We’ve made some changes to this form.</p>
+    <p class="govuk-body">We’d like to contact you to check that it was easy to understand.</p>
 
-    <h2 class="govuk-heading-l">What we'll do</h2>
+    <h2 class="govuk-heading-l">What we may do</h2>
     <p class="govuk-body">We may:</p>
-
     <ul class="govuk-list govuk-list--bullet">
-        <li>phone or email you after you've made your claim</li>
-        <li>ask you what was easy or hard about it</li>
-        <li>use your feedback to improve the service</li>
+        <li>phone or email you after you’ve made your claim</li>
+        <li>ask you some questions to check that the form was easy to understand</li>
+        <li>ask if you want to give us more feedback</li>
     </ul>
-
     <h2 class="govuk-heading-l">Your consent</h2>
-    <p class="govuk-body">By selecting 'Agree and continue' you give us consent to contact you for feedback</p>
+    <p class="govuk-body">By selecting 'Agree and continue' you give us consent to contact you after you've applied.</p>
 
     {{
         govukButton({
@@ -29,17 +27,13 @@
     }}
 
     <h2 class="govuk-heading-l">If you do not want to consent</h2>
-    <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" class="govuk-link" target="_blank">current online service</a> if you do not want to consent.</p>
+    <p class="govuk-body">You can apply for compensation using our <a href="https://www.cica.gov.uk/OAS/Account/create" target="_blank">other online service</a> if you do not want to consent.</p>
 
     <h2 class="govuk-heading-l">Contact us</h2>
-    <p class="govuk-body">You can contact us if you have any questions</p>
+    <p class="govuk-body">You can contact us if you have any questions.</p>
 
-    <p class="govuk-body">
-        Email:<br>
-        <strong class="govuk-!-font-weight-bold"><a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></strong><br /><br />
-        Telephone:<br>
-        <strong class="govuk-!-font-weight-bold">0300 003 3601</strong> option 8
-    </p>
+    <p class="govuk-body">Email:<br><strong><a href="mailto:info@cica.gov.uk?Subject=Private%20beta">info@cica.gov.uk</a></strong></p>
+    <p class="govuk-body">Telephone: <br><strong>0300 003 3601</strong> option 8</p>
 
     {{ govukTable({
         caption: "Opening times",
@@ -96,6 +90,6 @@
         ]
     }) }}
 
-    <p class="govuk-body"><a href="https://www.gov.uk/call-charges" class="govuk-link" target="_blank">Find out about call charges</a></p>
+    <p class="govuk-body"><a href="https://www.gov.uk/call-charges" target="_blank">Find out about call charges</a></p>
 
 {% endblock %}
