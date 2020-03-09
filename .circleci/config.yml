@@ -9,7 +9,7 @@ executors:
       IMAGE_NAME: cica-repo-dev
     docker:
       # Image tool container
-      - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/tools:circleci 
+      - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/tools:circleci
       # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
 jobs:
   build:
@@ -20,15 +20,15 @@ jobs:
       - run:
           name: Build docker image
           command: |
-              docker build --no-cache -t cica/cica-repo-dev .
+            docker build --no-cache -t cica/cica-repo-dev .
       - run:
           name: Archive Docker Image
           command: |
-              docker save -o image.tar cica/cica-repo-dev:latest
+            docker save -o image.tar cica/cica-repo-dev:latest
       - persist_to_workspace:
-           root: .
-           paths:
-             - ./image.tar
+          root: .
+          paths:
+            - ./image.tar
   publish_latest:
     executor: docker-publisher
     steps:
@@ -38,16 +38,16 @@ jobs:
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
-#g      - run:
-#          name: Install test tools
-#          command: curl -fsSL https://goss.rocks/install | sh
+      #g      - run:
+      #          name: Install test tools
+      #          command: curl -fsSL https://goss.rocks/install | sh
       - run:
           name: Test the container
           command: |
-              docker run -d -p 3001:3001 --restart=always --name cica-repo-dev cica/cica-repo-dev:latest
-              docker ps
-              docker stop cica-repo-dev
-              docker ps
+            docker run -d -p 3001:3001 --restart=always --name cica-repo-dev cica/cica-repo-dev:latest
+            docker ps
+            docker stop cica-repo-dev
+            docker ps
   push_image:
     executor: docker-publisher
     steps:
@@ -60,14 +60,14 @@ jobs:
       - run:
           name: Authenticate and push image to ecr
           command: |
-              echo "run aws"
-              $(aws ecr get-login --region eu-west-2 --no-include-email)
-              docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-              docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-              if [ "${CIRCLE_BRANCH}" ==  "cw-deploy" ]; then
-                 docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-                 docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-              fi
+            echo "run aws"
+            $(aws ecr get-login --region eu-west-2 --no-include-email)
+            docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
+            docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
+            if [ "${CIRCLE_BRANCH}" ==  "cw-deploy" ]; then
+               docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
+               docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
+            fi
   deploy_to_dev:
     executor: docker-publisher
     steps:
@@ -130,43 +130,48 @@ jobs:
                 -f kube_deploy/Production/cert.yml
 workflows:
   version: 2
-  build-test-push-deploydev-deployuat-deploytoprodapproval-deployprod:
+  build-test-push-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
     jobs:
       - build
       - publish_latest:
-           requires:
-             - build
+          requires:
+            - build
       - push_image:
-           requires:
-             - publish_latest
-           filters:
-             branches:
-               only: cw-deploy
+          requires:
+            - publish_latest
+          filters:
+            branches:
+              only: cw-deploy
       - deploy_to_dev:
-           requires:
-             - push_image
-           filters:
-             branches:
-               only: cw-deploy       
+          requires:
+            - push_image
+          filters:
+            branches:
+              only: cw-deploy
+      - deploy_to_uat_approval:
+          type: approval
+          requires:
+            - push_image
+            - deploy_to_dev
       - deploy_to_uat:
-#          type: approval
-           requires:
-             - push_image
-             - deploy_to_dev
-           filters:
-             branches:
-               only: cw-deploy
+          #          type: approval
+          requires:
+            - push_image
+            - deploy_to_uat_approval
+          filters:
+            branches:
+              only: cw-deploy
       - deploy_to_prod_approval:
-           type: approval
-           requires:
-             - push_image
-             - deploy_to_uat
-           filters:
-             branches:
-               only: cw-deploy
+          type: approval
+          requires:
+            - push_image
+            - deploy_to_uat
+          filters:
+            branches:
+              only: cw-deploy
       - deploy_to_prod:
-           requires:
-             - deploy_to_prod_approval
-           filters:
-             branches:
-               only: cw-deploy
+          requires:
+            - deploy_to_prod_approval
+          filters:
+            branches:
+              only: cw-deploy
