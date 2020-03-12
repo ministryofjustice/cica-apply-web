@@ -271,7 +271,7 @@ module.exports = {
                             'i-have-no-contact-with-the-offender':
                                 'I have no contact with the offender',
                             email: 'Email to ',
-                            sms: 'Text message to',
+                            text: 'Text message to',
                             10000033: 'Avon And Somerset Constabulary',
                             10000035: 'Bedfordshire Police',
                             10000001: 'British Transport Police',
@@ -566,7 +566,7 @@ module.exports = {
                                 componentIds: ['q-applicant-enter-your-email-address']
                             },
                             {
-                                itemValue: 'sms',
+                                itemValue: 'text',
                                 componentIds: ['q-applicant-enter-your-telephone-number']
                             }
                         ]
