@@ -19,6 +19,7 @@ function createCicaGa(window) {
     };
 
     function send(options) {
+        // eslint-disable-next-line prefer-object-spread
         const gtagOptions = Object.assign({}, defaultOptions, options);
         window.gtag(gtagOptions.type, gtagOptions.action, {
             event_category: gtagOptions.category,
