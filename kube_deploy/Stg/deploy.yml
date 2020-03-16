@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp-stg
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: webapp-stg
+    spec:
+      containers:
+        - name: webapp
+          image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-staging:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: CW_DCS_URL
+              value: http://dcs-service-staging
+            - name: CW_DCS_JWT
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_dcs_jwt
+            - name: CW_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_cookie_secret
+            - name: CW_GA_TRACKING_ID
+              value: UA-136710388-4
+            - name: CW_URL
+              value: https://staging.claim-criminal-injuries-compensation.service.justice.gov.uk
