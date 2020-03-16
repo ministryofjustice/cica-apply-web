@@ -88,7 +88,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Dev/deploy.yml data-capture-service=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Dev/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Dev/service.yml \
@@ -108,7 +108,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Stg/deploy.yml data-capture-service=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Stg/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Stg/service.yml \
@@ -128,7 +128,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Uat/deploy.yml data-capture-service=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Uat/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Uat/service.yml \
@@ -148,7 +148,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Production/deploy.yml data-capture-service=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Production/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Production/service.yml \
@@ -168,7 +168,7 @@ workflows:
           filters:
             branches:
               only:
-                - dcs-deploy
+                - cw-deploy
                 - stagingsetup
       - deploy_to_staging:
           requires:
@@ -181,7 +181,7 @@ workflows:
             - push_image
           filters:
             branches:
-              only: dcs-deploy
+              only: cw-deploy
       - deploy_to_uat_approval:
           type: approval
           requires:
@@ -194,7 +194,7 @@ workflows:
             - deploy_to_uat_approval
           filters:
             branches:
-              only: dcs-deploy
+              only: cw-deploy
       - deploy_to_prod_approval:
           type: approval
           requires:
@@ -202,10 +202,10 @@ workflows:
             - deploy_to_uat
           filters:
             branches:
-              only: dcs-deploy
+              only: cw-deploy
       - deploy_to_prod:
           requires:
             - deploy_to_prod_approval
           filters:
             branches:
-              only: dcs-deploy
+              only: cw-deploy
