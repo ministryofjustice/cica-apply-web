@@ -110,9 +110,6 @@ module.exports = {
                                         'Have you been known by any other names?',
                                     'p-applicant-what-other-names-have-you-used': 'Other names',
                                     'p-applicant-enter-your-date-of-birth': 'Date of birth',
-                                    'p-applicant-enter-your-email-address': 'Email address',
-                                    'p-applicant-enter-your-address': 'Address',
-                                    'p-applicant-enter-your-telephone-number': 'Telephone Number',
                                     'p-applicant-confirmation-method': 'Confirmation method',
                                     'p-applicant-british-citizen-or-eu-national':
                                         'Are you a British citizen or EU National?'
@@ -511,44 +508,9 @@ module.exports = {
             }
         }
     },
-    'p-applicant-confirmation-method': {
+    'p-applicant-declaration': {
         options: {
-            transformOrder: [
-                'q-applicant-enter-your-email-address',
-                'q-applicant-enter-your-telephone-number',
-                'q-applicant-confirmation-method'
-            ],
-            outputOrder: ['q-applicant-confirmation-method'],
-            properties: {
-                'q-applicant-confirmation-method': {
-                    options: {
-                        conditionalComponentMap: [
-                            {
-                                itemValue: 'email',
-                                componentIds: ['q-applicant-enter-your-email-address']
-                            },
-                            {
-                                itemValue: 'text',
-                                componentIds: ['q-applicant-enter-your-telephone-number']
-                            }
-                        ]
-                    }
-                },
-                'q-applicant-enter-your-email-address': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-20'
-                        }
-                    }
-                },
-                'q-applicant-enter-your-telephone-number': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-20'
-                        }
-                    }
-                }
-            }
+            buttonText: 'Agree and Submit'
         }
     }
 };
