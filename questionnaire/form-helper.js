@@ -90,8 +90,16 @@ function removeUnwantedHiddenAnswers(body, sectionId) {
             uiSchema[sectionId].options.properties[
                 question
             ].options.conditionalComponentMap.forEach(mapping => {
-                const truthyAnswer = answers[question] === 'true' || answers[question] === true;
-                if (truthyAnswer !== mapping.itemValue) {
+                // const truthyAnswer = answers[question] === 'true' || answers[question] === true;
+                let givenAnswer;
+                if (answers[question] === 'true' || answers[question] === true) {
+                    givenAnswer = true;
+                } else if (answers[question] === 'false' || answers[question] === false) {
+                    givenAnswer = false;
+                } else {
+                    givenAnswer = answers[question];
+                }
+                if (givenAnswer !== mapping.itemValue) {
                     // If answer is not relevant to the question
                     mapping.componentIds.forEach(id => {
                         delete answers[id]; // Delete it
