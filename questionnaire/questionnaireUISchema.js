@@ -418,6 +418,14 @@ module.exports = {
             outputOrder: ['q-applicant-scottish-town-or-city', 'q-applicant-scottish-location']
         }
     },
+    'p-offender-describe-contact-with-offender': {
+        options: {
+            outputOrder: [
+                'q-offender-describe-contact-with-offender',
+                'q-offender-i-have-no-contact-with-offender'
+            ]
+        }
+    },
     'p--confirmation': {
         options: {
             showBackButton: false
@@ -510,7 +518,8 @@ module.exports = {
     },
     'p-applicant-declaration': {
         options: {
-            buttonText: 'Agree and Submit'
+            buttonText: 'Agree and Submit',
+            isSummary: true
         }
     }
 };
