@@ -518,7 +518,7 @@ module.exports = {
     },
     'p-applicant-declaration': {
         options: {
-            buttonText: 'Agree and Submit',
+            buttonText: 'Agree and submit',
             isSummary: true
         }
     }

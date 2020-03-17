@@ -160,25 +160,6 @@ describe('Data capture service endpoints', () => {
                 });
             });
         });
-        describe('/transition', () => {
-            describe('GET', () => {
-                describe('200', () => {
-                    it('Should respond with a 200 status', async () => {
-                        const response = await request(app).get('/transition');
-                        expect(response.statusCode).toBe(200);
-                    });
-                    it('Should render a page with the transition page heading', async () => {
-                        const response = await request(app).get('/transition');
-                        const actual = response.res.text.replace(/\s+/g, '');
-                        const pageHeading = `<h1 class="govuk-heading-xl">We are still working on this part of the service</h1>`.replace(
-                            /\s+/g,
-                            ''
-                        );
-                        expect(actual).toContain(pageHeading);
-                    });
-                });
-            });
-        });
     });
 
     describe('Cica-web /apply routes', () => {
