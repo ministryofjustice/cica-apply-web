@@ -13,7 +13,7 @@ executors:
       # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
 jobs:
   build-and-test:
-   executor:
+    executor:
     name: node/default
     steps:
       - checkout
