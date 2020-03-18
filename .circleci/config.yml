@@ -12,17 +12,25 @@ executors:
       - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/tools:circleci
       # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
 jobs:
-  build-and-test:
-    executor:
-    steps:
+  build-and-test: 
+    executor: ~
+    steps: 
       - checkout
-      - run: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
+      - 
+        run: 
+          command: "sudo npm install -g npm@latest"
+          name: "Update npm"
+      - 
+        restore_cache: 
+          key: "dependency-cache-{{ checksum \"package-lock.json\" }}"
+      - 
+        run: 
+          command: "npm install"
+          name: "Install npm wee"
+      - 
+        save_cache: 
+          key: "dependency-cache-{{ checksum \"package-lock.json\" }}"
+          paths: 
             - node_modules
   build:
     executor: docker-publisher
