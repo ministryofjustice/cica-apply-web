@@ -14,7 +14,6 @@ executors:
 jobs:
   build-and-test:
     executor:
-    name: node/default
     steps:
       - checkout
       - run:
