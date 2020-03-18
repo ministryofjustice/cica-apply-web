@@ -102,79 +102,60 @@ describe('Data capture service endpoints', () => {
                     });
                 });
             });
-            describe('/start-page', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/start-page');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/start-page');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/start-page', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/start-page');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the start page heading', async () => {
+                        const response = await request(app).get('/start-page');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
-            describe('/cookies', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/cookies');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/cookies');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Cookies</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/cookies', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/cookies');
+                        expect(response.statusCode).toBe(200);
+                    });
+                    it('Should render a page with the cookies page heading', async () => {
+                        const response = await request(app).get('/cookies');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Cookies</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
-            describe('/contact-us', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/contact-us');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/contact-us');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Contact us</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+        });
+        describe('/contact-us', () => {
+            describe('GET', () => {
+                describe('200', () => {
+                    it('Should respond with a 200 status', async () => {
+                        const response = await request(app).get('/contact-us');
+                        expect(response.statusCode).toBe(200);
                     });
-                });
-            });
-            describe('/transition', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/transition');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/transition');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">We are still working on this part of the service</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
+                    it('Should render a page with the contact us heading', async () => {
+                        const response = await request(app).get('/contact-us');
+                        const actual = response.res.text.replace(/\s+/g, '');
+                        const pageHeading = `<h1 class="govuk-heading-xl">Contact us</h1>`.replace(
+                            /\s+/g,
+                            ''
+                        );
+                        expect(actual).toContain(pageHeading);
                     });
                 });
             });

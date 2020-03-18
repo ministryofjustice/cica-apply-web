@@ -31,84 +31,6 @@ module.exports = {
             }
         }
     },
-    'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
-        // transformer: 'form',
-        options: {
-            transformOrder: [
-                'q-applicant-applied-for-other-compensation-briefly-explain-why-not',
-                'q-applicant-have-you-applied-for-or-received-any-other-compensation'
-            ],
-            outputOrder: ['q-applicant-have-you-applied-for-or-received-any-other-compensation'],
-            properties: {
-                'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
-                    // transformer: 'govukRadios',
-                    options: {
-                        conditionalComponentMap: [
-                            {
-                                itemValue: false,
-                                componentIds: [
-                                    'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
-                                ]
-                            }
-                        ]
-                    }
-                },
-                'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-20'
-                        }
-                    }
-                }
-            }
-        }
-    },
-    'p-applicant-other-compensation-details': {
-        // transformer: 'form',
-        options: {
-            transformOrder: [
-                'q-applicant-who-did-you-apply-to',
-                'q-how-much-was-award',
-                'q-when-will-you-find-out',
-                'q-applicant-has-a-decision-been-made'
-            ],
-            outputOrder: [
-                'q-applicant-who-did-you-apply-to',
-                'q-applicant-has-a-decision-been-made'
-            ],
-            properties: {
-                'q-applicant-has-a-decision-been-made': {
-                    // transformer: 'govukRadios',
-                    options: {
-                        conditionalComponentMap: [
-                            {
-                                itemValue: false,
-                                componentIds: ['q-when-will-you-find-out']
-                            },
-                            {
-                                itemValue: true,
-                                componentIds: ['q-how-much-was-award']
-                            }
-                        ]
-                    }
-                },
-                'q-how-much-was-award': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-10'
-                        }
-                    }
-                },
-                'q-when-will-you-find-out': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-20'
-                        }
-                    }
-                }
-            }
-        }
-    },
     'p-applicant-when-did-the-crime-start': {
         options: {
             properties: {
@@ -160,35 +82,37 @@ module.exports = {
     },
     'p--check-your-answers': {
         options: {
-            isSummary: true,
-            buttonText: 'Agree and Submit',
             properties: {
                 'p-check-your-answers': {
                     options: {
                         summaryStructure: [
                             {
+                                title: 'About the application',
+                                questions: {
+                                    'p-applicant-who-are-you-applying-for':
+                                        'Who are you applying for?',
+                                    'p-applicant-are-you-18-or-over': 'Are you 18 or over?',
+                                    'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse':
+                                        'Were you a victim of sexual assault or abuse?',
+                                    'p-applicant-select-the-option-that-applies-to-you':
+                                        "Option you've selected",
+                                    'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police':
+                                        'Reasons for delay in reporting crime',
+                                    'p-applicant-select-reasons-for-the-delay-in-making-your-application':
+                                        'Reasons for the delay in making your application'
+                                }
+                            },
+                            {
                                 title: 'Your details',
                                 questions: {
                                     'p-applicant-enter-your-name': 'Name',
-
                                     'p-applicant-have-you-been-known-by-any-other-names':
                                         'Have you been known by any other names?',
                                     'p-applicant-what-other-names-have-you-used': 'Other names',
                                     'p-applicant-enter-your-date-of-birth': 'Date of birth',
-                                    'p-applicant-enter-your-email-address': 'Email address',
-                                    'p-applicant-enter-your-address': 'Address',
-                                    'p-applicant-enter-your-telephone-number': 'Telephone Number',
                                     'p-applicant-confirmation-method': 'Confirmation method',
                                     'p-applicant-british-citizen-or-eu-national':
-                                        'Are you a British citizen or EU National?',
-                                    'p-applicant-are-you-18-or-over': 'Are you 18 or over?',
-
-                                    'p-applicant-who-are-you-applying-for':
-                                        'Who are you applying for?',
-                                    'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse':
-                                        'Were you a victim of sexual assault or abuse?',
-                                    'p-applicant-select-the-option-that-applies-to-you':
-                                        "Option you've selected"
+                                        'Are you a British citizen or EU National?'
                                 }
                             },
                             {
@@ -202,8 +126,6 @@ module.exports = {
                                         'When did the crime start?',
                                     'p-applicant-when-did-the-crime-stop':
                                         'When did the crime stop?',
-                                    'p-applicant-select-reasons-for-the-delay-in-making-your-application':
-                                        'Reasons for the delay in making your application',
                                     'p-applicant-where-did-the-crime-happen':
                                         'Where did the crime happen?',
                                     'p-applicant-where-in-england-did-it-happen':
@@ -215,7 +137,6 @@ module.exports = {
                                     'p-offender-do-you-know-the-name-of-the-offender':
                                         'Do you know the name of the offender?',
                                     'p-offender-enter-offenders-name': "Offender's name",
-
                                     'p-offender-describe-contact-with-offender':
                                         'Contact with offender'
                                 }
@@ -229,9 +150,7 @@ module.exports = {
                                         'When was the crime reported?',
                                     'p--whats-the-crime-reference-number': 'Crime reference number',
                                     'p--which-police-force-is-investigating-the-crime':
-                                        'Which police force is investigating?',
-                                    'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police':
-                                        'Reasons for delay in reporting crime'
+                                        'Which police force is investigating?'
                                 }
                             },
                             {
@@ -240,9 +159,22 @@ module.exports = {
                                     'p-applicant-have-you-applied-to-us-before':
                                         'Have you applied before?',
                                     'p-applicant-have-you-applied-for-or-received-any-other-compensation':
-                                        'Have you received other compensation?',
+                                        'Have you applied for or received any other form of compensation?',
+                                    'p-applicant-who-did-you-apply-to': 'Who did you apply to?',
+                                    'p-applicant-has-a-decision-been-made':
+                                        'Have they made a decision?',
+                                    'p-applicant-how-much-was-award': 'How much was the award?',
+                                    'p-applicant-when-will-you-find-out': 'When will you find out?',
                                     'p-applicant-other-compensation-details':
                                         'Details of other compensation received'
+                                }
+                            },
+                            {
+                                title: 'Contact details',
+                                questions: {
+                                    'p-applicant-enter-your-address': 'Address',
+                                    'p-applicant-enter-your-email-address': 'Email address',
+                                    'p-applicant-enter-your-telephone-number': 'Telephone Number'
                                 }
                             }
                         ],
@@ -587,6 +519,12 @@ module.exports = {
                     }
                 }
             }
+        }
+    },
+    'p-applicant-declaration': {
+        options: {
+            buttonText: 'Agree and submit',
+            isSummary: true
         }
     }
 };

@@ -20,10 +20,6 @@ router.get('/contact-us', (req, res) => {
     res.render('contact-us.njk');
 });
 
-router.get('/transition', (req, res) => {
-    res.render('transition.njk');
-});
-
 router.get('/new-claim', (req, res) => {
     res.render('new-claim.njk');
 });
