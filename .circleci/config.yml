@@ -176,7 +176,7 @@ workflows:
   build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
     jobs:
       - build
-      - build-and-test
+      - build-and-test:
           requires:
             - build
       - publish_latest:
