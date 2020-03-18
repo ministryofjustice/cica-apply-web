@@ -173,8 +173,8 @@ jobs:
                 -f kube_deploy/Production/cert.yml
 workflows:
   version: 2
-   build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
-     jobs:
+  build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
+    jobs:
       - build
       - build-and-test
           requires:
