@@ -159,7 +159,12 @@ module.exports = {
                                     'p-applicant-have-you-applied-to-us-before':
                                         'Have you applied before?',
                                     'p-applicant-have-you-applied-for-or-received-any-other-compensation':
-                                        'Have you received other compensation?',
+                                        'Have you applied for or received any other form of compensation?',
+                                    'p-applicant-who-did-you-apply-to': 'Who did you apply to?',
+                                    'p-applicant-has-a-decision-been-made':
+                                        'Have they made a decision?',
+                                    'p-applicant-how-much-was-award': 'How much was the award?',
+                                    'p-applicant-when-will-you-find-out': 'When will you find out?',
                                     'p-applicant-other-compensation-details':
                                         'Details of other compensation received'
                                 }
