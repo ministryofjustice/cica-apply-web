@@ -16,11 +16,11 @@ jobs:
     executor:
     name: node/default
     steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-            - run: npm test
+       - checkout
+     � - node/with-cache:
+           � steps:
+             �  - run: npm install
+              � - run: npm test
   build:
     executor: docker-publisher
     steps:
