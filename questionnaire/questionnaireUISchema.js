@@ -82,7 +82,6 @@ module.exports = {
     },
     'p--check-your-answers': {
         options: {
-            pageContext: 'summary',
             properties: {
                 'p-check-your-answers': {
                     options: {
@@ -138,8 +137,6 @@ module.exports = {
                                     'p-offender-do-you-know-the-name-of-the-offender':
                                         'Do you know the name of the offender?',
                                     'p-offender-enter-offenders-name': "Offender's name",
-                                    'p-offender-do-you-have-contact-with-offender':
-                                        'Do you have contact with the offender?',
                                     'p-offender-describe-contact-with-offender':
                                         'Contact with offender'
                                 }
@@ -197,6 +194,14 @@ module.exports = {
                                         'Details of other compensation received',
                                     'p-applicant-applied-for-other-compensation-briefly-explain-why-not':
                                         "Reason you didn't apply for compensation"
+                                }
+                            },
+                            {
+                                title: 'Contact details',
+                                questions: {
+                                    'p-applicant-enter-your-address': 'Address',
+                                    'p-applicant-enter-your-email-address': 'Email address',
+                                    'p-applicant-enter-your-telephone-number': 'Telephone Number'
                                 }
                             },
                             {
@@ -558,7 +563,7 @@ module.exports = {
     'p-applicant-declaration': {
         options: {
             buttonText: 'Agree and submit',
-            pageContext: 'submission'
+            isSummary: true
         }
     },
     'p-applicant-select-treatments': {
