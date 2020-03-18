@@ -12,6 +12,15 @@ executors:
       - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/tools:circleci
       # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
 jobs:
+  build-and-test:
+    executor:
+    name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm test
   build:
     executor: docker-publisher
     steps:
@@ -156,12 +165,15 @@ jobs:
                 -f kube_deploy/Production/cert.yml
 workflows:
   version: 2
-  ? build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod
-  : jobs:
+   build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
+     jobs:
       - build
-      - publish_latest:
+      - build-and-test
           requires:
             - build
+      - publish_latest:
+          requires:
+            - build-and-test
       - push_image:
           requires:
             - publish_latest
