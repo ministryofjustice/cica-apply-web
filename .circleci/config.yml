@@ -17,13 +17,13 @@ jobs:
     steps: 
       - checkout
       - run: 
-          command: "sudo npm install -g npm@latest"
+          command: "npm install"
           name: "Update npm"
       - restore_cache: 
           key: "dependency-cache-{{ checksum \"package-lock.json\" }}"
       - run: 
-          command: "npm install"
-          name: "Install npm wee"
+          command: "npm test"
+          name: "Run tests"
       - save_cache: 
           key: "dependency-cache-{{ checksum \"package-lock.json\" }}"
           paths: 
