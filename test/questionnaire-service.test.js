@@ -22,7 +22,7 @@ describe('Questionnaire service', () => {
             const questionnaireService = require('../questionnaire/questionnaire-service')();
             const response = await questionnaireService.createQuestionnaire();
 
-            expect(response).toEqual(createQuestionnaire);
+            expect(response).toEqual({});
         });
     });
     describe('getSection', () => {
