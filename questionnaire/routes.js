@@ -50,10 +50,10 @@ router
                 response.body.data[0].attributes &&
                 response.body.data[0].attributes.sectionId
             ) {
-                const isSummary = formHelper.checkIsSummary(
+                const isSummaryPage = formHelper.checkIsSummaryContext(
                     response.body.data[0].attributes.sectionId
                 );
-                answers = isSummary
+                answers = isSummaryPage
                     ? await qService.getAnswers(req.cicaSession.questionnaireId)
                     : answers;
             }
