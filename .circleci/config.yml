@@ -16,16 +16,8 @@ jobs:
     docker:
       - image: circleci/node:10.13.0   
     steps:
-      - checkout   
-      - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "package.json" }}
-        - v1-dependencies-    
+      - checkout      
       - run: npm install    
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}  
       - run: npm test
   build:
     executor: docker-publisher
