@@ -82,6 +82,7 @@ module.exports = {
     },
     'p--check-your-answers': {
         options: {
+            pageContext: 'summary',
             properties: {
                 'p-check-your-answers': {
                     options: {
@@ -524,7 +525,7 @@ module.exports = {
     'p-applicant-declaration': {
         options: {
             buttonText: 'Agree and submit',
-            isSummary: true
+            pageContext: 'submission'
         }
     }
 };
