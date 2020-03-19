@@ -361,18 +361,36 @@ describe('form-helper functions', () => {
     });
 
     describe('Check is summary', () => {
-        it('Should return true if a section has `isSummary: true` in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
+        it('Should return true if a section has `pageContext: summary` in the UISchema', () => {
+            const sectionName = 'p--check-your-answers';
 
             const actual = formHelper.checkIsSummary(sectionName);
 
             expect(actual).toEqual(true);
         });
 
-        it('Should return false if a section has no `isSummary` value in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
+        it('Should return false if a section has no `pageContext` value in the UISchema', () => {
+            const sectionName = 'p--confirmation';
 
             const actual = formHelper.checkIsSummary(sectionName);
+
+            expect(actual).toEqual(false);
+        });
+    });
+
+    describe('Check is submission', () => {
+        it('Should return true if a section has `pageContext: submission` in the UISchema', () => {
+            const sectionName = 'p-applicant-declaration';
+
+            const actual = formHelper.checkIsSubmission(sectionName);
+
+            expect(actual).toEqual(true);
+        });
+
+        it('Should return false if a section has no `pageContext` value in the UISchema', () => {
+            const sectionName = 'p--confirmation';
+
+            const actual = formHelper.checkIsSubmission(sectionName);
 
             expect(actual).toEqual(false);
         });

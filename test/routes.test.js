@@ -277,7 +277,8 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             addPrefix: () => prefixedSection,
                             getSectionHtml: () => getSectionHtmlValid,
-                            removeSectionIdPrefix: () => initial
+                            removeSectionIdPrefix: () => initial,
+                            checkIsSummary: () => false
                         }));
                         // eslint-disable-next-line global-require
                         app = require('../app');

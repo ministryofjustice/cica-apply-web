@@ -47,9 +47,15 @@ router
             const response = await qService.getSection(req.cicaSession.questionnaireId, sectionId);
             if (
                 response.body.data &&
-                response.body.data[0].attributes.sectionId === response.body.meta.summary
+                response.body.data[0].attributes &&
+                response.body.data[0].attributes.sectionId
             ) {
-                answers = await qService.getAnswers(req.cicaSession.questionnaireId);
+                const isSummary = formHelper.checkIsSummary(
+                    response.body.data[0].attributes.sectionId
+                );
+                answers = isSummary
+                    ? await qService.getAnswers(req.cicaSession.questionnaireId)
+                    : answers;
             }
             const html = formHelper.getSectionHtml(
                 response.body,
