@@ -29,9 +29,6 @@ jobs:
           root: .
           paths:
             - ./image.tar
-      - run:
-          command: "npm install"
-          name: "Update npm"
       - restore_cache:
           key: 'dependency-cache-{{ checksum "package-lock.json" }}'
       - run:
