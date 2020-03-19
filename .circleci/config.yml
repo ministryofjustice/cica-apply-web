@@ -13,31 +13,20 @@ executors:
       # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
 jobs:
   build-and-test:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build docker image
-          command: |
-            docker build --no-cache -t cica/cica-repo-dev .
-      - run:
-          name: Archive Docker Image
-          command: |
-            docker save -o image.tar cica/cica-repo-dev:latest
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./image.tar
-      - restore_cache:
-          key: 'dependency-cache-{{ checksum "package-lock.json" }}'
-      - run:
-          command: "npm test"
-          name: "Run tests"
+        docker:
+          - image: circleci/node:10.13.0   
+        steps:
+          - checkout   
+          - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-    
+          - run: npm install    
       - save_cache:
-          key: 'dependency-cache-{{ checksum "package-lock.json" }}'
           paths:
             - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}  
+      - run: npm test
   build:
     executor: docker-publisher
     steps:
@@ -184,13 +173,13 @@ workflows:
   version: 2
   ? build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod
   : jobs:
-      - build
-      - build-and-test:
-          requires:
-            - build
-      - publish_latest:
+      - build-and-test
+      - build:
           requires:
             - build-and-test
+      - publish_latest:
+          requires:
+            - build
       - push_image:
           requires:
             - publish_latest
