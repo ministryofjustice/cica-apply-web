@@ -28,6 +28,10 @@ router.get('/police-forces', (req, res) => {
     res.render('police-forces.njk');
 });
 
+router.get('/accessibility-statement', (req, res) => {
+    res.render('accessibility-statement.njk');
+});
+
 router.get('*', (req, res) => {
     res.render('404.njk');
 });
