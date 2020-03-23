@@ -138,6 +138,8 @@ module.exports = {
                                     'p-offender-do-you-know-the-name-of-the-offender':
                                         'Do you know the name of the offender?',
                                     'p-offender-enter-offenders-name': "Offender's name",
+                                    'p-offender-do-you-have-contact-with-offender':
+                                        'Do you have contact with the offender?',
                                     'p-offender-describe-contact-with-offender':
                                         'Contact with offender'
                                 }
@@ -167,7 +169,9 @@ module.exports = {
                                     'p-applicant-how-much-was-award': 'How much was the award?',
                                     'p-applicant-when-will-you-find-out': 'When will you find out?',
                                     'p-applicant-other-compensation-details':
-                                        'Details of other compensation received'
+                                        'Details of other compensation received',
+                                    'p-applicant-applied-for-other-compensation-briefly-explain-why-not':
+                                        "Reason you didn't apply for compensation"
                                 }
                             },
                             {
@@ -422,14 +426,6 @@ module.exports = {
     'p-applicant-where-in-scotland-did-it-happen': {
         options: {
             outputOrder: ['q-applicant-scottish-town-or-city', 'q-applicant-scottish-location']
-        }
-    },
-    'p-offender-describe-contact-with-offender': {
-        options: {
-            outputOrder: [
-                'q-offender-describe-contact-with-offender',
-                'q-offender-i-have-no-contact-with-offender'
-            ]
         }
     },
     'p--confirmation': {
