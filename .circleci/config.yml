@@ -164,58 +164,58 @@ jobs:
 workflows:
   version: 2
    build-test-push-deploystg-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
-    jobs:
-      - build-and-test
-      - build:
-          requires:
-            - build-and-test
-      - publish_latest:
-          requires:
-            - build
-      - push_image:
-          requires:
-            - publish_latest
-          filters:
-            branches:
-              only:
-                - cw-deploy
-                - stg-deploy
-      - deploy_to_staging:
-          requires:
-            - push_image
-          filters:
-            branches:
-              only: stg-deploy
-      - deploy_to_dev:
-          requires:
-            - push_image
-          filters:
-            branches:
-              only: cw-deploy
-      - deploy_to_uat_approval:
-          type: approval
-          requires:
-            - push_image
-            - deploy_to_dev
-      - deploy_to_uat:
-          #          type: approval
-          requires:
-            - push_image
-            - deploy_to_uat_approval
-          filters:
-            branches:
-              only: cw-deploy
-      - deploy_to_prod_approval:
-          type: approval
-          requires:
-            - push_image
-            - deploy_to_uat
-          filters:
-            branches:
-              only: cw-deploy
-      - deploy_to_prod:
-          requires:
-            - deploy_to_prod_approval
-          filters:
-            branches:
-              only: cw-deploy
+     jobs:
+       - build-and-test
+       - build:
+           requires:
+             - build-and-test
+       - publish_latest:
+           requires:
+             - build
+       - push_image:
+           requires:
+             - publish_latest
+           filters:
+             branches:
+               only:
+                 - cw-deploy
+                 - stg-deploy
+       - deploy_to_staging:
+           requires:
+             - push_image
+           filters:
+             branches:
+               only: stg-deploy
+       - deploy_to_dev:
+           requires:
+             - push_image
+           filters:
+             branches:
+               only: cw-deploy
+       - deploy_to_uat_approval:
+           type: approval
+           requires:
+             - push_image
+             - deploy_to_dev
+       - deploy_to_uat:
+           #          type: approval
+           requires:
+             - push_image
+             - deploy_to_uat_approval
+           filters:
+             branches:
+               only: cw-deploy
+       - deploy_to_prod_approval:
+           type: approval
+           requires:
+             - push_image
+             - deploy_to_uat
+           filters:
+             branches:
+               only: cw-deploy
+       - deploy_to_prod:
+           requires:
+             - deploy_to_prod_approval
+           filters:
+             branches:
+               only: cw-deploy
