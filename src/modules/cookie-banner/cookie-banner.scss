@@ -1,0 +1,21 @@
+// $govuk-cookie-banner-background: #d5e8f3;
+.js-enabled {
+    .cookie-banner {
+        // display: none;
+    }
+}
+
+.cookie-banner {
+    @include govuk-font($size: 16);
+    padding: 10px 0;
+    background-color: #d5e8f3; // $govuk-cookie-banner-background;
+}
+
+.cookie-banner__message {
+    margin: 0 30px;
+}
+
+.cookie-banner__message-text {
+    display: block;
+    margin: 0 auto;
+}

@@ -14,7 +14,7 @@
         "build": "npm run copy:css && npm run copy:js && webpack --config webpack.config.prod.js --mode production",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
-        "buildRun:dev": "npm run sass && npm run build:dev && node ./bin/www",
+        "buildRun:dev": "npm run sass || true && npm run build:dev && node ./bin/www",
         "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
         "copy:js": "rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
     },
@@ -32,7 +32,7 @@
         "moment": "^2.24.0",
         "morgan": "~1.9.0",
         "nanoid": "^2.1.10",
-        "nunjucks": "^3.1.7",
+        "nunjucks": "^3.2.1",
         "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.4"
     },
     "devDependencies": {
@@ -50,7 +50,7 @@
         "husky": "^4.0.3",
         "jest": "^24.9.0",
         "lint-staged": "^9.5.0",
-        "node-sass": "^4.12.0",
+        "node-sass": "^4.13.1",
         "nodemon": "^1.18.9",
         "prettier": "^1.19.1",
         "q-base-config": "github:CriminalInjuriesCompensationAuthority/q-base-config#v0.7.0",
