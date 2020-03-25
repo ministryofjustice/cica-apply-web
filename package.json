@@ -10,13 +10,13 @@
         "test:dom": "jest --config=jest.config.jsdom.js",
         "test:node": "jest --config=jest.config.js",
         "coverage": "jest --coverage",
-        "build:dev": "npm run copy:css && npm run copy:js && webpack --config webpack.config.js --mode development",
-        "build": "npm run copy:css && npm run copy:js && webpack --config webpack.config.prod.js --mode production",
+        "build:dev": "npm run copy:js && webpack --config webpack.config.js --mode development",
+        "build": "npm run copy:js && webpack --config webpack.config.prod.js --mode production",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "buildRun:dev": "npm run sass || true && npm run build:dev && node ./bin/www",
         "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
-        "copy:js": "rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
+        "copy:js": "cp node_modules/govuk-frontend/govuk/all.js public/dist/js/all.js && rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
     },
     "dependencies": {
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
