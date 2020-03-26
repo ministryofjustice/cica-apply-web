@@ -6,19 +6,19 @@ metadata:
 spec:
   tls:
     - hosts:
-        - staging.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+        - stg.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
     - hosts:
-        - staging.claim-criminal-injuries-compensation.service.justice.gov.uk
-      secretName: staging-claim-criminal-injuries-compensation-cert-secret
+        - stg.claim-criminal-injuries-compensation.service.justice.gov.uk
+      secretName: stg-claim-criminal-injuries-compensation-cert-secret
   rules:
-    - host: staging.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+    - host: stg.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
       http:
         paths:
           - path: /
             backend:
               serviceName: webapp-service
               servicePort: 3000
-    - host: staging.claim-criminal-injuries-compensation.service.justice.gov.uk
+    - host: stg.claim-criminal-injuries-compensation.service.justice.gov.uk
       http:
         paths:
           - path: /
