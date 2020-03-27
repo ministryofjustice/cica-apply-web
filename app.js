@@ -35,7 +35,7 @@ nunjucks
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
-
+    res.set('Application-Version', process.env.npm_package_version);
     next();
 });
 
