@@ -18,9 +18,8 @@ COPY package*.json ./
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-# RUN npm install
 # If you are building your code for production
-RUN npm install
+RUN npm ci
 
 # Bundle app source
 COPY . .
