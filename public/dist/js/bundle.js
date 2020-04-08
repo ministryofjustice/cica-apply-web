@@ -709,6 +709,32 @@ module.exports = function (target, source) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/correct-is-regexp-logic.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/core-js/internals/correct-is-regexp-logic.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var MATCH = wellKnownSymbol('match');
+
+module.exports = function (METHOD_NAME) {
+  var regexp = /./;
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (e) {
+    try {
+      regexp[MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (f) { /* empty */ }
+  } return false;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/correct-prototype-getter.js":
 /*!********************************************************************!*\
   !*** ./node_modules/core-js/internals/correct-prototype-getter.js ***!
@@ -1897,6 +1923,24 @@ var inspectSource = __webpack_require__(/*! ../internals/inspect-source */ "./no
 var WeakMap = global.WeakMap;
 
 module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/not-a-regexp.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/internals/not-a-regexp.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isRegExp = __webpack_require__(/*! ../internals/is-regexp */ "./node_modules/core-js/internals/is-regexp.js");
+
+module.exports = function (it) {
+  if (isRegExp(it)) {
+    throw TypeError("The method doesn't accept regular expressions");
+  } return it;
+};
 
 
 /***/ }),
@@ -3672,6 +3716,32 @@ if (NOT_GENERIC || INCORRECT_NAME) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.string.includes.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/modules/es.string.includes.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var notARegExp = __webpack_require__(/*! ../internals/not-a-regexp */ "./node_modules/core-js/internals/not-a-regexp.js");
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+var correctIsRegExpLogic = __webpack_require__(/*! ../internals/correct-is-regexp-logic */ "./node_modules/core-js/internals/correct-is-regexp-logic.js");
+
+// `String.prototype.includes` method
+// https://tc39.github.io/ecma262/#sec-string.prototype.includes
+$({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
+  includes: function includes(searchString /* , position = 0 */) {
+    return !!~String(requireObjectCoercible(this))
+      .indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.string.iterator.js":
 /*!************************************************************!*\
   !*** ./node_modules/core-js/modules/es.string.iterator.js ***!
@@ -4629,17 +4699,10 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _modules_ga__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../modules/ga */ "./src/modules/ga/index.js");
-/* harmony import */ var _modules_autocomplete_autocomplete__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../modules/autocomplete/autocomplete */ "./src/modules/autocomplete/autocomplete.js");
-/* harmony import */ var _modules_cookie_banner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../modules/cookie-banner */ "./src/modules/cookie-banner/index.js");
-/* harmony import */ var _modules_cookie_preference__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../modules/cookie-preference */ "./src/modules/cookie-preference/index.js");
-
-
-
+/* harmony import */ var _modules_ga__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modules/ga */ "./src/modules/ga/index.js");
+/* harmony import */ var _modules_autocomplete_autocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modules/autocomplete/autocomplete */ "./src/modules/autocomplete/autocomplete.js");
+/* harmony import */ var _modules_cookie_banner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../modules/cookie-banner */ "./src/modules/cookie-banner/index.js");
+/* harmony import */ var _modules_cookie_preference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../modules/cookie-preference */ "./src/modules/cookie-preference/index.js");
 /* global ANALYTICS_TRACKING_ID */
 
 
@@ -4647,41 +4710,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (function () {
-  var cookiePreference = Object(_modules_cookie_preference__WEBPACK_IMPORTED_MODULE_5__["default"])('cicaPreference');
+  var cookiePreference = Object(_modules_cookie_preference__WEBPACK_IMPORTED_MODULE_3__["default"])('cicaPreference', ['essential', 'analytics']);
 
   if (cookiePreference.get('analytics').value === '1') {
-    var cicaGa = Object(_modules_ga__WEBPACK_IMPORTED_MODULE_2__["default"])(window);
+    var cicaGa = Object(_modules_ga__WEBPACK_IMPORTED_MODULE_0__["default"])(window);
     cicaGa.setUpGAEventTracking();
   } else {
     window["ga-disable-".concat("UA-136710388-2")] = true;
   }
 
-  var autocomplete = Object(_modules_autocomplete_autocomplete__WEBPACK_IMPORTED_MODULE_3__["createAutocomplete"])(window);
+  var autocomplete = Object(_modules_autocomplete_autocomplete__WEBPACK_IMPORTED_MODULE_1__["createAutocomplete"])(window);
   autocomplete.init('.govuk-select');
-  var cookieBanner = Object(_modules_cookie_banner__WEBPACK_IMPORTED_MODULE_4__["default"])(window, cookiePreference);
+  var cookieBanner = Object(_modules_cookie_banner__WEBPACK_IMPORTED_MODULE_2__["default"])(window, cookiePreference);
   cookieBanner.show();
-  var formCookiePreference = window.document.querySelector('#cookie-preferences');
-
-  if (formCookiePreference) {
-    var preferencesElements = formCookiePreference.querySelectorAll('[data-cookie-preference]'); // check/select the radio button that corresponds to the current cookie settings.
-
-    preferencesElements.forEach(function (element) {
-      if (element.value === cookiePreference.get(element.getAttribute('data-cookie-preference')).value) {
-        // eslint-disable-next-line no-param-reassign
-        element.checked = true;
-      }
-    });
-    formCookiePreference.addEventListener('submit', function (e) {
-      var preferencesElementsSelected = formCookiePreference.querySelectorAll('[data-cookie-preference]:checked'); // always needs to be set regardless.
-
-      cookiePreference.set('essential', 1);
-      preferencesElementsSelected.forEach(function (element) {
-        cookiePreference.set(element.getAttribute('data-cookie-preference'), element.value);
-      });
-      e.preventDefault();
-      return false;
-    });
-  }
 })();
 
 /***/ }),
@@ -4878,8 +4919,14 @@ function createAutocomplete(window) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.freeze */ "./node_modules/core-js/modules/es.object.freeze.js");
-/* harmony import */ var core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.freeze */ "./node_modules/core-js/modules/es.object.freeze.js");
+/* harmony import */ var core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
+
+
 
 
 function createCookieBanner(window, cookiePreference) {
@@ -4896,21 +4943,41 @@ function createCookieBanner(window, cookiePreference) {
   }
 
   var buttonAcceptAll = window.document.querySelector('#cookie-banner-accept-all');
-  var buttonSetPreferences = window.document.querySelector('#cookie-banner-set-preferences');
   buttonAcceptAll.addEventListener('click', function (e) {
     cookiePreference.acceptAll();
     hide();
     e.preventDefault();
     return false;
   });
-  buttonSetPreferences.addEventListener('click', function (e) {
-    console.log(cookiePreference.get('nothing'));
-    console.log(cookiePreference.get('essential'));
-    console.log(cookiePreference.get('analytics'));
-    console.log(cookiePreference.get('123NO'));
-    e.preventDefault();
-    return false;
-  });
+  var formCookiePreference = window.document.querySelector('#cookie-preferences');
+
+  if (formCookiePreference) {
+    var preferencesElements = formCookiePreference.querySelectorAll('[data-cookie-preference]'); // check/select the radio button that corresponds to the current cookie settings.
+
+    preferencesElements.forEach(function (element) {
+      if (element.value === cookiePreference.get(element.getAttribute('data-cookie-preference')).value) {
+        // eslint-disable-next-line no-param-reassign
+        element.checked = true;
+      }
+    });
+    formCookiePreference.addEventListener('submit', function (e) {
+      var preferencesElementsSelected = formCookiePreference.querySelectorAll('[data-cookie-preference]:checked'); // always needs to be set regardless.
+
+      cookiePreference.set('essential', 1);
+      preferencesElementsSelected.forEach(function (element) {
+        cookiePreference.set(element.getAttribute('data-cookie-preference'), element.value);
+      });
+      hide();
+      window.document.querySelector('#preferences-set-success').classList.remove('moj-banner--invisible'); // eslint-disable-next-line no-param-reassign
+
+      window.document.body.scrollTop = 0; // eslint-disable-next-line no-param-reassign
+
+      window.document.documentElement.scrollTop = 0;
+      e.preventDefault();
+      return false;
+    });
+  }
+
   return Object.freeze({
     show: show,
     hide: hide
@@ -4944,10 +5011,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_freeze__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
 /* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../node_modules/js-cookie/src/js.cookie */ "./node_modules/js-cookie/src/js.cookie.js");
-/* harmony import */ var _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.string.includes */ "./node_modules/core-js/modules/es.string.includes.js");
+/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../node_modules/js-cookie/src/js.cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10__);
 
 
 
@@ -4958,8 +5029,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function createCookiePreference(cookieName) {
-  var cookiePreferences = ['essential', 'analytics'];
+
+
+function createCookiePreference(cookieName, allowedPreferences) {
   var cookieConfig = {
     path: '/',
     expires: 365,
@@ -4986,7 +5058,7 @@ function createCookiePreference(cookieName) {
   }
 
   function getPreference(preferenceName) {
-    var cookieValue = _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8___default.a.get(cookieName);
+    var cookieValue = _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10___default.a.get(cookieName);
     var cookiePreferenceTable = {};
 
     if (cookieValue) {
@@ -5005,26 +5077,22 @@ function createCookiePreference(cookieName) {
   }
 
   function set(preferenceName, preferenceValue) {
-    var currentCookieValue = _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8___default.a.get(cookieName);
+    if (!allowedPreferences.includes(preferenceName)) {
+      throw Error("Unable to set preference \"".concat(preferenceName, "\" as it is not in the preference whitelist"));
+    }
+
+    var currentCookieValue = _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10___default.a.get(cookieName);
 
     if (currentCookieValue) {
       currentCookieValue = window.atob(currentCookieValue);
       var newCookieValue = getDistinctValues( // add the new one to the front so it is retained after
       // `getDistinctValues` all other preferences with the same name.
       "".concat(preferenceName, "=").concat(preferenceValue, ",").concat(currentCookieValue, ","));
-      console.log({
-        a: newCookieValue,
-        b: window.btoa(newCookieValue)
-      });
-      _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8___default.a.set(cookieName, window.btoa(newCookieValue), cookieConfig);
+      _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10___default.a.set(cookieName, window.btoa(newCookieValue), cookieConfig);
       return;
     }
 
-    console.log({
-      a: "".concat(preferenceName, "=").concat(preferenceValue, ","),
-      b: window.btoa("".concat(preferenceName, "=").concat(preferenceValue, ","))
-    });
-    _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8___default.a.set(cookieName, window.btoa("".concat(preferenceName, "=").concat(preferenceValue, ",")), cookieConfig);
+    _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10___default.a.set(cookieName, window.btoa("".concat(preferenceName, "=").concat(preferenceValue, ",")), cookieConfig);
   }
 
   function get(preferenceName) {
@@ -5033,11 +5101,11 @@ function createCookiePreference(cookieName) {
     } // else return true/false if the cookie exists.
 
 
-    return _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_8___default.a.get(cookieName);
+    return _node_modules_js_cookie_src_js_cookie__WEBPACK_IMPORTED_MODULE_10___default.a.get(cookieName);
   }
 
   function acceptAll() {
-    cookiePreferences.forEach(function (cookiePreference) {
+    allowedPreferences.forEach(function (cookiePreference) {
       set(cookiePreference, '1');
     });
   }

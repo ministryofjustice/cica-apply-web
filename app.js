@@ -19,6 +19,7 @@ const app = express();
 nunjucks
     .configure(
         [
+            'node_modules/@ministryofjustice/frontend/',
             'node_modules/govuk-frontend/govuk/',
             'node_modules/govuk-frontend/govuk/components/',
             'index/',

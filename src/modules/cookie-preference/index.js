@@ -1,7 +1,6 @@
 import jsCookies from '../../../node_modules/js-cookie/src/js.cookie';
 
-function createCookiePreference(cookieName) {
-    const cookiePreferences = ['essential', 'analytics'];
+function createCookiePreference(cookieName, allowedPreferences) {
     const cookieConfig = {
         path: '/',
         expires: 365,
@@ -47,6 +46,11 @@ function createCookiePreference(cookieName) {
     }
 
     function set(preferenceName, preferenceValue) {
+        if (!allowedPreferences.includes(preferenceName)) {
+            throw Error(
+                `Unable to set preference "${preferenceName}" as it is not in the preference whitelist`
+            );
+        }
         let currentCookieValue = jsCookies.get(cookieName);
 
         if (currentCookieValue) {
@@ -56,18 +60,10 @@ function createCookiePreference(cookieName) {
                 // `getDistinctValues` all other preferences with the same name.
                 `${preferenceName}=${preferenceValue},${currentCookieValue},`
             );
-            console.log({
-                a: newCookieValue,
-                b: window.btoa(newCookieValue)
-            });
             jsCookies.set(cookieName, window.btoa(newCookieValue), cookieConfig);
             return;
         }
 
-        console.log({
-            a: `${preferenceName}=${preferenceValue},`,
-            b: window.btoa(`${preferenceName}=${preferenceValue},`)
-        });
         jsCookies.set(
             cookieName,
             window.btoa(`${preferenceName}=${preferenceValue},`),
@@ -85,7 +81,7 @@ function createCookiePreference(cookieName) {
     }
 
     function acceptAll() {
-        cookiePreferences.forEach(cookiePreference => {
+        allowedPreferences.forEach(cookiePreference => {
             set(cookiePreference, '1');
         });
     }
