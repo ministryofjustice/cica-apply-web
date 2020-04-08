@@ -3199,7 +3199,6 @@
   line-height: 1.25;
   color: #0b0c0c;
   box-sizing: border-box;
-  width: 100%;
   padding-top: 15px;
   padding-bottom: 15px;
   left: 15px;
@@ -3207,6 +3206,9 @@
   background-color: #fbfdfe; }
   .cookie-banner.cookie-banner--visible {
     display: block; }
+
+.moj-banner--invisible {
+  display: none; }
 
 .cookie-banner__message {
   margin: 0;
@@ -3226,3 +3228,63 @@
 
 .cookie-banner__button .govuk-button {
   width: 90%; }
+
+/* ==========================================================================
+   #BANNER
+   ========================================================================== */
+.moj-banner {
+  border: 5px solid #1d70b8;
+  color: #1d70b8;
+  font-size: 0;
+  margin-bottom: 30px;
+  padding: 10px; }
+
+.moj-banner__icon {
+  fill: currentColor;
+  float: left;
+  margin-right: 10px; }
+
+.moj-banner__message {
+  font-family: "GDS Transport", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.25;
+  font-size: 19px;
+  font-size: 1.1875rem;
+  line-height: 1.31579;
+  color: #0b0c0c;
+  display: block;
+  overflow: hidden; }
+
+.moj-banner__message h2 {
+  margin-bottom: 10px; }
+
+.moj-banner__message h2:last-child,
+.moj-banner__message p:last-child {
+  margin-bottom: 0; }
+
+.moj-banner__assistive {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important; }
+
+/* Style variants
+   ========================================================================== */
+.moj-banner--success {
+  border-color: #00703c;
+  color: #00703c; }
+
+.moj-banner--warning {
+  border-color: #d4351c;
+  color: #d4351c; }

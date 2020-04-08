@@ -19,6 +19,7 @@
         "copy:js": "cp node_modules/govuk-frontend/govuk/all.js public/dist/js/all.js && rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
     },
     "dependencies": {
+        "@ministryofjustice/frontend": "0.0.17-alpha",
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
         "cookie-parser": "~1.4.3",
         "csurf": "^1.10.0",
