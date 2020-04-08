@@ -3186,6 +3186,7 @@
   width: 25% !important; }
 
 .cookie-banner {
+  display: none;
   font-family: "GDS Transport", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -3196,12 +3197,32 @@
   font-size: 16px;
   font-size: 1rem;
   line-height: 1.25;
-  padding: 10px 0;
-  background-color: #d5e8f3; }
+  color: #0b0c0c;
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  left: 15px;
+  padding-right: 15px;
+  background-color: #fbfdfe; }
+  .cookie-banner.cookie-banner--visible {
+    display: block; }
 
 .cookie-banner__message {
-  margin: 0 30px; }
-
-.cookie-banner__message-text {
-  display: block;
+  margin: 0;
+  max-width: 960px;
+  margin: 0 15px;
+  margin: 0 30px;
+  width: 960px;
   margin: 0 auto; }
+  @supports (margin: max(calc(0px))) {
+    .cookie-banner__message {
+      margin-right: max(15px, calc(15px + env(safe-area-inset-right)));
+      margin-left: max(15px, calc(15px + env(safe-area-inset-left))); } }
+  @supports (margin: max(calc(0px))) {
+    .cookie-banner__message {
+      margin-right: max(30px, calc(15px + env(safe-area-inset-right)));
+      margin-left: max(30px, calc(15px + env(safe-area-inset-left))); } }
+
+.cookie-banner__button .govuk-button {
+  width: 90%; }
