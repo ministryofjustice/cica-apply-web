@@ -4451,6 +4451,7 @@
   -moz-osx-font-smoothing: grayscale; }
 
 .cookie-banner {
+  display: none;
   font-family: "GDS Transport", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -4458,8 +4459,14 @@
   font-size: 14px;
   font-size: 0.875rem;
   line-height: 1.14286;
-  padding: 10px 0;
-  background-color: #d5e8f3; }
+  color: #0b0c0c;
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  left: 15px;
+  padding-right: 15px;
+  background-color: #fbfdfe; }
   @media print {
     .cookie-banner {
       font-family: sans-serif; } }
@@ -4472,10 +4479,38 @@
     .cookie-banner {
       font-size: 14pt;
       line-height: 1.2; } }
+  @media print {
+    .cookie-banner {
+      color: #000000; } }
+  .cookie-banner.cookie-banner--visible {
+    display: block; }
 
 .cookie-banner__message {
-  margin: 0 30px; }
+  margin: 0;
+  max-width: 960px;
+  margin: 0 15px; }
+  @supports (margin: max(calc(0px))) {
+    .cookie-banner__message {
+      margin-right: max(15px, calc(15px + env(safe-area-inset-right)));
+      margin-left: max(15px, calc(15px + env(safe-area-inset-left))); } }
+  @media (min-width: 40.0625em) {
+    .cookie-banner__message {
+      margin: 0 30px; }
+      @supports (margin: max(calc(0px))) {
+        .cookie-banner__message {
+          margin-right: max(30px, calc(15px + env(safe-area-inset-right)));
+          margin-left: max(30px, calc(15px + env(safe-area-inset-left))); } } }
+  @media (min-width: 1020px) {
+    .cookie-banner__message {
+      margin: 0 auto; }
+      @supports (margin: max(calc(0px))) {
+        .cookie-banner__message {
+          margin: 0 auto; } } }
 
-.cookie-banner__message-text {
-  display: block;
-  margin: 0 auto; }
+@media (min-width: 40.0625em) {
+  .cookie-banner__button .govuk-button {
+    width: 90%; } }
+
+@media print {
+  .cookie-banner {
+    display: none !important; } }

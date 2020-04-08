@@ -1,21 +1,35 @@
-// $govuk-cookie-banner-background: #d5e8f3;
-.js-enabled {
-    .cookie-banner {
-        // display: none;
+.cookie-banner {
+    display: none;
+    @include govuk-font(16);
+    @include govuk-text-colour;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    padding-top: govuk-spacing(3);
+    padding-bottom: govuk-spacing(3);
+    left: govuk-spacing(3);
+    padding-right: govuk-spacing(3);
+    background-color: lighten(desaturate(govuk-colour('light-blue'), 8.46), 42.55);
+
+    &.cookie-banner--visible {
+        display: block;
     }
 }
 
-.cookie-banner {
-    @include govuk-font($size: 16);
-    padding: 10px 0;
-    background-color: #d5e8f3; // $govuk-cookie-banner-background;
-}
-
 .cookie-banner__message {
-    margin: 0 30px;
+    margin: 0;
+    @include govuk-width-container;
 }
 
-.cookie-banner__message-text {
-    display: block;
-    margin: 0 auto;
+.cookie-banner__button .govuk-button {
+    @include govuk-media-query($from: tablet) {
+        width: 90%;
+    }
+}
+
+@include govuk-media-query($media-type: print) {
+    .cookie-banner {
+        display: none !important;
+    }
 }
