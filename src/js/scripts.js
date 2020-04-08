@@ -5,7 +5,7 @@ import createCookieBanner from '../modules/cookie-banner';
 import createCookiePreference from '../modules/cookie-preference';
 
 (() => {
-    const cookiePreference = createCookiePreference('cicaPreference', ['essential', 'analytics']);
+    const cookiePreference = createCookiePreference('_prefs', ['essential', 'analytics']);
     if (cookiePreference.get('analytics').value === '1') {
         const cicaGa = createCicaGa(window);
         cicaGa.setUpGAEventTracking();

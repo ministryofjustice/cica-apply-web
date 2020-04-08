@@ -4710,7 +4710,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (function () {
-  var cookiePreference = Object(_modules_cookie_preference__WEBPACK_IMPORTED_MODULE_3__["default"])('cicaPreference', ['essential', 'analytics']);
+  var cookiePreference = Object(_modules_cookie_preference__WEBPACK_IMPORTED_MODULE_3__["default"])('_prefs', ['essential', 'analytics']);
 
   if (cookiePreference.get('analytics').value === '1') {
     var cicaGa = Object(_modules_ga__WEBPACK_IMPORTED_MODULE_0__["default"])(window);
