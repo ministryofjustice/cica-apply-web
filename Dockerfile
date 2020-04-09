@@ -1,5 +1,5 @@
 # lets start from an image that already has nodejs installed
-FROM node:10.13.0
+FROM node:12.16.1
 
 RUN groupadd -g 1014 dc_user \
 && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
@@ -20,7 +20,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 # RUN npm install
 # If you are building your code for production
-RUN npm install
+RUN npm ci
 
 # Bundle app source
 COPY . .
