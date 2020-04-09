@@ -159,17 +159,17 @@ describe('Data capture service endpoints', () => {
                     });
                 });
             });
-            describe('/transition', () => {
+            describe('/accessibility-statement', () => {
                 describe('GET', () => {
                     describe('200', () => {
                         it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/transition');
+                            const response = await request(app).get('/accessibility-statement');
                             expect(response.statusCode).toBe(200);
                         });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/transition');
+                        it('Should render a page with the accessibility statement page heading', async () => {
+                            const response = await request(app).get('/accessibility-statement');
                             const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">We are still working on this part of the service</h1>`.replace(
+                            const pageHeading = `<h1 class="govuk-heading-xl">Accessibility statement for Claim criminal injuries compensation</h1>`.replace(
                                 /\s+/g,
                                 ''
                             );
@@ -296,7 +296,8 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             addPrefix: () => prefixedSection,
                             getSectionHtml: () => getSectionHtmlValid,
-                            removeSectionIdPrefix: () => initial
+                            removeSectionIdPrefix: () => initial,
+                            checkIsSummaryContext: () => false
                         }));
                         // eslint-disable-next-line global-require
                         app = require('../app');
