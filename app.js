@@ -35,7 +35,9 @@ nunjucks
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
-
+    // https://stackoverflow.com/a/22339262/2952356
+    // `process.env.npm_package_version` only works if you use npm start to run the app.
+    res.set('Application-Version', process.env.npm_package_version);
     next();
 });
 
