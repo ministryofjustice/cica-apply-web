@@ -20,16 +20,16 @@ router.get('/contact-us', (req, res) => {
     res.render('contact-us.njk');
 });
 
-router.get('/transition', (req, res) => {
-    res.render('transition.njk');
-});
-
 router.get('/new-claim', (req, res) => {
     res.render('new-claim.njk');
 });
 
 router.get('/police-forces', (req, res) => {
     res.render('police-forces.njk');
+});
+
+router.get('/accessibility-statement', (req, res) => {
+    res.render('accessibility-statement.njk');
 });
 
 router.get('*', (req, res) => {

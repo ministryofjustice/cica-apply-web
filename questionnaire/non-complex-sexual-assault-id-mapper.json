@@ -1,4 +1,3 @@
-
 {
     "applicant-declaration": "p-applicant-declaration",
     "applicant-british-citizen-or-eu-national": "p-applicant-british-citizen-or-eu-national",
@@ -40,5 +39,19 @@
     "confirmation": "p--confirmation",
     "applicant-redirect-to-our-other-application": "p-applicant-redirect-to-our-other-application",
     "applicant-you-cannot-get-compensation": "p-applicant-you-cannot-get-compensation",
+    "transition-someone-else": "p--transition-someone-else",
+    "transition-under-18": "p--transition-under-18",
+    "transition-not-sa": "p--transition-not-sa",
+    "transition-not-british-citizen": "p--transition-not-british-citizen",
+    "transition-option-2": "p--transition-option-2",
+    "context-offender": "p--context-offender",
+    "applicant-when-will-you-find-out": "p-applicant-when-will-you-find-out",
+    "applicant-how-much-was-award": "p-applicant-how-much-was-award",
+    "applicant-has-a-decision-been-made": "p-applicant-has-a-decision-been-made",
+    "applicant-who-did-you-apply-to": "p-applicant-who-did-you-apply-to",
+    "context-applicant-details": "p--context-applicant-details",
+    "context-compensation": "p--context-compensation",
+    "applicant-applied-for-other-compensation-briefly-explain-why-not": "p-applicant-applied-for-other-compensation-briefly-explain-why-not",
+    "offender-do-you-have-contact-with-offender": "p-offender-do-you-have-contact-with-offender",
     "system": "system"
 }

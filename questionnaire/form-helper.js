@@ -27,12 +27,22 @@ function getButtonText(sectionId) {
         : 'Continue';
 }
 
-function checkIsSummary(sectionId) {
-    return sectionId in uiSchema &&
+function checkIsSummaryContext(sectionId) {
+    return !!(
+        sectionId in uiSchema &&
         uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.isSummary
-        ? uiSchema[sectionId].options.isSummary
-        : false;
+        uiSchema[sectionId].options.pageContext &&
+        uiSchema[sectionId].options.pageContext === 'summary'
+    );
+}
+
+function checkIsSubmissionContext(sectionId) {
+    return !!(
+        sectionId in uiSchema &&
+        uiSchema[sectionId].options &&
+        uiSchema[sectionId].options.pageContext &&
+        uiSchema[sectionId].options.pageContext === 'submission'
+    );
 }
 
 function renderSection({
@@ -45,7 +55,7 @@ function renderSection({
     cspNonce
 }) {
     const showButton = !isFinal;
-    const isSummary = checkIsSummary(sectionId);
+    const isSubmissionPage = checkIsSubmissionContext(sectionId);
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
@@ -64,7 +74,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" {%- if ${isSummary} %} action="/apply/submission/confirm"{% endif %} novalidate>
+                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %} novalidate>
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}
@@ -284,7 +294,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
 
 module.exports = {
     getButtonText,
-    checkIsSummary,
+    checkIsSummaryContext,
+    checkIsSubmissionContext,
     renderSection,
     removeSectionIdPrefix,
     processRequest,

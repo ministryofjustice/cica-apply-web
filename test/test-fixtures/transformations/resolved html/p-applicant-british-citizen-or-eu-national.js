@@ -226,25 +226,31 @@ const html = `<!DOCTYPE html>
 
             <h2 class="govuk-visually-hidden">Support links</h2>
             <ul class="govuk-footer__inline-list">
-
+              
+                <li class="govuk-footer__inline-list-item">
+                  <a class="govuk-footer__link" href="https://www.gov.uk/guidance/cica-privacy-notice">
+                    Privacy
+                  </a>
+                </li>
+              
                 <li class="govuk-footer__inline-list-item">
                   <a class="govuk-footer__link" href="/cookies">
                     Cookies
                   </a>
                 </li>
-
-                <li class="govuk-footer__inline-list-item">
-                  <a class="govuk-footer__link" href="https://www.gov.uk/guidance/cica-privacy-notice">
-                    Privacy notice
-                  </a>
-                </li>
-
+              
                 <li class="govuk-footer__inline-list-item">
                   <a class="govuk-footer__link" href="/contact-us">
-                    Contact us
+                    Contact
                   </a>
                 </li>
-
+              
+                <li class="govuk-footer__inline-list-item">
+                  <a class="govuk-footer__link" href="/accessibility-statement">
+                    Accessibility statement
+                  </a>
+                </li>
+              
             </ul>
 
 
