@@ -100,17 +100,22 @@ function removeUnwantedHiddenAnswers(body, sectionId) {
             uiSchema[sectionId].options.properties[
                 question
             ].options.conditionalComponentMap.forEach(mapping => {
-                // const truthyAnswer = answers[question] === 'true' || answers[question] === true;
-                let givenAnswer;
+                let givenAnswer = answers[question];
                 if (answers[question] === 'true' || answers[question] === true) {
                     givenAnswer = true;
                 } else if (answers[question] === 'false' || answers[question] === false) {
                     givenAnswer = false;
-                } else {
-                    givenAnswer = answers[question];
                 }
-                if (givenAnswer !== mapping.itemValue) {
-                    // If answer is not relevant to the question
+
+                if (Array.isArray(givenAnswer) && !givenAnswer.includes(mapping.itemValue)) {
+                    // If checkbox answer is not relevant to the question
+                    mapping.componentIds.forEach(id => {
+                        delete answers[id]; // Delete it
+                    });
+                }
+
+                if (!Array.isArray(givenAnswer) && givenAnswer !== mapping.itemValue) {
+                    // If radio button answer is not relevant to the question
                     mapping.componentIds.forEach(id => {
                         delete answers[id]; // Delete it
                     });
