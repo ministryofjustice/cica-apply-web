@@ -159,34 +159,6 @@ describe('Questionnaire service', () => {
 
             expect(expected).toEqual(response);
         });
-        /*  it('Returns continues to check for 15 seconds', async () => {
-            jest.useFakeTimers();
-            jest.doMock('../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => getValidSubmission
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const questionnaireService = require('../questionnaire/questionnaire-service')();
-            await questionnaireService.getSubmissionStatus(
-                'questionnaire-id',
-                Date.now()
-            );
-
-            expect(setTimeout).toHaveBeenCalledTimes(15);
-        });
-        it('Should return a 504 error if it is called with a time older than 15 seconds ago.', async () => {
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const questionnaireService = require('../questionnaire/questionnaire-service')();
-            const response = await questionnaireService.getSubmissionStatus(
-                'questionnaire-id',
-                Date.now() - 16000
-            );
-
-            expect(response).toThrow('The upstream server took too long to respond');
-        }); */
     });
 
     describe('getFirstSection', () => {
