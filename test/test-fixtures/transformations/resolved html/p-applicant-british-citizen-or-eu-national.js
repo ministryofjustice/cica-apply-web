@@ -21,13 +21,13 @@ const html = `<!DOCTYPE html>
 
 
   <!--[if !IE 8]><!-->
-    <link href="/govuk-frontend/all.css" rel="stylesheet" />
+    <link href="/dist/css/styles.css" rel="stylesheet" />
   <!--<![endif]-->
 
 
 
   <!--[if IE 8]>
-    <link href="/govuk-frontend/all-ie8.css" rel="stylesheet" />
+    <link href="/dist/css/styles-ie8.css" rel="stylesheet" />
   <![endif]-->
 
 
@@ -42,10 +42,28 @@ const html = `<!DOCTYPE html>
   </head>
   <body class="govuk-template__body ">
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <div class="cookie-banner govuk-width-container" id="cookie-banner">
+    <div class="govuk-grid-row">
+        <div class=" govuk-grid-column-two-thirds">
+            <div class="cookie-banner__message">
+                <span class="govuk-heading-m">Tell us whether you accept cookies</span>
+                <p class="govuk-body">This service uses cookies that are essential for the site to work. We also use non-essential cookies to help us improve your experience.</p>
+                <p class="govuk-body">Do you accept these non-essential cookies?</p>
+            </div>
+            <div class="cookie-banner__buttons">
+                <div class="cookie-banner__button cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop govuk-!-padding-left-0">
+                    <a href="/cookies" id="cookie-banner-accept-all" class="govuk-button button--inline" role="button">Accept all cookies</a>
+                </div>
+                <div class="cookie-banner__button govuk-grid-column-full govuk-grid-column-one-half-from-desktop govuk-!-padding-left-0">
+                    <a href="/cookies" id="cookie-banner-set-preferences" class="govuk-button govuk-button--secondary button--inline" role="button">Set cookie preferences</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
     <script nonce="somenonce">
         window.dataLayer = window.dataLayer || [];
         function gtag(){
@@ -292,7 +310,7 @@ const html = `<!DOCTYPE html>
 
 
 
-  <script src="/govuk-frontend/all.js"></script>
+  <script src="/dist/js/all.js"></script>
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
   <script src="/dist/js/autocomplete.min.js"></script>
   <script src="/dist/js/bundle.js"></script>
