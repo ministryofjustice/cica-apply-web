@@ -1,4 +1,4 @@
-import guaTrackLinks from './vendor/gua-anchor';
+import guaTrackLinks from './gua-anchor';
 import debounce from '../../../node_modules/debounce';
 
 function createCicaGa(window) {
