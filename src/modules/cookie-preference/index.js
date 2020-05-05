@@ -7,41 +7,17 @@ function createCookiePreference(cookieName, allowedPreferences) {
         samesite: 'strict'
     };
 
-    function getDistinctValues(value) {
-        const valueTable = [];
-        return value
-            .split(',')
-            .filter(x => x !== '') // removes empty array element caused by the trailing comma.
-            .reduce((acc, item) => {
-                let accumulator = acc;
-                accumulator += '';
-                const splitItem = item.split('=');
-                if (!valueTable.includes(splitItem[0])) {
-                    accumulator += `${splitItem[0]}=${splitItem[1]},`;
-                    valueTable.push(splitItem[0]);
-                }
-                return accumulator;
-            }, '');
-    }
-
     function getPreference(preferenceName) {
-        const cookieValue = jsCookies.get(cookieName);
-        let cookiePreferenceTable = {};
-        if (cookieValue) {
-            cookiePreferenceTable = window
-                .atob(cookieValue)
-                .split(',')
-                .reduce((acc, item) => {
-                    const splitItem = item.split('=');
-                    // eslint-disable-next-line prefer-destructuring
-                    acc[splitItem[0]] = splitItem[1];
-                    return acc;
-                }, {});
+        let cookieValue = jsCookies.get(cookieName) || '{}';
+        try {
+            cookieValue = JSON.parse(cookieValue);
+        } catch (e) {
+            throw Error(`Unable to get preference "${preferenceName}". cookie value is malformed`);
         }
 
         return {
             name: preferenceName,
-            value: cookiePreferenceTable[preferenceName] || null
+            value: cookieValue[preferenceName] || null
         };
     }
 
@@ -51,24 +27,12 @@ function createCookiePreference(cookieName, allowedPreferences) {
                 `Unable to set preference "${preferenceName}" as it is not in the preference whitelist`
             );
         }
-        let currentCookieValue = jsCookies.get(cookieName);
 
-        if (currentCookieValue) {
-            currentCookieValue = window.atob(currentCookieValue);
-            const newCookieValue = getDistinctValues(
-                // add the new one to the front so it is retained after
-                // `getDistinctValues` all other preferences with the same name.
-                `${preferenceName}=${preferenceValue},${currentCookieValue},`
-            );
-            jsCookies.set(cookieName, window.btoa(newCookieValue), cookieConfig);
-            return;
-        }
+        let cookieValue = jsCookies.get(cookieName) || '{}';
+        cookieValue = JSON.parse(cookieValue);
 
-        jsCookies.set(
-            cookieName,
-            window.btoa(`${preferenceName}=${preferenceValue},`),
-            cookieConfig
-        );
+        cookieValue[preferenceName] = preferenceValue;
+        jsCookies.set(cookieName, JSON.stringify(cookieValue), cookieConfig);
     }
 
     function get(preferenceName) {

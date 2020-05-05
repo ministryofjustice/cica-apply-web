@@ -1,11 +1,12 @@
 import createCookiePreference from './index';
+import jsCookies from '../../../node_modules/js-cookie/src/js.cookie';
 
 describe('Cookie Preference', () => {
     const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
     it('should set a preference in a cookie', () => {
         cookiePreference.set('colour', 'green');
 
-        expect(window.document.cookie).toEqual('testCookie=Y29sb3VyPWdyZWVuLA==');
+        expect(window.document.cookie).toEqual('testCookie={%22colour%22:%22green%22}');
     });
 
     it('should overwrite a preference in a cookie', () => {
@@ -13,12 +14,14 @@ describe('Cookie Preference', () => {
         cookiePreference.set('colour', 'blue');
         cookiePreference.set('colour', 'green');
 
-        expect(window.document.cookie).toEqual('testCookie=Y29sb3VyPWdyZWVuLA==');
+        expect(window.document.cookie).toEqual('testCookie={%22colour%22:%22green%22}');
     });
 
     it('should set all allowed preferences at once', () => {
         cookiePreference.acceptAll();
-        expect(window.document.cookie).toEqual('testCookie=Zm9vZD0xLGRyaW5rPTEsY29sb3VyPTEs');
+        expect(window.document.cookie).toEqual(
+            'testCookie={%22colour%22:%221%22%2C%22drink%22:%221%22%2C%22food%22:%221%22}'
+        );
         expect(cookiePreference.get('colour')).toEqual({
             name: 'colour',
             value: '1'
@@ -40,7 +43,7 @@ describe('Cookie Preference', () => {
     });
 
     it('should get a preference by name from a cookie', () => {
-        window.document.cookie = 'testCookie=ZHJpbms9Y29mZmVlLGNvbG91cj1ncmVlbiw=';
+        window.document.cookie = 'testCookie={%22drink%22:%22coffee%22}';
         const preference = cookiePreference.get('drink');
 
         expect(preference).toEqual({
@@ -50,7 +53,7 @@ describe('Cookie Preference', () => {
     });
 
     it('should get a null value if preference is not defined in the cookie', () => {
-        window.document.cookie = 'testCookie=ZHJpbms9Y29mZmVlLGNvbG91cj1ncmVlbiw=';
+        window.document.cookie = 'testCookie={%22drink%22:%22coffee%22%2C%22colour%22:%22green%22}';
         const preference = cookiePreference.get('food');
 
         expect(preference).toEqual({
@@ -60,8 +63,18 @@ describe('Cookie Preference', () => {
     });
 
     it('should get an entire cookie', () => {
-        window.document.cookie = 'testCookie=Zm9vZD1waXp6YSw=';
+        window.document.cookie =
+            'testCookie={%22colour%22:%221%22%2C%22drink%22:%221%22%2C%22food%22:%221%22}';
         const cookie = cookiePreference.get();
-        expect(cookie).toEqual('Zm9vZD1waXp6YSw=');
+        expect(cookie).toEqual('{"colour":"1","drink":"1","food":"1"}');
+    });
+
+    it('should throw with a malformed cookie when getting any specific preference', () => {
+        jsCookies.get = jest.fn(() => {
+            return 'malformed cookie json 123';
+        });
+        expect(() => {
+            cookiePreference.get('tvshow', 'friends');
+        }).toThrow('Unable to get preference "tvshow". cookie value is malformed');
     });
 });

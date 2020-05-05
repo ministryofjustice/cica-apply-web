@@ -5,18 +5,18 @@
     "scripts": {
         "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --exec npm run buildRun:dev",
         "start": "node ./bin/www",
-        "sass": "node-sass src/sass/styles.scss public/dist/css/styles.css && node-sass src/sass/styles-ie8.scss public/dist/css/styles-ie8.css",
+        "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
         "test:node": "jest --config=jest.config.js",
         "coverage": "jest --coverage",
-        "build:dev": "npm run copy:js && webpack --config webpack.config.js --mode development",
-        "build": "npm run copy:js && webpack --config webpack.config.prod.js --mode production",
+        "build:dev": "npm run copy:css && npm run copy:js && webpack --config webpack.config.js --mode development",
+        "build": "npm run copy:css && npm run copy:js && webpack --config webpack.config.prod.js --mode production",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "buildRun:dev": "npm run sass || true && npm run build:dev && node ./bin/www",
         "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
-        "copy:js": "cp node_modules/govuk-frontend/govuk/all.js public/dist/js/all.js && rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
+        "copy:js": "rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/"
     },
     "dependencies": {
         "@ministryofjustice/frontend": "0.0.17-alpha",
@@ -35,7 +35,7 @@
         "morgan": "~1.9.0",
         "nanoid": "^2.1.10",
         "nunjucks": "^3.2.1",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v0.7.4"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v1.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.7.4",
