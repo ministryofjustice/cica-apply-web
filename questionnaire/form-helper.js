@@ -101,9 +101,9 @@ function removeUnwantedHiddenAnswers(body, sectionId) {
                 question
             ].options.conditionalComponentMap.forEach(mapping => {
                 let givenAnswer = answers[question];
-                if (answers[question] === 'true' || answers[question] === true) {
+                if (givenAnswer === 'true' || givenAnswer === true) {
                     givenAnswer = true;
-                } else if (answers[question] === 'false' || answers[question] === false) {
+                } else if (givenAnswer === 'false' || givenAnswer === false) {
                     givenAnswer = false;
                 }
 
