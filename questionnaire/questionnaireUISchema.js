@@ -593,7 +593,7 @@ module.exports = {
                         }
                     }
                 },
-                'q-gp-building-and-street-2': {
+                'q-gp-building-and-street2': {
                     options: {
                         macroOptions: {
                             classes: ''
@@ -603,7 +603,7 @@ module.exports = {
             },
             outputOrder: [
                 'q-gp-building-and-street',
-                'q-gp-building-and-street-2',
+                'q-gp-building-and-street2',
                 'q-gp-town-or-city',
                 'q-gp-county',
                 'q-gp-postcode'
