@@ -2,22 +2,22 @@ import createCookiePreference from './index';
 import jsCookies from '../../../node_modules/js-cookie/src/js.cookie';
 
 describe('Cookie Preference', () => {
-    const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
     it('should set a preference in a cookie', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         cookiePreference.set('colour', 'green');
-
         expect(window.document.cookie).toEqual('testCookie={%22colour%22:%22green%22}');
     });
 
     it('should overwrite a preference in a cookie', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         cookiePreference.set('colour', 'red');
         cookiePreference.set('colour', 'blue');
         cookiePreference.set('colour', 'green');
-
         expect(window.document.cookie).toEqual('testCookie={%22colour%22:%22green%22}');
     });
 
     it('should set all allowed preferences at once', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         cookiePreference.acceptAll();
         expect(window.document.cookie).toEqual(
             'testCookie={%22colour%22:%221%22%2C%22drink%22:%221%22%2C%22food%22:%221%22}'
@@ -37,12 +37,14 @@ describe('Cookie Preference', () => {
     });
 
     it('should not allow an non-whitelist preference to be set', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         expect(() => {
             cookiePreference.set('tvshow', 'friends');
         }).toThrow('Unable to set preference "tvshow" as it is not in the preference whitelist');
     });
 
     it('should get a preference by name from a cookie', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         window.document.cookie = 'testCookie={%22drink%22:%22coffee%22}';
         const preference = cookiePreference.get('drink');
 
@@ -53,6 +55,7 @@ describe('Cookie Preference', () => {
     });
 
     it('should get a null value if preference is not defined in the cookie', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         window.document.cookie = 'testCookie={%22drink%22:%22coffee%22%2C%22colour%22:%22green%22}';
         const preference = cookiePreference.get('food');
 
@@ -63,6 +66,7 @@ describe('Cookie Preference', () => {
     });
 
     it('should get an entire cookie', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         window.document.cookie =
             'testCookie={%22colour%22:%221%22%2C%22drink%22:%221%22%2C%22food%22:%221%22}';
         const cookie = cookiePreference.get();
@@ -70,6 +74,7 @@ describe('Cookie Preference', () => {
     });
 
     it('should throw with a malformed cookie when getting any specific preference', () => {
+        const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         jsCookies.get = jest.fn(() => {
             return 'malformed cookie json 123';
         });
