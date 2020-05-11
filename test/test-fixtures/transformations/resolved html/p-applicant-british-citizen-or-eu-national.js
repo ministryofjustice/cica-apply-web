@@ -42,25 +42,6 @@ const html = `<!DOCTYPE html>
   </head>
   <body class="govuk-template__body ">
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-    <div class="cookie-banner govuk-width-container" id="cookie-banner">
-    <div class="govuk-grid-row">
-        <div class=" govuk-grid-column-two-thirds">
-            <div class="cookie-banner__message">
-                <span class="govuk-heading-m">Tell us whether you accept cookies</span>
-                <p class="govuk-body">This service uses cookies that are essential for the site to work. We also use non-essential cookies to help us improve your experience.</p>
-                <p class="govuk-body">Do you accept these non-essential cookies?</p>
-            </div>
-            <div class="cookie-banner__buttons">
-                <div class="cookie-banner__button cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop govuk-!-padding-left-0">
-                    <a href="/cookies" id="cookie-banner-accept-all" class="govuk-button button--inline" role="button">Accept all cookies</a>
-                </div>
-                <div class="cookie-banner__button govuk-grid-column-full govuk-grid-column-one-half-from-desktop govuk-!-padding-left-0">
-                    <a href="/cookies" id="cookie-banner-set-preferences" class="govuk-button govuk-button--secondary button--inline" role="button">Set cookie preferences</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
@@ -74,7 +55,25 @@ const html = `<!DOCTYPE html>
     </script>
 
       <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-
+      <div class="cookie-banner govuk-width-container" id="cookie-banner">
+      <div class="govuk-grid-row">
+          <div class=" govuk-grid-column-two-thirds">
+              <div class="cookie-banner__message">
+                  <h2 class="govuk-heading-m">Tell us whether you accept cookies</h2>
+                  <p class="govuk-body">This service uses cookies that are essential for the site to work. We also use non-essential cookies to help us improve your experience.</p>
+                  <p class="govuk-body">Do you accept these non-essential cookies?</p>
+              </div>
+              <div class="cookie-banner__buttons">
+                  <div class="cookie-banner__button cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop govuk-!-padding-left-0">
+                      <a href="/cookies" id="cookie-banner-accept-all" class="govuk-button button--inline" role="button">Accept all cookies</a>
+                  </div>
+                  <div class="cookie-banner__button govuk-grid-column-full govuk-grid-column-one-half-from-desktop govuk-!-padding-left-0">
+                      <a href="/cookies" id="cookie-banner-set-preferences" class="govuk-button govuk-button--secondary button--inline" role="button">Set cookie preferences</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 
 
 
