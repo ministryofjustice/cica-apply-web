@@ -20,8 +20,18 @@
   <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css" />
 {% endblock %}
 
-{% block bodyStart %}
+
+{% block skipLink %}
+    {{ super() }}
+    {#
+      given how the govuk template.njk is defined, this is the only way
+      to put the cookie banner before the skip ink whilst still being
+      outside the main content
+    #}
     {% include "cookie-banner.njk" %}
+{% endblock %}
+
+{% block bodyStart %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ gaTrackingId }}"></script>
     <script nonce="{{ nonce }}">

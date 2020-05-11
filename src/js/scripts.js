@@ -16,6 +16,10 @@ import createCookiePreference from '../modules/cookie-preference';
     const autocomplete = createAutocomplete(window);
     autocomplete.init('.govuk-select');
 
-    const cookieBanner = createCookieBanner(window, cookiePreference);
+    const cookieBanner = createCookieBanner(window, cookiePreference, {
+        cookieBannerElement: '#cookie-banner',
+        cookieBannerVisibleClass: 'cookie-banner--visible',
+        cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
+    });
     cookieBanner.show();
 })();

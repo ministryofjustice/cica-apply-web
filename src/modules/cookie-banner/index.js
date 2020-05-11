@@ -1,17 +1,27 @@
-function createCookieBanner(window, cookiePreference) {
-    const cookieBannerElement = window.document.querySelector('#cookie-banner');
+function createCookieBanner(window, cookiePreference, options = {}) {
+    const defaultOptions = {
+        cookieBannerElement: '#cookie-banner',
+        cookieBannerVisibleClass: 'cookie-banner--visible',
+        cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
+    };
+
+    const combinedOptions = {...defaultOptions, ...options};
+
+    const cookieBannerElement = window.document.querySelector(combinedOptions.cookieBannerElement);
 
     function show() {
         if (!cookiePreference.get()) {
-            cookieBannerElement.classList.add('cookie-banner--visible');
+            cookieBannerElement.classList.add(combinedOptions.cookieBannerVisibleClass);
         }
     }
 
     function hide() {
-        cookieBannerElement.classList.remove('cookie-banner--visible');
+        cookieBannerElement.classList.remove(combinedOptions.cookieBannerVisibleClass);
     }
 
-    const buttonAcceptAll = window.document.querySelector('#cookie-banner-accept-all');
+    const buttonAcceptAll = window.document.querySelector(
+        combinedOptions.cookieBannerButtonAcceptAll
+    );
 
     buttonAcceptAll.addEventListener('click', e => {
         cookiePreference.acceptAll();
