@@ -62,7 +62,7 @@ describe('Cookie Preference', () => {
         });
     });
 
-    it('should get a null value if preference is not defined in the cookie', () => {
+    it('should get an undefined value if preference is not defined in the cookie', () => {
         deleteCookie('testCookie');
         const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         window.document.cookie = 'testCookie={%22drink%22:%22coffee%22%2C%22colour%22:%22green%22}';
@@ -70,7 +70,7 @@ describe('Cookie Preference', () => {
 
         expect(preference).toEqual({
             name: 'food',
-            value: null
+            value: undefined
         });
     });
 

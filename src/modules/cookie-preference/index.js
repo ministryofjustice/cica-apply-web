@@ -11,7 +11,7 @@ function createCookiePreference(cookieName, allowedPreferences) {
         const cookieValue = jsCookies.getJSON(cookieName) || {};
         return {
             name: preferenceName,
-            value: cookieValue[preferenceName] || null
+            value: cookieValue[preferenceName]
         };
     }
 
@@ -22,11 +22,9 @@ function createCookiePreference(cookieName, allowedPreferences) {
             );
         }
 
-        let cookieValue = jsCookies.get(cookieName) || '{}';
-        cookieValue = JSON.parse(cookieValue);
-
+        const cookieValue = jsCookies.getJSON(cookieName) || {};
         cookieValue[preferenceName] = preferenceValue;
-        jsCookies.set(cookieName, JSON.stringify(cookieValue), cookieConfig);
+        jsCookies.set(cookieName, cookieValue, cookieConfig);
     }
 
     function get(preferenceName) {
