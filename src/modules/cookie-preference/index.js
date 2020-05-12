@@ -7,7 +7,7 @@ function createCookiePreference(cookieName, allowedPreferences) {
         samesite: 'strict'
     };
 
-    function getPreference(preferenceName) {
+    function get(preferenceName) {
         const cookieValue = jsCookies.getJSON(cookieName) || {};
         return {
             name: preferenceName,
@@ -27,12 +27,7 @@ function createCookiePreference(cookieName, allowedPreferences) {
         jsCookies.set(cookieName, cookieValue, cookieConfig);
     }
 
-    function get(preferenceName) {
-        if (preferenceName) {
-            return getPreference(preferenceName);
-        }
-
-        // else return true/false if the cookie exists.
+    function getCookie() {
         return jsCookies.get(cookieName);
     }
 
@@ -45,6 +40,7 @@ function createCookiePreference(cookieName, allowedPreferences) {
     return Object.freeze({
         set,
         get,
+        getCookie,
         acceptAll
     });
 }

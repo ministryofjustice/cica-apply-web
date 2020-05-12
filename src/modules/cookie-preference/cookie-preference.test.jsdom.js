@@ -79,7 +79,7 @@ describe('Cookie Preference', () => {
         const cookiePreference = createCookiePreference('testCookie', ['colour', 'drink', 'food']);
         window.document.cookie =
             'testCookie={%22colour%22:%221%22%2C%22drink%22:%221%22%2C%22food%22:%221%22}';
-        const cookie = cookiePreference.get();
+        const cookie = cookiePreference.getCookie();
         expect(cookie).toEqual('{"colour":"1","drink":"1","food":"1"}');
     });
 });

@@ -10,7 +10,7 @@ function createCookieBanner(window, cookiePreference, options = {}) {
     const cookieBannerElement = window.document.querySelector(combinedOptions.cookieBannerElement);
 
     function show() {
-        if (!cookiePreference.get()) {
+        if (!cookiePreference.getCookie()) {
             cookieBannerElement.classList.add(combinedOptions.cookieBannerVisibleClass);
         }
     }
