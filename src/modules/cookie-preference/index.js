@@ -8,13 +8,7 @@ function createCookiePreference(cookieName, allowedPreferences) {
     };
 
     function getPreference(preferenceName) {
-        let cookieValue = jsCookies.get(cookieName) || '{}';
-        try {
-            cookieValue = JSON.parse(cookieValue);
-        } catch (e) {
-            throw Error(`Unable to get preference "${preferenceName}". cookie value is malformed`);
-        }
-
+        const cookieValue = jsCookies.getJSON(cookieName) || {};
         return {
             name: preferenceName,
             value: cookieValue[preferenceName] || null

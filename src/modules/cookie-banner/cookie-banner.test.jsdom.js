@@ -49,8 +49,8 @@ const bannerHtml = `
 `;
 
 describe('Cookie Banner', () => {
-    window.document.body.innerHTML = bannerHtml;
     it('should make the cookie banner visible', () => {
+        window.document.body.innerHTML = bannerHtml;
         const cookiePreference = createCookiePreference('testCookie', ['essential', 'analytics']);
         const cookieBanner = createCookieBanner(window, cookiePreference);
         const cookieBannerElement = window.document.querySelector('#cookie-banner');
@@ -59,6 +59,7 @@ describe('Cookie Banner', () => {
     });
 
     it('should make the cookie banner invisible', () => {
+        window.document.body.innerHTML = bannerHtml;
         const cookiePreference = createCookiePreference('testCookie', ['essential', 'analytics']);
         const cookieBanner = createCookieBanner(window, cookiePreference);
         const cookieBannerElement = window.document.querySelector('#cookie-banner');
@@ -68,6 +69,7 @@ describe('Cookie Banner', () => {
     });
 
     it('should update the DOM after cookie consent', () => {
+        window.document.body.innerHTML = bannerHtml;
         const cookiePreference = createCookiePreference('testCookie', ['essential', 'analytics']);
         const cookieBanner = createCookieBanner(window, cookiePreference);
         const cookieBannerElement = window.document.querySelector('#cookie-banner');
@@ -80,6 +82,7 @@ describe('Cookie Banner', () => {
     });
 
     it('should hide when all preferences are accepted', () => {
+        window.document.body.innerHTML = bannerHtml;
         const cookiePreference = createCookiePreference('testCookie', ['essential', 'analytics']);
         const cookieBanner = createCookieBanner(window, cookiePreference);
         const cookieBannerElement = window.document.querySelector('#cookie-banner');
