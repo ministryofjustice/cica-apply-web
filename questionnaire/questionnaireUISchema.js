@@ -157,6 +157,31 @@ module.exports = {
                                 }
                             },
                             {
+                                title: 'Your injuries',
+                                questions: {
+                                    'p-applicant-do-you-have-disabling-mental-injury':
+                                        'Do you have a disabling mental injury?',
+                                    'p-applicant-mental-injury-duration':
+                                        'Has your mental injury lasted 6 weeks or more?',
+                                    'p-applicant-select-treatments':
+                                        "Select any treatments you've had",
+                                    'p-applicant-has-your-treatment-finished-dmi':
+                                        'Have you finished your mental health treatment?',
+                                    'p-applicant-affect-on-daily-life-dmi':
+                                        'Briefly say how the crime has affected your daily life'
+                                }
+                            },
+                            {
+                                title: 'Your medical details',
+                                questions: {
+                                    'p-applicant-are-you-registered-with-gp':
+                                        'Are you registered with a GP practice?',
+                                    'p-applicant-have-you-seen-a-gp':
+                                        'Have you seen a GP about your injuries?',
+                                    'p-gp-enter-your-address': "What is your GP's address?"
+                                }
+                            },
+                            {
                                 title: 'Other compensation',
                                 questions: {
                                     'p-applicant-have-you-applied-to-us-before':
@@ -194,7 +219,7 @@ module.exports = {
                             'other-reasons': 'Other reasons',
                             'i-was-under-18': 'I was under 18',
                             'unable-to-report-crime': 'Unable to report the crime',
-                            other: 'Other reasons',
+                            other: 'Other',
                             'option-1:-sexual-assault-or-abuse':
                                 'Option 1: Sexual assault or abuse',
                             'option-2:-sexual-assault-or-abuse-and-other-injuries-or-losses':
@@ -209,6 +234,11 @@ module.exports = {
                                 'I have no contact with the offender',
                             email: 'Email to ',
                             text: 'Text message to',
+                            cbt: 'CBT',
+                            emdr: 'EMDR',
+                            antidepressants: 'Antidepressants',
+                            counselling: 'counselling',
+                            psychotherapy: 'psychotherapy',
                             10000033: 'Avon And Somerset Constabulary',
                             10000035: 'Bedfordshire Police',
                             10000001: 'British Transport Police',
@@ -498,6 +528,13 @@ module.exports = {
                                 itemValue: 'text',
                                 componentIds: ['q-applicant-enter-your-telephone-number']
                             }
+                        ],
+                        additionalMapping: [
+                            {
+                                itemType: 'divider',
+                                itemValue: 'or',
+                                itemIndex: 2
+                            }
                         ]
                     }
                 },
@@ -522,6 +559,55 @@ module.exports = {
         options: {
             buttonText: 'Agree and submit',
             pageContext: 'submission'
+        }
+    },
+    'p-applicant-select-treatments': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-other-treatment-dmi',
+                'q-applicant-select-treatments-dmi'
+            ],
+            outputOrder: ['q-applicant-select-treatments-dmi'],
+            properties: {
+                'q-applicant-select-treatments-dmi': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'other',
+                                componentIds: ['q-applicant-other-treatment-dmi']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-gp-enter-your-address': {
+        options: {
+            properties: {
+                'q-gp-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-gp-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-gp-building-and-street',
+                'q-gp-building-and-street2',
+                'q-gp-town-or-city',
+                'q-gp-county',
+                'q-gp-postcode'
+            ]
         }
     }
 };

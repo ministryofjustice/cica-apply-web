@@ -49,19 +49,56 @@ describe('form-helper functions', () => {
 
     describe('Remove unused hidden answers from an answer object', () => {
         it('Should remove answers to conditionally revealing questions, given they should be hidden', () => {
-            const body1 = {
+            const body = {
                 'q-applicant-have-you-applied-to-us-before': false,
                 'q-enter-your-previous-reference-number': '11/111111'
             };
-            const expected1 = {
+            const body2 = {
+                'q-applicant-select-treatments-dmi': ['cbt'],
+                'q-applicant-other-treatment-dmi': 'delete me'
+            };
+
+            const expected = {
                 'q-applicant-have-you-applied-to-us-before': false
             };
+            const expected2 = {
+                'q-applicant-select-treatments-dmi': ['cbt']
+            };
+
+            const actual = formHelper.removeUnwantedHiddenAnswers(
+                body,
+                'p-applicant-have-you-applied-to-us-before'
+            );
+            const actual2 = formHelper.removeUnwantedHiddenAnswers(
+                body2,
+                'p-applicant-select-treatments'
+            );
+
+            expect(actual).toEqual(expected);
+            expect(actual2).toEqual(expected2);
+        });
+
+        it('Should not remove answers to conditionally revealing questions if they are visible', () => {
+            const body1 = {
+                'q-applicant-have-you-applied-to-us-before': true,
+                'q-enter-your-previous-reference-number': '11/111111'
+            };
+            const body2 = {
+                'q-applicant-select-treatments-dmi': ['other'],
+                'q-applicant-other-treatment-dmi': 'keep me'
+            };
+
             const actual1 = formHelper.removeUnwantedHiddenAnswers(
                 body1,
                 'p-applicant-have-you-applied-to-us-before'
             );
+            const actual2 = formHelper.removeUnwantedHiddenAnswers(
+                body2,
+                'p-applicant-select-treatments'
+            );
 
-            expect(actual1).toEqual(expected1);
+            expect(actual1).toEqual(body1);
+            expect(actual2).toEqual(body2);
         });
     });
 
