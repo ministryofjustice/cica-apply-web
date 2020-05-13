@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const webpack = require('webpack');
 
 module.exports = {
     entry: {
@@ -39,11 +38,5 @@ module.exports = {
                 ]
             }
         ]
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            SERVICE_URL: JSON.stringify(process.env.CW_URL),
-            ANALYTICS_TRACKING_ID: JSON.stringify(process.env.CW_GA_TRACKING_ID)
-        })
-    ]
+    }
 };

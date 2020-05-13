@@ -1,4 +1,3 @@
-/* global ANALYTICS_TRACKING_ID */
 import createCicaGa from '../modules/ga';
 import {createAutocomplete} from '../modules/autocomplete/autocomplete';
 import createCookieBanner from '../modules/cookie-banner';
@@ -10,7 +9,7 @@ import createCookiePreference from '../modules/cookie-preference';
         const cicaGa = createCicaGa(window);
         cicaGa.setUpGAEventTracking();
     } else {
-        window[`ga-disable-${ANALYTICS_TRACKING_ID}`] = true;
+        window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
     }
 
     const autocomplete = createAutocomplete(window);
