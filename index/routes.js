@@ -16,10 +16,6 @@ router.get('/contact-us', (req, res) => {
     res.render('contact-us.njk');
 });
 
-router.get('/new-claim', (req, res) => {
-    res.render('new-claim.njk');
-});
-
 router.get('/police-forces', (req, res) => {
     res.render('police-forces.njk');
 });
