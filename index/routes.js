@@ -8,10 +8,6 @@ router.get('/', (req, res) => {
     res.render('consent.njk');
 });
 
-router.get('/start-page', (req, res) => {
-    res.render('start-page.njk');
-});
-
 router.get('/cookies', (req, res) => {
     res.render('cookies.njk');
 });
