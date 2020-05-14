@@ -1,111 +1,81 @@
 {% extends "page.njk" %}
-{% from "components/table/macro.njk" import govukTable %}
+{% from "components/radios/macro.njk" import govukRadios %}
+{% from "moj/components/banner/macro.njk" import mojBanner %}
 
 {% block innerContent %}
+
     <h1 class="govuk-heading-xl">Cookies</h1>
 
-    <h2 class="govuk-heading-l">How our service uses cookies</h2>
+    {% set bannerHtml %}
+        <p class="govuk-heading-m">Your cookie settings were saved</p>
+        <a class="govuk-button govuk-!-margin-bottom-0" href="/apply">
+            Continue your application
+        </a>
+    {% endset %}
 
-    <p class="govuk-body">When you apply for compensation online, we store a small file, known as a cookie, on your PC or digital device.</p>
-    <p class="govuk-body">The cookie remembers the information you enter by storing it on your computer.  We do not store the information.</p>
-
-    <p class="govuk-body">The cookie is deleted when you:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>submit your application</li>
-        <li>do not add any information for 15 minutes</li>
-    </ul>
-
-    <h2 class="govuk-heading-l">Other ways we use cookies</h2>
-
-    <p class="govuk-body">We also use cookies to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>help your PC or digital device connect with us quicker</li>
-        <li>store information, if you create a user account</li>
-        <li>measure how you use our service, so we can update and improve it</li>
-        <li>make sure we do not keep showing you the same notifications</li>
-        <li>protect your security, by stopping sites that pretend to be GOV.UK services from gathering your information</li>
-    </ul>
-
-
-    <p class="govuk-body">You can <a class="govuk-link" href="https://www.gov.uk/help/cookies" target="_blank">read more about how cookies are used</a>.</p>
-    <p class="govuk-body"><a class="govuk-link" href="https://ico.org.uk/your-data-matters/online/cookies/" target="_blank">Learn how to manage cookies</a>.</p>
-
-
-    <h2 class="govuk-heading-l">Cookies specific to our service</h2>
-
-    {{ govukTable({
-      firstCellIsHeader: true,
-      head: [
-        {
-          text: "Name"
-        },
-        {
-          text: "Purpose"
-        },
-        {
-          text: "Expires"
+    {{ mojBanner({
+        html: bannerHtml,
+        classes: 'moj-banner moj-banner--success moj-banner--invisible',
+        attributes: {
+            id: 'preferences-set-success'
         }
-      ],
-      rows: [
-        [
-          {
-            text: "cookiePanel"
-          },
-          {
-            text: "Lets us know if you have dismissed the cookie banner"
-          },
-          {
-            text: "Never"
-          }
-        ],
-        [
-          {
-            text: "sessionCookie"
-          },
-          {
-            text: "Confirms your identity and allows continued use of the service without disruption"
-          },
-          {
-            text: "After 15 minutes of inactivity"
-          }
-        ],
-        [
-          {
-            text: "_ga"
-          },
-          {
-            text: "This helps us count how many people visit the GOV.UK Design System site by tracking if you've visited before"
-          },
-          {
-            text: "2 years"
-          }
-        ],
-        [
-          {
-            text: "_gid"
-          },
-          {
-            text: "This helps us count how many people visit the GOV.UK Design System site by tracking if you've visited before"
-          },
-          {
-            text: "24 hours"
-          }
-        ],
-        [
-          {
-            text: "_gat"
-          },
-          {
-            text: "This is used to limit the rate at which page view requests are recorded by Google"
-          },
-          {
-            text: "1 minute"
-          }
-        ]
-      ]
     }) }}
 
-    <h2 class="govuk-heading-l">Other suppliers</h2>
+    <p class="govuk-body">Cookies are files saved on your phone, tablet or computer when you visit a website.</p>
+    <p class="govuk-body">We use cookies to store information about how you use the 'Claim criminal injuries compensation' service, such as the pages you visit.</p>
 
-    <p class="govuk-body">GB group supply our address lookup service. <a class="govuk-link" href="https://www.gbgplc.com/cookie-policy/" target="_blank">Read GB Group's cookie policy</a>.</p>
+    <form id="cookie-preferences" method="post">
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <p class="govuk-fieldset__heading govuk-!-margin-top-5">
+                        Cookies used to improve the service
+                    </p>
+                </legend>
+                {{ govukRadios({
+                    idPrefix: "q-cookie-preference-analytics",
+                    name: "q-cookie-preference-analytics",
+                    hint: {
+                        html: "<p>We use Google Analytics to measure how you use the website so we can improve it. We do not allow Google to use or share the data about how you use this site.</p>
+                            <p>Google Analytics sets cookies that store anonymised information about:</p>
+
+                            <ul>
+                                <li>how you got to the site</li>
+                                <li>the pages you visit on the site</li>
+                                <li>how long you spend on each page</li>
+                                <li>what you click on while you're visiting the site</li>
+                            </ul>"
+                    },
+                    items: [
+                        {
+                            value: 1,
+                            text: "Use cookies that measure my website use",
+                            attributes: {
+                                'data-cookie-preference': 'analytics'
+                            }
+                        },
+                        {
+                            value: 0,
+                            text: "Do not use cookies that measure my website use",
+                            attributes: {
+                                'data-cookie-preference': 'analytics'
+                            },
+                            checked: true
+                        }
+                    ],
+                    classes: "govuk-radios--inline"
+                }) }}
+            </fieldset>
+        </div>
+        <input type="submit" class="govuk-button" id="save-preferences" value="Save changes" />
+    </form>
+
+    <h2 class="govuk-heading-l govuk-!-margin-top-5">Essential cookies</h2>
+    <p class="govuk-body">These cookies need to be on to allow you to use the 'Claim criminal injuries compensation' service.</p>
+    <h3 class="govuk-heading-m">Your progress when using the service</h3>
+    <p class="govuk-body">When you use the service, we’ll set a cookie to remember your progress through this site. This cookie does not store your personal data and is deleted when you close this website.</p>
+    <h3 class="govuk-heading-m">Your cookie preferences</h3>
+    <p class="govuk-body">When you use the service, we’ll set a cookie to remember your cookie preferences. This cookie does not store any personal data.</p>
+    <p class="govuk-body">It will be saved on your computer or phone for 1 year, or until you delete it.</p>
+
 {% endblock %}
