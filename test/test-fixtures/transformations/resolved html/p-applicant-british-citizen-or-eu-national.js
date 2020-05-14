@@ -34,7 +34,7 @@ const html = `<!DOCTYPE html>
   <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
-  <link rel="stylesheet "href="/dist/css/accessible-autocomplete.css" />	
+  <link rel="stylesheet "href="/dist/css/accessible-autocomplete.css" />
   <link rel="stylesheet "href="/dist/css/accessible-autocomplete-wrapper.css" />
 
 
@@ -111,7 +111,7 @@ const html = `<!DOCTYPE html>
     <div class="govuk-header__content">
 
 
-    <a href="/start-page" class="govuk-header__link govuk-header__link--service-name">
+    <a href="https://www.gov.uk/claim-compensation-criminal-injury/make-claim" class="govuk-header__link govuk-header__link--service-name">
       Claim criminal injuries compensation
     </a>
 
@@ -243,31 +243,31 @@ const html = `<!DOCTYPE html>
 
             <h2 class="govuk-visually-hidden">Support links</h2>
             <ul class="govuk-footer__inline-list">
-              
+
                 <li class="govuk-footer__inline-list-item">
                   <a class="govuk-footer__link" href="https://www.gov.uk/guidance/cica-privacy-notice">
                     Privacy
                   </a>
                 </li>
-              
+
                 <li class="govuk-footer__inline-list-item">
                   <a class="govuk-footer__link" href="/cookies">
                     Cookies
                   </a>
                 </li>
-              
+
                 <li class="govuk-footer__inline-list-item">
                   <a class="govuk-footer__link" href="/contact-us">
                     Contact
                   </a>
                 </li>
-              
+
                 <li class="govuk-footer__inline-list-item">
                   <a class="govuk-footer__link" href="/accessibility-statement">
                     Accessibility statement
                   </a>
                 </li>
-              
+
             </ul>
 
 
