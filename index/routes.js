@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('consent.njk');
+    res.redirect(301, 'https://www.gov.uk/claim-compensation-criminal-injury/make-claim');
 });
 
 router.get('/cookies', (req, res) => {

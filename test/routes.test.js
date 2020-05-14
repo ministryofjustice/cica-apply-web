@@ -89,16 +89,10 @@ describe('Data capture service endpoints', () => {
                 describe('200', () => {
                     it('Should respond with a 200 status', async () => {
                         const response = await request(app).get('/');
-                        expect(response.statusCode).toBe(200);
-                    });
-                    it('Should render a page with the consent heading', async () => {
-                        const response = await request(app).get('/');
-                        const actual = response.res.text.replace(/\s+/g, '');
-                        const pageHeading = `<h1 class="govuk-heading-xl">A new way to claim</h1>`.replace(
-                            /\s+/g,
-                            ''
+                        expect(response.statusCode).toBe(301);
+                        expect(response.get('location')).toEqual(
+                            'https://www.gov.uk/claim-compensation-criminal-injury/make-claim'
                         );
-                        expect(actual).toContain(pageHeading);
                     });
                 });
             });
