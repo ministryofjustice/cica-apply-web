@@ -102,25 +102,6 @@ describe('Data capture service endpoints', () => {
                     });
                 });
             });
-            describe('/start-page', () => {
-                describe('GET', () => {
-                    describe('200', () => {
-                        it('Should respond with a 200 status', async () => {
-                            const response = await request(app).get('/start-page');
-                            expect(response.statusCode).toBe(200);
-                        });
-                        it('Should render a page with the start page heading', async () => {
-                            const response = await request(app).get('/start-page');
-                            const actual = response.res.text.replace(/\s+/g, '');
-                            const pageHeading = `<h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>`.replace(
-                                /\s+/g,
-                                ''
-                            );
-                            expect(actual).toContain(pageHeading);
-                        });
-                    });
-                });
-            });
             describe('/cookies', () => {
                 describe('GET', () => {
                     describe('200', () => {
