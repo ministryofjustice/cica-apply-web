@@ -5,11 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('consent.njk');
-});
-
-router.get('/start-page', (req, res) => {
-    res.render('start-page.njk');
+    res.redirect(301, 'https://www.gov.uk/claim-compensation-criminal-injury/make-claim');
 });
 
 router.get('/cookies', (req, res) => {
@@ -18,10 +14,6 @@ router.get('/cookies', (req, res) => {
 
 router.get('/contact-us', (req, res) => {
     res.render('contact-us.njk');
-});
-
-router.get('/new-claim', (req, res) => {
-    res.render('new-claim.njk');
 });
 
 router.get('/police-forces', (req, res) => {
