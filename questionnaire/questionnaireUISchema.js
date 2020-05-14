@@ -93,12 +93,9 @@ module.exports = {
                                     'p-applicant-who-are-you-applying-for':
                                         'Who are you applying for?',
                                     'p-applicant-are-you-18-or-over': 'Are you 18 or over?',
+                                    'p-applicant-confirmation-method': 'Confirmation method',
                                     'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse':
                                         'Were you a victim of sexual assault or abuse?',
-                                    'p-applicant-select-the-option-that-applies-to-you':
-                                        "Option you've selected",
-                                    'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police':
-                                        'Reasons for delay in reporting crime',
                                     'p-applicant-select-reasons-for-the-delay-in-making-your-application':
                                         'Reasons for the delay in making your application'
                                 }
@@ -111,7 +108,6 @@ module.exports = {
                                         'Have you been known by any other names?',
                                     'p-applicant-what-other-names-have-you-used': 'Other names',
                                     'p-applicant-enter-your-date-of-birth': 'Date of birth',
-                                    'p-applicant-confirmation-method': 'Confirmation method',
                                     'p-applicant-british-citizen-or-eu-national':
                                         'Are you a British citizen or EU National?'
                                 }
@@ -153,7 +149,9 @@ module.exports = {
                                         'When was the crime reported?',
                                     'p--whats-the-crime-reference-number': 'Crime reference number',
                                     'p--which-police-force-is-investigating-the-crime':
-                                        'Which police force is investigating?'
+                                        'Which police force is investigating?',
+                                    'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police':
+                                        'Reasons for delay in reporting crime'
                                 }
                             },
                             {
@@ -349,7 +347,7 @@ module.exports = {
                         macroOptions: {
                             classes: ''
                         },
-                        autoComplete: 'address-line1'
+                        autoComplete: 'address-line2'
                     }
                 },
                 'q-applicant-town-or-city': {
@@ -608,6 +606,11 @@ module.exports = {
                 'q-gp-county',
                 'q-gp-postcode'
             ]
+        }
+    },
+    'p--whats-the-crime-reference-number': {
+        options: {
+            outputOrder: ['q--whats-the-crime-reference-number', 'i-dont-know-the-crime-reference']
         }
     }
 };
