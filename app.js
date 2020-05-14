@@ -19,6 +19,7 @@ const app = express();
 nunjucks
     .configure(
         [
+            'node_modules/@ministryofjustice/frontend/',
             'node_modules/govuk-frontend/govuk/',
             'node_modules/govuk-frontend/govuk/components/',
             'index/',
@@ -31,7 +32,8 @@ nunjucks
             express: app
         }
     )
-    .addGlobal('gaTrackingId', process.env.CW_GA_TRACKING_ID);
+    .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID) // gaTrackingId
+    .addGlobal('CW_URL', process.env.CW_URL); // serviceUrl
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();

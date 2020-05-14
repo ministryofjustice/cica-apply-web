@@ -20,16 +20,27 @@
   <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css" />
 {% endblock %}
 
+
+{% block skipLink %}
+    {{ super() }}
+    {#
+      given how the govuk template.njk is defined, this is the only way
+      to put the cookie banner before the skip ink whilst still being
+      outside the main content
+    #}
+    {% include "cookie-banner.njk" %}
+{% endblock %}
+
 {% block bodyStart %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ gaTrackingId }}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
     <script nonce="{{ nonce }}">
         window.dataLayer = window.dataLayer || [];
         function gtag(){
             dataLayer.push(arguments);
         }
         gtag('js', new Date());
-        gtag('config', '{{ gaTrackingId }}');
+        gtag('config', '{{ CW_GA_TRACKING_ID }}');
     </script>
 {% endblock %}
 
@@ -67,6 +78,12 @@
 
 {% block bodyEnd %}
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+    <script nonce="{{ nonce }}">
+        window.CICA = {
+            SERVICE_URL: '{{ CW_URL }}',
+            ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
+        };
+    </script>
     <script src="/govuk-frontend/all.js"></script>
     <script nonce="{{ nonce }}">window.GOVUKFrontend.initAll()</script>
     <script src="/dist/js/autocomplete.min.js"></script>
