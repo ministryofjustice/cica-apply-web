@@ -308,7 +308,12 @@ const html = `<!DOCTYPE html>
 
 
 
-
+<script nonce="somenonce">
+window.CICA = {
+  SERVICE_URL: '',
+  ANALYTICS_TRACKING_ID: ''
+};
+</script>
 <script src="/govuk-frontend/all.js"></script>
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
   <script src="/dist/js/autocomplete.min.js"></script>
