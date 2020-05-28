@@ -87,6 +87,10 @@ function renderSection({
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
+            {% block bodyEnd %}
+                {% include "timeout-modal.njk" %}
+                {{ super() }}
+            {% endblock %}
         `,
         {nonce: cspNonce}
     );
