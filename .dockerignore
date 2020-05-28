@@ -18,6 +18,7 @@
 !questionnaire
 !partials
 !src
+!components
 
 !package.json
 !package-lock.json
