@@ -88,7 +88,7 @@ function renderSection({
                 </form>
             {% endblock %}
             {% block bodyEnd %}
-                {% include "timeout-modal.njk" %}
+                {% include "modal-timeout.njk" %}
                 {{ super() }}
             {% endblock %}
         `,
