@@ -1,0 +1,27 @@
+{% extends "page.njk" %}
+{% from "components/button/macro.njk" import govukButton %}
+
+{% block content %}
+<main role="main" class="govuk-main-wrapper ga-event ga-event--scrollthreshold">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                Claim criminal injuries compensation
+            </h1>
+            <form name="questionnaire-form" id="questionnaire-form">
+                {{ govukButton({
+                    text: "No params",
+                    isStartButton: true,
+                    href: "/apply"
+                }) }}
+                <p>\n\n\n\n</p>
+                {{ govukButton({
+                    text: "isCica param",
+                    isStartButton: true,
+                    href: "/apply?isCica=true"
+                }) }}
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

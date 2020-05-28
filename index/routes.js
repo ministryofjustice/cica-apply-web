@@ -24,6 +24,10 @@ router.get('/accessibility-statement', (req, res) => {
     res.render('accessibility-statement.njk');
 });
 
+router.get('/test-page', (req, res) => {
+    res.render('test-page.njk');
+});
+
 router.get('*', (req, res) => {
     res.render('404.njk');
 });
