@@ -32,3 +32,5 @@ spec:
               value: UA-136710388-3
             - name: CW_URL
               value: https://uat.claim-criminal-injuries-compensation.service.justice.gov.uk
+            - name: CW_SESSION_DURATION
+              value: 900000
