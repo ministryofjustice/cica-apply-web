@@ -3,7 +3,8 @@
 const service = require('./request-service')();
 
 function questionnaireService() {
-    function createQuestionnaire() {
+    function createQuestionnaire(isCsc) {
+        const origin = isCsc ? 'TEL' : 'WEB';
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
             headers: {
@@ -13,7 +14,10 @@ function questionnaireService() {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName: 'sexual-assault'
+                        templateName: 'sexual-assault',
+                        metaData: {
+                            origin
+                        }
                     }
                 }
             }
