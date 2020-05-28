@@ -1,10 +1,9 @@
-/* eslint-disable */
-'use strict';
+import CustomEvent from '../../../node_modules/custom-event';
 
 function Modal(module) {
     this.module = module;
     this.dialogBox = module.querySelector('dialog');
-    this.container = document.documentElement;
+    this.container = window.document.documentElement;
     this.hasNativeDialog = 'showModal' in this.dialogBox;
 
     // list of elements that are allowed to be focused on.
@@ -18,7 +17,7 @@ function Modal(module) {
     ];
 }
 
-Modal.prototype.init = function(options) {
+Modal.prototype.init = options => {
     this.options = options || {};
 
     this.open = this.handleOpen.bind(this);
@@ -50,7 +49,7 @@ Modal.prototype.init = function(options) {
     return this;
 };
 
-Modal.prototype.handleOpen = function(e) {
+Modal.prototype.handleOpen = e => {
     if (e) {
         e.preventDefault();
     }
@@ -59,14 +58,18 @@ Modal.prototype.handleOpen = function(e) {
         return;
     }
 
-    this.lastActiveElement = document.activeElement;
+    this.lastActiveElement = window.document.activeElement;
     this.container.classList.add('govuk-!-scroll-disabled');
     this.module.classList.add('govuk-modal--open');
-    this.hasNativeDialog ? this.dialogBox.show() : this.dialogBox.setAttribute('open', '');
+    if (this.hasNativeDialog) {
+        this.dialogBox.show();
+    } else {
+        this.dialogBox.setAttribute('open', '');
+    }
     this.isOpen = true;
     this.focus();
 
-    document.addEventListener('keydown', this.boundKeyDown, true);
+    window.document.addEventListener('keydown', this.boundKeyDown, true);
 
     if (typeof this.options.onOpen === 'function') {
         this.options.onOpen.call(this);
@@ -85,13 +88,18 @@ Modal.prototype.handleClose = function(e) {
         return;
     }
 
-    this.hasNativeDialog ? this.dialogBox.close() : this.dialogBox.removeAttribute('open');
+    if (this.hasNativeDialog) {
+        this.dialogBox.close();
+    } else {
+        this.dialogBox.removeAttribute('open');
+    }
+
     this.module.classList.remove('govuk-modal--open');
     this.container.classList.remove('govuk-!-scroll-disabled');
     this.isOpen = false;
     this.lastActiveElement.focus();
 
-    document.removeEventListener('keydown', this.boundKeyDown, true);
+    window.document.removeEventListener('keydown', this.boundKeyDown, true);
 
     if (typeof this.options.onClose === 'function') {
         this.options.onClose.call(this);
@@ -101,13 +109,13 @@ Modal.prototype.handleClose = function(e) {
     this.module.dispatchEvent(event);
 };
 
-Modal.prototype.handleFocus = function() {
+Modal.prototype.handleFocus = () => {
     this.dialogBox.scrollIntoView();
     this.focusElement.focus({preventScroll: true});
 };
 
-Modal.prototype.handleKeyDown = function(e) {
-    const keyCode = e.keyCode;
+Modal.prototype.handleKeyDown = e => {
+    const {keyCode} = e;
 
     // tab key.
     if (keyCode === 9) {
@@ -115,29 +123,27 @@ Modal.prototype.handleKeyDown = function(e) {
 
         // is the modal element (or any of the "focusable" elements) currently
         // being focused on?
-        const isFocusedOnModal = [...this.focusable, this.dialogBox].some((element) => {
-            return document.activeElement === element;
+        const isFocusedOnModal = [...this.focusable, this.dialogBox].some(element => {
+            return window.document.activeElement === element;
         });
 
-        // if the modal is not currently focused on them force it.
+        // if the modal is not currently focused on them then force it.
         if (!isFocusedOnModal) {
             focusElement = this.dialogBox;
-        } else {
             // if the currently focused element is the last "focusable" element
             // in the defined `focusable` array, then wrap it to the dialog
             // box element. or if there are no "focusable" element defined, then
             // just force focus to the dialog box.
-            if (
-                (document.activeElement === this.focusableLast && !e.shiftKey) ||
-                !this.focusable.length
-            ) {
-                focusElement = this.dialogBox;
-                // when shift is held down...
-                // if the dialog box element is currently focused then force
-                // focus to the last element in the "focusable" array 
-            } else if (document.activeElement === this.dialogBox && e.shiftKey) {
-                focusElement = this.focusableLast;
-            }
+        } else if (
+            (window.document.activeElement === this.focusableLast && !e.shiftKey) ||
+            !this.focusable.length
+        ) {
+            focusElement = this.dialogBox;
+            // when shift is held down...
+            // if the dialog box element is currently focused then force
+            // focus to the last element in the "focusable" array
+        } else if (window.document.activeElement === this.dialogBox && e.shiftKey) {
+            focusElement = this.focusableLast;
         }
 
         // set the focus.
@@ -148,11 +154,11 @@ Modal.prototype.handleKeyDown = function(e) {
     }
 };
 
-Modal.prototype.handleContent = function(options) {
+Modal.prototype.handleContent = options => {
     const dialogTitle = this.dialogBox.querySelector('.govuk-modal__heading');
     const dialogContent = this.dialogBox.querySelector('.govuk-modal__content');
     dialogTitle.innerHTML = options.heading;
     dialogContent.innerHTML = options.content;
-}
+};
 
 export default Modal;
