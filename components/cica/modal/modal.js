@@ -79,7 +79,7 @@ Modal.prototype.handleOpen = e => {
     this.module.dispatchEvent(event);
 };
 
-Modal.prototype.handleClose = function(e) {
+Modal.prototype.handleClose = e => {
     if (e) {
         e.preventDefault();
     }
