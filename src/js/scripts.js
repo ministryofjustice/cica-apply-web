@@ -38,7 +38,8 @@ import createTimeoutModal from '../modules/modal-timeout';
         sessionTimeoutModalElement.addEventListener('MODAL_ERROR_RESUME_FAILURE', () => {
             const timeoutEndedModal = createTimeoutModal(window);
             timeoutEndedModal.init({
-                element: '#govuk-modal-session-resume-error'
+                element: '#govuk-modal-session-resume-error',
+                closeElement: '.govuk-modal__close'
             });
         });
 

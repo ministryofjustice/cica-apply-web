@@ -319,7 +319,8 @@ describe('Timeout Modal', () => {
             const timeoutEndedModal = createTimeoutModal(window);
             timeoutEndedModal.init({
                 element: '#govuk-modal-test-6',
-                resumeElement: '.govuk-modal__continue'
+                resumeElement: '.govuk-modal__continue',
+                closeElement: '.govuk-modal__close'
             });
             const modalElement = document.querySelector('#govuk-modal-test-6');
             expect(modalElement.classList.contains('govuk-modal--open')).toEqual(true);
@@ -412,6 +413,7 @@ describe('Timeout Modal', () => {
             timeoutEndedModal.init({
                 element: '#govuk-modal-test-5',
                 resumeElement: '.govuk-modal__continue',
+                closeElement: '.govuk-modal__close',
                 onClose: () => {
                     modalClosed = '123456';
                 }

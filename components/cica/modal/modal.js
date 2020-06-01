@@ -38,7 +38,6 @@ Modal.prototype.init = function(options) {
     this.focusableLast = this.focusable[this.focusable.length - 1];
     this.focusElement = this.options.focusElement || this.dialogBox;
     this.dialogContent = this.options.content;
-    // this.buttonClose = this.dialogBox.querySelector('.govuk-modal__close');
 
     this.isOpen = this.dialogBox.hasAttribute('open');
 
@@ -53,10 +52,6 @@ Modal.prototype.init = function(options) {
     if (this.options.closeElement) {
         this.options.closeElement.addEventListener('click', this.close);
     }
-
-    // if (this.buttonClose) {
-    //     this.buttonClose.addEventListener('click', this.close);
-    // }
 
     return this;
 };
