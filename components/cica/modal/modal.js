@@ -1,3 +1,6 @@
+/* eslint-disable func-names */
+// reason for the above eslint rule change is explained
+// above the `Modal.prototype.init` method definition.
 import CustomEvent from '../../../node_modules/custom-event';
 
 function Modal(module) {
@@ -17,7 +20,12 @@ function Modal(module) {
     ];
 }
 
-Modal.prototype.init = options => {
+// Arrow functions can never be used as constructor functions. Hence,
+// they can never be invoked with the new keyword. As such, a prototype
+// property does not exist for an arrow function.
+// https://blog.logrocket.com/anomalies-in-javascript-arrow-functions/
+// https://stackoverflow.com/questions/22939130/when-should-i-use-arrow-functions-in-ecmascript-6
+Modal.prototype.init = function(options) {
     this.options = options || {};
 
     this.open = this.handleOpen.bind(this);
@@ -30,7 +38,7 @@ Modal.prototype.init = options => {
     this.focusableLast = this.focusable[this.focusable.length - 1];
     this.focusElement = this.options.focusElement || this.dialogBox;
     this.dialogContent = this.options.content;
-    this.buttonClose = this.dialogBox.querySelector('.govuk-modal__close');
+    // this.buttonClose = this.dialogBox.querySelector('.govuk-modal__close');
 
     this.isOpen = this.dialogBox.hasAttribute('open');
 
@@ -42,14 +50,18 @@ Modal.prototype.init = options => {
         this.content(this.options.content);
     }
 
-    if (this.buttonClose) {
-        this.buttonClose.addEventListener('click', this.close);
+    if (this.options.closeElement) {
+        this.options.closeElement.addEventListener('click', this.close);
     }
+
+    // if (this.buttonClose) {
+    //     this.buttonClose.addEventListener('click', this.close);
+    // }
 
     return this;
 };
 
-Modal.prototype.handleOpen = e => {
+Modal.prototype.handleOpen = function(e) {
     if (e) {
         e.preventDefault();
     }
@@ -79,7 +91,7 @@ Modal.prototype.handleOpen = e => {
     this.module.dispatchEvent(event);
 };
 
-Modal.prototype.handleClose = e => {
+Modal.prototype.handleClose = function(e) {
     if (e) {
         e.preventDefault();
     }
@@ -100,7 +112,6 @@ Modal.prototype.handleClose = e => {
     this.lastActiveElement.focus();
 
     window.document.removeEventListener('keydown', this.boundKeyDown, true);
-
     if (typeof this.options.onClose === 'function') {
         this.options.onClose.call(this);
     }
@@ -109,12 +120,12 @@ Modal.prototype.handleClose = e => {
     this.module.dispatchEvent(event);
 };
 
-Modal.prototype.handleFocus = () => {
+Modal.prototype.handleFocus = function() {
     this.dialogBox.scrollIntoView();
     this.focusElement.focus({preventScroll: true});
 };
 
-Modal.prototype.handleKeyDown = e => {
+Modal.prototype.handleKeyDown = function(e) {
     const {keyCode} = e;
 
     // tab key.
@@ -153,8 +164,7 @@ Modal.prototype.handleKeyDown = e => {
         }
     }
 };
-
-Modal.prototype.handleContent = options => {
+Modal.prototype.handleContent = function(options) {
     const dialogTitle = this.dialogBox.querySelector('.govuk-modal__heading');
     const dialogContent = this.dialogBox.querySelector('.govuk-modal__content');
     dialogTitle.innerHTML = options.heading;
