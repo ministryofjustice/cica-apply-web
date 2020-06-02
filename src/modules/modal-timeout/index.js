@@ -61,7 +61,7 @@ function createTimeoutModal(window) {
 
     function resumeClickHandler(settings) {
         // get a valid html response - this will go to our custom 404 page.
-        get('/')
+        get('/something')
             .then(() => {
                 settings.dialogBoxResumeCTA.removeEventListener('click', resumeClickHandler);
                 timeoutsArray.forEach(x => {
