@@ -4,12 +4,15 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, 'src/js/scripts.js')
+        'bundle.js': [
+            // bundles from the bottom up.
+            path.resolve(__dirname, 'components/cica/modal/modal.js'),
+            path.resolve(__dirname, 'src/js/scripts.js')
+        ]
     },
     output: {
-        path: path.resolve(__dirname, 'public/dist/js'),
-        publicPath: '/',
-        filename: 'bundle.js'
+        filename: '[name]',
+        path: path.resolve(__dirname, 'public/dist/js')
     },
     devtool: 'none',
     module: {

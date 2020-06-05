@@ -8,6 +8,7 @@ const sectionList = require('./non-complex-sexual-assault-id-mapper');
 nunjucks.configure(
     [
         'node_modules/@ministryofjustice/frontend/',
+        'components/',
         'node_modules/govuk-frontend/govuk/',
         'node_modules/govuk-frontend/govuk/components/',
         'index/',
@@ -85,6 +86,10 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
+            {% endblock %}
+            {% block bodyEnd %}
+                {% include "modal-timeout.njk" %}
+                {{ super() }}
             {% endblock %}
         `,
         {nonce: cspNonce}
