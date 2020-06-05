@@ -1,0 +1,121 @@
+@include govuk-exports("govuk/component/timeout") {
+    $govuk-modal-width: 640px;
+
+    .govuk-modal,
+    .govuk-modal__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .govuk-modal__overlay {
+        z-index: 10;
+        opacity: 0.7;
+        background: govuk-colour("black");
+    }
+    .govuk-modal {
+        display: none;
+        z-index: 100;
+    }
+    .govuk-modal--open {
+        display: table;
+        display: flex;
+        flex-direction: column;
+    }
+    .govuk-modal__wrapper {
+        box-sizing: border-box;
+        display: table-cell;
+        display: flex;
+        height: inherit;
+        @include govuk-responsive-padding(7, "top");
+        @include govuk-responsive-padding(7, "bottom");
+        overflow-y: auto;
+        vertical-align: middle;
+        align-items: center;
+    }
+    .govuk-modal__box {
+        box-sizing: border-box;
+        display: block;
+        position: relative;
+        z-index: 20;
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 0;
+        border: $govuk-focus-width solid govuk-colour("black");
+        background: govuk-colour("white");
+
+        &:focus {
+            outline: $govuk-focus-width solid $govuk-focus-colour;
+        }
+        &::backdrop {
+            display: none;
+        }
+    }
+    .govuk-modal__header {
+        @include govuk-clearfix;
+        @include govuk-responsive-margin(5, "bottom");
+        padding-bottom: $govuk-focus-width;
+        color: govuk-colour("white");
+        background-color: govuk-colour("black");
+        text-align: right;
+    }
+    .govuk-modal__main {
+        @include govuk-responsive-padding(6);
+        padding-top: 0;
+    }
+    .govuk-modal__header-image {
+        display: block;
+        margin: 6px 0 6px 6px;
+        @include govuk-responsive-margin(5, "left");
+        float: left;
+    }
+    .govuk-modal__heading:last-child {
+        margin-bottom: 0;
+    }
+    .govuk-modal__close {
+        $font-size: 36px;
+        $line-height: 1;
+        display: block;
+        width: auto;
+        min-width: 44px;
+        margin: 0;
+        padding: 2px 5px;
+        float: right;
+        color: govuk-colour("white");
+        background-color: govuk-colour("black");
+        box-shadow: none !important;
+        font-size: $font-size;
+
+        @if $govuk-typography-use-rem {
+            font-size: govuk-px-to-rem($font-size);
+        }
+
+        @include govuk-typography-weight-bold;
+        line-height: $line-height;
+
+        &:hover {
+            color: govuk-colour("black");
+            background-color: govuk-colour("yellow");
+        }
+
+        &:active {
+            top: 0;
+        }
+    }
+    @include govuk-media-query($from: tablet) {
+        .govuk-modal__main {
+            padding-top: 0;
+        }
+
+        .govuk-modal__box {
+            width: percentage($govuk-modal-width / map-get($govuk-breakpoints, desktop));
+        }
+    }
+    @include govuk-media-query($from: desktop) {
+        .govuk-modal__box {
+            width: $govuk-modal-width;
+        }
+    }
+}

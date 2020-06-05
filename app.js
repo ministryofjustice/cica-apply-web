@@ -20,6 +20,7 @@ nunjucks
     .configure(
         [
             'node_modules/@ministryofjustice/frontend/',
+            'components/',
             'node_modules/govuk-frontend/govuk/',
             'node_modules/govuk-frontend/govuk/components/',
             'index/',
@@ -32,8 +33,9 @@ nunjucks
             express: app
         }
     )
-    .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID) // gaTrackingId
-    .addGlobal('CW_URL', process.env.CW_URL); // serviceUrl
+    .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID)
+    .addGlobal('CW_URL', process.env.CW_URL)
+    .addGlobal('CW_SESSION_DURATION', process.env.CW_SESSION_DURATION);
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
@@ -78,8 +80,8 @@ app.use(
     clientSessions({
         cookieName: 'cicaSession', // cookie name dictates the key name added to the request object
         secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
-        duration: 15 * 60 * 1000, // how long the session will stay valid in ms
-        activeDuration: 15 * 60 * 1000, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+        duration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // how long the session will stay valid in ms
+        activeDuration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
         cookie: {
             ephemeral: true, // when true, cookie expires when the browser closes
             httpOnly: true, // when true, cookie is not accessible from javascript

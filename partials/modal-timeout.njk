@@ -1,0 +1,75 @@
+
+{% from "cica/modal/macro.njk" import govukModal %}
+{% set sessionTimeoutHeading %}
+    <span aria-live="assertive">Your application will time out in <span class="govuk-modal__time-remaining" aria-atomic="true" aria-live="assertive"></span></span>
+{% endset %}
+{% set sessionTimeoutDescription %}
+    <p class="govuk-body">We'll reset your application if you do not respond. We do this to keep your information secure.</p>
+{% endset %}
+{% set sessionEndedHeading %}
+    Your application has timed out
+{% endset %}
+{% set sessionEndedDescription %}
+    <p class="govuk-body">You'll have to start your application again.</p>
+{% endset %}
+{% set sessionResumeErrorHeading %}
+    Something went wrong
+{% endset %}
+{% set sessionResumeErrorDescription %}
+    <p class="govuk-body">We were unable to resume your application. You'll have to start your application again.</p>
+{% endset %}
+            
+{% call govukModal({
+    id: "session-timing-out",
+    role: "alertdialog",
+    hasCloseButton: false,
+    heading: {
+        html: sessionTimeoutHeading
+    },
+    content: {
+        html: sessionTimeoutDescription
+    }
+}) %}
+    {{ govukButton({
+        text: "Continue application",
+        type: "button",
+        classes: "govuk-modal__continue"
+    }) }}
+    <!-- <a href="{{ basePath }}" class="govuk-modal-dialogue__cancel govuk-body govuk-link govuk-link--no-visited-state">Start again</a> -->
+{% endcall %}
+
+{% call govukModal({
+    id: "session-ended",
+    role: "alertdialog",
+    hasCloseButton: false,
+    heading: {
+        html: sessionEndedHeading
+    },
+    content: {
+        html: sessionEndedDescription
+    }
+}) %}
+    {{ govukButton({
+        text: "Start again",
+        type: "button",
+        href: "/apply"
+    }) }}
+{% endcall %}
+
+{% call govukModal({
+    id: "session-resume-error",
+    role: "alertdialog",
+    hasCloseButton: true,
+    heading: {
+        html: sessionResumeErrorHeading
+    },
+    content: {
+        html: sessionResumeErrorDescription
+    }
+}) %}
+    {{ govukButton({
+        text: "Start again",
+        type: "button",
+        href: "/apply"
+    }) }}
+{% endcall %}
