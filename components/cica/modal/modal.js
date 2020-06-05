@@ -38,7 +38,6 @@ Modal.prototype.init = function(options) {
     this.focusableLast = this.focusable[this.focusable.length - 1];
     this.focusElement = this.options.focusElement || this.dialogBox;
     this.dialogContent = this.options.content;
-
     this.isOpen = this.dialogBox.hasAttribute('open');
 
     if (this.options.triggerElement) {
