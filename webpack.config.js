@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         'bundle.js': [
             // bundles from the bottom up.
+            path.resolve(__dirname, 'components/cica/modal/modal.js'),
             path.resolve(__dirname, 'src/js/scripts.js')
         ]
     },
