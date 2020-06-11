@@ -3,8 +3,8 @@
 const service = require('./request-service')();
 
 function questionnaireService() {
-    function createQuestionnaire(isCsc) {
-        const origin = isCsc ? 'TEL' : 'WEB';
+    function createQuestionnaire(isCica) {
+        const origin = isCica ? 'TEL' : 'WEB';
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
             headers: {
