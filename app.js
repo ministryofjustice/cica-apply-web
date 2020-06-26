@@ -106,10 +106,12 @@ app.use('/apply', async (req, res, next) => {
     const cookie = req.cicaSession.questionnaireId;
     // query param passed from Tempus launch page
     const phoneApplicant = !!req.query.isCica;
+    console.log({phoneApplicant, query: req.query});
     if (cookie === undefined) {
         // no: set it and redirect.
         try {
             const response = await qService.createQuestionnaire(phoneApplicant);
+            console.log(response.body.data.attributes.meta);
             req.cicaSession.questionnaireId = response.body.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial

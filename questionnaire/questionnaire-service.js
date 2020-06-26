@@ -15,7 +15,9 @@ function questionnaireService() {
                     type: 'questionnaires',
                     attributes: {
                         templateName: 'sexual-assault',
-                        applicationOrigin: origin
+                        metadata: {
+                            origin
+                        }
                     }
                 }
             }
