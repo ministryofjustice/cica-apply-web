@@ -63,5 +63,10 @@
     "applicant-are-you-claiming-for-expenses": "p-applicant-are-you-claiming-for-expenses",
     "transition": "p--transition",
     "transition-no-phone-or-email": "p--transition-no-phone-or-email",
+    "applicant-what-was-injured": "p-applicant-what-was-injured",
+    "applicant-what-was-injured-upper": "p-applicant-what-was-injured-upper",
+    "applicant-select-head-injuries": "p-applicant-select-head-injuries",
+    "applicant-select-face-injuries": "p-applicant-select-face-injuries",
+    "applicant-select-neck-injuries": "p-applicant-select-neck-injuries",
     "system": "system"
 }
