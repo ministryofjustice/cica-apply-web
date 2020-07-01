@@ -105,5 +105,10 @@
     "applicant-treatment-for-physical-injuries": "p-applicant-treatment-for-physical-injuries",
     "applicant-medical-help": "p-applicant-medical-help",
     "applicant-treatment-address": "p-applicant-treatment-address",
+    "applicant-what-was-injured": "p-applicant-what-was-injured",
+    "applicant-what-was-injured-upper": "p-applicant-what-was-injured-upper",
+    "applicant-select-head-injuries": "p-applicant-select-head-injuries",
+    "applicant-select-face-injuries": "p-applicant-select-face-injuries",
+    "applicant-select-neck-injuries": "p-applicant-select-neck-injuries",
     "system": "system"
 }
