@@ -72,5 +72,15 @@
     "applicant-physical-injury-upper-ear": "p-applicant-physical-injury-upper-ear",
     "applicant-physical-injury-upper-nose": "p-applicant-physical-injury-upper-nose",
     "applicant-physical-injury-upper-mouth": "p-applicant-physical-injury-upper-mouth",
+    "applicant-physical-injury-upper-skin": "p-applicant-physical-injury-upper-skin",
+    "applicant-physical-injury-arms": "p-applicant-physical-injury-arms",
+    "applicant-physical-injury-arms-shoulder": "p-applicant-physical-injury-arms-shoulder",
+    "applicant-physical-injury-arms-arm": "p-applicant-physical-injury-arms-arm",
+    "applicant-physical-injury-arms-elbow": "p-applicant-physical-injury-arms-elbow",
+    "applicant-physical-injury-arms-wrist": "p-applicant-physical-injury-arms-wrist",
+    "applicant-physical-injury-arms-hand": "p-applicant-physical-injury-arms-hand",
+    "applicant-physical-injury-arms-digit": "p-applicant-physical-injury-arms-digit",
+    "applicant-physical-injury-arms-skin": "p-applicant-physical-injury-arms-skin",
+    "context-physical-injuries": "p--context-physical-injuries",
     "system": "system"
 }
