@@ -157,6 +157,10 @@ module.exports = {
                             {
                                 title: 'Your injuries',
                                 questions: {
+                                    'p-applicant-are-you-claiming-for-physical-injuries':
+                                        'Are you claiming for physical injuries?',
+                                    'p-applicant-are-you-claiming-for-payments':
+                                        'Are you claiming for a sexually transmitted infection (STI), pregnancy, or loss of a pregnancy?',
                                     'p-applicant-do-you-have-disabling-mental-injury':
                                         'Do you have a disabling mental injury?',
                                     'p-applicant-mental-injury-duration':
@@ -177,6 +181,15 @@ module.exports = {
                                     'p-applicant-have-you-seen-a-gp':
                                         'Have you seen a GP about your injuries?',
                                     'p-gp-enter-your-address': "What is your GP's address?"
+                                }
+                            },
+                            {
+                                title: 'Money',
+                                questions: {
+                                    'p-applicant-are-you-claiming-for-loe':
+                                        'Are you claiming for loss of earnings?',
+                                    'p-applicant-are-you-claiming-for-expenses':
+                                        'Are you claiming for expenses as a result of your injuries?'
                                 }
                             },
                             {
