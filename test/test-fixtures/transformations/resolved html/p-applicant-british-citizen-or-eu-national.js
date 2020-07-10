@@ -21,21 +21,19 @@ const html = `<!DOCTYPE html>
 
 
   <!--[if !IE 8]><!-->
-    <link href="/govuk-frontend/all.css" rel="stylesheet" />
+    <link href="/dist/css/all.css" rel="stylesheet" />
   <!--<![endif]-->
 
 
 
   <!--[if IE 8]>
-  <link href="/govuk-frontend/all-ie8.css" rel="stylesheet" />
+  <link href="/dist/css/all-ie8.css" rel="stylesheet" />
   <![endif]-->
 
 
   <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
-  <link rel="stylesheet "href="/dist/css/accessible-autocomplete.css" />
-  <link rel="stylesheet "href="/dist/css/accessible-autocomplete-wrapper.css" />
 
 
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
@@ -555,9 +553,7 @@ window.CICA = {
   SESSION_DURATION:
 };
 </script>
-<script src="/govuk-frontend/all.js"></script>
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
-  <script src="/dist/js/autocomplete.min.js"></script>
   <script src="/dist/js/bundle.js"></script>
   </body>
 </html>

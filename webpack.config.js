@@ -7,6 +7,8 @@ module.exports = {
         'bundle.js': [
             // bundles from the bottom up.
             path.resolve(__dirname, 'components/cica/modal/modal.js'),
+            path.resolve(__dirname, 'src/modules/autocomplete/vendor/autocomplete.min.js'),
+            path.resolve(__dirname, 'node_modules/govuk-frontend/govuk/all.js'),
             path.resolve(__dirname, 'src/js/scripts.js')
         ]
     },
