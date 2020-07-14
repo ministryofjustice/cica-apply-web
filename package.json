@@ -38,7 +38,7 @@
         "morgan": "~1.9.0",
         "nanoid": "^2.1.10",
         "nunjucks": "^3.2.1",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v1.0.1"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer.git#v1.1.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.10.5",
@@ -49,7 +49,7 @@
         "babel-loader": "^8.0.6",
         "core-js": "^3.5.0",
         "custom-event": "^1.0.1",
-        "eslint": "^6.8.0",
+        "eslint": "5.16.0",
         "eslint-config-airbnb-base": "^14.0.0",
         "eslint-config-prettier": "^6.9.0",
         "eslint-plugin-import": "^2.19.1",
