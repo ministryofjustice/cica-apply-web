@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webapp-prod
@@ -34,3 +34,6 @@ spec:
               value: https://claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_SESSION_DURATION
               value: '900000'
+  selector:
+    matchLabels:
+      app: webapp-prod
