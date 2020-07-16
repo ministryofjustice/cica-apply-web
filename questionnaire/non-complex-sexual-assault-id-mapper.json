@@ -98,5 +98,8 @@
     "applicant-physical-injury-legs-toes": "p-applicant-physical-injury-legs-toes",
     "applicant-physical-injury-legs-skin": "p-applicant-physical-injury-legs-skin",
     "context-physical-injuries": "p--context-physical-injuries",
+    "applicant-infections": "p-applicant-infections",
+    "applicant-select-infections": "p-applicant-select-infections",
+    "applicant-pregnancy": "p-applicant-pregnancy",
     "system": "system"
 }
