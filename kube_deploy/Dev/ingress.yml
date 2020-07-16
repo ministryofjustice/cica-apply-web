@@ -1,27 +1,27 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: webapp-ingress
   namespace: claim-criminal-injuries-compensation-dev
 spec:
   tls:
-  - hosts:
-    - dev.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
-  - hosts:
-    - dev.claim-criminal-injuries-compensation.service.justice.gov.uk
-    secretName: dev-claim-criminal-injuries-compensation-cert-secret
+    - hosts:
+        - dev.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+    - hosts:
+        - dev.claim-criminal-injuries-compensation.service.justice.gov.uk
+      secretName: dev-claim-criminal-injuries-compensation-cert-secret
   rules:
-  - host: dev.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: webapp-service
-          servicePort: 3000
-  - host: dev.claim-criminal-injuries-compensation.service.justice.gov.uk
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: webapp-service
-          servicePort: 3000
+    - host: dev.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: webapp-service
+              servicePort: 3000
+    - host: dev.claim-criminal-injuries-compensation.service.justice.gov.uk
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: webapp-service
+              servicePort: 3000
