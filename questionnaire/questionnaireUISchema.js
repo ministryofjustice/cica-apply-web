@@ -863,5 +863,32 @@ module.exports = {
         options: {
             outputOrder: ['q--whats-the-crime-reference-number', 'i-dont-know-the-crime-reference']
         }
+    },
+    'p-applicant-treatment-address': {
+        options: {
+            properties: {
+                'q-applicant-treatment-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-applicant-treatment-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-applicant-treatment-building-and-street',
+                'q-applicant-treatment-building-and-street2',
+                'q-applicant-treatment-town-or-city',
+                'q-applicant-treatment-county',
+                'q-applicant-treatment-postcode'
+            ]
+        }
     }
 };
