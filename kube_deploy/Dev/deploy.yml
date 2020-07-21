@@ -33,7 +33,7 @@ spec:
             - name: CW_URL
               value: https://dev.claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_SESSION_DURATION
-              value: '120000'
+              value: '900000'
   selector:
     matchLabels:
       app: webapp-dev
