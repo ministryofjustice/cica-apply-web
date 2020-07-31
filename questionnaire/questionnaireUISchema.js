@@ -249,10 +249,13 @@ module.exports = {
                             {
                                 title: 'Money',
                                 questions: {
-                                    'p-applicant-are-you-claiming-for-loe':
-                                        'Are you claiming for loss of earnings?',
-                                    'p-applicant-are-you-claiming-for-expenses':
-                                        'Are you claiming for expenses as a result of your injuries?'
+                                    'p-applicant-unable-to-work-duration':
+                                        'Have you been unable to work for more than 28 weeks?',
+                                    'p-applicant-job-when-crime-happened':
+                                        'Did you have a job when the crime happened?',
+                                    'p-applicant-work-details-option':
+                                        'Select the option that applies to you',
+                                    'p-applicant-expenses': 'What expenses have you had?'
                                 }
                             },
                             {
@@ -575,7 +578,17 @@ module.exports = {
                             knee: 'Knee',
                             ankle: 'Ankle',
                             foot: 'Foot',
-                            toes: 'Toes'
+                            toes: 'Toes',
+                            aids: 'Buying or repairing physical aids',
+                            alterations: 'Alterations to my home',
+                            'home-care': 'Home care',
+                            treatment: "NHS treatment I've paid for",
+                            'no-expenses': 'I have not had these expenses',
+                            employed:
+                                'I had been in regular work for at least 3 years before the crime',
+                            'underage-for-work': 'I was too young to work',
+                            education: 'I was in full-time education',
+                            care: 'I was caring for someone'
                         }
                     }
                 }
@@ -889,6 +902,48 @@ module.exports = {
                 'q-applicant-treatment-county',
                 'q-applicant-treatment-postcode'
             ]
+        }
+    },
+    'p-applicant-expenses': {
+        options: {
+            properties: {
+                'q-applicant-expenses': {
+                    options: {
+                        additionalMapping: [
+                            {
+                                itemType: 'divider',
+                                itemValue: 'or',
+                                itemIndex: 4
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-work-details-option': {
+        options: {
+            transformOrder: ['q-applicant-work-details-other', 'q-applicant-work-details-option'],
+            outputOrder: ['q-applicant-work-details-option'],
+            properties: {
+                'q-applicant-work-details-option': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'other',
+                                componentIds: ['q-applicant-work-details-other']
+                            }
+                        ]
+                    }
+                },
+                'q-applicant-work-details-other': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
+                }
+            }
         }
     }
 };

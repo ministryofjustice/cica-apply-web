@@ -110,5 +110,10 @@
     "applicant-select-head-injuries": "p-applicant-select-head-injuries",
     "applicant-select-face-injuries": "p-applicant-select-face-injuries",
     "applicant-select-neck-injuries": "p-applicant-select-neck-injuries",
+    "applicant-unable-to-work-duration": "p-applicant-unable-to-work-duration",
+    "applicant-job-when-crime-happened": "p-applicant-job-when-crime-happened",
+    "applicant-work-details-option": "p-applicant-work-details-option",
+    "applicant-expenses": "p-applicant-expenses",
+    "context-money": "p--context-money",
     "system": "system"
 }
