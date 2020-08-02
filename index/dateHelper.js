@@ -26,7 +26,6 @@ function createDateHelper() {
     function includesToday(listOfWeekDays) {
         let today = new Date();
         today = today.getDay();
-        console.log({today, listOfWeekDays, includes: listOfWeekDays.includes(today)});
         return listOfWeekDays.includes(today);
     }
 
