@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template ">
+    <head>
+
+        <meta charset="utf-8" />
+        <title{% if pageTitleLang %} lang="{{ pageTitleLang }}"{% endif %}>{% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}</title>
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta name="theme-color" content="#0b0c0c" /> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon" />
+        <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="#0b0c0c"> 
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
+        <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+
+        <!--[if !IE 8]><!-->
+        <link href="/govuk-frontend/all.css" rel="stylesheet" />
+        <!--<![endif]-->
+
+        <!--[if IE 8]>
+        <link href="/govuk-frontend/all-ie8.css" rel="stylesheet" />
+        <![endif]-->
+
+        <!--[if lt IE 9]>
+        <script src="/html5-shiv/html5shiv.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css" />
+        <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css" />
+        <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
+
+    </head>
+    <body class="govuk-template__body ">
+
+        <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
+        <script nonce="{{ nonce }}">
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', '{{ CW_GA_TRACKING_ID }}');
+        </script>
+
+        {% include "cookie-banner.njk" %}
+
+        {% block content %}
+        {% endblock %}
+
+        {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+        <script nonce="{{ nonce }}">
+            window.CICA = {
+                SERVICE_URL: '{{ CW_URL }}',
+                ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}',
+                SESSION_DURATION: {{ CW_SESSION_DURATION }}
+            };
+        </script>
+        <script src="/govuk-frontend/all.js"></script>
+        <script nonce="{{ nonce }}">window.GOVUKFrontend.initAll()</script>
+        <script src="/dist/js/autocomplete.min.js"></script>
+        <script src="/dist/js/bundle.js"></script>
+    </body>
+</html>

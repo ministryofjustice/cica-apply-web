@@ -24,6 +24,14 @@ router.get('/accessibility-statement', (req, res) => {
     res.render('accessibility-statement.njk');
 });
 
+router.get('/start-chat', (req, res) => {
+    res.render('start-chat.njk');
+});
+
+router.get('/chat', (req, res) => {
+    res.render('chat-iframe.njk');
+});
+
 router.get('*', (req, res) => {
     res.render('404.njk');
 });
