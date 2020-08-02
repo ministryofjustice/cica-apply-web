@@ -34,6 +34,14 @@ spec:
               value: https://dev.claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_SESSION_DURATION
               value: '900000'
+            - name: CW_LIVECHAT_CHAT_ID
+              value: 6221d2d5-b8e2-4103-bc7d-c5f66eb2a3dc
+            - name: CW_LIVECHAT_ACTIVE_DAYS
+              value: 0,1,2,3,4,5,6
+            - name: CW_LIVECHAT_START_TIME
+              value: '13:30:00.000'
+            - name: CW_LIVECHAT_END_TIME
+              value: '13:35:00.000'
   selector:
     matchLabels:
       app: webapp-dev
