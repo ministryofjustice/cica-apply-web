@@ -8,19 +8,7 @@ function createDateHelper() {
     }
 
     function getFullTime(date) {
-        return `${date
-            .getHours()
-            .toString()
-            .padStart(2, '0')}:${date
-            .getMinutes()
-            .toString()
-            .padStart(2, '0')}:${date
-            .getSeconds()
-            .toString()
-            .padStart(2, '0')}.${date
-            .getMilliseconds()
-            .toString()
-            .padStart(3, '0')}`;
+        return moment(date).format('HH:mm:ss.SSS');
     }
 
     function includesToday(listOfWeekDays) {
