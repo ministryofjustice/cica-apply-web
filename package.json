@@ -8,7 +8,7 @@
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
-        "test:node": "jest --config=jest.config.js",
+        "test:node": "jest --config=jest.config.js --debug --verbose",
         "coverage": "jest --coverage",
         "build:dev": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack:dev",
         "build": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack",

@@ -59,7 +59,8 @@ app.use(
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
                 objectSrc: ["'none'"],
-                frameSrc: ['*.ccng.bt.com']
+                frameSrc: ['*.ccng.bt.com'],
+                connectSrc: ['www.google-analytics.com']
             }
         },
         hsts: {

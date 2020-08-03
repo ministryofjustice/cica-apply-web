@@ -10,7 +10,7 @@ const presets = [
             targets: {
                 browsers: [
                     'defaults',
-                    // 'maintained node versions',
+                    'maintained node versions',
                     'last 2 versions',
                     'ie >= 9',
                     'Safari >= 12',
