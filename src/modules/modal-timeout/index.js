@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as CustomEvent from 'custom-event';
+import CustomEvent from 'custom-event';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as timeConvert from 'time-convert';
 import Modal from '../../../components/cica/modal/modal';

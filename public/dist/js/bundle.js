@@ -184,7 +184,7 @@ Modal.prototype.handleOpen = function (e) {
     this.options.onOpen.call(this);
   }
 
-  var event = new custom_event__WEBPACK_IMPORTED_MODULE_0__('MODAL_OPEN');
+  var event = new custom_event__WEBPACK_IMPORTED_MODULE_0___default.a('MODAL_OPEN');
   this.module.dispatchEvent(event);
 };
 
@@ -213,7 +213,7 @@ Modal.prototype.handleClose = function (e) {
     this.options.onClose.call(this);
   }
 
-  var event = new custom_event__WEBPACK_IMPORTED_MODULE_0__('MODAL_CLOSE');
+  var event = new custom_event__WEBPACK_IMPORTED_MODULE_0___default.a('MODAL_CLOSE');
   this.module.dispatchEvent(event);
 };
 
@@ -21531,7 +21531,7 @@ function createTimeoutModal(window) {
       return;
     }
 
-    var event = new custom_event__WEBPACK_IMPORTED_MODULE_1__('TIMED_OUT');
+    var event = new custom_event__WEBPACK_IMPORTED_MODULE_1___default.a('TIMED_OUT');
     dialogBox.dispatchEvent(event);
   }
 
@@ -21554,7 +21554,7 @@ function createTimeoutModal(window) {
         onTimeout: settings.onTimeout
       });
     }).catch(function () {
-      var event = new custom_event__WEBPACK_IMPORTED_MODULE_1__('MODAL_ERROR_RESUME_FAILURE');
+      var event = new custom_event__WEBPACK_IMPORTED_MODULE_1___default.a('MODAL_ERROR_RESUME_FAILURE');
       settings.dialogBox.dispatchEvent(event);
     });
   }

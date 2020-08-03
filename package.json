@@ -8,7 +8,7 @@
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
-        "test:node": "jest --config=jest.config.js --debug --verbose",
+        "test:node": "jest --config=jest.config.js",
         "coverage": "jest --coverage",
         "build:dev": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack:dev",
         "build": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack",
@@ -43,6 +43,7 @@
     "devDependencies": {
         "@babel/cli": "^7.10.5",
         "@babel/core": "^7.7.4",
+        "@babel/plugin-transform-runtime": "^7.11.0",
         "@babel/preset-env": "^7.7.4",
         "axios": "^0.19.2",
         "babel-loader": "^8.0.6",

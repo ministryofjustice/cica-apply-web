@@ -2,7 +2,7 @@
 // reason for the above eslint rule change is explained
 // above the `Modal.prototype.init` method definition.
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as CustomEvent from 'custom-event';
+import CustomEvent from 'custom-event';
 
 function Modal(module) {
     this.module = module;
