@@ -10,7 +10,7 @@ window.CICA = {
     SESSION_DURATION: 3000
 };
 
-jest.mock('../../../node_modules/axios/dist/axios.min', () => {
+jest.mock('axios', () => {
     return {
         get: () => {
             return Promise.resolve('something went right');

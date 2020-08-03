@@ -112,5 +112,4 @@ function createAutocomplete(window) {
     });
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export {createAutocomplete};
+export default createAutocomplete;

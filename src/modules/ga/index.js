@@ -1,5 +1,5 @@
+import * as debounce from 'debounce';
 import guaTrackLinks from './vendor/gua-anchor';
-import debounce from '../../../node_modules/debounce';
 
 function createCicaGa(window) {
     // eslint-disable-next-line no-undef
@@ -97,6 +97,20 @@ function createCicaGa(window) {
         );
     }
 
+    function elementClickHandler(element, options) {
+        element.addEventListener(
+            'click',
+            () => {
+                send({
+                    action: 'click',
+                    category: options.category,
+                    label: options.label
+                });
+            },
+            false
+        );
+    }
+
     /* * ******************************************* * */
     /* * * TRACKING HANDLERS END                   * * */
     /* * ******************************************* * */
@@ -107,6 +121,13 @@ function createCicaGa(window) {
         trackableElements.forEach(element => {
             if (element.classList.contains('ga-event--scrollthreshold')) {
                 scrollThresholdHandler();
+                return;
+            }
+            if (element.classList.contains('ga-event--click')) {
+                elementClickHandler(element, {
+                    label: element.getAttribute('tracking-label') || element.innerText,
+                    category: element.getAttribute('tracking-category') || element.tagName
+                });
                 return;
             }
             const dataModuleId = element.getAttribute('data-module');

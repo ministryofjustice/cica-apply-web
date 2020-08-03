@@ -1,7 +1,8 @@
 /* eslint-disable func-names */
 // reason for the above eslint rule change is explained
 // above the `Modal.prototype.init` method definition.
-import CustomEvent from '../../../node_modules/custom-event';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as CustomEvent from 'custom-event';
 
 function Modal(module) {
     this.module = module;
