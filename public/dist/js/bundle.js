@@ -21114,7 +21114,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function createCookiePreference(cookieName, allowedPreferences) {
-  // jsCookies = jsCookies();
   var cookieConfig = {
     path: '/',
     expires: 365,
