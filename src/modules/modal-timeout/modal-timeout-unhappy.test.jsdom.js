@@ -11,7 +11,7 @@ window.CICA = {
 };
 
 // emulate a 404 for the session refresh attempt.
-jest.mock('../../../node_modules/axios/dist/axios.min', () => {
+jest.mock('axios', () => {
     return {
         get: () => {
             return Promise.reject(new Error('something went wrong'));

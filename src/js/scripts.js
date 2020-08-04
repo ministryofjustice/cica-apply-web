@@ -1,8 +1,15 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'core-js';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'regenerator-runtime/runtime';
+
 import createCicaGa from '../modules/ga';
-import {createAutocomplete} from '../modules/autocomplete/autocomplete';
+import createAutocomplete from '../modules/autocomplete/autocomplete';
 import createCookieBanner from '../modules/cookie-banner';
 import createCookiePreference from '../modules/cookie-preference';
 import createTimeoutModal from '../modules/modal-timeout';
+import createNewWindowAnchors from '../modules/new-window-anchors';
+import createLiveChat from '../modules/live-chat';
 
 (() => {
     const cookiePreference = createCookiePreference('_prefs', ['essential', 'analytics']);
@@ -57,4 +64,7 @@ import createTimeoutModal from '../modules/modal-timeout';
             ]
         });
     }
+
+    createNewWindowAnchors(window.document.querySelectorAll('[open-new-window]'));
+    createLiveChat(window.document.querySelector('#chat-iframe'));
 })();

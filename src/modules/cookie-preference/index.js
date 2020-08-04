@@ -1,4 +1,4 @@
-import jsCookies from '../../../node_modules/js-cookie/src/js.cookie';
+import * as jsCookies from 'js-cookie';
 
 function createCookiePreference(cookieName, allowedPreferences) {
     const cookieConfig = {

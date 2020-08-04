@@ -35,7 +35,8 @@ nunjucks
     )
     .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID)
     .addGlobal('CW_URL', process.env.CW_URL)
-    .addGlobal('CW_SESSION_DURATION', process.env.CW_SESSION_DURATION);
+    .addGlobal('CW_SESSION_DURATION', process.env.CW_SESSION_DURATION)
+    .addGlobal('CW_LIVECHAT_CHAT_ID', process.env.CW_LIVECHAT_CHAT_ID);
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
@@ -57,7 +58,9 @@ app.use(
                     'www.googletagmanager.com'
                 ],
                 imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
-                objectSrc: ["'none'"]
+                objectSrc: ["'none'"],
+                frameSrc: ['*.ccng.bt.com'],
+                connectSrc: ['www.google-analytics.com']
             }
         },
         hsts: {
