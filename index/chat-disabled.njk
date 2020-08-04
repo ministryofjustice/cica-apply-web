@@ -1,0 +1,13 @@
+{% extends "page.njk" %}
+
+{% block pageTitle %}Sorry, the service is unavailable - {{ super() }}{% endblock %}
+
+{% block innerContent %}
+
+    <h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>
+
+    <p class="govuk-body">The chat is open from 10am to 3pm, Monday to Friday.</p>
+
+    <p class="govuk-body">Email <a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a> if you need to contact us.</p>
+
+{% endblock %}

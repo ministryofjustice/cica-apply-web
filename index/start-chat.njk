@@ -1,0 +1,43 @@
+
+{% extends "page.njk" %}
+{% from "components/radios/macro.njk" import govukRadios %}
+
+{% block pageTitle %}Chat to our customer support team online - {{ super() }}{% endblock %}
+
+{% block innerContent %}
+
+    <h1 class="govuk-heading-xl">Chat to us online</h1>
+
+    <p class="govuk-body">You <strong>cannot</strong> get an update on your claim here.</p>
+    <p class="govuk-body">You can get help with:</p>
+    
+    <ul class="govuk-list govuk-list--bullet">
+        <li>how to make a claim</li>
+        <li>what you can claim for</li>
+        <li>where to send evidence</li>
+    </ul>
+
+    <p class="govuk-body">The chat is open from 10am to 3pm, Monday to Friday.</p>
+
+    {#
+        web chat querystring parameters:
+         * recId - GUID
+         * locale - string
+         * name - string
+         * email - string
+         * subject - string
+         * region - string
+         * url - URL
+    #}
+    <a href="/chat?recId={{ CW_LIVECHAT_CHAT_ID }}" class="govuk-button ga-event ga-event--click" tracking-label="start a chat" tracking-category="button" open-new-window='{"width": "380", "height": "700"}'>Start a chat</a>
+
+    <h2 class="govuk-heading-l">Other ways to contact us</h2>
+
+    <p class="govuk-body">Discuss your claim by:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>email at <a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a></li>
+        <li>telephone on 0300 003 3601</li>
+    </ul>
+
+{% endblock %}
