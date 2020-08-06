@@ -1,6 +1,7 @@
 User-agent: *
 # Don't allow indexing of user needs pages
 Disallow: /apply
+Disallow: /chat
 
 # https://ahrefs.com/robot/ crawls the site frequently
 User-agent: AhrefsBot
