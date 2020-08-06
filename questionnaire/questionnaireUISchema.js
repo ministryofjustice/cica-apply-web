@@ -157,10 +157,16 @@ module.exports = {
                             {
                                 title: 'Your injuries',
                                 questions: {
+                                    'p-applicant-infections':
+                                        'Do you have HIV, hepatitis or an STI as a result of the crime?',
+                                    'p-applicant-select-infections':
+                                        'Select what infection you have',
+                                    'p-applicant-pregnancy':
+                                        'Did you become pregnant as a result of the crime?',
+                                    'p-applicant-pregnancy-loss':
+                                        'Did you lose a pregnancy as a result of the crime?',
                                     'p-applicant-are-you-claiming-for-physical-injuries':
                                         'Are you claiming for physical injuries?',
-                                    'p-applicant-are-you-claiming-for-payments':
-                                        'Are you claiming for a sexually transmitted infection (STI), pregnancy, or loss of a pregnancy?',
                                     'p-applicant-physical-injury': 'What was injured?',
                                     'p-applicant-physical-injury-upper': 'What was injured?',
                                     'p-applicant-physical-injury-upper-head':
