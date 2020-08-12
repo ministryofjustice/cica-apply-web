@@ -912,23 +912,6 @@ module.exports = {
             ]
         }
     },
-    'p-applicant-expenses': {
-        options: {
-            properties: {
-                'q-applicant-expenses': {
-                    options: {
-                        additionalMapping: [
-                            {
-                                itemType: 'divider',
-                                itemValue: 'or',
-                                itemIndex: 4
-                            }
-                        ]
-                    }
-                }
-            }
-        }
-    },
     'p-applicant-work-details-option': {
         options: {
             transformOrder: ['q-applicant-work-details-other', 'q-applicant-work-details-option'],
