@@ -249,7 +249,9 @@ module.exports = {
                                         'Are you registered with a GP practice?',
                                     'p-applicant-have-you-seen-a-gp':
                                         'Have you seen a GP about your injuries?',
-                                    'p-gp-enter-your-address': "What is your GP's address?"
+                                    'p-gp-enter-your-address': "What is your GP's address?",
+                                    'p-dentist-visited': 'Have you seen a dentist about your injuries?',
+                                    'p-dentist-details': "What is your dentist's address?"
                                 }
                             },
                             {
