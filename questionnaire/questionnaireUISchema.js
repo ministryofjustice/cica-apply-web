@@ -253,7 +253,10 @@ module.exports = {
                                     'p-applicant-medical-help': 'Did you seek other medical help?',
                                     'p-applicant-treatment-address': 'Where did you have treatment?',
                                     'p-dentist-visited': 'Have you seen a dentist about your injuries?',
-                                    'p-dentist-details': "What is your dentist's address?"
+                                    'p-dentist-details': "What is your dentist's address?",
+                                    'p-applicant-dentist-visited':
+                                        'Have you seen a dentist about your injuries?',
+                                    'p-applicant-dentist-address': "What is your dentist's address?"
                                 }
                             },
                             {
