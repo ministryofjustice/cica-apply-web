@@ -116,7 +116,7 @@
     "applicant-expenses": "p-applicant-expenses",
     "context-money": "p--context-money",
     "applicant-pregnancy-loss": "p-applicant-pregnancy-loss",
-    "dentist-visited": "p-dentist-visited",
-    "dentist-details": "p-dentist-details",
+    "applicant-dentist-visited": "p-applicant-dentist-visited",
+    "applicant-dentist-address": "p-applicant-dentist-address",
     "system": "system"
 }
