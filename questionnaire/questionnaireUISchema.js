@@ -1580,5 +1580,32 @@ module.exports = {
                 }
             }
         }
+    },
+    'p-applicant-dentist-address': {
+        options: {
+            properties: {
+                'q-applicant-dentist-address-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-applicant-dentist-address-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-applicant-dentist-address-building-and-street',
+                'q-applicant-dentist-address-building-and-street2',
+                'q-applicant-dentist-address-town-or-city',
+                'q-applicant-dentist-address-county',
+                'q-applicant-dentist-address-postcode'
+            ]
+        }
     }
 };
