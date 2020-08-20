@@ -251,8 +251,10 @@ module.exports = {
                                         'Have you seen a GP about your injuries?',
                                     'p-gp-enter-your-address': "What is your GP's address?",
                                     'p-applicant-medical-help': 'Did you seek other medical help?',
-                                    'p-applicant-treatment-address': 'Where did you have treatment?',
-                                    'p-dentist-visited': 'Have you seen a dentist about your injuries?',
+                                    'p-applicant-treatment-address':
+                                        'Where did you have treatment?',
+                                    'p-dentist-visited':
+                                        'Have you seen a dentist about your injuries?',
                                     'p-dentist-details': "What is your dentist's address?",
                                     'p-applicant-dentist-visited':
                                         'Have you seen a dentist about your injuries?',
