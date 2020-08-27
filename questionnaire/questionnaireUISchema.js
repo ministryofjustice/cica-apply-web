@@ -1542,6 +1542,94 @@ module.exports = {
             }
         }
     },
+    'p-applicant-physical-injury-upper-muscle': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-physical-injuries-upper-muscle-other',
+                'q-applicant-physical-injuries'
+            ],
+            outputOrder: ['q-applicant-physical-injuries'],
+            properties: {
+                'q-applicant-physical-injuries': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'phyinj-149',
+                                componentIds: ['q-applicant-physical-injuries-upper-muscle-other']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-physical-injury-torso-muscle': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-physical-injuries-torso-muscle-other',
+                'q-applicant-physical-injuries'
+            ],
+            outputOrder: ['q-applicant-physical-injuries'],
+            properties: {
+                'q-applicant-physical-injuries': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'phyinj-149',
+                                componentIds: ['q-applicant-physical-injuries-torso-muscle-other']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-physical-injury-arms-muscle': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-physical-injuries-arms-muscle-other',
+                'q-applicant-physical-injuries'
+            ],
+            outputOrder: ['q-applicant-physical-injuries'],
+            properties: {
+                'q-applicant-physical-injuries': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'phyinj-149',
+                                componentIds: ['q-applicant-physical-injuries-arms-muscle-other']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-physical-injury-legs-muscle': {
+        // transformer: 'form',
+        options: {
+            transformOrder: [
+                'q-applicant-physical-injuries-legs-muscle-other',
+                'q-applicant-physical-injuries'
+            ],
+            outputOrder: ['q-applicant-physical-injuries'],
+            properties: {
+                'q-applicant-physical-injuries': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'phyinj-149',
+                                componentIds: ['q-applicant-physical-injuries-legs-muscle-other']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
     'p-applicant-physical-injury-legs-skin': {
         // transformer: 'form',
         options: {
