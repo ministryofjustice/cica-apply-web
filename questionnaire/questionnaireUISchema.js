@@ -158,86 +158,63 @@ module.exports = {
                                 title: 'Your injuries',
                                 questions: {
                                     'p-applicant-infections':
-                                        'Do you have HIV, hepatitis or an STI as a result of the crime?',
-                                    'p-applicant-select-infections':
-                                        'Select what infection you have',
-                                    'p-applicant-pregnancy':
-                                        'Did you become pregnant as a result of the crime?',
-                                    'p-applicant-pregnancy-loss':
-                                        'Did you lose a pregnancy as a result of the crime?',
+                                        'Do you have HIV, hepatitis or an STI?',
+                                    'p-applicant-select-infections': 'What infection do you have?',
+                                    'p-applicant-pregnancy': 'Did you become pregnant?',
+                                    'p-applicant-pregnancy-loss': 'Did you lose a pregnancy?',
                                     'p-applicant-are-you-claiming-for-physical-injuries':
-                                        'Are you claiming for physical injuries?',
+                                        'Do you have physical injuries?',
                                     'p-applicant-physical-injury': 'What was injured?',
-                                    'p-applicant-physical-injury-upper': 'What was injured?',
+                                    'p-applicant-physical-injury-upper':
+                                        'What parts of the head, face or neck were injured?',
                                     'p-applicant-physical-injury-upper-head':
-                                        'Select any injuries to the head',
-                                    'p-applicant-physical-injury-upper-face':
-                                        'Select any injuries to the face',
-                                    'p-applicant-physical-injury-upper-neck':
-                                        'Select any injuries to the neck',
+                                        'Head or brain injuries',
+                                    'p-applicant-physical-injury-upper-face': 'Face injuries',
+                                    'p-applicant-physical-injury-upper-neck': 'Neck injuries',
                                     'p-applicant-physical-injury-upper-eye':
-                                        'Select any injuries to the eyes',
+                                        'Eye or eyesight injuries',
                                     'p-applicant-physical-injury-upper-ear':
-                                        'Select any injuries to the ears',
-                                    'p-applicant-physical-injury-upper-nose':
-                                        'Select any injuries to the nose',
-                                    'p-applicant-physical-injury-upper-mouth':
-                                        'Select any injuries to the mouth',
+                                        'Ear or hearing injuries',
+                                    'p-applicant-physical-injury-upper-nose': 'Nose injuries',
+                                    'p-applicant-physical-injury-upper-mouth': 'Mouth injuries',
                                     'p-applicant-physical-injury-upper-skin':
-                                        'Select any injuries to the skin',
-                                    'p-applicant-physical-injury-torso': 'What was injured?',
+                                        'Skin on your head, face or neck injuries',
+                                    'p-applicant-physical-injury-torso': 'Torso injuries',
                                     'p-applicant-physical-injury-torso-shoulder':
-                                        'Select any injuries to the shoulders',
-                                    'p-applicant-physical-injury-torso-chest':
-                                        'Select any injuries to the chest',
-                                    'p-applicant-physical-injury-torso-abdomen':
-                                        'Select any injuries to the abdomen',
-                                    'p-applicant-physical-injury-torso-back':
-                                        'Select any injuries to the back',
-                                    'p-applicant-physical-injury-torso-pelvis':
-                                        'Select any injuries to the pelvis',
+                                        'Shoulder injuries',
+                                    'p-applicant-physical-injury-torso-chest': 'Chest injuries',
+                                    'p-applicant-physical-injury-torso-abdomen': 'Abdomen injuries',
+                                    'p-applicant-physical-injury-torso-back': 'Back injuries',
+                                    'p-applicant-physical-injury-torso-pelvis': 'Pelvis injuries',
                                     'p-applicant-physical-injury-torso-genitals':
-                                        'Select any injuries to the genitals',
-                                    'p-applicant-physical-injury-torso-skin':
-                                        'Select any injuries to the skin',
-                                    'p-applicant-physical-injury-arms': 'What was injured?',
+                                        'Genital injuries',
+                                    'p-applicant-physical-injury-torso-skin': 'Torso injuries',
+                                    'p-applicant-physical-injury-arms':
+                                        'What parts of the arms or hands were injured?',
                                     'p-applicant-physical-injury-arms-shoulder':
-                                        'Select any injuries to the shoulders',
-                                    'p-applicant-physical-injury-arms-arm':
-                                        'Select any injuries to the arms',
-                                    'p-applicant-physical-injury-arms-elbow':
-                                        'Select any injuries to the elbows',
-                                    'p-applicant-physical-injury-arms-wrist':
-                                        'Select any injuries to the wrists',
-                                    'p-applicant-physical-injury-arms-hand':
-                                        'Select any injuries to the hands',
+                                        'Shoulder injuries',
+                                    'p-applicant-physical-injury-arms-arm': 'Arm injuries',
+                                    'p-applicant-physical-injury-arms-elbow': 'Elbow injuries',
+                                    'p-applicant-physical-injury-arms-wrist': 'Wrist injuries',
+                                    'p-applicant-physical-injury-arms-hand': 'Hand injuries',
                                     'p-applicant-physical-injury-arms-digit':
-                                        'Select any injuries to the fingers and thumbs',
+                                        'Finger or thumb injuries',
                                     'p-applicant-physical-injury-arms-skin':
-                                        'Select any injuries to the skin',
-                                    'p-applicant-physical-injury-legs': 'What was injured?',
-                                    'p-applicant-physical-injury-legs-hip':
-                                        'Select any injuries to the hips',
-                                    'p-applicant-physical-injury-legs-leg':
-                                        'Select any injuries to the legs',
-                                    'p-applicant-physical-injury-legs-knee':
-                                        'Select any injuries to the knees',
-                                    'p-applicant-physical-injury-legs-ankle':
-                                        'Select any injuries to the ankles',
-                                    'p-applicant-physical-injury-legs-foot':
-                                        'Select any injuries to the feet',
-                                    'p-applicant-physical-injury-legs-toes':
-                                        'Select any injuries to the toes',
+                                        'Skin on your arms or hands injuries',
+                                    'p-applicant-physical-injury-legs':
+                                        'What parts of the legs or feet were injured?',
+                                    'p-applicant-physical-injury-legs-hip': 'Hip injuries',
+                                    'p-applicant-physical-injury-legs-leg': 'Leg injuries',
+                                    'p-applicant-physical-injury-legs-knee': 'Knee injuries',
+                                    'p-applicant-physical-injury-legs-ankle': 'Ankle injuries',
+                                    'p-applicant-physical-injury-legs-foot': 'Foot injuries',
+                                    'p-applicant-physical-injury-legs-toes': 'Toe injuries',
                                     'p-applicant-physical-injury-legs-skin':
-                                        'Select any injuries to the skin',
+                                        'Skin on your legs or feet injuries',
                                     'p-applicant-do-you-have-disabling-mental-injury':
                                         'Do you have a disabling mental injury?',
                                     'p-applicant-mental-injury-duration':
                                         'Has your mental injury lasted 6 weeks or more?',
-                                    'p-applicant-select-treatments':
-                                        "Select any treatments you've had",
-                                    'p-applicant-has-your-treatment-finished-dmi':
-                                        'Have you finished your mental health treatment?',
                                     'p-applicant-affect-on-daily-life-dmi':
                                         'Briefly say how the crime has affected your daily life'
                                 }
@@ -245,11 +222,15 @@ module.exports = {
                             {
                                 title: 'Your medical details',
                                 questions: {
+                                    'p-applicant-select-treatments':
+                                        'Treatment for your physical injuries',
+                                    'p-applicant-has-your-treatment-finished-dmi':
+                                        'Have you finished your treatment?',
                                     'p-applicant-are-you-registered-with-gp':
                                         'Are you registered with a GP practice?',
                                     'p-applicant-have-you-seen-a-gp':
                                         'Have you seen a GP about your injuries?',
-                                    'p-gp-enter-your-address': "What is your GP's address?",
+                                    'p-gp-enter-your-address': "GP's address",
                                     'p-applicant-medical-help': 'Did you seek other medical help?',
                                     'p-applicant-treatment-address':
                                         'Where did you have treatment?',
@@ -269,8 +250,8 @@ module.exports = {
                                     'p-applicant-job-when-crime-happened':
                                         'Did you have a job when the crime happened?',
                                     'p-applicant-work-details-option':
-                                        'Select the option that applies to you',
-                                    'p-applicant-expenses': 'What expenses have you had?'
+                                        'Reason for not having paid work',
+                                    'p-applicant-expenses': 'Expenses'
                                 }
                             },
                             {
@@ -288,7 +269,7 @@ module.exports = {
                                     'p-applicant-other-compensation-details':
                                         'Details of other compensation received',
                                     'p-applicant-applied-for-other-compensation-briefly-explain-why-not':
-                                        "Reason you didn't apply for compensation"
+                                        'Why you have not applied for or received any other form of compensation'
                                 }
                             },
                             {
