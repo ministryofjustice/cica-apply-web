@@ -124,5 +124,7 @@
     "applicant-dentist-address": "p-applicant-dentist-address",
     "applicant-you-cannot-get-compensation-violent-crime": "p-applicant-you-cannot-get-compensation-violent-crime",
     "applicant-victim-of-violent-crime": "p-applicant-victim-of-violent-crime",
+    "applicant-non-sa-infections": "p-applicant-non-sa-infections",
+    "applicant-select-non-sa-infections": "p-applicant-select-non-sa-infections",
     "system": "system"
 }
