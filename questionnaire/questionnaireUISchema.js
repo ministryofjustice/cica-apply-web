@@ -181,6 +181,8 @@ module.exports = {
                                     'p-applicant-physical-injury-upper-mouth': 'Mouth injuries',
                                     'p-applicant-physical-injury-upper-skin':
                                         'Skin on your head, face or neck injuries',
+                                    'p-applicant-physical-injury-upper-muscle':
+                                        'Tissue on your head, face or neck injuries',
                                     'p-applicant-physical-injury-torso': 'Torso injuries',
                                     'p-applicant-physical-injury-torso-shoulder':
                                         'Shoulder injuries',
@@ -191,6 +193,8 @@ module.exports = {
                                     'p-applicant-physical-injury-torso-genitals':
                                         'Genital injuries',
                                     'p-applicant-physical-injury-torso-skin': 'Torso injuries',
+                                    'p-applicant-physical-injury-torso-muscle':
+                                        'Tissue on your torso injuries',
                                     'p-applicant-physical-injury-arms':
                                         'What parts of the arms or hands were injured?',
                                     'p-applicant-physical-injury-arms-shoulder':
@@ -203,6 +207,8 @@ module.exports = {
                                         'Finger or thumb injuries',
                                     'p-applicant-physical-injury-arms-skin':
                                         'Skin on your arms or hands injuries',
+                                    'p-applicant-physical-injury-arms-muscle':
+                                        'Tissue on your arms injuries',
                                     'p-applicant-physical-injury-legs':
                                         'What parts of the legs or feet were injured?',
                                     'p-applicant-physical-injury-legs-hip': 'Hip injuries',
@@ -213,6 +219,8 @@ module.exports = {
                                     'p-applicant-physical-injury-legs-toes': 'Toe injuries',
                                     'p-applicant-physical-injury-legs-skin':
                                         'Skin on your legs or feet injuries',
+                                    'p-applicant-physical-injury-legs-muscle':
+                                        'Tissue on your legs injuries',
                                     'p-applicant-do-you-have-disabling-mental-injury':
                                         'Do you have a disabling mental injury?',
                                     'p-applicant-mental-injury-duration':
