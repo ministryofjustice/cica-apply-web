@@ -50,9 +50,9 @@ router
                 response.body.data[0].attributes &&
                 response.body.data[0].attributes.sectionId
             ) {
-                const isSummaryPage = formHelper.checkIsSummaryContext(
-                    response.body.data[0].attributes.sectionId
-                );
+                const isSummaryPage =
+                    formHelper.getSectionContext(response.body.data[0].attributes.sectionId) ===
+                    'summary';
                 answers = isSummaryPage
                     ? await qService.getAnswers(req.cicaSession.questionnaireId)
                     : answers;
@@ -63,6 +63,9 @@ router
                 req.csrfToken(),
                 res.locals.nonce
             );
+            if (formHelper.getSectionContext(sectionId) === 'confirmation') {
+                req.cicaSession.reset();
+            }
             res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');

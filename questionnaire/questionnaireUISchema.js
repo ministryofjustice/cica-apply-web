@@ -471,6 +471,7 @@ module.exports = {
     },
     'p--confirmation': {
         options: {
+            pageContext: 'confirmation',
             showBackButton: false
         }
     },

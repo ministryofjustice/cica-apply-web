@@ -29,21 +29,11 @@ function getButtonText(sectionId) {
         : 'Continue';
 }
 
-function checkIsSummaryContext(sectionId) {
-    return !!(
+function getSectionContext(sectionId) {
+    return (
         sectionId in uiSchema &&
         uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.pageContext &&
-        uiSchema[sectionId].options.pageContext === 'summary'
-    );
-}
-
-function checkIsSubmissionContext(sectionId) {
-    return !!(
-        sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.pageContext &&
-        uiSchema[sectionId].options.pageContext === 'submission'
+        uiSchema[sectionId].options.pageContext
     );
 }
 
@@ -57,7 +47,7 @@ function renderSection({
     cspNonce
 }) {
     const showButton = !isFinal;
-    const isSubmissionPage = checkIsSubmissionContext(sectionId);
+    const isSubmissionPage = getSectionContext(sectionId) === 'submission';
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
@@ -305,8 +295,6 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
 
 module.exports = {
     getButtonText,
-    checkIsSummaryContext,
-    checkIsSubmissionContext,
     renderSection,
     removeSectionIdPrefix,
     processRequest,
@@ -318,5 +306,6 @@ module.exports = {
     processPreviousAnswers,
     getSectionHtmlWithErrors,
     addPrefix,
-    escapeSchemaContent
+    escapeSchemaContent,
+    getSectionContext
 };
