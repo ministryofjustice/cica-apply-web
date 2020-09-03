@@ -431,7 +431,7 @@ describe('Data capture service endpoints', () => {
                             addPrefix: () => prefixedSection,
                             getSectionHtml: () => getSectionHtmlValid,
                             removeSectionIdPrefix: () => initial,
-                            checkIsSummaryContext: () => false
+                            getSectionContext: () => undefined
                         }));
                         // eslint-disable-next-line global-require
                         app = require('../app');

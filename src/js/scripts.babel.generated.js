@@ -581,7 +581,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   if (cookiePreference.get('analytics').value === '1') {
     var cicaGa = (0, _ga.default)(window);
-    cicaGa.setUpGAEventTracking();
+    cicaGa.init();
   } else {
     window["ga-disable-".concat(window.CICA.ANALYTICS_TRACKING_ID)] = true;
   }
@@ -621,6 +621,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       // e.g. a session length of 15 minutes results in a modal being
       // shown at 10 minutes, and 14 minutes.
       Math.floor(window.CICA.SESSION_DURATION * (2 / 3) / 1000) * 1000, Math.floor(window.CICA.SESSION_DURATION * (14 / 15) / 1000) * 1000]
+    });
+    window.document.querySelectorAll('.govuk-modal').forEach(function (modalElement) {
+      modalElement.addEventListener('MODAL_OPEN', function () {
+        // TODO: make this `DRY`!
+        window.gtag('event', 'open', {
+          event_category: modalElement.id,
+          non_interaction: true
+        });
+      }, false);
     });
   }
 

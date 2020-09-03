@@ -115,7 +115,12 @@ app.use('/apply', async (req, res, next) => {
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial
             );
-            return res.redirect(`${req.baseUrl}/${initialSection}`);
+            let redirectionUrl = `${req.baseUrl}/${initialSection}`;
+            // query param passed from Tempus launch page
+            if (req.query.isCica) {
+                redirectionUrl = `${redirectionUrl}?isCica=true`;
+            }
+            return res.redirect(redirectionUrl);
         } catch (err) {
             res.status(404).render('404.njk');
             next(err);

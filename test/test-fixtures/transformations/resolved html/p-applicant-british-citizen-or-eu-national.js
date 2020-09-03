@@ -370,11 +370,7 @@ const html = `<!DOCTYPE html>
     
   
 
-<button type="button" class="govuk-button govuk-modal__continue" data-module="govuk-button">
-  Continue application
-</button>
-
-    <!-- <a href="" class="govuk-modal-dialogue__cancel govuk-body govuk-link govuk-link--no-visited-state">Start again</a> -->
+                    <button class="govuk-button govuk-modal__continue ga-event--click" data-module="govuk-button" data-tracking-category="modal-button">Continue application</button>
 
                 
             </div>
@@ -446,10 +442,7 @@ const html = `<!DOCTYPE html>
   
     
   
-
-<a href="/apply" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-  Start again
-</a>
+                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button">Start again</a>
 
 
                 
@@ -535,10 +528,7 @@ const html = `<!DOCTYPE html>
   
     
   
-
-<a href="/apply" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-  Start again
-</a>
+                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button">Start again</a>
 
 
                 

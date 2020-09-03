@@ -15,7 +15,7 @@ import createLiveChat from '../modules/live-chat';
     const cookiePreference = createCookiePreference('_prefs', ['essential', 'analytics']);
     if (cookiePreference.get('analytics').value === '1') {
         const cicaGa = createCicaGa(window);
-        cicaGa.setUpGAEventTracking();
+        cicaGa.init();
     } else {
         window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
     }
@@ -62,6 +62,20 @@ import createLiveChat from '../modules/live-chat';
                 Math.floor((window.CICA.SESSION_DURATION * (2 / 3)) / 1000) * 1000,
                 Math.floor((window.CICA.SESSION_DURATION * (14 / 15)) / 1000) * 1000
             ]
+        });
+
+        window.document.querySelectorAll('.govuk-modal').forEach(modalElement => {
+            modalElement.addEventListener(
+                'MODAL_OPEN',
+                () => {
+                    // TODO: make this `DRY`!
+                    window.gtag('event', 'open', {
+                        event_category: modalElement.id,
+                        non_interaction: true
+                    });
+                },
+                false
+            );
         });
     }
 

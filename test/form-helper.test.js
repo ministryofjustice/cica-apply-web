@@ -401,7 +401,7 @@ describe('form-helper functions', () => {
         it('Should return true if a section has `pageContext: summary` in the UISchema', () => {
             const sectionName = 'p--check-your-answers';
 
-            const actual = formHelper.checkIsSummaryContext(sectionName);
+            const actual = formHelper.getSectionContext(sectionName) === 'summary';
 
             expect(actual).toEqual(true);
         });
@@ -409,7 +409,7 @@ describe('form-helper functions', () => {
         it('Should return false if a section has no `pageContext` value in the UISchema', () => {
             const sectionName = 'p--confirmation';
 
-            const actual = formHelper.checkIsSummaryContext(sectionName);
+            const actual = formHelper.getSectionContext(sectionName) === 'summary';
 
             expect(actual).toEqual(false);
         });
@@ -419,7 +419,7 @@ describe('form-helper functions', () => {
         it('Should return true if a section has `pageContext: submission` in the UISchema', () => {
             const sectionName = 'p-applicant-declaration';
 
-            const actual = formHelper.checkIsSubmissionContext(sectionName);
+            const actual = formHelper.getSectionContext(sectionName) === 'submission';
 
             expect(actual).toEqual(true);
         });
@@ -427,7 +427,7 @@ describe('form-helper functions', () => {
         it('Should return false if a section has no `pageContext` value in the UISchema', () => {
             const sectionName = 'p--confirmation';
 
-            const actual = formHelper.checkIsSubmissionContext(sectionName);
+            const actual = formHelper.getSectionContext(sectionName) === 'submission';
 
             expect(actual).toEqual(false);
         });

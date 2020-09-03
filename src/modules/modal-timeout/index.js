@@ -106,7 +106,8 @@ function createTimeoutModal(window) {
 
         if (settings.dialogBoxResumeCTA) {
             // close dialogue on 'resume application'.
-            settings.dialogBoxResumeCTA.addEventListener('click', () => {
+            settings.dialogBoxResumeCTA.addEventListener('click', e => {
+                e.preventDefault();
                 resumeClickHandler(settings);
             });
         }

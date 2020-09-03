@@ -32,10 +32,11 @@
 }) %}
     {{ govukButton({
         text: "Continue application",
-        type: "button",
-        classes: "govuk-modal__continue"
+        classes: "govuk-modal__continue ga-event--click",
+        attributes: {
+            "data-tracking-category": "modal-button"
+        }
     }) }}
-    <!-- <a href="{{ basePath }}" class="govuk-modal-dialogue__cancel govuk-body govuk-link govuk-link--no-visited-state">Start again</a> -->
 {% endcall %}
 
 {% call govukModal({
@@ -51,8 +52,11 @@
 }) %}
     {{ govukButton({
         text: "Start again",
-        type: "button",
-        href: "/apply"
+        href: "/apply",
+        classes: "ga-event--click",
+        attributes: {
+            "data-tracking-category": "modal-button"
+        }
     }) }}
 {% endcall %}
 
@@ -69,7 +73,10 @@
 }) %}
     {{ govukButton({
         text: "Start again",
-        type: "button",
-        href: "/apply"
+        href: "/apply",
+        classes: "ga-event--click",
+        attributes: {
+            "data-tracking-category": "modal-button"
+        }
     }) }}
 {% endcall %}
