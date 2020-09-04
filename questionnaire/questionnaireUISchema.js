@@ -90,6 +90,8 @@ module.exports = {
                             {
                                 title: 'About the application',
                                 questions: {
+                                    'p-applicant-fatal-claim':
+                                        'Are you applying for someone who died from their injuries?',
                                     'p-applicant-who-are-you-applying-for':
                                         'Who are you applying for?',
                                     'p-applicant-are-you-18-or-over': 'Are you 18 or over?',
