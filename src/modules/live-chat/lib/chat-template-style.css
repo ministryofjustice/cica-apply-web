@@ -151,12 +151,39 @@ a:focus,
     display: block !important;
     color: #ffffff;
 }
-
-/* #lbl_CookiePolicylink {
-    color: #1d70b8 !important;
-    text-decoration: underline;
-    font-weight: normal;
-} */
+/** BUG FIX: DAC_Focus_Missing_01 START **/
+#acceptCookies:link, #acceptCookies:visited, #acceptCookies:active, #acceptCookies:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+#acceptCookies::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+#acceptCookies:hover {
+    background-color: #005a30;
+}
+#acceptCookies:active {
+    top: 2px;
+}
+#acceptCookies:focus {
+    border-color: #ffdd00;
+    outline: 3px solid transparent;
+    box-shadow: inset 0 0 0 1px #ffdd00;
+}
+#acceptCookies:focus #lbl_acceptCookies {
+    color: #0b0c0c;
+}
+#acceptCookies:active:focus #lbl_acceptCookies {
+    color: #ffffff;
+}
+#acceptCookies:focus:not(:active):not(:hover) {
+    border-color: #ffdd00;
+    color: #0b0c0c;
+    background-color: #ffdd00;
+    box-shadow: 0 2px 0 #0b0c0c;
+}
+/** BUG FIX: DAC_Focus_Missing_01 END **/
 
 .userMsg {
     background: #1D70B8 !important;
@@ -204,8 +231,25 @@ a:focus,
 
 #btnSend {
     color: #1D70B8 !important;
+    display: block; /** BUG FIX: DAC_Target_Size_01 **/
+}
+
+/** BUG FIX: DAC_Target_Size_01 START **/
+.controlButton {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
     display: block;
 }
+.controlButton:before {
+    display: block;
+}
+#btnMute {
+    text-align: left;
+    display: inline-block;
+}
+/** BUG FIX: DAC_Target_Size_01 END **/
 
 #chatInputContainer.bg-secondary {
     background: #ddd !important;
@@ -272,6 +316,13 @@ a:focus,
 .modal-footer {
     border: 0;
 }
+
+/** BUG FIX: DAC_Reflow_01 START **/
+.modal-open .modal {
+    max-height: 90%;
+    overflow: auto;
+}
+/** BUG FIX: DAC_Reflow_01 START **/
 
 .btn {
     -webkit-font-smoothing: antialiased;
