@@ -234,8 +234,9 @@ module.exports = {
                             {
                                 title: 'Your medical details',
                                 questions: {
-                                    'p-applicant-select-treatments':
+                                    'p-applicant-treatment-for-physical-injuries':
                                         'Treatment for your physical injuries',
+                                    'p-applicant-select-treatments': 'Mental health treatments',
                                     'p-applicant-has-your-treatment-finished-dmi':
                                         'Have you finished your treatment?',
                                     'p-applicant-are-you-registered-with-gp':
