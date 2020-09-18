@@ -42,5 +42,10 @@ describe('Date Helper', () => {
             const result = dateHelper.includesToday(dayList);
             expect(result).toEqual(true);
         });
+        it('should check if today is included in the default param empty string', () => {
+            const dateHelper = createDateHelper();
+            const result = dateHelper.includesToday();
+            expect(result).toEqual(false);
+        });
     });
 });
