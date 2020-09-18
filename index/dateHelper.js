@@ -11,7 +11,7 @@ function createDateHelper() {
         return moment(date).format('HH:mm:ss.SSS');
     }
 
-    function includesToday(listOfWeekDays) {
+    function includesToday(listOfWeekDays = '') {
         let today = new Date();
         today = today.getDay();
         return listOfWeekDays.includes(today);
