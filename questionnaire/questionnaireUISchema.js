@@ -1713,5 +1713,10 @@ module.exports = {
                 'q-applicant-dentist-address-postcode'
             ]
         }
+    },
+    'p-applicant-you-cannot-get-compensation-violent-crime': {
+        options: {
+            buttonText: 'Continue anyway'
+        }
     }
 };
