@@ -166,7 +166,7 @@ module.exports = {
                                     'p-applicant-mental-injury-duration':
                                         'Has your mental injury lasted 6 weeks or more?',
                                     'p-applicant-select-treatments':
-                                        "Select any treatments you've had",
+                                        "Select any mental health treatments you've had",
                                     'p-applicant-has-your-treatment-finished-dmi':
                                         'Have you finished your mental health treatment?',
                                     'p-applicant-affect-on-daily-life-dmi':
