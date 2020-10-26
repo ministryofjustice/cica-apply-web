@@ -66,6 +66,16 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_livechat_maintenance_message
+            - name: CW_MAINTENANCE_MESSAGE
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_maintenance_message
+            - name: CW_MAINTENANCE_MESSAGE_ENABLED
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_maintenance_message_enabled
   selector:
     matchLabels:
       app: webapp-uat

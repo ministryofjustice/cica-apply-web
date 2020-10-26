@@ -47,6 +47,16 @@ nunjucks
     .addGlobal(
         'CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED',
         process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED === 'true'
+    )
+    .addGlobal(
+        'CW_MAINTENANCE_MESSAGE',
+        !process.env?.CW_MAINTENANCE_MESSAGE?.length
+            ? 'maintenance message not set'
+            : process.env.CW_MAINTENANCE_MESSAGE
+    )
+    .addGlobal(
+        'CW_MAINTENANCE_MESSAGE_ENABLED',
+        process.env.CW_MAINTENANCE_MESSAGE_ENABLED === 'true'
     );
 
 app.use((req, res, next) => {
