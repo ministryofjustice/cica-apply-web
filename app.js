@@ -47,7 +47,8 @@ nunjucks
     .addGlobal(
         'CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED',
         process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED === 'true'
-    );
+    )
+    .addGlobal('CW_MAINTENANCE_MESSAGE', process.env.CW_MAINTENANCE_MESSAGE);
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
