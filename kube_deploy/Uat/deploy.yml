@@ -67,7 +67,7 @@ spec:
                   name: cica-web-secrets
                   key: cw_livechat_maintenance_message
             - name: CW_MAINTENANCE_MESSAGE
-              value: 'The service will be unavailable from 4.30pm to 7pm. Your answers will not be saved if you try to submit your application during this time.'
+              value: 'The service will be unavailable from 2:30pm till 4:30pm on Monday 20 June 2022. Your answers will not be saved and you will not be able to submit your application during this time.'
   selector:
     matchLabels:
       app: webapp-uat
