@@ -163,7 +163,12 @@ module.exports = {
                                 questions: {
                                     'p-applicant-infections':
                                         'Do you have HIV, hepatitis or an STI?',
-                                    'p-applicant-select-infections': 'What infection do you have?',
+                                    'p-applicant-non-sa-infections':
+                                        'Do you have HIV or hepatitis?',
+                                    'p-applicant-select-infections':
+                                        'Select what infection you have',
+                                    'p-applicant-select-non-sa-infections':
+                                        'Select what infection you have',
                                     'p-applicant-pregnancy': 'Did you become pregnant?',
                                     'p-applicant-pregnancy-loss': 'Did you lose a pregnancy?',
                                     'p-applicant-are-you-claiming-for-physical-injuries':
