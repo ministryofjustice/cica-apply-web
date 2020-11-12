@@ -53,9 +53,15 @@ router
                 const isSummaryPage =
                     formHelper.getSectionContext(response.body.data[0].attributes.sectionId) ===
                     'summary';
-                answers = isSummaryPage
-                    ? await qService.getAnswers(req.cicaSession.questionnaireId)
-                    : answers;
+
+                if (isSummaryPage) {
+                    answers = await qService.getAnswers(req.cicaSession.questionnaireId);
+                    res.set({
+                        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+                        Expires: '-1',
+                        Pragma: 'no-cache'
+                    });
+                }
             }
             const html = formHelper.getSectionHtml(
                 response.body,
