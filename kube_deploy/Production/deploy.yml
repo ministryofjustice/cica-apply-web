@@ -33,7 +33,7 @@ spec:
             - name: CW_URL
               value: https://claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_SESSION_DURATION
-              value: '900000'
+              value: '1800000'
             - name: CW_LIVECHAT_CHAT_ID
               value: ff753a08-883d-453c-bf64-811301587100
             - name: CW_LIVECHAT_ACTIVE_DAYS
