@@ -302,6 +302,14 @@ module.exports = {
                                     'p-applicant-enter-your-email-address': 'Email address',
                                     'p-applicant-enter-your-telephone-number': 'Telephone Number'
                                 }
+                            },
+                            {
+                                title: 'Additional information',
+                                questions: {
+                                    'p-applicant-provide-additional-information':
+                                        'Is there anything else you want to tell us about the incident?',
+                                    'p-applicant-additional-information': 'Additional information'
+                                }
                             }
                         ],
                         lookup: {
