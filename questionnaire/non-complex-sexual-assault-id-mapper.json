@@ -127,6 +127,9 @@
     "applicant-non-sa-infections": "p-applicant-non-sa-infections",
     "applicant-select-non-sa-infections": "p-applicant-select-non-sa-infections",
     "applicant-fatal-claim": "p-applicant-fatal-claim",
-    "system": "system",
-    "applicant-incident-type": "p-applicant-incident-type"
+    "applicant-incident-type": "p-applicant-incident-type",
+    "applicant-additional-information": "p-applicant-additional-information",
+    "applicant-provide-additional-information": "p-applicant-provide-additional-information",
+    "context-additional-info": "p--context-additional-info",
+    "system": "system"
 }
