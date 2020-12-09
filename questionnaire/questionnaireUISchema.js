@@ -142,7 +142,10 @@ module.exports = {
                                     'p-offender-do-you-have-contact-with-offender':
                                         'Do you have contact with the offender?',
                                     'p-offender-describe-contact-with-offender':
-                                        'Contact with offender'
+                                        'Contact with offender',
+                                    'p-applicant-describe-incident':
+                                        'Would you like to describe the crime?',
+                                    'p-applicant-incident-description': 'Description of the crime'
                                 }
                             },
                             {
@@ -307,7 +310,7 @@ module.exports = {
                                 title: 'Additional information',
                                 questions: {
                                     'p-applicant-provide-additional-information':
-                                        'Is there anything else you want to tell us about the incident?',
+                                        'Would you like to add any information?',
                                     'p-applicant-additional-information': 'Additional information'
                                 }
                             }
