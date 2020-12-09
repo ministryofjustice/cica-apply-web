@@ -131,5 +131,7 @@
     "applicant-additional-information": "p-applicant-additional-information",
     "applicant-provide-additional-information": "p-applicant-provide-additional-information",
     "context-additional-info": "p--context-additional-info",
+    "applicant-describe-incident": "p-applicant-describe-incident",
+    "applicant-incident-description": "p-applicant-incident-description",
     "system": "system"
 }
