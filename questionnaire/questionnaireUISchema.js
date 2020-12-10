@@ -145,7 +145,7 @@ module.exports = {
                                         'Contact with offender',
                                     'p-applicant-describe-incident':
                                         'Would you like to describe the crime?',
-                                    'p-applicant-incident-description': 'Description of the crime'
+                                    'p-applicant-incident-description': 'Your description'
                                 }
                             },
                             {
@@ -236,10 +236,6 @@ module.exports = {
                                         'Do you have a disabling mental injury?',
                                     'p-applicant-mental-injury-duration':
                                         'Has your mental injury lasted 6 weeks or more?',
-                                    'p-applicant-select-treatments':
-                                        'What mental health treatments have you had?',
-                                    'p-applicant-has-your-treatment-finished-dmi':
-                                        'Have you finished your treatment?',
                                     'p-applicant-affect-on-daily-life-dmi':
                                         'Briefly say how the crime has affected your daily life'
                                 }
@@ -770,17 +766,29 @@ module.exports = {
     },
     'p-applicant-where-in-england-did-it-happen': {
         options: {
-            outputOrder: ['q-applicant-english-town-or-city', 'q-applicant-english-location']
+            outputOrder: [
+                'q-applicant-english-town-or-city',
+                'q-applicant-english-location',
+                'additional-info-help-text'
+            ]
         }
     },
     'p-applicant-where-in-wales-did-it-happen': {
         options: {
-            outputOrder: ['q-applicant-welsh-town-or-city', 'q-applicant-welsh-location']
+            outputOrder: [
+                'q-applicant-welsh-town-or-city',
+                'q-applicant-welsh-location',
+                'additional-info-help-text'
+            ]
         }
     },
     'p-applicant-where-in-scotland-did-it-happen': {
         options: {
-            outputOrder: ['q-applicant-scottish-town-or-city', 'q-applicant-scottish-location']
+            outputOrder: [
+                'q-applicant-scottish-town-or-city',
+                'q-applicant-scottish-location',
+                'additional-info-help-text'
+            ]
         }
     },
     'p--confirmation': {
@@ -806,7 +814,7 @@ module.exports = {
                     }
                 }
             },
-            outputOrder: ['q-police-force-id', 'list-of-police-forces']
+            outputOrder: ['q-police-force-id', 'additional-info-help-text']
         }
     },
     'p-applicant-enter-your-email-address': {
@@ -1749,6 +1757,29 @@ module.exports = {
     'p-applicant-you-cannot-get-compensation-violent-crime': {
         options: {
             buttonText: 'Continue anyway'
+        }
+    },
+    'p-applicant-where-did-the-crime-happen': {
+        options: {
+            outputOrder: ['q-applicant-where-did-the-crime-happen', 'additional-info-help-text']
+        }
+    },
+    'p--when-was-the-crime-reported-to-police': {
+        options: {
+            outputOrder: ['q--when-was-the-crime-reported-to-police', 'additional-info-help-text']
+        }
+    },
+    'p-offender-do-you-know-the-name-of-the-offender': {
+        options: {
+            outputOrder: [
+                'q-offender-do-you-know-the-name-of-the-offender',
+                'additional-info-help-text'
+            ]
+        }
+    },
+    'p-offender-enter-offenders-name': {
+        options: {
+            outputOrder: ['q-offender-enter-offenders-name', 'additional-info-help-text']
         }
     }
 };
