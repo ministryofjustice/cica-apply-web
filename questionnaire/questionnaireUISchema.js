@@ -232,10 +232,6 @@ module.exports = {
                                         'Do you have a disabling mental injury?',
                                     'p-applicant-mental-injury-duration':
                                         'Has your mental injury lasted 6 weeks or more?',
-                                    'p-applicant-select-treatments':
-                                        'What mental health treatments have you had?',
-                                    'p-applicant-has-your-treatment-finished-dmi':
-                                        'Have you finished your treatment?',
                                     'p-applicant-affect-on-daily-life-dmi':
                                         'Briefly say how the crime has affected your daily life'
                                 }
