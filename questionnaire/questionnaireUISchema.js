@@ -119,6 +119,7 @@ module.exports = {
                             {
                                 title: 'About the crime',
                                 questions: {
+                                    'p-applicant-incident-type': 'Cause of injuries',
                                     'p-applicant-did-the-crime-happen-once-or-over-time':
                                         'Did the crime happen once or over a period of time?',
                                     'p-applicant-when-did-the-crime-happen':
@@ -629,7 +630,17 @@ module.exports = {
                                 'I had been in regular work for at least 3 years before the crime',
                             'underage-for-work': 'I was too young to work',
                             education: 'I was in full-time education',
-                            care: 'I was caring for someone'
+                            care: 'I was caring for someone',
+                            ASST: 'Physical assault',
+                            WEAP: 'Assault with a weapon',
+                            SEX: 'Sexual assault or abuse',
+                            FMLY: 'Domestic or family violence',
+                            ARSN: 'Arson',
+                            PSNG: 'Poisoning',
+                            ANIMAL: 'Animal attack',
+                            VEHICLE: 'Vehicle attack',
+                            SECV: 'Witnessing an incident',
+                            OTHER: 'Other'
                         }
                     }
                 }
