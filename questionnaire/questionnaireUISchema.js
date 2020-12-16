@@ -136,16 +136,16 @@ module.exports = {
                                         'Where in Scotland did it happen?',
                                     'p-applicant-where-in-wales-did-it-happen':
                                         'Where in Wales did it happen?',
+                                    'p-applicant-describe-incident':
+                                        'Would you like to describe the crime?',
+                                    'p-applicant-incident-description': 'Your description',
                                     'p-offender-do-you-know-the-name-of-the-offender':
                                         'Do you know the name of the offender?',
                                     'p-offender-enter-offenders-name': "Offender's name",
                                     'p-offender-do-you-have-contact-with-offender':
                                         'Do you have contact with the offender?',
                                     'p-offender-describe-contact-with-offender':
-                                        'Contact with offender',
-                                    'p-applicant-describe-incident':
-                                        'Would you like to describe the crime?',
-                                    'p-applicant-incident-description': 'Your description'
+                                        'Contact with offender'
                                 }
                             },
                             {
@@ -253,15 +253,15 @@ module.exports = {
                                     'p-applicant-have-you-seen-a-gp':
                                         'Have you seen a GP about your injuries?',
                                     'p-gp-enter-your-address': "GP's address",
-                                    'p-applicant-medical-help': 'Did you seek other medical help?',
-                                    'p-applicant-treatment-address':
-                                        'Where did you have treatment?',
                                     'p-dentist-visited':
                                         'Have you seen a dentist about your injuries?',
                                     'p-dentist-details': "What is your dentist's address?",
                                     'p-applicant-dentist-visited':
                                         'Have you seen a dentist about your injuries?',
-                                    'p-applicant-dentist-address': "What is your dentist's address?"
+                                    'p-applicant-dentist-address':
+                                        "What is your dentist's address?",
+                                    'p-applicant-medical-help': 'Did you seek other medical help?',
+                                    'p-applicant-treatment-address': 'Where did you have treatment?'
                                 }
                             },
                             {
