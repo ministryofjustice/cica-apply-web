@@ -3,15 +3,15 @@
 const html = `<!DOCTYPE html>
 <html lang="en" class="govuk-template ">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>Are you a British citizen or EU national? - Claim criminal injuries compensation - GOV.UK</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0c0c" />
+    <meta name="theme-color" content="#0b0c0c">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 
-      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon" />
+      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
       <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="#0b0c0c">
       <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
       <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
@@ -85,11 +85,11 @@ const html = `<!DOCTYPE html>
         <span class="govuk-header__logotype">
 
           <svg
-            role="presentation"
+            aria-hidden="true"
             focusable="false"
             class="govuk-header__logotype-crown"
             xmlns="http://www.w3.org/2000/svg"
-            viewbox="0 0 132 97"
+            viewBox="0 0 132 97"
             height="30"
             width="36"
           >
@@ -273,11 +273,11 @@ const html = `<!DOCTYPE html>
 
 
         <svg
-          role="presentation"
+          aria-hidden="true"
           focusable="false"
           class="govuk-footer__licence-logo"
           xmlns="http://www.w3.org/2000/svg"
-          viewbox="0 0 483.2 195.7"
+          viewBox="0 0 483.2 195.7"
           height="17"
           width="41"
         >
@@ -323,7 +323,7 @@ const html = `<!DOCTYPE html>
                 focusable="false"
                 class="govuk-modal__header-image"
                 xmlns="http://www.w3.org/2000/svg"
-                viewbox="0 0 132 97"
+                viewBox="0 0 132 97"
                 height="30"
                 width="36"
                 >
@@ -398,7 +398,7 @@ const html = `<!DOCTYPE html>
                 focusable="false"
                 class="govuk-modal__header-image"
                 xmlns="http://www.w3.org/2000/svg"
-                viewbox="0 0 132 97"
+                viewBox="0 0 132 97"
                 height="30"
                 width="36"
                 >
@@ -471,7 +471,7 @@ const html = `<!DOCTYPE html>
                 focusable="false"
                 class="govuk-modal__header-image"
                 xmlns="http://www.w3.org/2000/svg"
-                viewbox="0 0 132 97"
+                viewBox="0 0 132 97"
                 height="30"
                 width="36"
                 >
