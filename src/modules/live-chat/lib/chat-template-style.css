@@ -92,6 +92,78 @@ a:focus,
 
 
 
+/* END CHAT "BUTTON" START */
+#endChat {
+
+}
+
+#endChat {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.1875;
+    box-sizing: border-box;
+    display: table;
+    position: relative;
+    width: auto !important;
+    margin-top: 0;
+    margin-bottom: 22px;
+    padding: 8px 10px 7px;
+    border: 2px solid transparent;
+    border-radius: 0;
+    color: #ffffff;
+    background-color: #d4351c;
+    -webkit-box-shadow: 0 2px 0 #55150b;
+    box-shadow: 0 2px 0 #55150b;
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: 10px !important;
+}
+
+#endChat:before {
+    display: none;
+}
+
+#lbl_EndChat {
+    display: block !important;
+    color: #ffffff;
+}
+/** BUG FIX: DAC_Focus_Missing_01 START **/
+#endChat:link, #endChat:visited, #endChat:active, #endChat:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+#endChat::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+#endChat:hover {
+    background-color: #aa2a16;
+}
+#endChat:active {
+    top: 2px;
+}
+#endChat:focus {
+    border-color: #ffdd00;
+    outline: 3px solid transparent;
+    box-shadow: inset 0 0 0 1px #ffdd00;
+}
+#endChat:focus #lbl_EndChat {
+    color: #0b0c0c;
+}
+#endChat:active:focus #lbl_EndChat {
+    color: #ffffff;
+}
+#endChat:focus:not(:active):not(:hover) {
+    border-color: #ffdd00;
+    color: #0b0c0c;
+    background-color: #ffdd00;
+    box-shadow: 0 2px 0 #0b0c0c;
+}
+/* END CHAT "BUTTON" END */
 
 #headerWrapper {
     background: #000 !important;

@@ -39,9 +39,9 @@ spec:
             - name: CW_LIVECHAT_ACTIVE_DAYS
               value: 1,2,3,4,5
             - name: CW_LIVECHAT_START_TIME
-              value: '09:00:00.000'
+              value: '10:00:00.000'
             - name: CW_LIVECHAT_END_TIME
-              value: '14:00:00.000'
+              value: '15:00:00.000'
   selector:
     matchLabels:
       app: webapp-uat

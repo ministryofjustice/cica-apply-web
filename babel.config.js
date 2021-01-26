@@ -6,7 +6,7 @@ const presets = [
         {
             // debug: true,
             useBuiltIns: 'entry',
-            corejs: 3,
+            corejs: 3.8,
             targets: {
                 browsers: [
                     'defaults',
@@ -15,7 +15,8 @@ const presets = [
                     'ie >= 9',
                     'Safari >= 12',
                     'ios_saf >= 10',
-                    'iOS >= 10'
+                    'iOS >= 10',
+                    'not dead'
                 ]
             }
         }
