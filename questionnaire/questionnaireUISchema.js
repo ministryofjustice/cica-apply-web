@@ -69,17 +69,6 @@ module.exports = {
             ]
         }
     },
-    'p-applicant-enter-your-date-of-birth': {
-        options: {
-            properties: {
-                'q-applicant-enter-your-date-of-birth': {
-                    options: {
-                        autoComplete: 'bday'
-                    }
-                }
-            }
-        }
-    },
     'p--check-your-answers': {
         options: {
             pageContext: 'summary',
@@ -660,32 +649,38 @@ module.exports = {
                 'q-applicant-building-and-street': {
                     options: {
                         macroOptions: {
-                            classes: ''
-                        },
-                        autoComplete: 'address-line1'
+                            classes: '',
+                            autocomplete: 'address-line1'
+                        }
                     }
                 },
                 'q-applicant-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: ''
-                        },
-                        autoComplete: 'address-line2'
+                            classes: '',
+                            autocomplete: 'address-line2'
+                        }
                     }
                 },
                 'q-applicant-town-or-city': {
                     options: {
-                        autoComplete: 'address-level2'
+                        macroOptions: {
+                            autocomplete: 'address-level2'
+                        }
                     }
                 },
                 'q-applicant-county': {
                     options: {
-                        autoComplete: 'address-level1'
+                        macroOptions: {
+                            autocomplete: 'address-level1'
+                        }
                     }
                 },
                 'q-applicant-postcode': {
                     options: {
-                        autoComplete: 'postal-code'
+                        macroOptions: {
+                            autocomplete: 'postal-code'
+                        }
                     }
                 }
             },
@@ -709,17 +704,23 @@ module.exports = {
             properties: {
                 'q-applicant-title': {
                     options: {
-                        autoComplete: 'honorific-prefix'
+                        macroOptions: {
+                            autocomplete: 'honorific-prefix'
+                        }
                     }
                 },
                 'q-applicant-first-name': {
                     options: {
-                        autoComplete: 'given-name'
+                        macroOptions: {
+                            autocomplete: 'given-name'
+                        }
                     }
                 },
                 'q-applicant-last-name': {
                     options: {
-                        autoComplete: 'family-name'
+                        macroOptions: {
+                            autocomplete: 'family-name'
+                        }
                     }
                 }
             }
@@ -822,8 +823,8 @@ module.exports = {
             properties: {
                 'q-applicant-enter-your-email-address': {
                     options: {
-                        autocomplete: 'email',
-                        attributes: {
+                        macroOptions: {
+                            autocomplete: 'email',
                             spellcheck: 'false'
                         }
                     }
@@ -836,7 +837,9 @@ module.exports = {
             properties: {
                 'q-applicant-enter-your-telephone-number': {
                     options: {
-                        autoComplete: 'tel'
+                        macroOptions: {
+                            autocomplete: 'tel'
+                        }
                     }
                 }
             }
@@ -875,14 +878,16 @@ module.exports = {
                 'q-applicant-enter-your-email-address': {
                     options: {
                         macroOptions: {
-                            classes: 'govuk-input--width-20'
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'email'
                         }
                     }
                 },
                 'q-applicant-enter-your-telephone-number': {
                     options: {
                         macroOptions: {
-                            classes: 'govuk-input--width-20'
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'tel'
                         }
                     }
                 }
