@@ -66,7 +66,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %} novalidate>
+                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %} novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}
