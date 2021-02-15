@@ -38,7 +38,7 @@
         "morgan": "~1.9.0",
         "nanoid": "^2.1.10",
         "nunjucks": "^3.2.1",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v1.2.1"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v1.3.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.12.10",
