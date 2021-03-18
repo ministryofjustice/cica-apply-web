@@ -144,6 +144,8 @@ module.exports = {
                                         'Was the crime reported to police?',
                                     'p--when-was-the-crime-reported-to-police':
                                         'When was the crime reported?',
+                                    'p-applicant-has-crime-reference-number':
+                                        'Do you know the crime reference number?',
                                     'p--whats-the-crime-reference-number': 'Crime reference number',
                                     'p--which-police-force-is-investigating-the-crime':
                                         'Which police force is investigating?',
@@ -1785,6 +1787,11 @@ module.exports = {
     'p-offender-enter-offenders-name': {
         options: {
             outputOrder: ['q-offender-enter-offenders-name', 'additional-info-help-text']
+        }
+    },
+    'p-applicant-has-crime-reference-number': {
+        options: {
+            outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info']
         }
     }
 };
