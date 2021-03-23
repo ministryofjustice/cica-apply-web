@@ -186,6 +186,9 @@ describe('Data capture service endpoints', () => {
                                     getFullTime: () => {
                                         return '10:30:17.135';
                                     },
+                                    timeIsBetween: () => {
+                                        return true;
+                                    },
                                     isBetween: () => {
                                         return true;
                                     },
@@ -211,6 +214,9 @@ describe('Data capture service endpoints', () => {
                                 jest.fn(() => ({
                                     getFullTime: () => {
                                         return '17:30:17.135';
+                                    },
+                                    timeIsBetween: () => {
+                                        return true;
                                     },
                                     isBetween: () => {
                                         return false;
@@ -248,6 +254,9 @@ describe('Data capture service endpoints', () => {
                                     getFullTime: () => {
                                         return '10:30:17.135';
                                     },
+                                    timeIsBetween: () => {
+                                        return true;
+                                    },
                                     isBetween: () => {
                                         return true;
                                     },
@@ -270,6 +279,9 @@ describe('Data capture service endpoints', () => {
                                 jest.fn(() => ({
                                     getFullTime: () => {
                                         return '17:30:17.135';
+                                    },
+                                    timeIsBetween: () => {
+                                        return true;
                                     },
                                     isBetween: () => {
                                         return false;

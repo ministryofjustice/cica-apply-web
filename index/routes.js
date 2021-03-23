@@ -27,44 +27,32 @@ router.get('/accessibility-statement', (req, res) => {
 
 router.get('/start-chat', (req, res) => {
     const dateHelper = createDateHelper();
-    const currentTime = `2020-01-01T${dateHelper.getFullTime(new Date())}Z`;
-    const liveChatStartTime = `2020-01-01T${process.env.CW_LIVECHAT_START_TIME}Z`;
-    const liveChatEndTime = `2020-01-01T${process.env.CW_LIVECHAT_END_TIME}Z`;
-    let liveChatActive = false;
-
     if (
-        dateHelper.isBetween(currentTime, liveChatStartTime, liveChatEndTime) &&
+        dateHelper.timeIsBetween(
+            dateHelper.getFullTime(new Date()),
+            process.env.CW_LIVECHAT_START_TIME,
+            process.env.CW_LIVECHAT_END_TIME
+        ) &&
         dateHelper.includesToday(process.env.CW_LIVECHAT_ACTIVE_DAYS)
     ) {
-        liveChatActive = true;
+        return res.render('start-chat.njk');
     }
-
-    if (liveChatActive) {
-        res.render('start-chat.njk');
-    } else {
-        res.render('chat-disabled.njk');
-    }
+    return res.render('chat-disabled.njk');
 });
 
 router.get('/chat', (req, res) => {
     const dateHelper = createDateHelper();
-    const currentTime = `2020-01-01T${dateHelper.getFullTime(new Date())}Z`;
-    const liveChatStartTime = `2020-01-01T${process.env.CW_LIVECHAT_START_TIME}Z`;
-    const liveChatEndTime = `2020-01-01T${process.env.CW_LIVECHAT_END_TIME}Z`;
-    let liveChatActive = false;
-
     if (
-        dateHelper.isBetween(currentTime, liveChatStartTime, liveChatEndTime) &&
+        dateHelper.timeIsBetween(
+            dateHelper.getFullTime(new Date()),
+            process.env.CW_LIVECHAT_START_TIME,
+            process.env.CW_LIVECHAT_END_TIME
+        ) &&
         dateHelper.includesToday(process.env.CW_LIVECHAT_ACTIVE_DAYS)
     ) {
-        liveChatActive = true;
+        return res.render('chat-iframe.njk');
     }
-
-    if (liveChatActive) {
-        res.render('chat-iframe.njk');
-    } else {
-        res.render('chat-disabled.njk');
-    }
+    return res.render('chat-disabled.njk');
 });
 
 router.get('*', (req, res) => {
