@@ -1,14 +1,27 @@
 'use strict';
 
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 function createDateHelper() {
     function isBetween(dateInput, dateStart, dateEnd) {
-        return moment(dateInput).isBetween(dateStart, dateEnd);
+        return moment
+            .utc(dateInput)
+            .tz('Europe/London')
+            .isBetween(dateStart, dateEnd);
+    }
+    function timeIsBetween(timeInput, timeStart, timeEnd) {
+        const now = moment().format('YYYY-MM-DD');
+        const dateInput = moment(`${now}T${timeInput}Z`).tz('Europe/London');
+        const dateStart = moment(`${now}T${timeStart}Z`).tz('Europe/London');
+        const dateEnd = moment(`${now}T${timeEnd}Z`).tz('Europe/London');
+
+        return isBetween(dateInput, dateStart, dateEnd);
     }
 
     function getFullTime(date) {
-        return moment(date).format('HH:mm:ss.SSS');
+        return moment(date)
+            .tz('Europe/London')
+            .format('HH:mm:ss.SSS');
     }
 
     function includesToday(listOfWeekDays = '') {
@@ -20,7 +33,8 @@ function createDateHelper() {
     return Object.freeze({
         isBetween,
         getFullTime,
-        includesToday
+        includesToday,
+        timeIsBetween
     });
 }
 

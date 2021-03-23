@@ -21,12 +21,22 @@ describe('Date Helper', () => {
             expect(result).toEqual(false);
         });
     });
-    describe('getFullTime', () => {
-        it('should get the full 24-hour time for a date', () => {
+    describe('timeIsBetween', () => {
+        it('should compare a time between 2 times', () => {
             const dateHelper = createDateHelper();
-            const date = new Date(2020, 6, 10, 3, 20, 45, 885);
-            const result = dateHelper.getFullTime(date);
-            expect(result).toEqual('03:20:45.885');
+            const timeToCompare = `13:30:00.000`;
+            const start = `01:30:00.000`;
+            const end = `23:30:00.000`;
+            const result = dateHelper.timeIsBetween(timeToCompare, start, end);
+            expect(result).toEqual(true);
+        });
+        it('should compare a time not between 2 times', () => {
+            const dateHelper = createDateHelper();
+            const timeToCompare = `00:30:00.000`;
+            const start = `01:30:00.000`;
+            const end = `23:30:00.000`;
+            const result = dateHelper.timeIsBetween(timeToCompare, start, end);
+            expect(result).toEqual(false);
         });
     });
     describe('includesToday', () => {
