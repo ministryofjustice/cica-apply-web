@@ -5,9 +5,10 @@
 {% block pageTitle %}There has been a problem - {{ super() }}{% endblock %}
 
 {% block innerContent %}
-    <h1 class="govuk-heading-xl">There has been a problem</h1>
-    <p class="govuk-body">Your application may not have been submitted.</p>
-    <p class="govuk-body">You'll get an email from us if we can fix the problem.</p>
-    <p class="govuk-body">Contact us after 30 minutes if you have not got an email from us.</p>
+    <h1 class="govuk-heading-xl">Sorry, there is a problem with the service</h1>
+    <p class="govuk-body">Your application was not sent.</p>
+    <p class="govuk-body">Try sending your application again in 10 minutes. To do this, select the back button on your browser. Then, select 'Agree and submit' again.</p>
+    <p class="govuk-body">If you still see this message, you can try these steps again. Or you can call us using the details below.</p>
+    <h2 class="govuk-heading-m">Contact Us</h2>
     {% include "contact.njk" %}
 {% endblock %}
