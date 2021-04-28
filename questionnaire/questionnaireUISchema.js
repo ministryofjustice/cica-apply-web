@@ -89,7 +89,10 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line2'
+                            autocomplete: 'address-line2',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
                         }
                     }
                 },
