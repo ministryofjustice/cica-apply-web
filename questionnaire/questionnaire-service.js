@@ -100,13 +100,6 @@ function questionnaireService() {
     }
 
     async function getSubmissionStatus(questionnaireId, startingDate) {
-        if (Date.now() - startingDate >= 15000) {
-            const err = Error(`Unable to retrieve questionnaire submission status`);
-            err.name = 'CRNNotRetrieved';
-            err.statusCode = 500;
-            err.error = '500 Internal Server Error';
-            throw err;
-        }
         const result = await getSubmission(questionnaireId);
 
         // dcs down...
@@ -126,6 +119,11 @@ function questionnaireService() {
 
         const {submitted} = result.body.data.attributes;
         if (submitted) {
+            return result.body.data.attributes;
+        }
+        // return the resource regardless.
+        // https://www.hobo-web.co.uk/your-website-design-should-load-in-4-seconds/
+        if (Date.now() - startingDate >= 6000) {
             return result.body.data.attributes;
         }
 

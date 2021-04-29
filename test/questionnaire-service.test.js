@@ -5,6 +5,7 @@ const getValidSection = require('./test-fixtures/res/get_schema_valid');
 const getValidPreviousSection = require('./test-fixtures/res/get_previous_valid_sectionId');
 const getValidSubmission = require('./test-fixtures/res/get_submission_not_started');
 const getValidCompletedSubmission = require('./test-fixtures/res/get_submission_valid');
+const getInvalidCompletedSubmission = require('./test-fixtures/res/get_submission_invalid');
 const postValidSubmission = require('./test-fixtures/res/post_valid_submission');
 
 const validPostResponse = {valid: true};
@@ -158,6 +159,20 @@ describe('Questionnaire service', () => {
             );
 
             expect(expected).toEqual(response);
+        });
+        it('should throw if the response is the wrong shape', async () => {
+            jest.doMock('../questionnaire/request-service', () =>
+                jest.fn(() => ({
+                    get: () => getInvalidCompletedSubmission
+                }))
+            );
+            jest.resetModules();
+            // eslint-disable-next-line global-require
+            const questionnaireService = require('../questionnaire/questionnaire-service')();
+
+            await expect(
+                questionnaireService.getSubmissionStatus('questionnaire-id', Date.now())
+            ).rejects.toThrow('The service is currently unavailable');
         });
     });
 
