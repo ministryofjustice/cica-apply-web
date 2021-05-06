@@ -328,7 +328,8 @@ module.exports = {
     'p-applicant-declaration': {
         options: {
             buttonText: 'Agree and submit',
-            pageContext: 'submission'
+            pageContext: 'submission',
+            outputOrder: ['applicant-declaration', 'applicant-info']
         }
     },
     'p-applicant-select-treatments': {
