@@ -1,4 +1,4 @@
-/* global document, Element, KeyboardEvent */
+/* global document, Element */
 
 import Modal from './modal';
 
@@ -362,41 +362,5 @@ describe('Modal component', () => {
         modal.close();
         modal.open();
         expect(hasBeenOpened).toEqual('bar');
-    });
-
-    it('should tab the Modal instance elements ', () => {
-        document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
-                <div class="govuk-modal__wrapper">
-                    <dialog
-                        id="test-1"
-                        class="govuk-modal__box"
-                        aria-labelledby="test-1-title"
-                        aria-describedby="test-1-content"
-                        aria-modal="true"
-                        role="alertdialog"
-                        tabindex="0"
-                    >
-                        <div class="govuk-modal__header">
-                            header
-                        </div>
-                        <div class="govuk-modal__main">
-                            <span class="govuk-modal__heading govuk-heading-l" id="test-1-title">Test 1 heading</span>
-                            <div class="govuk-modal__content" id="test-1-content">
-                                <p class="govuk-body">Test 1 modal body text</p><a href="/something">Click here</a>
-                            </div>
-                            <button type="button" class="govuk-button govuk-modal__continue" data-module="govuk-button">
-                                Continue application
-                            </button>
-                        </div>
-                    </dialog>
-                </div>
-                <div class="govuk-modal__overlay"></div>
-            </div>`;
-        new Modal(document.querySelector('#govuk-modal-test-1')).init();
-        const currentActiveElement = document.activeElement;
-
-        const event1 = new KeyboardEvent('keydown', {keyCode: 9});
-        document.dispatchEvent(event1);
-        expect(document.activeElement).not.toEqual(currentActiveElement);
     });
 });
