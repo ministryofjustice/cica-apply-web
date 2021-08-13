@@ -134,5 +134,8 @@
     "applicant-describe-incident": "p-applicant-describe-incident",
     "applicant-incident-description": "p-applicant-incident-description",
     "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number",
+    "main-applicant-declaration": "p-main-applicant-declaration",
+    "rep-declaration": "p-rep-declaration",
+    "applicant-representative": "p-applicant-representative",
     "system": "system"
 }
