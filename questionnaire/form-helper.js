@@ -47,7 +47,6 @@ function renderSection({
     cspNonce
 }) {
     const showButton = !isFinal;
-    const isSubmissionPage = getSectionContext(sectionId) === 'submission';
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
@@ -66,7 +65,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %} novalidate autocomplete="off">
+                <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}

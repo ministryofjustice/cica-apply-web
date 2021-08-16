@@ -14,9 +14,8 @@ const getProgressEntries = require('./test-fixtures/res/progress_entry_example')
 const getProgressEntriesErrors = require('./test-fixtures/res/post_section_returned_errors');
 const getPreviousValid = require('./test-fixtures/res/get_previous_valid_sectionId');
 const getPreviousValidUrl = require('./test-fixtures/res/get_previous_valid_url');
-
 const postValidSubmission = require('./test-fixtures/res/post_valid_submission');
-const postValidSubmissionFailed = require('./test-fixtures/res/post_valid_submission_service_down');
+const postValidSubmissionServiceDown = require('./test-fixtures/res/post_valid_submission_service_down');
 
 let app;
 
@@ -510,7 +509,8 @@ describe('Data capture service endpoints', () => {
                                 getSectionHtmlWithErrors: () => getSectionHtmlValid,
                                 removeSectionIdPrefix: () => section,
                                 processRequest: () => processedAnswer,
-                                getNextSection: () => section
+                                getNextSection: () => section,
+                                getSectionContext: () => false
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
@@ -656,6 +656,93 @@ describe('Data capture service endpoints', () => {
                         });
                     });
                 });
+                describe('submission page success', () => {
+                    beforeAll(() => {
+                        const prefixedSection = 'p-applicant-declaration';
+                        const section = 'the-next-page';
+                        const processedAnswer = {'q-applicant-declaration': [true]};
+                        jest.resetModules();
+                        jest.doMock('../questionnaire/form-helper', () => ({
+                            addPrefix: () => prefixedSection,
+                            removeSectionIdPrefix: () => section,
+                            processRequest: () => processedAnswer,
+                            getSectionContext: () => 'submission'
+                        }));
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
+                            jest.fn(() => ({
+                                postSubmission: () => {},
+                                postSection: () => getProgressEntries,
+                                createQuestionnaire: () => createQuestionnaire,
+                                getCurrentSection: () => getCurrentSection,
+                                getSubmissionStatus: () => postValidSubmission
+                            }))
+                        );
+                        // eslint-disable-next-line global-require
+                        app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
+                    });
+                    it('should submit the application', () => {
+                        const currentAgent = request.agent(app);
+                        return currentAgent.get('/apply/').then(() =>
+                            currentAgent
+                                .post('/apply/applicant-declaration')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(302);
+                                    expect(response.res.text).toBe(
+                                        'Found. Redirecting to /apply/the-next-page'
+                                    );
+                                })
+                        );
+                    });
+                });
+
+                describe('Submission page fail', () => {
+                    beforeAll(() => {
+                        const prefixedSection = 'p-applicant-declaration';
+                        const section = 'the-next-page';
+                        const processedAnswer = {'q-applicant-declaration': [true]};
+                        jest.resetModules();
+                        jest.doMock('../questionnaire/form-helper', () => ({
+                            addPrefix: () => prefixedSection,
+                            removeSectionIdPrefix: () => section,
+                            processRequest: () => processedAnswer,
+                            getSectionContext: () => 'submission'
+                        }));
+                        jest.doMock('../questionnaire/questionnaire-service', () =>
+                            jest.fn(() => ({
+                                postSubmission: () => {},
+                                postSection: () => getProgressEntries,
+                                createQuestionnaire: () => createQuestionnaire,
+                                getCurrentSection: () => getCurrentSection,
+                                getSubmissionStatus: () => postValidSubmissionServiceDown
+                            }))
+                        );
+                        // eslint-disable-next-line global-require
+                        app = require('../app');
+                        replaceCsrfMiddlwareForTest(app);
+                    });
+                    it('should fail gracefully if the application fails', () => {
+                        const currentAgent = request.agent(app);
+                        return currentAgent.get('/apply/').then(() =>
+                            currentAgent
+                                .post('/apply/applicant-declaration')
+                                .set(
+                                    'Cookie',
+                                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
+                                )
+                                .then(response => {
+                                    expect(response.statusCode).toBe(500);
+                                    expect(response.res.text).toContain(
+                                        '<p class="govuk-body">Your application was not sent.</p>'
+                                    );
+                                })
+                        );
+                    });
+                });
             });
         });
 
@@ -682,7 +769,8 @@ describe('Data capture service endpoints', () => {
                                 removeSectionIdPrefix: () => section,
                                 getSectionHtml: () => getSectionHtmlValid,
                                 processRequest: () => processedAnswer,
-                                getNextSection: () => section
+                                getNextSection: () => section,
+                                getSectionContext: () => false
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
@@ -857,164 +945,6 @@ describe('Data capture service endpoints', () => {
             });
         });
 
-        describe('/apply/submission/confirm', () => {
-            describe('POST', () => {
-                describe('302', () => {
-                    beforeAll(() => {
-                        const sectionIdNoPrefix = 'confirmation';
-                        jest.resetModules();
-                        jest.doMock('../questionnaire/questionnaire-service', () =>
-                            // return a modified factory function, that returns an object with a method, that returns a valid created response
-                            jest.fn(() => ({
-                                postSubmission: () => {},
-                                getSubmissionStatus: () => postValidSubmission,
-                                createQuestionnaire: () => createQuestionnaire,
-                                getCurrentSection: () => getCurrentSection
-                            }))
-                        );
-                        jest.doMock('../questionnaire/form-helper', () => ({
-                            removeSectionIdPrefix: () => sectionIdNoPrefix
-                        }));
-                        // eslint-disable-next-line global-require
-                        app = require('../app');
-                        replaceCsrfMiddlwareForTest(app);
-                    });
-
-                    it('Should respond with a found status', () => {
-                        const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() =>
-                            currentAgent
-                                .post('/apply/submission/confirm')
-                                .set(
-                                    'Cookie',
-                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(302);
-                                })
-                        );
-                    });
-
-                    it('Should redirect the user to the confirmation page', () => {
-                        const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() =>
-                            currentAgent
-                                .post('/apply/submission/confirm')
-                                .set(
-                                    'Cookie',
-                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                                )
-                                .then(response => {
-                                    expect(response.res.text).toBe(
-                                        'Found. Redirecting to /apply/confirmation'
-                                    );
-                                })
-                        );
-                    });
-                });
-                describe('404', () => {
-                    beforeAll(() => {
-                        jest.resetModules();
-                        jest.doMock('../questionnaire/questionnaire-service', () =>
-                            // return a modified factory function, that returns an object with a method, that returns a valid created response
-                            jest.fn(() => ({
-                                postSubmission: () => {},
-                                getSubmissionStatus: () => {},
-                                createQuestionnaire: () => createQuestionnaire
-                            }))
-                        );
-                        // eslint-disable-next-line global-require
-                        app = require('../app');
-                        replaceCsrfMiddlwareForTest(app);
-                    });
-
-                    it('Should fail gracefully', () => {
-                        const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() =>
-                            currentAgent
-                                .post('/apply/submission/confirm')
-                                .set(
-                                    'Cookie',
-                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(500);
-                                })
-                        );
-                    });
-                });
-                describe('503', () => {
-                    beforeAll(() => {
-                        jest.resetModules();
-                        jest.doMock('../questionnaire/questionnaire-service', () =>
-                            // return a modified factory function, that returns an object with a method, that returns a valid created response
-                            jest.fn(() => ({
-                                postSubmission: () => {},
-                                getSubmissionStatus: () => postValidSubmissionFailed,
-                                createQuestionnaire: () => createQuestionnaire
-                            }))
-                        );
-                        // eslint-disable-next-line global-require
-                        app = require('../app');
-                        replaceCsrfMiddlwareForTest(app);
-                    });
-
-                    it('Should tell the user the service is unavailable', () => {
-                        const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() =>
-                            currentAgent
-                                .post('/apply/submission/confirm')
-                                .set(
-                                    'Cookie',
-                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(500);
-                                })
-                        );
-                    });
-                });
-                describe('504', () => {
-                    beforeAll(() => {
-                        jest.resetModules();
-                        jest.doMock('../questionnaire/questionnaire-service', () =>
-                            // return a modified factory function, that returns an object with a method, that returns a valid created response
-                            jest.fn(() => ({
-                                postSubmission: () => {},
-                                getSubmissionStatus() {
-                                    const err = Error(
-                                        `The upstream server took too long to respond`
-                                    );
-                                    err.name = 'HTTPError';
-                                    err.statusCode = 504;
-                                    err.error = '504 Gateway Timeout';
-                                    throw err;
-                                },
-                                createQuestionnaire: () => createQuestionnaire
-                            }))
-                        );
-                        // eslint-disable-next-line global-require
-                        app = require('../app');
-                        replaceCsrfMiddlwareForTest(app);
-                    });
-
-                    it('Should throw a 504 if the service times out', () => {
-                        const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() =>
-                            currentAgent
-                                .post('/apply/submission/confirm')
-                                .set(
-                                    'Cookie',
-                                    'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(504);
-                                })
-                        );
-                    });
-                });
-            });
-        });
         describe('/apply/:section?next=<some section id>', () => {
             beforeEach(() => {
                 // tidy up from previous tests
@@ -1118,7 +1048,6 @@ describe('Data capture service endpoints', () => {
                         }
                     });
                 });
-
                 // eslint-disable-next-line global-require
                 app = require('../app');
                 replaceCsrfMiddlwareForTest(app);
