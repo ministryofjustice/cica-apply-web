@@ -55,6 +55,7 @@ function guaTrackLinks(domain, window) {
         var href;
         var hrefNoQuerystring;
         var scheme;
+        var target;
 
         // click may have originated from an element within an anchor e.g.
         // <a href="index.html"><img src="logo.jpg" alt="Home" /></a>
@@ -72,6 +73,7 @@ function guaTrackLinks(domain, window) {
                 // get scheme from url e.g. http:, https:, mailto:, tel:, etc
                 // http://en.wikipedia.org/wiki/URI_scheme
                 scheme = href.slice(0, href.indexOf(':') + 1);
+                target = node.target;
 
                 // handle schemes
                 if (scheme.indexOf('http') === 0) {
@@ -89,6 +91,10 @@ function guaTrackLinks(domain, window) {
                     event_category: scheme,
                     event_label: href,
                     event_callback: function() {
+                        if (target === '_blank') {
+                            window.open(href, href).focus();
+                            return;
+                        }
                         // eslint-disable-next-line no-param-reassign
                         window.location.href = href;
                     }

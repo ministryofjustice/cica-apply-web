@@ -334,6 +334,18 @@ module.exports = {
             pageContext: 'submission'
         }
     },
+    'p-mainapplicant-declaration-under-12': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-mainapplicant-declaration-12-and-over': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
     'p-applicant-select-treatments': {
         // transformer: 'form',
         options: {
@@ -1224,6 +1236,247 @@ module.exports = {
     'p-applicant-has-crime-reference-number': {
         options: {
             outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info']
+        }
+    },
+    'p-mainapplicant-confirmation-method': {
+        options: {
+            transformOrder: [
+                'q-mainapplicant-enter-your-email-address',
+                'q-mainapplicant-enter-your-telephone-number',
+                'q-mainapplicant-confirmation-method'
+            ],
+            outputOrder: ['q-mainapplicant-confirmation-method'],
+            properties: {
+                'q-mainapplicant-confirmation-method': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'email',
+                                componentIds: ['q-mainapplicant-enter-your-email-address']
+                            },
+                            {
+                                itemValue: 'text',
+                                componentIds: ['q-mainapplicant-enter-your-telephone-number']
+                            }
+                        ],
+                        additionalMapping: [
+                            {
+                                itemType: 'divider',
+                                itemValue: 'or',
+                                itemIndex: 2
+                            }
+                        ]
+                    }
+                },
+                'q-mainapplicant-enter-your-email-address': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'email'
+                        }
+                    }
+                },
+                'q-mainapplicant-enter-your-telephone-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'tel'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-mainapplicant-enter-your-name': {
+        options: {
+            outputOrder: [
+                'q-mainapplicant-title',
+                'q-mainapplicant-first-name',
+                'q-mainapplicant-last-name'
+            ],
+            properties: {
+                'q-mainapplicant-title': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'honorific-prefix'
+                        }
+                    }
+                },
+                'q-mainapplicant-first-name': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'given-name'
+                        }
+                    }
+                },
+                'q-mainapplicant-last-name': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'family-name'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-mainapplicant-enter-your-address': {
+        options: {
+            properties: {
+                'q-mainapplicant-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line1'
+                        }
+                    }
+                },
+                'q-mainapplicant-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line2',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-mainapplicant-town-or-city': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'address-level2'
+                        }
+                    }
+                },
+                'q-mainapplicant-county': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'address-level1'
+                        }
+                    }
+                },
+                'q-mainapplicant-postcode': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'postal-code'
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-mainapplicant-building-and-street',
+                'q-mainapplicant-building-and-street-2',
+                'q-mainapplicant-town-or-city',
+                'q-mainapplicant-county',
+                'q-mainapplicant-postcode'
+            ]
+        }
+    },
+    'p-mainapplicant-parent': {
+        options: {
+            outputOrder: ['q-mainapplicant-parent', 'can-i-apply-for-child']
+        }
+    },
+    'p-mainapplicant-shared-responsibility': {
+        options: {
+            outputOrder: [
+                'q-mainapplicant-shared-responsibility',
+                'mainapplicant-shared-responsibility'
+            ]
+        }
+    },
+    'p-mainapplicant-shared-responsibility-name': {
+        options: {
+            outputOrder: [
+                'q-mainapplicant-shared-responsibility-name',
+                'mainapplicant-shared-responsibility-name'
+            ]
+        }
+    },
+    'p-applicant-se-treatment': {
+        options: {
+            outputOrder: ['q-applicant-se-treatment', 'help-se-treatment']
+        }
+    },
+    'p-applicant-se-equipment': {
+        options: {
+            outputOrder: ['q-applicant-se-equipment', 'help-se-equipment']
+        }
+    },
+    'p-applicant-se-home-changes': {
+        options: {
+            outputOrder: ['q-applicant-se-home-changes', 'help-se-home-changes']
+        }
+    },
+    'p-applicant-se-aids': {
+        options: {
+            outputOrder: ['q-applicant-se-aids', 'help-se-aids']
+        }
+    },
+    'p-applicant-se-other': {
+        options: {
+            outputOrder: ['q-applicant-se-other', 'help-understanding-expenses']
+        }
+    },
+    'p-applicant-unable-to-work-duration': {
+        options: {
+            outputOrder: ['q-applicant-unable-to-work-duration', 'details-work-duration']
+        }
+    },
+    'p-applicant-select-infections': {
+        options: {
+            transformOrder: ['q-applicant-infections-other', 'q-applicant-physical-injuries'],
+            outputOrder: ['q-applicant-physical-injuries'],
+            properties: {
+                'q-applicant-physical-injuries': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'phyinj-149',
+                                componentIds: ['q-applicant-infections-other']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-select-non-sa-infections': {
+        options: {
+            transformOrder: ['q-applicant-infections-other', 'q-applicant-physical-injuries'],
+            outputOrder: ['q-applicant-physical-injuries'],
+            properties: {
+                'q-applicant-physical-injuries': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'phyinj-149',
+                                componentIds: ['q-applicant-infections-other']
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-future-work': {
+        options: {
+            outputOrder: ['q-applicant-future-work', 'help-future-work']
+        }
+    },
+    'p-applicant-affect-future-duration': {
+        options: {
+            outputOrder: ['q-applicant-affect-future-duration', 'help-affect-future-duration']
+        }
+    },
+    'p-applicant-affect-duration': {
+        options: {
+            outputOrder: ['q-applicant-affect-duration', 'help-affect-duration']
+        }
+    },
+    'p-applicant-se-home-care': {
+        options: {
+            outputOrder: ['q-applicant-se-home-care', 'help-understanding-care']
         }
     }
 };

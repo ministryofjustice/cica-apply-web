@@ -47,7 +47,6 @@ function renderSection({
     cspNonce
 }) {
     const showButton = !isFinal;
-    const isSubmissionPage = getSectionContext(sectionId) === 'submission';
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
@@ -66,7 +65,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %} novalidate autocomplete="off">
+                <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}
@@ -215,33 +214,25 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, allAnswers, csrfToken, cspNonce) {
+function getSectionHtml(sectionData, csrfToken, cspNonce) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
-    let answers;
-    if (Object.entries(allAnswers).length === 0 && allAnswers.constructor === Object) {
-        const answersObject = processPreviousAnswers(
-            sectionData.included.filter(answer => answer.type === 'answers')
-        );
-        answers = answersObject[sectionId];
-    } else {
-        answers = processPreviousAnswers(allAnswers.body.data);
-    }
+    const answersObject = processPreviousAnswers(
+        sectionData.included.filter(answer => answer.type === 'answers')
+    );
+    const answers = answersObject[sectionId];
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-
     const showBackLink = !(
         uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
     );
-
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema: escapeSchemaContent(schema),
         uiSchema,
         data: answers
     });
-
     return renderSection({
         transformation,
         isFinal: display.final,

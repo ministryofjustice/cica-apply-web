@@ -42,7 +42,6 @@ router
     .route('/:section')
     .get(async (req, res, next) => {
         try {
-            let answers = {};
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await qService.getSection(req.cicaSession.questionnaireId, sectionId);
             if (
@@ -55,7 +54,6 @@ router
                     'summary';
 
                 if (isSummaryPage) {
-                    answers = await qService.getAnswers(req.cicaSession.questionnaireId);
                     res.set({
                         'Cache-Control': 'private, no-cache, no-store, must-revalidate',
                         Expires: '-1',
@@ -65,7 +63,6 @@ router
             }
             const html = formHelper.getSectionHtml(
                 response.body,
-                answers,
                 req.csrfToken(),
                 res.locals.nonce
             );
@@ -82,6 +79,7 @@ router
         try {
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
+            let nextSectionId;
             // delete the token from the body to allow AJV to validate the request.
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
@@ -91,7 +89,29 @@ router
                 body
             );
             if (response.statusCode === 201) {
-                // is there a forced redirect
+                // if the page is a submission
+                const isApplicationSubmission =
+                    formHelper.getSectionContext(sectionId) === 'submission';
+                if (isApplicationSubmission) {
+                    try {
+                        await qService.postSubmission(req.cicaSession.questionnaireId);
+                        const submissionResponse = await qService.getSubmissionStatus(
+                            req.cicaSession.questionnaireId,
+                            Date.now()
+                        );
+
+                        if (submissionResponse.status === 'FAILED') {
+                            const err = Error(`Unable to retrieve questionnaire submission status`);
+                            err.name = 'CRNNotRetrieved';
+                            err.statusCode = 500;
+                            err.error = '500 Internal Server Error';
+                            throw err;
+                        }
+                    } catch (err) {
+                        return next(err);
+                    }
+                }
+
                 if ('next' in req.query) {
                     const progressEntryResponse = await qService.getSection(
                         req.cicaSession.questionnaireId,
@@ -99,10 +119,9 @@ router
                     );
 
                     if (progressEntryResponse.statusCode === 200) {
-                        const nextSectionId = formHelper.removeSectionIdPrefix(
+                        nextSectionId = formHelper.removeSectionIdPrefix(
                             progressEntryResponse.body.data[0].attributes.sectionId
                         );
-
                         return res.redirect(`${req.baseUrl}/${nextSectionId}`);
                     }
                 }
@@ -110,9 +129,10 @@ router
                 const progressEntryResponse = await qService.getCurrentSection(
                     req.cicaSession.questionnaireId
                 );
-                const nextSectionId = formHelper.removeSectionIdPrefix(
+                nextSectionId = formHelper.removeSectionIdPrefix(
                     progressEntryResponse.body.data[0].attributes.sectionId
                 );
+
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
 
@@ -128,32 +148,5 @@ router
             return next(err);
         }
     });
-
-router.route('/submission/confirm').post(async (req, res, next) => {
-    try {
-        await qService.postSubmission(req.cicaSession.questionnaireId);
-        const response = await qService.getSubmissionStatus(
-            req.cicaSession.questionnaireId,
-            Date.now()
-        );
-
-        if (response.status === 'FAILED') {
-            const err = Error(`Unable to retrieve questionnaire submission status`);
-            err.name = 'CRNNotRetrieved';
-            err.statusCode = 500;
-            err.error = '500 Internal Server Error';
-            throw err;
-        }
-
-        const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
-        const responseBody = resp.body;
-        const nextSection = formHelper.removeSectionIdPrefix(
-            responseBody.data[0].attributes.sectionId
-        );
-        return res.redirect(`${req.baseUrl}/${nextSection}`);
-    } catch (err) {
-        return next(err);
-    }
-});
 
 module.exports = router;
