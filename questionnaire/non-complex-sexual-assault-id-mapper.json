@@ -134,5 +134,20 @@
     "applicant-describe-incident": "p-applicant-describe-incident",
     "applicant-incident-description": "p-applicant-incident-description",
     "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number",
-    "system": "system"
+    "system": "system",
+    "mainapplicant-parent": "p-mainapplicant-parent",
+    "mainapplicant-context-details": "p-mainapplicant-context-details",
+    "mainapplicant-confirmation-method": "p-mainapplicant-confirmation-method",
+    "mainapplicant-enter-your-name": "p-mainapplicant-enter-your-name",
+    "mainapplicant-enter-your-address": "p-mainapplicant-enter-your-address",
+    "mainapplicant-enter-your-telephone-number": "p-mainapplicant-enter-your-telephone-number",
+    "mainapplicant-enter-your-email-address": "p-mainapplicant-enter-your-email-address",
+    "mainapplicant-applicant-relationship": "p-mainapplicant-applicant-relationship",
+    "mainapplicant-applicant-shared-responsibility": "p-mainapplicant-applicant-shared-responsibility",
+    "mainapplicant-applicant-shared-responsibility-name": "p-mainapplicant-applicant-shared-responsibility-name",
+    "mainapplicant-applicant-care-order": "p-mainapplicant-applicant-care-order",
+    "mainapplicant-applicant-care-order-authority": "p-mainapplicant-applicant-care-order-authority",
+    "context-authority": "p--context-authority"
+
+
 }

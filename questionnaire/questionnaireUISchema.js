@@ -1225,5 +1225,160 @@ module.exports = {
         options: {
             outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info']
         }
+    },
+    'p-mainapplicant-confirmation-method': {
+        options: {
+            transformOrder: [
+                'q-mainapplicant-enter-your-email-address',
+                'q-mainapplicant-enter-your-telephone-number',
+                'q-mainapplicant-confirmation-method'
+            ],
+            outputOrder: ['q-mainapplicant-confirmation-method'],
+            properties: {
+                'q-mainapplicant-confirmation-method': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'email',
+                                componentIds: ['q-mainapplicant-enter-your-email-address']
+                            },
+                            {
+                                itemValue: 'text',
+                                componentIds: ['q-mainapplicant-enter-your-telephone-number']
+                            }
+                        ],
+                        additionalMapping: [
+                            {
+                                itemType: 'divider',
+                                itemValue: 'or',
+                                itemIndex: 2
+                            }
+                        ]
+                    }
+                },
+                'q-mainapplicant-enter-your-email-address': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'email'
+                        }
+                    }
+                },
+                'q-mainapplicant-enter-your-telephone-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'tel'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-mainapplicant-enter-your-name': {
+        options: {
+            outputOrder: [
+                'q-mainapplicant-title',
+                'q-mainapplicant-first-name',
+                'q-mainapplicant-last-name'
+            ],
+            properties: {
+                'q-mainapplicant-title': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'honorific-prefix'
+                        }
+                    }
+                },
+                'q-mainapplicant-first-name': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'given-name'
+                        }
+                    }
+                },
+                'q-mainapplicant-last-name': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'family-name'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-mainapplicant-enter-your-address': {
+        options: {
+            properties: {
+                'q-mainapplicant-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line1'
+                        }
+                    }
+                },
+                'q-mainapplicant-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line2',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-mainapplicant-town-or-city': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'address-level2'
+                        }
+                    }
+                },
+                'q-mainapplicant-county': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'address-level1'
+                        }
+                    }
+                },
+                'q-mainapplicant-postcode': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'postal-code'
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-mainapplicant-building-and-street',
+                'q-mainapplicant-building-and-street-2',
+                'q-mainapplicant-town-or-city',
+                'q-mainapplicant-county',
+                'q-mainapplicant-postcode'
+            ]
+        }
+    },
+    'p-mainapplicant-parent': {
+        options: {
+            outputOrder: ['q-mainapplicant-parent', 'can-i-apply-for-child']
+        }
+    },
+    'p-mainapplicant-applicant-shared-responsibility': {
+        options: {
+            outputOrder: [
+                'q-mainapplicant-applicant-shared-responsibility',
+                'mainapplicant-applicant-shared-responsibility'
+            ]
+        }
+    },
+    'p-mainapplicant-applicant-shared-responsibility-name': {
+        options: {
+            outputOrder: [
+                'q-mainapplicant-applicant-shared-responsibility-name',
+                'mainapplicant-applicant-shared-responsibility-name'
+            ]
+        }
     }
 };
