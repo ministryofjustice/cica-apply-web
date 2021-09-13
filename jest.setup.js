@@ -5,6 +5,7 @@ jest.testEnvironment = 'node';
 process.env.CW_DCS_JWT = 'A massive string';
 process.env.CW_COOKIE_SECRET = 'Also a huge string';
 process.env.CW_DCS_URL = 'http://docker.for.win.localhost:3100';
-process.env.CW_LIVECHAT_START_TIME = '10:00:00.000';
-process.env.CW_LIVECHAT_END_TIME = '15:00:00.000';
-process.env.CW_LIVECHAT_ACTIVE_DAYS = '0,1,2,3,4,5,6';
+process.env.CW_LIVECHAT_START_TIMES =
+    'false,08:30:00.000,08:30:00.000,10:00:00.000,08:30:00.000,08:30:00.000,false';
+process.env.CW_LIVECHAT_END_TIMES =
+    'false,17:00:00.000,17:00:00.000,17:00:00.000,17:00:00.000,17:00:00.000,false';
