@@ -181,18 +181,9 @@ describe('Data capture service endpoints', () => {
                         });
                         it('Should render specific content on the page', async () => {
                             jest.resetModules();
-                            jest.doMock('../index/dateHelper', () =>
+                            jest.doMock('../index/liveChatHelper', () =>
                                 jest.fn(() => ({
-                                    getFullTime: () => {
-                                        return '10:30:17.135';
-                                    },
-                                    timeIsBetween: () => {
-                                        return true;
-                                    },
-                                    isBetween: () => {
-                                        return true;
-                                    },
-                                    includesToday: () => {
+                                    isLiveChatActive: () => {
                                         return true;
                                     }
                                 }))
@@ -210,18 +201,9 @@ describe('Data capture service endpoints', () => {
                         });
                         it('Should render a 404 page', async () => {
                             jest.resetModules();
-                            jest.doMock('../index/dateHelper', () =>
+                            jest.doMock('../index/liveChatHelper', () =>
                                 jest.fn(() => ({
-                                    getFullTime: () => {
-                                        return '17:30:17.135';
-                                    },
-                                    timeIsBetween: () => {
-                                        return true;
-                                    },
-                                    isBetween: () => {
-                                        return false;
-                                    },
-                                    includesToday: () => {
+                                    isLiveChatActive: () => {
                                         return false;
                                     }
                                 }))
@@ -249,18 +231,9 @@ describe('Data capture service endpoints', () => {
                         });
                         it('Should render specific content on the page', async () => {
                             jest.resetModules();
-                            jest.doMock('../index/dateHelper', () =>
+                            jest.doMock('../index/liveChatHelper', () =>
                                 jest.fn(() => ({
-                                    getFullTime: () => {
-                                        return '10:30:17.135';
-                                    },
-                                    timeIsBetween: () => {
-                                        return true;
-                                    },
-                                    isBetween: () => {
-                                        return true;
-                                    },
-                                    includesToday: () => {
+                                    isLiveChatActive: () => {
                                         return true;
                                     }
                                 }))
@@ -275,18 +248,9 @@ describe('Data capture service endpoints', () => {
                         });
                         it('Should render a 404 page', async () => {
                             jest.resetModules();
-                            jest.doMock('../index/dateHelper', () =>
+                            jest.doMock('../index/liveChatHelper', () =>
                                 jest.fn(() => ({
-                                    getFullTime: () => {
-                                        return '17:30:17.135';
-                                    },
-                                    timeIsBetween: () => {
-                                        return true;
-                                    },
-                                    isBetween: () => {
-                                        return false;
-                                    },
-                                    includesToday: () => {
+                                    isLiveChatActive: () => {
                                         return false;
                                     }
                                 }))

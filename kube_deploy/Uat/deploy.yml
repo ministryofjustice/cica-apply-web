@@ -36,12 +36,10 @@ spec:
               value: '1800000'
             - name: CW_LIVECHAT_CHAT_ID
               value: ff753a08-883d-453c-bf64-811301587100
-            - name: CW_LIVECHAT_ACTIVE_DAYS
-              value: 1,2,3,4,5
-            - name: CW_LIVECHAT_START_TIME
-              value: '10:00:00.000'
-            - name: CW_LIVECHAT_END_TIME
-              value: '15:00:00.000'
+            - name: CW_LIVECHAT_START_TIMES
+              value: 'false,08:30:00.000,08:30:00.000,10:00:00.000,08:30:00.000,08:30:00.000,false'
+            - name: CW_LIVECHAT_END_TIMES
+              value: 'false,17:00:00.000,17:00:00.000,17:00:00.000,17:00:00.000,17:00:00.000,false'
   selector:
     matchLabels:
       app: webapp-uat

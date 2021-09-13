@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const createDateHelper = require('./dateHelper');
+const createLiveChatHelper = require('./liveChatHelper');
 
 const router = express.Router();
 
@@ -26,14 +26,12 @@ router.get('/accessibility-statement', (req, res) => {
 });
 
 router.get('/start-chat', (req, res) => {
-    const dateHelper = createDateHelper();
+    const liveChatHelper = createLiveChatHelper();
     if (
-        dateHelper.timeIsBetween(
-            dateHelper.getFullTime(new Date()),
-            process.env.CW_LIVECHAT_START_TIME,
-            process.env.CW_LIVECHAT_END_TIME
-        ) &&
-        dateHelper.includesToday(process.env.CW_LIVECHAT_ACTIVE_DAYS)
+        liveChatHelper.isLiveChatActive(
+            process.env.CW_LIVECHAT_START_TIMES,
+            process.env.CW_LIVECHAT_END_TIMES
+        )
     ) {
         return res.render('start-chat.njk');
     }
@@ -41,14 +39,12 @@ router.get('/start-chat', (req, res) => {
 });
 
 router.get('/chat', (req, res) => {
-    const dateHelper = createDateHelper();
+    const liveChatHelper = createLiveChatHelper();
     if (
-        dateHelper.timeIsBetween(
-            dateHelper.getFullTime(new Date()),
-            process.env.CW_LIVECHAT_START_TIME,
-            process.env.CW_LIVECHAT_END_TIME
-        ) &&
-        dateHelper.includesToday(process.env.CW_LIVECHAT_ACTIVE_DAYS)
+        liveChatHelper.isLiveChatActive(
+            process.env.CW_LIVECHAT_START_TIMES,
+            process.env.CW_LIVECHAT_END_TIMES
+        )
     ) {
         return res.render('chat-iframe.njk');
     }

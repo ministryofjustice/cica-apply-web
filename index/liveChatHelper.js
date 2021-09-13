@@ -2,7 +2,7 @@
 
 const moment = require('moment-timezone');
 
-function createDateHelper() {
+function createLiveChatHelper() {
     function isBetween(dateInput, dateStart, dateEnd) {
         return moment
             .utc(dateInput)
@@ -24,18 +24,29 @@ function createDateHelper() {
             .format('HH:mm:ss.SSS');
     }
 
-    function includesToday(listOfWeekDays = '') {
-        let today = new Date();
-        today = today.getDay();
-        return listOfWeekDays.includes(today);
+    function getOperationalTimesOfDayFromString(stringList) {
+        return stringList.split(',');
+    }
+
+    function isLiveChatActive(startTimes, endTimes) {
+        const startTimesArray = getOperationalTimesOfDayFromString(startTimes);
+        const endTimesArray = getOperationalTimesOfDayFromString(endTimes);
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6.
+
+        if (startTimesArray[dayOfWeek] !== 'false') {
+            return timeIsBetween(
+                getFullTime(new Date()),
+                startTimesArray[dayOfWeek],
+                endTimesArray[dayOfWeek]
+            );
+        }
+        return false;
     }
 
     return Object.freeze({
-        isBetween,
-        getFullTime,
-        includesToday,
-        timeIsBetween
+        isLiveChatActive
     });
 }
 
-module.exports = createDateHelper;
+module.exports = createLiveChatHelper;
