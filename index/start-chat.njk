@@ -1,5 +1,6 @@
 {% extends "page.njk" %}
 {% from "components/radios/macro.njk" import govukRadios %}
+{% from "components/table/macro.njk" import govukTable %}
 
 {% block pageTitle %}Chat to our customer support team online - {{ super() }}{% endblock %}
 
@@ -8,8 +9,6 @@
     <h1 class="govuk-heading-xl">Chat to us online</h1>
 
     <p class="govuk-body">You can ask about claiming compensation or discuss your claim.</p>
-
-    <p class="govuk-body">The chat is open from 10am to 3pm, Monday to Friday.</p>
 
     {#
         web chat querystring parameters:
@@ -21,7 +20,63 @@
          * region - string
          * url - URL
     #}
+
     <a href="/chat?recId={{ CW_LIVECHAT_CHAT_ID }}&locale=en-gb" class="govuk-button ga-event ga-event--click" data-tracking-label="start a chat" data-tracking-category="button" open-new-window='{"width": "380", "height": "700"}'>Start a chat</a>
+
+    {{ govukTable({
+        caption: "Opening times",
+        firstCellIsHeader: true,
+        head: [
+            {
+            text: "Day"
+            },
+            {
+            text: "Opening times"
+            }
+        ],
+        rows: [
+            [
+                {
+                    text: "Monday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Tuesday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Wednesday"
+                },
+                {
+                    text: "10am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Thursday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Friday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ]
+        ]
+    }) }}
 
     <h2 class="govuk-heading-l">Other ways to contact us</h2>
 

@@ -1,4 +1,5 @@
 {% extends "page.njk" %}
+{% from "components/table/macro.njk" import govukTable %}
 
 {% block pageTitle %}Sorry, the service is unavailable - {{ super() }}{% endblock %}
 
@@ -6,7 +7,60 @@
 
     <h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>
 
-    <p class="govuk-body">The chat is open from 10am to 3pm, Monday to Friday.</p>
+    {{ govukTable({
+        caption: "Opening times",
+        firstCellIsHeader: true,
+        head: [
+            {
+            text: "Day"
+            },
+            {
+            text: "Opening times"
+            }
+        ],
+        rows: [
+            [
+                {
+                    text: "Monday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Tuesday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Wednesday"
+                },
+                {
+                    text: "10am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Thursday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Friday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ]
+        ]
+    }) }}
 
     <p class="govuk-body">Email <a href="mailto:info@cica.gov.uk" class="govuk-link">info@cica.gov.uk</a> if you need to contact us.</p>
 

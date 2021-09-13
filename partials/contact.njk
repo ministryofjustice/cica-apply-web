@@ -1,5 +1,59 @@
+{% from "components/table/macro.njk" import govukTable %}
 <p class="govuk-body govuk-!-margin-bottom-1">Telephone: 0300 003 3601</p>
 <p class="govuk-body govuk-!-margin-bottom-1">Outside the UK: +44 (0) 203 684 2517</p>
 <p class="govuk-body"><a href="https://www.relayuk.bt.com" class="govuk-link">Relay UK</a>: (if you cannot hear or speak on the phone) 18001 0300 003 3601</p>
-<p class="govuk-body">Our phone lines are open Monday to Friday, 10am to 3pm.</p>
+{{ govukTable({
+        caption: "Opening times",
+        firstCellIsHeader: true,
+        head: [
+            {
+            text: "Day"
+            },
+            {
+            text: "Opening times"
+            }
+        ],
+        rows: [
+            [
+                {
+                    text: "Monday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Tuesday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Wednesday"
+                },
+                {
+                    text: "10am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Thursday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ],
+            [
+                {
+                    text: "Friday"
+                },
+                {
+                    text: "8:30am to 5pm"
+                }
+            ]
+        ]
+    }) }}
 <p class="govuk-body"><a href="https://www.gov.uk/call-charges" class="govuk-link">Find out about call charges</a></p>
