@@ -1391,6 +1391,11 @@ module.exports = {
             outputOrder: ['q-applicant-se-equipment', 'help-se-equipment']
         }
     },
+    'p-applicant-se-home-care': {
+        options: {
+            outputOrder: ['q-applicant-se-home-care', 'help-understanding-care']
+        }
+    },
     'p-applicant-se-home-changes': {
         options: {
             outputOrder: ['q-applicant-se-home-changes', 'help-se-home-changes']
@@ -1399,6 +1404,11 @@ module.exports = {
     'p-applicant-se-aids': {
         options: {
             outputOrder: ['q-applicant-se-aids', 'help-se-aids']
+        }
+    },
+    'p-applicant-se-other': {
+        options: {
+            outputOrder: ['q-applicant-se-other', 'help-understanding-expenses']
         }
     },
     'p-applicant-unable-to-work-duration': {
