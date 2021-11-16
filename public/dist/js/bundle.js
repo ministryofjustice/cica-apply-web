@@ -23790,7 +23790,8 @@ function guaTrackLinks(domain, window) {
     var node = ev.target || ev.srcElement;
     var href;
     var hrefNoQuerystring;
-    var scheme; // click may have originated from an element within an anchor e.g.
+    var scheme;
+    var target; // click may have originated from an element within an anchor e.g.
     // <a href="index.html"><img src="logo.jpg" alt="Home" /></a>
     // walk up dom and check if target has a parent anchor
 
@@ -23804,7 +23805,8 @@ function guaTrackLinks(domain, window) {
         hrefNoQuerystring = href.split('?')[0]; // get scheme from url e.g. http:, https:, mailto:, tel:, etc
         // http://en.wikipedia.org/wiki/URI_scheme
 
-        scheme = href.slice(0, href.indexOf(':') + 1); // handle schemes
+        scheme = href.slice(0, href.indexOf(':') + 1);
+        target = node.target; // handle schemes
 
         if (scheme.indexOf('http') === 0) {
           if (hrefNoQuerystring.indexOf(domain) === -1) {
@@ -23822,7 +23824,12 @@ function guaTrackLinks(domain, window) {
           event_category: scheme,
           event_label: href,
           event_callback: function event_callback() {
-            // eslint-disable-next-line no-param-reassign
+            if (target === '_blank') {
+              window.open(href, href).focus();
+              return;
+            } // eslint-disable-next-line no-param-reassign
+
+
             window.location.href = href;
           }
         }); // stop default link click and let the GA hitCallback redirect to the link
