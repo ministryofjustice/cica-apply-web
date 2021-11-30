@@ -9,8 +9,7 @@ executors:
       IMAGE_NAME: cica-repo-dev
     docker:
       # Image tool container
-      - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/tools:circleci
-      # - image: ${ECR_REPOSITORY}/${ECR_REPO_NAME}:image-tools-circleci
+      - image: ministryofjustice/cloud-platform-tools
 jobs:
   build-for-test:
     docker:
@@ -84,9 +83,6 @@ jobs:
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
-      #      - run:
-      #          name: Install test tools
-      #          command: curl -fsSL https://goss.rocks/install | sh
       - run:
           name: Test the container
           command: |
@@ -118,12 +114,18 @@ jobs:
     executor: docker-publisher
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Kubectl deployment
+          name: Authenticate with cluster
           command: |
-            setup-kube-auth
-            kubectl config use-context dev
-      - setup_remote_docker
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_DEV}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-dev
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-dev get pods
       - deploy:
           name: Deploy to the cluster
           command: |
@@ -137,12 +139,18 @@ jobs:
     executor: docker-publisher
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Kubectl deployment
+          name: Authenticate with cluster
           command: |
-            setup-kube-auth
-            kubectl config use-context uat
-      - setup_remote_docker
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_UAT}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-uat
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-uat get pods
       - deploy:
           name: Deploy to the cluster
           command: |
@@ -156,21 +164,27 @@ jobs:
     executor: docker-publisher
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Kubectl deployment
+          name: Authenticate with cluster
           command: |
-            setup-kube-auth
-            kubectl config use-context production
-      - setup_remote_docker
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_PROD}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-prod
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-prod get pods
       - deploy:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Production/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Prod/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
-                -f kube_deploy/Production/service.yml \
-                -f kube_deploy/Production/ingress.yml
+                -f kube_deploy/Prod/service.yml \
+                -f kube_deploy/Prod/ingress.yml
 workflows:
   version: 2
   build-test-push-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:

@@ -4,17 +4,17 @@ metadata:
   name: webapp-ingress
   namespace: claim-criminal-injuries-compensation-uat
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-uat-blue
+    external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-uat-green
     external-dns.alpha.kubernetes.io/aws-weight: '100'
 spec:
   tls:
     - hosts:
-        - uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+        - uat.claim-criminal-injuries-compensation.apps.live.cloud-platform.service.justice.gov.uk
     - hosts:
         - uat.claim-criminal-injuries-compensation.service.justice.gov.uk
       secretName: uat-claim-criminal-injuries-compensation-cert-secret
   rules:
-    - host: uat.claim-criminal-injuries-compensation.apps.live-1.cloud-platform.service.justice.gov.uk
+    - host: uat.claim-criminal-injuries-compensation.apps.live.cloud-platform.service.justice.gov.uk
       http:
         paths:
           - path: /
