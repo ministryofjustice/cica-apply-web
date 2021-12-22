@@ -29,13 +29,13 @@ function getButtonText(sectionId) {
         : 'Continue';
 }
 
-function getSectionContext(sectionId) {
-    return (
-        sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.pageContext
-    );
-}
+// function getSectionContext(sectionId) {
+//     return (
+//         sectionId in uiSchema &&
+//         uiSchema[sectionId].options &&
+//         uiSchema[sectionId].options.pageContext
+//     );
+// }
 
 function renderSection({
     transformation,
@@ -305,6 +305,6 @@ module.exports = {
     processPreviousAnswers,
     getSectionHtmlWithErrors,
     addPrefix,
-    escapeSchemaContent,
-    getSectionContext
+    escapeSchemaContent // ,
+    // getSectionContext
 };

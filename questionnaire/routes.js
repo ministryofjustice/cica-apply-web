@@ -45,33 +45,47 @@ router
             let answers = {};
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await qService.getSection(req.cicaSession.questionnaireId, sectionId);
-            if (
-                response.body.data &&
-                response.body.data[0].attributes &&
-                response.body.data[0].attributes.sectionId
-            ) {
-                const isSummaryPage =
-                    formHelper.getSectionContext(response.body.data[0].attributes.sectionId) ===
-                    'summary';
+            // if (
+            //     response.body.data &&
+            //     response.body.data[0].attributes &&
+            //     response.body.data[0].attributes.sectionId
+            // ) {
+            //     const isSummaryPage =
+            //         formHelper.getSectionContext(response.body.data[0].attributes.sectionId) ===
+            //         'summary';
 
-                if (isSummaryPage) {
+            //     if (isSummaryPage) {
+            //         answers = await qService.getAnswers(req.cicaSession.questionnaireId);
+            //         res.set({
+            //             'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+            //             Expires: '-1',
+            //             Pragma: 'no-cache'
+            //         });
+            //     }
+            // }
+
+            console.log({responseBody: response.body});
+
+            if (response.body.meta && response.body.meta.request) {
+                if (response.body.meta.request.headers) {
+                    // TODO: move this out of here.
                     answers = await qService.getAnswers(req.cicaSession.questionnaireId);
-                    res.set({
-                        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
-                        Expires: '-1',
-                        Pragma: 'no-cache'
-                    });
+                    res.set(response.body.meta.request.headers);
+                }
+                if (
+                    response.body.meta.request.session &&
+                    response.body.meta.request.session.destroy
+                ) {
+                    req.cicaSession.reset();
                 }
             }
+
             const html = formHelper.getSectionHtml(
                 response.body,
                 answers,
                 req.csrfToken(),
                 res.locals.nonce
             );
-            if (formHelper.getSectionContext(sectionId) === 'confirmation') {
-                req.cicaSession.reset();
-            }
             res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
@@ -92,28 +106,28 @@ router
                 body
             );
             if (response.statusCode === 201) {
-                // if the page is a submission
-                const isApplicationSubmission =
-                    formHelper.getSectionContext(sectionId) === 'submission';
-                if (isApplicationSubmission) {
-                    try {
-                        await qService.postSubmission(req.cicaSession.questionnaireId);
-                        const submissionResponse = await qService.getSubmissionStatus(
-                            req.cicaSession.questionnaireId,
-                            Date.now()
-                        );
+                // // if the page is a submission
+                // const isApplicationSubmission =
+                //     formHelper.getSectionContext(sectionId) === 'submission';
+                // if (isApplicationSubmission) {
+                //     try {
+                //         await qService.postSubmission(req.cicaSession.questionnaireId);
+                //         const submissionResponse = await qService.getSubmissionStatus(
+                //             req.cicaSession.questionnaireId,
+                //             Date.now()
+                //         );
 
-                        if (submissionResponse.status === 'FAILED') {
-                            const err = Error(`Unable to retrieve questionnaire submission status`);
-                            err.name = 'CRNNotRetrieved';
-                            err.statusCode = 500;
-                            err.error = '500 Internal Server Error';
-                            throw err;
-                        }
-                    } catch (err) {
-                        return next(err);
-                    }
-                }
+                //         if (submissionResponse.status === 'FAILED') {
+                //             const err = Error(`Unable to retrieve questionnaire submission status`);
+                //             err.name = 'CRNNotRetrieved';
+                //             err.statusCode = 500;
+                //             err.error = '500 Internal Server Error';
+                //             throw err;
+                //         }
+                //     } catch (err) {
+                //         return next(err);
+                //     }
+                // }
 
                 if ('next' in req.query) {
                     const progressEntryResponse = await qService.getSection(

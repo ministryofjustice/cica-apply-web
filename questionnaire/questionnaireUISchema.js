@@ -71,7 +71,7 @@ module.exports = {
     },
     'p--check-your-answers': {
         options: {
-            pageContext: 'summary'
+            // pageContext: 'summary'
         }
     },
     'p-applicant-enter-your-address': {
@@ -228,7 +228,7 @@ module.exports = {
     },
     'p--confirmation': {
         options: {
-            pageContext: 'confirmation',
+            // pageContext: 'confirmation',
             showBackButton: false
         }
     },
@@ -331,7 +331,7 @@ module.exports = {
     'p-applicant-declaration': {
         options: {
             buttonText: 'Agree and submit',
-            pageContext: 'submission'
+            // pageContext: 'submission'
         }
     },
     'p-applicant-select-treatments': {

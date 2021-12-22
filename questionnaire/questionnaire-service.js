@@ -67,70 +67,70 @@ function questionnaireService() {
         return service.get(opts);
     }
 
-    function getSubmission(questionnaireId) {
-        const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
-            headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
-            }
-        };
-        return service.get(opts);
-    }
+    // function getSubmission(questionnaireId) {
+    //     const opts = {
+    //         url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
+    //         headers: {
+    //             Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+    //         }
+    //     };
+    //     return service.get(opts);
+    // }
 
-    function postSubmission(questionnaireId) {
-        const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
-            headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
-            },
-            body: {
-                data: {
-                    type: 'submissions',
-                    attributes: {
-                        questionnaireId
-                    }
-                }
-            }
-        };
-        return service.post(opts);
-    }
+    // function postSubmission(questionnaireId) {
+    //     const opts = {
+    //         url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
+    //         headers: {
+    //             Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+    //         },
+    //         body: {
+    //             data: {
+    //                 type: 'submissions',
+    //                 attributes: {
+    //                     questionnaireId
+    //                 }
+    //             }
+    //         }
+    //     };
+    //     return service.post(opts);
+    // }
 
-    function timeout(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    // function timeout(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    // }
 
-    async function getSubmissionStatus(questionnaireId, startingDate) {
-        const result = await getSubmission(questionnaireId);
+    // async function getSubmissionStatus(questionnaireId, startingDate) {
+    //     const result = await getSubmission(questionnaireId);
 
-        // dcs down...
-        if (
-            !result ||
-            !result.body ||
-            !result.body.data ||
-            !result.body.data.attributes ||
-            (result.body.errors && result.body.errors[0].status === 404)
-        ) {
-            const err = Error(`The service is currently unavailable`);
-            err.name = 'DCSUnavailable';
-            err.statusCode = 500;
-            err.error = '500 Internal Server Error';
-            throw err;
-        }
+    //     // dcs down...
+    //     if (
+    //         !result ||
+    //         !result.body ||
+    //         !result.body.data ||
+    //         !result.body.data.attributes ||
+    //         (result.body.errors && result.body.errors[0].status === 404)
+    //     ) {
+    //         const err = Error(`The service is currently unavailable`);
+    //         err.name = 'DCSUnavailable';
+    //         err.statusCode = 500;
+    //         err.error = '500 Internal Server Error';
+    //         throw err;
+    //     }
 
-        const {submitted} = result.body.data.attributes;
-        if (submitted) {
-            return result.body.data.attributes;
-        }
-        // return the resource regardless.
-        // https://www.hobo-web.co.uk/your-website-design-should-load-in-4-seconds/
-        if (Date.now() - startingDate >= 6000) {
-            return result.body.data.attributes;
-        }
+    //     const {submitted} = result.body.data.attributes;
+    //     if (submitted) {
+    //         return result.body.data.attributes;
+    //     }
+    //     // return the resource regardless.
+    //     // https://www.hobo-web.co.uk/your-website-design-should-load-in-4-seconds/
+    //     if (Date.now() - startingDate >= 6000) {
+    //         return result.body.data.attributes;
+    //     }
 
-        // check again.
-        await timeout(1000);
-        return getSubmissionStatus(questionnaireId, startingDate);
-    }
+    //     // check again.
+    //     await timeout(1000);
+    //     return getSubmissionStatus(questionnaireId, startingDate);
+    // }
 
     function getAnswers(questionnaireId) {
         const opts = {
@@ -158,10 +158,10 @@ function questionnaireService() {
         postSection,
         getPrevious,
         getCurrentSection,
-        getSubmission,
-        postSubmission,
-        timeout,
-        getSubmissionStatus,
+        // getSubmission,
+        // postSubmission,
+        // timeout,
+        // getSubmissionStatus,
         getAnswers,
         getFirstSection
     });

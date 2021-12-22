@@ -405,8 +405,8 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             addPrefix: () => prefixedSection,
                             getSectionHtml: () => getSectionHtmlValid,
-                            removeSectionIdPrefix: () => initial,
-                            getSectionContext: () => undefined
+                            removeSectionIdPrefix: () => initial // ,
+                            // getSectionContext: () => undefined
                         }));
                         // eslint-disable-next-line global-require
                         app = require('../app');
@@ -509,8 +509,8 @@ describe('Data capture service endpoints', () => {
                                 getSectionHtmlWithErrors: () => getSectionHtmlValid,
                                 removeSectionIdPrefix: () => section,
                                 processRequest: () => processedAnswer,
-                                getNextSection: () => section,
-                                getSectionContext: () => false
+                                getNextSection: () => section // ,
+                                // getSectionContext: () => false
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
@@ -665,8 +665,8 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             addPrefix: () => prefixedSection,
                             removeSectionIdPrefix: () => section,
-                            processRequest: () => processedAnswer,
-                            getSectionContext: () => 'submission'
+                            processRequest: () => processedAnswer // ,
+                            // getSectionContext: () => 'submission'
                         }));
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
@@ -709,8 +709,8 @@ describe('Data capture service endpoints', () => {
                         jest.doMock('../questionnaire/form-helper', () => ({
                             addPrefix: () => prefixedSection,
                             removeSectionIdPrefix: () => section,
-                            processRequest: () => processedAnswer,
-                            getSectionContext: () => 'submission'
+                            processRequest: () => processedAnswer // ,
+                            // getSectionContext: () => 'submission'
                         }));
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
@@ -769,8 +769,8 @@ describe('Data capture service endpoints', () => {
                                 removeSectionIdPrefix: () => section,
                                 getSectionHtml: () => getSectionHtmlValid,
                                 processRequest: () => processedAnswer,
-                                getNextSection: () => section,
-                                getSectionContext: () => false
+                                getNextSection: () => section // ,
+                                // getSectionContext: () => false
                             }));
                             // eslint-disable-next-line global-require
                             app = require('../app');
