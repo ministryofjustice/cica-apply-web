@@ -1,6 +1,7 @@
 'use strict';
 
 const moment = require('moment-timezone');
+const bankHolidays = require('./bank-holidays.json');
 
 function createLiveChatHelper() {
     function isBetween(dateInput, dateStart, dateEnd) {
@@ -28,7 +29,14 @@ function createLiveChatHelper() {
         return stringList.split(',');
     }
 
+    function isBankHoliday() {
+        return bankHolidays.events.some(x => moment(x.date).isSame(new Date(), 'day'));
+    }
+
     function isLiveChatActive(startTimes, endTimes) {
+        if (isBankHoliday()) {
+            return false;
+        }
         const startTimesArray = getOperationalTimesOfDayFromString(startTimes);
         const endTimesArray = getOperationalTimesOfDayFromString(endTimes);
         const today = new Date();

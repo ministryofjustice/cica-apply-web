@@ -1,5 +1,6 @@
 'use strict';
 
+const moment = require('moment-timezone');
 const createLiveChatHelper = require('../index/liveChatHelper');
 
 describe('Live Chat Helper', () => {
@@ -36,6 +37,29 @@ describe('Live Chat Helper', () => {
             );
             jest.useRealTimers();
             expect(result).toBe(false);
+        });
+        describe('bank holidays', () => {
+            it('should return false for being a bank holiday', () => {
+                jest.useFakeTimers('modern');
+                jest.setSystemTime(new Date(2018, 11, 25, 4, 0, 48)); // Tue Dec 25 2018 04:00:48 GMT+0000 (Greenwich Mean Time)
+                const liveChatHelper = createLiveChatHelper();
+                const result = liveChatHelper.isLiveChatActive(
+                    process.env.CW_LIVECHAT_START_TIMES,
+                    process.env.CW_LIVECHAT_END_TIMES
+                );
+                jest.useRealTimers();
+                expect(result).toBe(false);
+            });
+
+            it('should have a list of future bank holidays', () => {
+                // eslint-disable-next-line global-require
+                const bankHolidays = require('../index/bank-holidays.json');
+                const today = new Date();
+                const futureBankHolidays = bankHolidays.events.filter(x =>
+                    moment(x.date).isAfter(today, 'day')
+                );
+                expect(futureBankHolidays.length).toBeGreaterThan(4);
+            });
         });
     });
 });
