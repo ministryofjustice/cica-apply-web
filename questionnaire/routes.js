@@ -64,11 +64,13 @@ router
             //     }
             // }
 
-            console.log({responseBody: response.body});
-
             if (response.body.meta && response.body.meta.request) {
                 if (response.body.meta.request.headers) {
-                    // TODO: move this out of here.
+                    // TODO: move this out of here. This `getAnswers` is called when we know we
+                    // are rendering the "summary" page. This used to be specifically assigned in
+                    // a "is Summary page" if block, but now it is only inferred to be a summary
+                    // page due to the response body having a header definition. This is inherently
+                    // less specific and is not extendable in this state.
                     answers = await qService.getAnswers(req.cicaSession.questionnaireId);
                     res.set(response.body.meta.request.headers);
                 }
