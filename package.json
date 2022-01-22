@@ -36,7 +36,7 @@
         "lodash.merge": "^4.6.1",
         "moment-timezone": "^0.5.33",
         "morgan": "~1.9.0",
-        "nanoid": "^2.1.10",
+        "nanoid": "^3.1.31",
         "nunjucks": "^3.2.1",
         "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v4.0.0"
     },
