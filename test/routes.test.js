@@ -737,7 +737,7 @@ describe('Data capture service endpoints', () => {
                                 .then(response => {
                                     expect(response.statusCode).toBe(500);
                                     expect(response.res.text).toContain(
-                                        '<p class="govuk-body">Your application was not sent.</p>'
+                                        '<p class="govuk-body">However, there is a delay with us sending your reference number to you.</p>'
                                     );
                                 })
                         );

@@ -330,7 +330,19 @@ module.exports = {
     },
     'p-applicant-declaration': {
         options: {
-            buttonText: 'Agree and submit',
+            buttonText: 'Submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-mainapplicant-declaration-under-12': {
+        options: {
+            buttonText: 'Submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-mainapplicant-declaration-12-and-over': {
+        options: {
+            buttonText: 'Submit',
             pageContext: 'submission'
         }
     },
@@ -1391,11 +1403,6 @@ module.exports = {
             outputOrder: ['q-applicant-se-equipment', 'help-se-equipment']
         }
     },
-    'p-applicant-se-home-care': {
-        options: {
-            outputOrder: ['q-applicant-se-home-care', 'help-understanding-care']
-        }
-    },
     'p-applicant-se-home-changes': {
         options: {
             outputOrder: ['q-applicant-se-home-changes', 'help-se-home-changes']
@@ -1417,7 +1424,6 @@ module.exports = {
         }
     },
     'p-applicant-select-infections': {
-        // transformer: 'form',
         options: {
             transformOrder: ['q-applicant-infections-other', 'q-applicant-physical-injuries'],
             outputOrder: ['q-applicant-physical-injuries'],
@@ -1436,7 +1442,6 @@ module.exports = {
         }
     },
     'p-applicant-select-non-sa-infections': {
-        // transformer: 'form',
         options: {
             transformOrder: ['q-applicant-infections-other', 'q-applicant-physical-injuries'],
             outputOrder: ['q-applicant-physical-injuries'],
@@ -1467,6 +1472,11 @@ module.exports = {
     'p-applicant-affect-duration': {
         options: {
             outputOrder: ['q-applicant-affect-duration', 'help-affect-duration']
+        }
+    },
+    'p-applicant-se-home-care': {
+        options: {
+            outputOrder: ['q-applicant-se-home-care', 'help-understanding-care']
         }
     }
 };

@@ -14,7 +14,7 @@
         "build": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
-        "buildRun:dev": "node ./bin/www",
+        "buildRun:dev": "npm run build:dev && node ./bin/www",
         "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
         "copy:js": "rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/",
         "webpack:dev": "webpack --config webpack.config.js",
