@@ -23,60 +23,7 @@
 
     <a href="/chat?recId={{ CW_LIVECHAT_CHAT_ID }}&locale=en-gb" class="govuk-button ga-event ga-event--click" data-tracking-label="start a chat" data-tracking-category="button" open-new-window='{"width": "380", "height": "700"}'>Start a chat</a>
 
-    {{ govukTable({
-        caption: "Opening times",
-        firstCellIsHeader: true,
-        head: [
-            {
-            text: "Day"
-            },
-            {
-            text: "Opening times"
-            }
-        ],
-        rows: [
-            [
-                {
-                    text: "Monday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Tuesday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Wednesday"
-                },
-                {
-                    text: "10am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Thursday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ],
-            [
-                {
-                    text: "Friday"
-                },
-                {
-                    text: "8:30am to 5pm"
-                }
-            ]
-        ]
-    }) }}
+    {% include "table-opening-times.njk" %}
 
     <h2 class="govuk-heading-l">Other ways to contact us</h2>
 
