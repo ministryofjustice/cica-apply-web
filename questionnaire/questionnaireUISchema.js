@@ -330,19 +330,19 @@ module.exports = {
     },
     'p-applicant-declaration': {
         options: {
-            buttonText: 'Submit',
+            buttonText: 'Agree and submit',
             pageContext: 'submission'
         }
     },
     'p-mainapplicant-declaration-under-12': {
         options: {
-            buttonText: 'Submit',
+            buttonText: 'Agree and submit',
             pageContext: 'submission'
         }
     },
     'p-mainapplicant-declaration-12-and-over': {
         options: {
-            buttonText: 'Submit',
+            buttonText: 'Agree and submit',
             pageContext: 'submission'
         }
     },
