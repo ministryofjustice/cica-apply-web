@@ -220,28 +220,20 @@ function getSectionHtml(sectionData, allAnswers, csrfToken, cspNonce) {
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
-    let answers;
-    if (Object.entries(allAnswers).length === 0 && allAnswers.constructor === Object) {
-        const answersObject = processPreviousAnswers(
-            sectionData.included.filter(answer => answer.type === 'answers')
-        );
-        answers = answersObject[sectionId];
-    } else {
-        answers = processPreviousAnswers(allAnswers.body.data);
-    }
+    const answersObject = processPreviousAnswers(
+        sectionData.included.filter(answer => answer.type === 'answers')
+    );
+    const answers = answersObject[sectionId];
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-
     const showBackLink = !(
         uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
     );
-
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema: escapeSchemaContent(schema),
         uiSchema,
         data: answers
     });
-
     return renderSection({
         transformation,
         isFinal: display.final,

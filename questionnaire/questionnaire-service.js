@@ -132,16 +132,6 @@ function questionnaireService() {
         return getSubmissionStatus(questionnaireId, startingDate);
     }
 
-    function getAnswers(questionnaireId) {
-        const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/answers`,
-            headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
-            }
-        };
-        return service.get(opts);
-    }
-
     function getFirstSection(currentQuestionnaireId) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
@@ -162,7 +152,6 @@ function questionnaireService() {
         postSubmission,
         timeout,
         getSubmissionStatus,
-        getAnswers,
         getFirstSection
     });
 }

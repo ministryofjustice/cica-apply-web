@@ -42,7 +42,6 @@ router
     .route('/:section')
     .get(async (req, res, next) => {
         try {
-            let answers = {};
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await qService.getSection(req.cicaSession.questionnaireId, sectionId);
             if (
@@ -55,7 +54,6 @@ router
                     'summary';
 
                 if (isSummaryPage) {
-                    answers = await qService.getAnswers(req.cicaSession.questionnaireId);
                     res.set({
                         'Cache-Control': 'private, no-cache, no-store, must-revalidate',
                         Expires: '-1',
@@ -65,7 +63,6 @@ router
             }
             const html = formHelper.getSectionHtml(
                 response.body,
-                answers,
                 req.csrfToken(),
                 res.locals.nonce
             );
