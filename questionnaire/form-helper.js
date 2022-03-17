@@ -215,7 +215,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, allAnswers, csrfToken, cspNonce) {
+function getSectionHtml(sectionData, csrfToken, cspNonce) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
