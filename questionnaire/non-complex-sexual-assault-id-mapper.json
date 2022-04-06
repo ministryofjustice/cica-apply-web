@@ -164,5 +164,6 @@
     "applicant-affect-future-duration": "p-applicant-affect-future-duration",
     "applicant-se-equipment": "p-applicant-se-equipment",
     "mainapplicant-declaration-under-12": "p-mainapplicant-declaration-under-12",
-    "mainapplicant-declaration-12-and-over": "p-mainapplicant-declaration-12-and-over"
+    "mainapplicant-declaration-12-and-over": "p-mainapplicant-declaration-12-and-over",
+    "applicant-upload-example": "p-applicant-upload-example"
 }
