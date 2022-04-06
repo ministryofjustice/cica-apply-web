@@ -1,8 +1,16 @@
 'use strict';
 
 const express = require('express');
+const AWS = require('aws-sdk');
+const multer = require('multer');
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
+
+const s3Client = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
 
 const router = express.Router();
 
@@ -176,12 +184,37 @@ router.route('/submission/confirm').post(async (req, res, next) => {
     }
 });
 
-router.route('/upload').post(async (req, res, next) => {
-    try {
-        return res.redirect(`${req.baseUrl}/${nextSection}`);
-    } catch (err) {
-        return next(err);
-    }
-});
+router
+    .route('/upload')
+    .post(multer({storage: multer.memoryStorage()}).single('file'), async (req, res, next) => {
+        try {
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: req.file.originalname,
+                Body: req.file.buffer
+            };
+
+            await s3Client.upload(uploadParams, (err, data) => {
+                if (err) {
+                    const error = Error(`Unable to upload document: ${err}`);
+                    error.name = 'UploadFailed';
+                    error.statusCode = 500;
+                    error.error = '500 Internal Server Error';
+                    throw error;
+                }
+                console.log(`File uploaded successfully.
+            Name: ${req.file.originalname},
+            Location: ${data.Location}`);
+            });
+            const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
+            const responseBody = resp.body;
+            const nextSection = formHelper.removeSectionIdPrefix(
+                responseBody.data[0].attributes.sectionId
+            );
+            return res.redirect(`${req.baseUrl}/${nextSection}`);
+        } catch (err) {
+            return next(err);
+        }
+    });
 
 module.exports = router;
