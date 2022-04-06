@@ -49,6 +49,7 @@ function renderSection({
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
+    const isUpload = sectionId === 'p-applicant-upload-example';
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
@@ -65,7 +66,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" novalidate autocomplete="off">
+                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %}  {%- if ${isUpload} %} action="/apply/upload"{% endif %}  novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}

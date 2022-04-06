@@ -149,4 +149,58 @@ router
         }
     });
 
+router.route('/submission/confirm').post(async (req, res, next) => {
+    try {
+        await qService.postSubmission(req.cicaSession.questionnaireId);
+        const response = await qService.getSubmissionStatus(
+            req.cicaSession.questionnaireId,
+            Date.now()
+        );
+
+        if (response.status === 'FAILED') {
+            const err = Error(`Unable to retrieve questionnaire submission status`);
+            err.name = 'CRNNotRetrieved';
+            err.statusCode = 500;
+            err.error = '500 Internal Server Error';
+            throw err;
+        }
+
+        const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
+        const responseBody = resp.body;
+        const nextSection = formHelper.removeSectionIdPrefix(
+            responseBody.data[0].attributes.sectionId
+        );
+        return res.redirect(`${req.baseUrl}/${nextSection}`);
+    } catch (err) {
+        return next(err);
+    }
+});
+
+router.route('/upload').post(async (req, res, next) => {
+    try {
+        await qService.postSubmission(req.cicaSession.questionnaireId);
+        const response = await qService.getSubmissionStatus(
+            req.cicaSession.questionnaireId,
+            Date.now()
+        );
+
+        if (response.status === 'FAILED') {
+            const err = Error(`Unable to retrieve questionnaire submission status`);
+            err.name = 'CRNNotRetrieved';
+            err.statusCode = 500;
+            err.error = '500 Internal Server Error';
+            throw err;
+        }
+
+        const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
+        const responseBody = resp.body;
+        const nextSection = formHelper.removeSectionIdPrefix(
+            responseBody.data[0].attributes.sectionId
+        );
+        return res.redirect(`${req.baseUrl}/${nextSection}`);
+    } catch (err) {
+        return next(err);
+    }
+});
+
 module.exports = router;
