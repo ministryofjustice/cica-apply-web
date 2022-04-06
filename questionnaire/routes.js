@@ -178,7 +178,6 @@ router.route('/submission/confirm').post(async (req, res, next) => {
 
 router.route('/upload').post(async (req, res, next) => {
     try {
-        
         return res.redirect(`${req.baseUrl}/${nextSection}`);
     } catch (err) {
         return next(err);
