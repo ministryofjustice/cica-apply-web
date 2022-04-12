@@ -66,7 +66,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
-                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %}  {%- if ${isUpload} %} action="/apply/upload"{% endif %}  novalidate autocomplete="off">
+                <form method="post" {%- if ${isSubmissionPage} %} action="/apply/submission/confirm"{% endif %}  {%- if ${isUpload} %} action="/apply/upload/document?_csrf=${csrfToken}" enctype="multipart/form-data" {% endif %}  novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}

@@ -1,15 +1,21 @@
 'use strict';
 
 const express = require('express');
+
 const AWS = require('aws-sdk');
 const multer = require('multer');
+const fs = require('fs');
+
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
 
 const s3Client = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
+    accessKeyId: 'AKIA2IBHVQYQZHZEEBBS',
+    secretAccessKey: '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',
+    region: 'eu-west-1'
+});
+const uploader = multer({
+    dest: 'uploads/'
 });
 
 const router = express.Router();
@@ -185,16 +191,16 @@ router.route('/submission/confirm').post(async (req, res, next) => {
 });
 
 router
-    .route('/upload')
-    .post(multer({storage: multer.memoryStorage()}).single('file'), async (req, res, next) => {
+    .route('/upload/document')
+    .post(uploader.single('q-applicant-upload-example'), async (req, res, next) => {
         try {
             const uploadParams = {
-                Bucket: process.env.AWS_BUCKET_NAME,
+                Bucket: 'cica-upload-demo',
                 Key: req.file.originalname,
-                Body: req.file.buffer
+                Body: fs.createReadStream(req.file.path)
             };
 
-            await s3Client.upload(uploadParams, (err, data) => {
+            await s3Client.upload(uploadParams, err => {
                 if (err) {
                     const error = Error(`Unable to upload document: ${err}`);
                     error.name = 'UploadFailed';
@@ -202,16 +208,10 @@ router
                     error.error = '500 Internal Server Error';
                     throw error;
                 }
-                console.log(`File uploaded successfully.
-            Name: ${req.file.originalname},
-            Location: ${data.Location}`);
             });
-            const resp = await qService.getCurrentSection(req.cicaSession.questionnaireId);
-            const responseBody = resp.body;
-            const nextSection = formHelper.removeSectionIdPrefix(
-                responseBody.data[0].attributes.sectionId
-            );
-            return res.redirect(`${req.baseUrl}/${nextSection}`);
+
+            // hardcoding next section for now
+            return res.redirect(`${req.baseUrl}/applicant-fatal-claim`);
         } catch (err) {
             return next(err);
         }
