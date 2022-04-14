@@ -194,7 +194,6 @@ router
     .route('/upload/document')
     .post(uploader.single('q-applicant-upload-example'), async (req, res, next) => {
         try {
-            console.log(`1::: HERE`);
             const uploadParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: req.file.originalname,
@@ -210,18 +209,47 @@ router
                     error.error = '500 Internal Server Error';
                     throw error;
                 }
-                console.log(`2::: HERE`);
             });
 
-            const progressEntryResponse = await qService.getCurrentSection(
-                req.cicaSession.questionnaireId
+            const sectionId = 'p-applicant-upload-example';
+            let nextSectionId;
+            const response = await qService.postSection(
+                req.cicaSession.questionnaireId,
+                sectionId,
+                {'q-applicant-upload-example': ['object']}
             );
-            console.log(`3::: ${progressEntryResponse}`);
-            const nextSectionId = formHelper.removeSectionIdPrefix(
-                progressEntryResponse.body.data[0].attributes.sectionId
+            if (response.statusCode === 201) {
+                if ('next' in req.query) {
+                    const progressEntryResponse = await qService.getSection(
+                        req.cicaSession.questionnaireId,
+                        formHelper.addPrefix(req.query.next)
+                    );
+
+                    if (progressEntryResponse.statusCode === 200) {
+                        nextSectionId = formHelper.removeSectionIdPrefix(
+                            progressEntryResponse.body.data[0].attributes.sectionId
+                        );
+                        return res.redirect(`${req.baseUrl}/${nextSectionId}`);
+                    }
+                }
+
+                const progressEntryResponse = await qService.getCurrentSection(
+                    req.cicaSession.questionnaireId
+                );
+                nextSectionId = formHelper.removeSectionIdPrefix(
+                    progressEntryResponse.body.data[0].attributes.sectionId
+                );
+
+                return res.redirect(`${req.baseUrl}/${nextSectionId}`);
+            }
+            console.log(response.body.errors);
+            const html = formHelper.getSectionHtmlWithErrors(
+                response.body,
+                sectionId,
+                req.csrfToken(),
+                res.locals.nonce
             );
-            console.log(`4::: ${nextSectionId}`);
-            return res.redirect(`${req.baseUrl}/${nextSectionId}`);
+            return res.send(html);
         } catch (err) {
             return next(err);
         }
