@@ -10,9 +10,9 @@ const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
 
 const s3Client = new AWS.S3({
-    accessKeyId: 'AKIA2IBHVQYQZHZEEBBS',
-    secretAccessKey: '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',
-    region: 'eu-west-1'
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
 });
 const uploader = multer({
     dest: 'uploads/'
@@ -194,24 +194,34 @@ router
     .route('/upload/document')
     .post(uploader.single('q-applicant-upload-example'), async (req, res, next) => {
         try {
+            console.log(`1::: HERE`);
             const uploadParams = {
-                Bucket: 'cica-upload-demo',
+                Bucket: process.env.AWS_BUCKET_NAME,
                 Key: req.file.originalname,
                 Body: fs.createReadStream(req.file.path)
             };
 
             await s3Client.upload(uploadParams, err => {
                 if (err) {
+                    console.log(`ERROR::: ${err}`);
                     const error = Error(`Unable to upload document: ${err}`);
                     error.name = 'UploadFailed';
                     error.statusCode = 500;
                     error.error = '500 Internal Server Error';
                     throw error;
                 }
+                console.log(`2::: HERE`);
             });
 
-            // hardcoding next section for now
-            return res.redirect(`${req.baseUrl}/applicant-fatal-claim`);
+            const progressEntryResponse = await qService.getCurrentSection(
+                req.cicaSession.questionnaireId
+            );
+            console.log(`3::: ${progressEntryResponse}`);
+            const nextSectionId = formHelper.removeSectionIdPrefix(
+                progressEntryResponse.body.data[0].attributes.sectionId
+            );
+            console.log(`4::: ${nextSectionId}`);
+            return res.redirect(`${req.baseUrl}/${nextSectionId}`);
         } catch (err) {
             return next(err);
         }
