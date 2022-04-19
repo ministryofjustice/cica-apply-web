@@ -136,6 +136,7 @@
     "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number",
     "system": "system",
     "mainapplicant-parent": "p-mainapplicant-parent",
+    "mainapplicant-do-you-want-to-upload-now": "p-mainapplicant-do-you-want-to-upload-now",
     "mainapplicant-context-details": "p-mainapplicant-context-details",
     "mainapplicant-confirmation-method": "p-mainapplicant-confirmation-method",
     "mainapplicant-enter-your-name": "p-mainapplicant-enter-your-name",
