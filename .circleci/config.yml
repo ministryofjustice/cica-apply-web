@@ -134,7 +134,8 @@ jobs:
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Dev/service.yml \
-                -f kube_deploy/Dev/ingress.yml
+                -f kube_deploy/Dev/ingress.yml \
+                -f kube_deploy/Dev/ingress-security-txt-redirect.yml
   deploy_to_uat:
     executor: docker-publisher
     steps:
@@ -159,7 +160,8 @@ jobs:
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Uat/service.yml \
-                -f kube_deploy/Uat/ingress.yml
+                -f kube_deploy/Uat/ingress.yml \
+                -f kube_deploy/Uat/ingress-security-txt-redirect.yml
   deploy_to_prod:
     executor: docker-publisher
     steps:
@@ -184,7 +186,8 @@ jobs:
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Prod/service.yml \
-                -f kube_deploy/Prod/ingress.yml
+                -f kube_deploy/Prod/ingress.yml \
+                -f kube_deploy/Prod/ingress-security-txt-redirect.yml
 workflows:
   version: 2
   build-test-push-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
