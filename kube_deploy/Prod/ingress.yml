@@ -6,6 +6,10 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-prod-green
     external-dns.alpha.kubernetes.io/aws-weight: '100'
+    kubernetes.io/ingress.class: modsec01
+    nginx.ingress.kubernetes.io/enable-modsecurity: 'true'
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine On
 spec:
   tls:
     - hosts:
