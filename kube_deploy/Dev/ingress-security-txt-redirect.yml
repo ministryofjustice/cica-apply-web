@@ -7,6 +7,7 @@ metadata:
     external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-security-txt-redirect-claim-criminal-injuries-compensation-dev-green
     external-dns.alpha.kubernetes.io/aws-weight: '100'
     nginx.ingress.kubernetes.io/permanent-redirect: https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt
+    kubernetes.io/ingress.class: modsec01
 spec:
   tls:
     - hosts:
@@ -21,7 +22,7 @@ spec:
           - path: /.well-known/security.txt
             pathType: ImplementationSpecific
             backend:
-              serviceName: webapp-service2
+              serviceName: webapp-service
               servicePort: 3000
     - host: dev.claim-criminal-injuries-compensation.apps.live.cloud-platform.service.justice.gov.uk
       http:
@@ -29,5 +30,5 @@ spec:
           - path: /.well-known/security.txt
             pathType: ImplementationSpecific
             backend:
-              serviceName: webapp-service2
+              serviceName: webapp-service
               servicePort: 3000
