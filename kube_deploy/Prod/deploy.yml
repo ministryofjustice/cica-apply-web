@@ -37,9 +37,9 @@ spec:
             - name: CW_LIVECHAT_CHAT_ID
               value: ff753a08-883d-453c-bf64-811301587100
             - name: CW_LIVECHAT_START_TIMES
-              value: 'false,08:30:00.000,08:30:00.000,08:30:00.000,08:30:00.000,08:30:00.000,false'
+              value: 'false,false,false,false,false,false,false'
             - name: CW_LIVECHAT_END_TIMES
-              value: 'false,17:00:00.000,17:00:00.000,15:00:00.000,17:00:00.000,17:00:00.000,false'
+              value: 'false,false,false,false,false,false,false'
   selector:
     matchLabels:
       app: webapp-prod

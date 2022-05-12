@@ -1,12 +1,21 @@
 {% extends "page.njk" %}
 {% from "components/radios/macro.njk" import govukRadios %}
-{% from "components/table/macro.njk" import govukTable %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
 
 {% block pageTitle %}Chat to our customer support team online - {{ super() }}{% endblock %}
 
 {% block innerContent %}
 
     <h1 class="govuk-heading-xl">Chat to us online</h1>
+
+    {% set bannerHtml %}
+        <p class="govuk-body">The live chat service will be unavailable from 10am Monday 23 May 2022 until 8.30am Monday 30 May 2022 due to essential system maintenance.</p>
+    {% endset %}
+
+    {{ mojBanner({
+        type: 'information',
+        html: bannerHtml
+    }) }}
 
     <p class="govuk-body">You can ask about claiming compensation or discuss your claim.</p>
 

@@ -1,11 +1,21 @@
 {% extends "page.njk" %}
 {% from "components/table/macro.njk" import govukTable %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
 
 {% block pageTitle %}Sorry, the service is unavailable - {{ super() }}{% endblock %}
 
 {% block innerContent %}
 
     <h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>
+
+    {% set bannerHtml %}
+        <p class="govuk-body">The live chat service will be unavailable from 10am Monday 23 May 2022 until 8.30am Monday 30 May 2022 due to essential system maintenance.</p>
+    {% endset %}
+
+    {{ mojBanner({
+        type: 'information',
+        html: bannerHtml
+    }) }}
 
     {% include "table-opening-times.njk" %}
 
