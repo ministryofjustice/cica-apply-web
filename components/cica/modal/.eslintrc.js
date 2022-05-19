@@ -2,7 +2,7 @@ const config = require('../../../.eslintrc.js');
 
 config.parserOptions = {
     ecmaVersion: 9,
-    sourceType: "module",
+    sourceType: 'module',
     ecmaFeatures: {
         modules: true
     }
