@@ -30,7 +30,7 @@ jobs:
           key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
       - run:
           name: Install npm dependencies
-          command: '[ ! -d node_modules ] && npm ci --loglevel warn --yes || echo package.json and package-lock.json unchanged. Using cache.'
+          command: 'if [ -d node_modules ]; then echo package.json and package-lock.json unchanged. Using node_modules cache.; else npm ci --loglevel warn --yes; fi'
       - save_cache:
           key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
