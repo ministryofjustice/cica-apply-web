@@ -62,40 +62,10 @@
         "node-sass": "^4.13.1",
         "nodemon": "^1.19.4",
         "prettier": "^1.19.1",
-        "q-base-config": "github:CriminalInjuriesCompensationAuthority/q-base-config#v0.10.0",
         "supertest": "^4.0.2",
         "time-convert": "0.0.2",
         "webpack": "^4.46.0",
         "webpack-cli": "^3.3.12"
     },
-    "license": "MIT",
-    "_m0": {
-        "devDependencies": {
-            "eslint": "^6.8.0",
-            "eslint-config-airbnb-base": "^14.0.0",
-            "eslint-config-prettier": "^6.9.0",
-            "eslint-plugin-import": "^2.19.1",
-            "eslint-plugin-jest": "^23.3.0",
-            "eslint-plugin-prettier": "^3.1.2",
-            "fs-extra": "^8.1.0",
-            "husky": "^4.0.3",
-            "jest": "^26.6.3",
-            "lint-staged": "^9.5.0",
-            "prettier": "^1.19.1"
-        },
-        "blocks": [
-            ".eslintignore",
-            ".eslintrc.js",
-            ".huskyrc.js",
-            ".lintstagedrc.js",
-            ".prettierrc.js",
-            ".gitignore",
-            "jest.config.js"
-        ],
-        "files": [
-            ".editorconfig",
-            "LICENSE",
-            "stuff/____README____"
-        ]
-    }
+    "license": "MIT"
 }
