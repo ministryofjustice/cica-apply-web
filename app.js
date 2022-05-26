@@ -36,7 +36,17 @@ nunjucks
     .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID)
     .addGlobal('CW_URL', process.env.CW_URL)
     .addGlobal('CW_SESSION_DURATION', process.env.CW_SESSION_DURATION)
-    .addGlobal('CW_LIVECHAT_CHAT_ID', process.env.CW_LIVECHAT_CHAT_ID);
+    .addGlobal('CW_LIVECHAT_CHAT_ID', process.env.CW_LIVECHAT_CHAT_ID)
+    .addGlobal(
+        'CW_LIVECHAT_MAINTENANCE_MESSAGE',
+        !process.env?.CW_LIVECHAT_MAINTENANCE_MESSAGE?.length
+            ? 'maintenance message not set'
+            : process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE
+    )
+    .addGlobal(
+        'CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED',
+        process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED === 'true'
+    );
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();

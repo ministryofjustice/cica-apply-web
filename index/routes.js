@@ -26,8 +26,12 @@ router.get('/accessibility-statement', (req, res) => {
 });
 
 router.get('/start-chat', (req, res) => {
+    if (process.env.CW_LIVECHAT_ALIVE !== 'true') {
+        return res.render('chat-withdrawn.njk');
+    }
     const liveChatHelper = createLiveChatHelper();
     if (
+        process.env.CW_LIVECHAT_DISABLED !== 'true' &&
         liveChatHelper.isLiveChatActive(
             process.env.CW_LIVECHAT_START_TIMES,
             process.env.CW_LIVECHAT_END_TIMES
@@ -39,8 +43,12 @@ router.get('/start-chat', (req, res) => {
 });
 
 router.get('/chat', (req, res) => {
+    if (process.env.CW_LIVECHAT_ALIVE !== 'true') {
+        return res.render('chat-withdrawn.njk');
+    }
     const liveChatHelper = createLiveChatHelper();
     if (
+        process.env.CW_LIVECHAT_DISABLED !== 'true' &&
         liveChatHelper.isLiveChatActive(
             process.env.CW_LIVECHAT_START_TIMES,
             process.env.CW_LIVECHAT_END_TIMES
