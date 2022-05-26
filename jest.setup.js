@@ -1,11 +1,15 @@
 'use strict';
 
-jest.setTimeout(30000);
+jest.setTimeout(3000);
 jest.testEnvironment = 'node';
 process.env.CW_DCS_JWT = 'A massive string';
 process.env.CW_COOKIE_SECRET = 'Also a huge string';
 process.env.CW_DCS_URL = 'http://docker.for.win.localhost:3100';
+process.env.CW_LIVECHAT_ALIVE = 'true';
+process.env.CW_LIVECHAT_DISABLED = 'false';
+process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED = 'true';
+process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE = 'The live chat service will be unavailable';
 process.env.CW_LIVECHAT_START_TIMES =
-    'false,08:30:00.000,08:30:00.000,10:00:00.000,08:30:00.000,08:30:00.000,false';
+    '00:00:01.000,00:00:01.000,00:00:01.000,00:00:01.000,00:00:01.000,00:00:01.000,00:00:01.000';
 process.env.CW_LIVECHAT_END_TIMES =
-    'false,17:00:00.000,17:00:00.000,17:00:00.000,17:00:00.000,17:00:00.000,false';
+    '23:59:59.000,23:59:59.000,23:59:59.000,23:59:59.000,23:59:59.000,23:59:59.000,23:59:59.000';
