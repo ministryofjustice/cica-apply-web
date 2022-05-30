@@ -164,5 +164,15 @@
     "applicant-affect-future-duration": "p-applicant-affect-future-duration",
     "applicant-se-equipment": "p-applicant-se-equipment",
     "mainapplicant-declaration-under-12": "p-mainapplicant-declaration-under-12",
-    "mainapplicant-declaration-12-and-over": "p-mainapplicant-declaration-12-and-over"
+    "mainapplicant-declaration-12-and-over": "p-mainapplicant-declaration-12-and-over",
+    "context-rep-details": "p-context-rep-details",
+    "rep-type": "p-rep-type",
+    "rep-confirmation-method": "p-rep-confirmation-method",
+    "rep-name": "p-rep-name",
+    "rep-organisation-name": "p-rep-organisation-name",
+    "rep-address": "p-rep-address",
+    "rep-email-address": "p-rep-email-address",
+    "rep-telephone-number": "p-rep-telephone-number",
+    "rep-reference-number": "p-rep-reference-number",
+    "rep-claims-management-reg": "p-rep-claims-management-reg"
 }

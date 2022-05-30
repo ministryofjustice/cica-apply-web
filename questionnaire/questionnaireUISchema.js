@@ -1478,5 +1478,83 @@ module.exports = {
         options: {
             outputOrder: ['q-applicant-se-home-care', 'help-understanding-care']
         }
+    },
+    'p-rep-confirmation-method': {
+        options: {
+            transformOrder: [
+                'q-rep-enter-your-email-address',
+                'q-rep-enter-your-telephone-number',
+                'q-rep-confirmation-method'
+            ],
+            outputOrder: ['q-rep-confirmation-method'],
+            properties: {
+                'q-rep-confirmation-method': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'email',
+                                componentIds: ['q-rep-enter-your-email-address']
+                            },
+                            {
+                                itemValue: 'text',
+                                componentIds: ['q-rep-enter-your-telephone-number']
+                            }
+                        ],
+                        additionalMapping: [
+                            {
+                                itemType: 'divider',
+                                itemValue: 'or',
+                                itemIndex: 2
+                            }
+                        ]
+                    }
+                },
+                'q-rep-enter-your-email-address': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'email'
+                        }
+                    }
+                },
+                'q-rep-enter-your-telephone-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'tel'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-rep-reference-number': {
+        options: {
+            transformOrder: [
+                'help-reference-number',
+                'q-rep-reference-number',
+                'q-rep-has-reference-number'
+            ],
+            outputOrder: ['q-rep-has-reference-number', 'help-reference-number'],
+            properties: {
+                'q-rep-has-reference-number': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: true,
+                                componentIds: ['q-rep-reference-number']
+                            }
+                        ]
+                    }
+                },
+                'q-rep-reference-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
+                }
+            }
+        }
     }
 };
