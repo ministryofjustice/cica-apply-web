@@ -160,14 +160,6 @@ module.exports = {
             }
         }
     },
-    'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
-        options: {
-            outputOrder: [
-                'q-applicant-select-reasons-for-the-delay-in-making-your-application',
-                'q-applicant-explain-reason-for-delay-application'
-            ]
-        }
-    },
     'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
         options: {
             outputOrder: [
