@@ -174,5 +174,7 @@
     "rep-email-address": "p-rep-email-address",
     "rep-telephone-number": "p-rep-telephone-number",
     "rep-reference-number": "p-rep-reference-number",
-    "rep-claims-management-reg": "p-rep-claims-management-reg"
+    "rep-claims-management-reg": "p-rep-claims-management-reg",
+    "new-or-existing-application": "p--new-or-existing-application",
+    "contact-cica": "p--contact-cica"
 }
