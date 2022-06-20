@@ -1,6 +1,6 @@
 {
     "name": "cica-web",
-    "version": "4.1.2",
+    "version": "5.0.0",
     "engines": {
         "npm": ">=8.5.2",
         "node": ">=16.0.0"
