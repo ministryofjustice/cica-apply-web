@@ -11,26 +11,25 @@ function requestService() {
                 accept: 'application/vnd.api+json',
                 'Content-Type': 'application/vnd.api+json'
             },
-            json: true,
-            body: options.body,
+            responseType: 'json',
             throwHttpErrors: false
         };
         opts = merge(opts, options);
-        return got(opts.url, opts);
+        return got(opts);
     }
 
     function get(options) {
         let opts = {
             method: 'GET',
             headers: {
-                accept: 'application/json',
-                'Content-Type': 'application/json'
+                accept: 'application/vnd.api+json',
+                'Content-Type': 'application/vnd.api+json'
             },
-            json: true,
+            responseType: 'json',
             throwHttpErrors: false
         };
         opts = merge(opts, options);
-        return got(opts.url, opts);
+        return got(opts);
     }
 
     return Object.freeze({

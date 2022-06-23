@@ -1,62 +1,63 @@
 'use strict';
 
-jest.resetModules();
-jest.mock('got');
-jest.mock('lodash.merge');
-const got = require('got');
-const merge = require('lodash.merge');
-const requestService = require('../questionnaire/request-service')();
+const http = require('http');
 
-describe('Request-service functions', () => {
-    describe('Post', () => {
-        it('Should post a request', () => {
-            const gotResponse = {status: 'ok'};
-            const mergeResponse = {
-                url: 'http://www.google.com/',
-                method: 'POST',
-                headers: {
-                    accept: 'application/vnd.api+json',
-                    'Content-Type': 'application/vnd.api+json'
-                },
-                json: true,
-                body: {
-                    body: 'This is a body'
-                },
-                throwHttpErrors: false
-            };
-            got.mockImplementation(() => gotResponse);
-            merge.mockImplementation(() => mergeResponse);
-            const options = {
-                url: 'http://www.google.com/',
-                body: 'This is a body'
-            };
-            const expected = mergeResponse;
-            requestService.post(options);
+const createRequestService = require('../questionnaire/request-service');
 
-            expect(got).toHaveBeenCalledWith('http://www.google.com/', expected);
+const simpleServer = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/vnd.api+json');
+
+    if (req.method === 'GET') {
+        res.end('{"get_test": "success"}');
+    }
+
+    if (req.method === 'POST') {
+        let reqBody = '';
+
+        req.on('data', chunk => {
+            reqBody += chunk;
         });
+
+        req.on('end', () => {
+            res.end(`{"post_test": ${reqBody}}`);
+        });
+    }
+});
+
+describe('requestService', () => {
+    beforeAll(() => {
+        simpleServer.listen(8125);
     });
 
-    describe('Get', () => {
-        it('Should get a request', () => {
-            const gotResponse = {status: 'ok'};
-            const mergeResponse = {
-                url: 'http://www.google.com/',
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                json: true,
-                throwHttpErrors: false
-            };
-            got.mockImplementation(() => gotResponse);
-            merge.mockImplementation(() => mergeResponse);
-            const options = {};
-            const expected = mergeResponse;
-            requestService.get(options);
+    afterAll(() => {
+        simpleServer.close();
+    });
 
-            expect(got).toHaveBeenCalledWith('http://www.google.com/', expected);
+    it('should GET JSON', async () => {
+        const requestService = createRequestService();
+        const requestOptions = {
+            url: 'http://127.0.0.1:8125/some-api-with-json-response'
+        };
+        const response = await requestService.get(requestOptions);
+
+        expect(response.body).toEqual({get_test: 'success'});
+    });
+
+    it('should POST JSON', async () => {
+        const requestService = createRequestService();
+        const requestOptions = {
+            url: 'http://127.0.0.1:8125/some-api-with-json-response',
+            json: {
+                is_a: 'success'
+            }
+        };
+        const response = await requestService.post(requestOptions);
+
+        expect(response.body).toEqual({
+            post_test: {
+                is_a: 'success'
+            }
         });
     });
 });

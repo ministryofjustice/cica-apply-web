@@ -9,7 +9,7 @@ function questionnaireService() {
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
-            body: {
+            json: {
                 data: {
                     type: 'questionnaires',
                     attributes: {
@@ -37,7 +37,7 @@ function questionnaireService() {
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
-            body: {
+            json: {
                 data: {
                     type: 'answers',
                     attributes: body
@@ -83,7 +83,7 @@ function questionnaireService() {
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
-            body: {
+            json: {
                 data: {
                     type: 'submissions',
                     attributes: {
