@@ -16,9 +16,9 @@ jobs:
       - image: cimg/node:16.15.0
     steps:
       - checkout
-      - run:
-          name: npm audit
-          command: npm audit --production --audit-level=moderate
+      # - run:
+      #     name: npm audit
+      #     command: npm audit --production --audit-level=moderate
       - persist_to_workspace:
           root: ./
           paths:
