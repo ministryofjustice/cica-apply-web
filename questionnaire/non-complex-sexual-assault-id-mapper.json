@@ -176,5 +176,8 @@
     "rep-reference-number": "p-rep-reference-number",
     "rep-claims-management-reg": "p-rep-claims-management-reg",
     "new-or-existing-application": "p--new-or-existing-application",
-    "contact-cica": "p--contact-cica"
+    "contact-cica": "p--contact-cica",
+    "applicant-can-handle-affairs": "p-applicant-can-handle-affairs",
+    "context-mainapplicant-details": "p--context-mainapplicant-details",
+    "mainapplicant-authority": "p-mainapplicant-authority"
 }
