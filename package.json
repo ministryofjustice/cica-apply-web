@@ -42,7 +42,7 @@
         "morgan": "~1.9.0",
         "nanoid": "^3.2.0",
         "nunjucks": "^3.2.1",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v4.2.0"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#feature/download/cica-237"
     },
     "devDependencies": {
         "@babel/cli": "^7.12.10",
