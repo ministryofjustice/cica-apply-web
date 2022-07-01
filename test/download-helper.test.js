@@ -4,7 +4,6 @@ const moment = require('moment-timezone');
 const downloadHelper = require('../questionnaire/download-helper');
 
 const sectionData = require('./test-fixtures/downloads/check-your-answers-section');
-// const expectedSummaryHtml = 'gfhfhgfgfhffffhf';
 const expectedSummaryHtml = require('./test-fixtures/downloads/expected-summary-html');
 
 describe('download-helper functions', () => {
