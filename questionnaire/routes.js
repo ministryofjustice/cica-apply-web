@@ -31,7 +31,7 @@ router.route('/download-summary').get(async (req, res, next) => {
         const timestamp = moment().tz('Europe/London');
         const draftSummaryHtml = downloadHelper.getSummaryHtml(response.body, timestamp);
         const filename = `Draft_application_summary_${timestamp.format(
-            'YYYY-MM-DD-HH-MM-SS-SSS'
+            'YYYY-MM-DD-HH-mm-ss-SSS'
         )}.html`;
         // add timestamp to filename in the correct format
         res.setHeader('Content-disposition', `attachment; filename=${filename}`);
