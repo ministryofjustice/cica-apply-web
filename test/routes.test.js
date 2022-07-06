@@ -321,6 +321,16 @@ describe('Data capture service endpoints', () => {
                                 );
                             }));
 
+                    it('Should redirect the user to the inital page if the download-summary page is selected without a session', () =>
+                        request
+                            .agent(app)
+                            .get('/apply/download-summary')
+                            .then(response => {
+                                expect(response.res.text).toBe(
+                                    'Found. Redirecting to /apply/applicant-declaration'
+                                );
+                            }));
+
                     it('Should set a cicaSession cookie', () =>
                         request
                             .agent(app)

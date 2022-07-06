@@ -12,7 +12,7 @@ const summaryHtml = '<!DOCTYPE html><html><head><title></title></head><body>Summ
 
 let app;
 
-describe('Data capture service endpoints', () => {
+describe('Download route service endpoint', () => {
     describe('Cica-web /apply/download-summary route', () => {
         describe('/apply/download-summary', () => {
             describe('GET', () => {
@@ -54,6 +54,7 @@ describe('Data capture service endpoints', () => {
                                 )
                                 .then(response => {
                                     expect(response.statusCode).toBe(200);
+                                    expect(response.res.text).toBe(summaryHtml);
                                 })
                         );
                     });
@@ -102,37 +103,6 @@ describe('Data capture service endpoints', () => {
                         });
                     });
                 });
-                // describe('Session Cookie not present', () => {
-                //     beforeAll(() => {
-                //         // const prefixedSection = 'p-applicant-enter-your-name';
-                //         // const initial = 'p-applicant-declaration';
-                //         // jest.resetModules();
-                //         // jest.doMock('../questionnaire/questionnaire-service', () =>
-                //         //     jest.fn(() => ({
-                //         //         getSection: () => getSectionValid,
-                //         //         createQuestionnaire: () => createQuestionnaire,
-                //         //         getCurrentSection: () => getCurrentSection
-                //         //     }))
-                //         // );
-                //         // jest.doMock('../questionnaire/form-helper', () => ({
-                //         //     addPrefix: () => prefixedSection,
-                //         //     getSectionHtml: () => getSectionHtmlValid,
-                //         //     removeSectionIdPrefix: () => initial,
-                //         //     getSectionContext: () => undefined
-                //         // }));
-                //         // eslint-disable-next-line global-require
-                //         app = require('../app');
-                //     });
-
-                //     it('Should redirect', async () => {
-                //         const currentAgent = request.agent(app);
-                //         return currentAgent.get('/apply/').then(() => {
-                //             currentAgent.get('/apply/download-summary').then(response => {
-                //                 expect(response.statusCode).toBe(302);
-                //             });
-                //         });
-                //     });
-                // });
             });
         });
     });
