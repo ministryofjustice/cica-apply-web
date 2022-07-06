@@ -1,10 +1,8 @@
 'use strict';
 
 const express = require('express');
-const moment = require('moment-timezone');
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
-const downloadHelper = require('./download-helper');
 
 const router = express.Router();
 
@@ -19,28 +17,6 @@ router.route('/').get(async (req, res, next) => {
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
         next(err);
-    }
-});
-
-router.route('/download-summary').get(async (req, res, next) => {
-    try {
-        const response = await qService.getSection(
-            req.cicaSession.questionnaireId,
-            'p--check-your-answers'
-        );
-        const timestamp = moment().tz('Europe/London');
-        const draftSummaryHtml = downloadHelper.getSummaryHtml(response.body, timestamp);
-        const filename = `Draft_application_summary_${timestamp.format(
-            'YYYY-MM-DD-HH-mm-ss-SSS'
-        )}.html`;
-        // add timestamp to filename in the correct format
-        res.setHeader('Content-disposition', `attachment; filename=${filename}`);
-        res.type('.html');
-        return res.send(draftSummaryHtml);
-    } catch (err) {
-        // is this the correct error code for a failure here?
-        res.status(err.statusCode || 404).render('404.njk');
-        return next(err);
     }
 });
 

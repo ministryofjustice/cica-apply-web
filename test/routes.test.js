@@ -321,10 +321,10 @@ describe('Data capture service endpoints', () => {
                                 );
                             }));
 
-                    it('Should redirect the user to the inital page if the download-summary page is selected without a session', () =>
+                    it('Should redirect the user to the inital page if the requested page is selected without a session', () =>
                         request
                             .agent(app)
-                            .get('/apply/download-summary')
+                            .get('/apply/applicant-british-citizen-or-eu-national')
                             .then(response => {
                                 expect(response.res.text).toBe(
                                     'Found. Redirecting to /apply/applicant-declaration'

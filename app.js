@@ -13,6 +13,7 @@ const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
+const downloadRouter = require('./download/routes');
 
 const app = express();
 
@@ -114,7 +115,7 @@ app.use(
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
-app.use('/apply', async (req, res, next) => {
+app.use(['/apply', '/download'], async (req, res, next) => {
     // check if client sent cookie
     const cookie = req.cicaSession.questionnaireId;
     if (cookie === undefined) {
@@ -125,7 +126,8 @@ app.use('/apply', async (req, res, next) => {
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial
             );
-            let redirectionUrl = `${req.baseUrl}/${initialSection}`;
+            const baseUrl = req.baseUrl === '/download' ? '/apply' : req.baseUrl;
+            let redirectionUrl = `${baseUrl}/${initialSection}`;
             // query param passed from Tempus launch page
             if (req.query.isCica) {
                 redirectionUrl = `${redirectionUrl}?isCica=true`;
@@ -157,6 +159,7 @@ app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
+app.use('/download', downloadRouter);
 app.use('/apply', applicationRouter);
 app.use('/', indexRouter);
 

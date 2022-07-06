@@ -1,10 +1,10 @@
 'use strict';
 
 const moment = require('moment-timezone');
-const downloadHelper = require('../questionnaire/download-helper');
+const downloadHelper = require('../download-helper');
 
-const sectionData = require('./test-fixtures/downloads/check-your-answers-section');
-const expectedSummaryHtml = require('./test-fixtures/downloads/expected-summary-html');
+const sectionData = require('./fixtures/check-your-answers-section');
+const expectedSummaryHtml = require('./fixtures/expected-summary-html');
 
 describe('download-helper functions', () => {
     describe('Should render Nunjucks', () => {
