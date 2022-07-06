@@ -4,7 +4,6 @@ const nunjucks = require('nunjucks');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('../questionnaire/questionnaireUISchema');
 
-// TODO do we need all of this configuration?
 nunjucks.configure(
     [
         'node_modules/@ministryofjustice/frontend/',
