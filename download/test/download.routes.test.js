@@ -52,7 +52,7 @@ describe('Download route service endpoint', () => {
                     });
                 });
                 describe('404', () => {
-                    beforeAll(() => {
+                    it('Should fail gracefully if the download helper throws an error', async () => {
                         const initial = 'p-applicant-declaration';
                         jest.resetModules();
                         jest.doMock('../../questionnaire/questionnaire-service', () =>
@@ -63,18 +63,14 @@ describe('Download route service endpoint', () => {
                         jest.doMock('../../questionnaire/form-helper', () => ({
                             removeSectionIdPrefix: () => initial
                         }));
+
+                        // eslint-disable-next-line global-require
+                        app = require('../../app');
                         jest.doMock('../download-helper', () => ({
                             getSummaryHtml: () => {
                                 throw new Error();
                             }
                         }));
-
-                        Date.now = jest.fn(() => new Date('2020-05-13T12:33:37.000Z'));
-                        // eslint-disable-next-line global-require
-                        app = require('../../app');
-                    });
-
-                    it('Should fail gracefully', async () => {
                         const currentAgent = request.agent(app);
                         return currentAgent.get('/apply/').then(() => {
                             currentAgent
@@ -89,6 +85,7 @@ describe('Download route service endpoint', () => {
                         });
                     });
                 });
+
                 describe('Session Cookie not present', () => {
                     beforeAll(() => {
                         const initial = 'applicant-declaration';
