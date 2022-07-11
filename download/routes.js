@@ -9,7 +9,6 @@ const qService = require('../questionnaire/questionnaire-service')();
 exports.qService = qService;
 
 const router = express.Router();
-exports.router = router;
 
 router.route('/application-summary').get(async (req, res, next) => {
     try {
