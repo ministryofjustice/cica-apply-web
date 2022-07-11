@@ -1556,5 +1556,10 @@ module.exports = {
                 }
             }
         }
+    },
+    'p--download-your-answers': {
+        options: {
+            buttonText: 'Continue to declaration'
+        }
     }
 };
