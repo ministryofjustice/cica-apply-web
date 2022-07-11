@@ -6,8 +6,6 @@ const moment = require('moment-timezone');
 const downloadHelper = require('./download-helper');
 const qService = require('../questionnaire/questionnaire-service')();
 
-exports.qService = qService;
-
 const router = express.Router();
 
 router.route('/application-summary').get(async (req, res, next) => {
