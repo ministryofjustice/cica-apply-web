@@ -155,6 +155,7 @@ function createCicaGa(window) {
                 click(element, {
                     label:
                         element.getAttribute('data-tracking-label') ||
+                        element.pathname ||
                         (element.innerText && element.innerText.trim()) ||
                         (element.innerHTML && element.innerHTML.trim()),
                     category: element.getAttribute('data-tracking-category') || element.tagName

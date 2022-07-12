@@ -219,7 +219,7 @@ const html = `<!DOCTYPE html>
 
 
 
-<button class="govuk-button" data-module="govuk-button">
+<button data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">
   Continue
 </button>
 <input type="hidden" name="_csrf" value="sometoken">
@@ -370,7 +370,7 @@ const html = `<!DOCTYPE html>
     
   
 
-                    <button class="govuk-button govuk-modal__continue ga-event--click" data-module="govuk-button" data-tracking-category="modal-button">Continue application</button>
+                    <button class="govuk-button govuk-modal__continue ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Continue application">Continue application</button>
 
                 
             </div>
@@ -442,7 +442,7 @@ const html = `<!DOCTYPE html>
   
     
   
-                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button">Start again</a>
+                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Start again">Start again</a>
 
 
                 
@@ -528,7 +528,7 @@ const html = `<!DOCTYPE html>
   
     
   
-                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button">Start again</a>
+                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Start again">Start again</a>
 
 
                 
