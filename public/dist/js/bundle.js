@@ -23687,7 +23687,7 @@ function createCicaGa(window) {
     trackableElements.forEach(function (element) {
       if (element.classList.contains('ga-event--click')) {
         click(element, {
-          label: element.getAttribute('data-tracking-label') || element.innerText && element.innerText.trim() || element.innerHTML && element.innerHTML.trim(),
+          label: element.getAttribute('data-tracking-label') || element.href || element.innerText && element.innerText.trim() || element.innerHTML && element.innerHTML.trim(),
           category: element.getAttribute('data-tracking-category') || element.tagName
         });
         return;
