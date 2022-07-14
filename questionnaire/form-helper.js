@@ -70,7 +70,8 @@ function renderSection({
                         ${transformation.content}
                     {% if ${showButton} %}
                         {{ govukButton({
-                            text: "${buttonTitle}"
+                            text: "${buttonTitle}",
+                            preventDoubleClick: true
                         }) }}
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
