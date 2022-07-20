@@ -63,7 +63,9 @@ describe('Timeout Modal', () => {
             // click resume button.
             document.querySelector('.govuk-modal__continue').click();
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 1200));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             expect(failure).toEqual('123456');
         });
     });

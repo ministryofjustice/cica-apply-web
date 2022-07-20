@@ -96,7 +96,9 @@ function questionnaireService() {
     }
 
     function timeout(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => {
+            setTimeout(resolve, ms);
+        });
     }
 
     async function getSubmissionStatus(questionnaireId, startingDate) {

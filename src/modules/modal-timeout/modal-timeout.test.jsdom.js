@@ -93,7 +93,9 @@ describe('Timeout Modal', () => {
                     .classList.contains('govuk-modal--open')
             ).toEqual(false);
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 1200));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             expect(
                 document
                     .querySelector('#govuk-modal-test-2')
@@ -135,12 +137,16 @@ describe('Timeout Modal', () => {
                 '3 seconds'
             );
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             expect(document.querySelector('.govuk-modal__time-remaining').innerHTML).toEqual(
                 '2 seconds'
             );
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             expect(document.querySelector('.govuk-modal__time-remaining').innerHTML).toEqual(
                 '1 second'
             );
@@ -185,13 +191,17 @@ describe('Timeout Modal', () => {
                 '3 seconds'
             );
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             // click resume button.
             document.body.querySelector('.govuk-modal__continue').click();
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             expect(document.querySelector('.govuk-modal__time-remaining').innerHTML).toEqual(
-                '3 seconds'
+                '2 seconds'
             );
         });
 
@@ -371,7 +381,9 @@ describe('Timeout Modal', () => {
             });
             expect(modalOpened).toEqual('no');
             // emulate a delay.
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(resolve => {
+                setTimeout(resolve, 1200);
+            });
             expect(modalOpened).toEqual('123456');
         });
 
