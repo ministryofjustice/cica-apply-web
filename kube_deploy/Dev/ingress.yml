@@ -1,12 +1,11 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: webapp-ingress
   namespace: claim-criminal-injuries-compensation-dev
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-dev-green
     external-dns.alpha.kubernetes.io/aws-weight: '100'
-    kubernetes.io/ingress.class: modsec01
+    external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-dev-green
     nginx.ingress.kubernetes.io/custom-http-errors: '406'
     nginx.ingress.kubernetes.io/default-backend: default
     nginx.ingress.kubernetes.io/enable-modsecurity: 'true'
@@ -38,18 +37,25 @@ spec:
     - hosts:
         - dev.claim-criminal-injuries-compensation.service.justice.gov.uk
       secretName: dev-claim-criminal-injuries-compensation-cert-secret
+  ingressClassName: modsec
   rules:
     - host: dev.claim-criminal-injuries-compensation.apps.live.cloud-platform.service.justice.gov.uk
       http:
         paths:
           - path: /
             backend:
-              serviceName: webapp-service
-              servicePort: 3000
+              service:
+                name: webapp-service
+                port:
+                  number: 3000
+            pathType: ImplementationSpecific
     - host: dev.claim-criminal-injuries-compensation.service.justice.gov.uk
       http:
         paths:
           - path: /
             backend:
-              serviceName: webapp-service
-              servicePort: 3000
+              service:
+                name: webapp-service
+                port:
+                  number: 3000
+            pathType: ImplementationSpecific
