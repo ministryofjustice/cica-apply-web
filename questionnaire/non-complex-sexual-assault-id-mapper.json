@@ -179,5 +179,7 @@
     "contact-cica": "p--contact-cica",
     "applicant-can-handle-affairs": "p-applicant-can-handle-affairs",
     "context-mainapplicant-details": "p--context-mainapplicant-details",
-    "mainapplicant-authority": "p-mainapplicant-authority"
+    "mainapplicant-authority": "p-mainapplicant-authority",
+    "has-legal-authority": "p--has-legal-authority",
+    "represents-legal-authority": "p--represents-legal-authority"
 }
