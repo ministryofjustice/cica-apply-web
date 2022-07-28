@@ -180,5 +180,7 @@
     "applicant-can-handle-affairs": "p-applicant-can-handle-affairs",
     "context-mainapplicant-details": "p--context-mainapplicant-details",
     "mainapplicant-authority": "p-mainapplicant-authority",
-    "download-your-answers": "p--download-your-answers"
+    "download-your-answers": "p--download-your-answers",
+    "has-legal-authority": "p--has-legal-authority",
+    "represents-legal-authority": "p--represents-legal-authority"
 }
