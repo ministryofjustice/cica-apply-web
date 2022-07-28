@@ -1561,5 +1561,15 @@ module.exports = {
         options: {
             buttonText: 'Continue to declaration'
         }
+    },
+    'p--has-legal-authority': {
+        options: {
+            outputOrder: ['q--has-legal-authority']
+        }
+    },
+    'p--represents-legal-authority': {
+        options: {
+            outputOrder: ['q--represents-legal-authority']
+        }
     }
 };
