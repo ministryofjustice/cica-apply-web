@@ -346,6 +346,18 @@ module.exports = {
             pageContext: 'submission'
         }
     },
+    'p-rep-declaration-under-12': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-rep-declaration-12-and-over': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
     'p-applicant-select-treatments': {
         // transformer: 'form',
         options: {
@@ -1482,8 +1494,8 @@ module.exports = {
     'p-rep-confirmation-method': {
         options: {
             transformOrder: [
-                'q-rep-enter-your-email-address',
-                'q-rep-enter-your-telephone-number',
+                'q-rep-email-address',
+                'q-rep-telephone-number',
                 'q-rep-confirmation-method'
             ],
             outputOrder: ['q-rep-confirmation-method'],
@@ -1493,11 +1505,11 @@ module.exports = {
                         conditionalComponentMap: [
                             {
                                 itemValue: 'email',
-                                componentIds: ['q-rep-enter-your-email-address']
+                                componentIds: ['q-rep-email-address']
                             },
                             {
                                 itemValue: 'text',
-                                componentIds: ['q-rep-enter-your-telephone-number']
+                                componentIds: ['q-rep-telephone-number']
                             }
                         ],
                         additionalMapping: [
@@ -1509,7 +1521,7 @@ module.exports = {
                         ]
                     }
                 },
-                'q-rep-enter-your-email-address': {
+                'q-rep-email-address': {
                     options: {
                         macroOptions: {
                             classes: 'govuk-input--width-20',
@@ -1517,7 +1529,7 @@ module.exports = {
                         }
                     }
                 },
-                'q-rep-enter-your-telephone-number': {
+                'q-rep-telephone-number': {
                     options: {
                         macroOptions: {
                             classes: 'govuk-input--width-20',
@@ -1560,6 +1572,16 @@ module.exports = {
     'p--download-your-answers': {
         options: {
             buttonText: 'Continue to declaration'
+        }
+    },
+    'p--has-legal-authority': {
+        options: {
+            outputOrder: ['q--has-legal-authority']
+        }
+    },
+    'p--represents-legal-authority': {
+        options: {
+            outputOrder: ['q--represents-legal-authority']
         }
     }
 };
