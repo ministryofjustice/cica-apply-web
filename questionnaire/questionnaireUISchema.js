@@ -346,6 +346,18 @@ module.exports = {
             pageContext: 'submission'
         }
     },
+    'p-rep-declaration-under-12': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-rep-declaration-12-and-over': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
     'p-applicant-select-treatments': {
         // transformer: 'form',
         options: {
