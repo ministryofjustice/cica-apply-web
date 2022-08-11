@@ -1,25 +1,12 @@
 'use strict';
 
-const nunjucks = require('nunjucks');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
+const createTemplateEngineService = require('../templateEngine');
 
-nunjucks.configure(
-    [
-        'node_modules/@ministryofjustice/frontend/',
-        'components/',
-        'node_modules/govuk-frontend/govuk/',
-        'node_modules/govuk-frontend/govuk/components/',
-        'index/',
-        'questionnaire/',
-        'page/',
-        'partials/'
-    ],
-    {
-        autoescape: true
-    }
-);
+const templateEngineService = createTemplateEngineService();
+const {render} = templateEngineService;
 
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
@@ -49,7 +36,7 @@ function renderSection({
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
-    return nunjucks.renderString(
+    return render(
         `
             {% extends "page.njk" %}
             {% block pageTitle %}

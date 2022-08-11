@@ -1,27 +1,14 @@
 'use strict';
 
-const nunjucks = require('nunjucks');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('../questionnaire/questionnaireUISchema');
+const createTemplateEngineService = require('../templateEngine');
 
-nunjucks.configure(
-    [
-        'node_modules/@ministryofjustice/frontend/',
-        'components/',
-        'node_modules/govuk-frontend/govuk/',
-        'node_modules/govuk-frontend/govuk/components/',
-        'index/',
-        'questionnaire/',
-        'page/',
-        'partials/'
-    ],
-    {
-        autoescape: true
-    }
-);
+const templateEngineService = createTemplateEngineService();
+const {render} = templateEngineService;
 
 function renderSection({transformation, timestamp}) {
-    return nunjucks.renderString(
+    return render(
         `
             {% extends "download.summary.njk" %}
             {% block pageTitle %}

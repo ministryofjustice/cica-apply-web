@@ -2,6 +2,10 @@
 
 const moment = require('moment-timezone');
 const downloadHelper = require('../download-helper');
+const createTemplateEngineService = require('../../templateEngine');
+
+const templateEngineService = createTemplateEngineService();
+templateEngineService.init();
 
 const sectionData = require('./fixtures/check-your-answers-section');
 const expectedSummaryHtml = require('./fixtures/expected-summary-html');
