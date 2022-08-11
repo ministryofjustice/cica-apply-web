@@ -3,6 +3,10 @@
 const formHelper = require('../questionnaire/form-helper');
 const validTransformation = require('./test-fixtures/transformations/p-applicant-british-citizen-or-eu-national');
 const validResolvedHtml = require('./test-fixtures/transformations/resolved html/p-applicant-british-citizen-or-eu-national');
+const createTemplateEngineService = require('../templateEngine');
+
+const templateEngineService = createTemplateEngineService();
+templateEngineService.init();
 
 const shouldShowSignInLink = require('../questionnaire/utils/shouldShowSignInLink');
 const uiSchema = require('../questionnaire/questionnaireUISchema');

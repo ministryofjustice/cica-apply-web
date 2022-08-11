@@ -5,7 +5,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
-const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
@@ -17,51 +16,14 @@ const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
+const createTemplateEngineService = require('./templateEngine');
 
 const DURATION_LIMIT = 3600000;
 
 const app = express();
 
-nunjucks
-    .configure(
-        [
-            'node_modules/@ministryofjustice/frontend/',
-            'components/',
-            'node_modules/govuk-frontend/govuk/',
-            'node_modules/govuk-frontend/govuk/components/',
-            'index/',
-            'questionnaire/',
-            'page/',
-            'partials/'
-        ],
-        {
-            autoescape: true,
-            express: app
-        }
-    )
-    .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID)
-    .addGlobal('CW_URL', process.env.CW_URL)
-    .addGlobal('CW_LIVECHAT_CHAT_ID', process.env.CW_LIVECHAT_CHAT_ID)
-    .addGlobal(
-        'CW_LIVECHAT_MAINTENANCE_MESSAGE',
-        !process.env?.CW_LIVECHAT_MAINTENANCE_MESSAGE?.length
-            ? 'maintenance message not set'
-            : process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE
-    )
-    .addGlobal(
-        'CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED',
-        process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED === 'true'
-    )
-    .addGlobal(
-        'CW_MAINTENANCE_MESSAGE',
-        !process.env?.CW_MAINTENANCE_MESSAGE?.length
-            ? 'maintenance message not set'
-            : process.env.CW_MAINTENANCE_MESSAGE
-    )
-    .addGlobal(
-        'CW_MAINTENANCE_MESSAGE_ENABLED',
-        process.env.CW_MAINTENANCE_MESSAGE_ENABLED === 'true'
-    );
+const templateEngineService = createTemplateEngineService(app);
+templateEngineService.init();
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
