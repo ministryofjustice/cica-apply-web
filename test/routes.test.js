@@ -1074,3 +1074,89 @@ describe('Data capture service endpoints', () => {
         });
     });
 });
+
+describe('/session', () => {
+    describe('Success', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        createQuestionnaire: () => createQuestionnaire,
+                        getCurrentSection: () => getCurrentSection,
+                        getSessionData: () => keepAlive,
+                        keepAlive: () => keepAlive
+                    }))
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+
+        it('should return a session resource', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/session');
+            expect(response.text).toEqual(
+                JSON.stringify({
+                    data: [
+                        {
+                            id: '285cb104-0c15-4a9c-9840-cb1007f098fb',
+                            type: 'sessions',
+                            attributes: {
+                                alive: true,
+                                duration: 900000,
+                                created: '2022-08-11T20:26:35Z'
+                            }
+                        }
+                    ]
+                })
+            );
+        });
+
+        it('should return a session keep alive resource', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/session/keep-alive');
+            expect(response.text).toEqual(
+                JSON.stringify({
+                    data: [
+                        {
+                            id: '285cb104-0c15-4a9c-9840-cb1007f098fb',
+                            type: 'sessions',
+                            attributes: {
+                                alive: true,
+                                duration: 900000,
+                                created: '2022-08-11T20:26:35Z'
+                            }
+                        }
+                    ]
+                })
+            );
+        });
+    });
+    describe('Failure', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        createQuestionnaire: () => createQuestionnaire,
+                        getCurrentSection: () => getCurrentSection,
+                        getSessionData: () => {
+                            return Promise.reject(new Error('Something went wrong'));
+                        },
+                        keepAlive: () => {
+                            return Promise.reject(new Error('Something went wrong'));
+                        }
+                    }))
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+
+        it('should error when retreiving a session keep alive resource', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/session/keep-alive');
+            expect(response.statusCode).toBe(404);
+        });
+    });
+});

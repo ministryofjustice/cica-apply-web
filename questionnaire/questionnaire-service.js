@@ -144,6 +144,26 @@ function questionnaireService() {
         return service.get(opts);
     }
 
+    function getSessionData(questionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/session`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+            }
+        };
+        return service.get(opts);
+    }
+
+    function keepAlive(questionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/session/keep-alive`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -154,7 +174,9 @@ function questionnaireService() {
         postSubmission,
         timeout,
         getSubmissionStatus,
-        getFirstSection
+        getFirstSection,
+        getSessionData,
+        keepAlive
     });
 }
 
