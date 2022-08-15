@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
-const clientSessions = require('client-sessions');
+const session = require('express-session');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
 const formHelper = require('./questionnaire/form-helper');
@@ -14,6 +14,7 @@ const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
+const sessionRouter = require('./session/routes');
 
 const app = express();
 
@@ -100,39 +101,48 @@ app.use(
         httpOnly: true
     })
 );
+
 app.use(
-    clientSessions({
-        cookieName: 'cicaSession', // cookie name dictates the key name added to the request object
-        secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
-        duration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // how long the session will stay valid in ms
-        activeDuration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+    session({
+        name: 'cicaSession',
+        secret: process.env.CW_COOKIE_SECRET,
+        resave: false,
+        saveUninitialized: false,
         cookie: {
-            ephemeral: true, // when true, cookie expires when the browser closes
-            httpOnly: true, // when true, cookie is not accessible from javascript
-            // TODO: create a proper environment variable for this situation.
-            // TODO: replace all instances of process.env.NODE_ENV conditions with their own env vars.
-            secureProxy: process.env.NODE_ENV === 'production' // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
+            secure: process.env.APP_ENV === 'prod',
+            httpOnly: true
         }
     })
 );
 
 app.use(
     csrf({
-        cookie: false,
-        sessionKey: 'cicaSession'
+        cookie: false
     })
 );
+
+app.use('/apply', async (req, res, next) => {
+    // download too?
+    if (req?.session?.questionnaireId) {
+        const response = await qService.keepAlive(req.session.questionnaireId);
+        const sessionData = response.body;
+        const sessionDuration = sessionData[0].attributes.duration;
+        const bufferDuration = 30000;
+        req.session.cookie.maxAge = sessionDuration - bufferDuration;
+    }
+    next();
+});
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
 app.use(['/apply', '/download'], async (req, res, next) => {
     // check if client sent cookie
-    const cookie = req.cicaSession.questionnaireId;
+    const cookie = req?.session?.questionnaireId;
     if (cookie === undefined) {
         // no: set it and redirect.
         try {
             const response = await qService.createQuestionnaire();
-            req.cicaSession.questionnaireId = response.body.data.attributes.id;
+            req.session.questionnaireId = response.body.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial
             );
@@ -169,8 +179,10 @@ app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
+
 app.use('/download', downloadRouter);
 app.use('/apply', applicationRouter);
+app.use('/session', sessionRouter);
 app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
