@@ -57,32 +57,31 @@ describe('Download route service endpoint', () => {
                         jest.resetModules();
                         jest.doMock('../../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
-                                createQuestionnaire: () => createQuestionnaire
+                                createQuestionnaire: () => createQuestionnaire,
+                                getSection: () => getSectionValid
                             }))
                         );
                         jest.doMock('../../questionnaire/form-helper', () => ({
                             removeSectionIdPrefix: () => initial
                         }));
-
-                        // eslint-disable-next-line global-require
-                        app = require('../../app');
                         jest.doMock('../download-helper', () => ({
                             getSummaryHtml: () => {
                                 throw new Error();
                             }
                         }));
+
+                        // eslint-disable-next-line global-require
+                        app = require('../../app');
+
                         const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() => {
-                            currentAgent
-                                .get('/download/application-summary')
-                                .set(
-                                    'Cookie',
-                                    'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(404);
-                                });
-                        });
+                        await currentAgent.get('/apply/');
+                        const response = await currentAgent
+                            .get('/download/application-summary')
+                            .set(
+                                'Cookie',
+                                'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
+                            );
+                        expect(response.statusCode).toBe(404);
                     });
                 });
 

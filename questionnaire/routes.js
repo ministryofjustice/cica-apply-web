@@ -6,7 +6,7 @@ const qService = require('./questionnaire-service')();
 
 const router = express.Router();
 
-router.route('/').get(async (req, res, next) => {
+router.route('/').get(async (req, res) => {
     try {
         const response = await qService.getFirstSection(req.session.questionnaireId);
         const responseBody = response.body;
@@ -16,11 +16,10 @@ router.route('/').get(async (req, res, next) => {
         res.redirect(`${req.baseUrl}/${initialSection}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
-        next(err);
     }
 });
 
-router.route('/previous/:section').get(async (req, res, next) => {
+router.route('/previous/:section').get(async (req, res) => {
     try {
         const sectionId = formHelper.addPrefix(req.params.section);
         const response = await qService.getPrevious(req.session.questionnaireId, sectionId);
@@ -33,8 +32,7 @@ router.route('/previous/:section').get(async (req, res, next) => {
         );
         return res.redirect(`${req.baseUrl}/${previousSectionId}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
-        return next(err);
+        return res.status(err.statusCode || 404).render('404.njk');
     }
 });
 

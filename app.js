@@ -125,7 +125,7 @@ app.use('/apply', async (req, res, next) => {
     // download too?
     if (req?.session?.questionnaireId) {
         const response = await qService.keepAlive(req.session.questionnaireId);
-        const sessionData = response.body;
+        const sessionData = response.body.data;
         const sessionDuration = sessionData[0].attributes.duration;
         const bufferDuration = 30000;
         req.session.cookie.maxAge = sessionDuration - bufferDuration;
@@ -154,8 +154,7 @@ app.use(['/apply', '/download'], async (req, res, next) => {
             }
             return res.redirect(redirectionUrl);
         } catch (err) {
-            res.status(404).render('404.njk');
-            next(err);
+            return res.status(404).render('404.njk');
         }
     }
     next(); // <-- important!
