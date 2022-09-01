@@ -14,6 +14,8 @@ const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
+const sessionRouter = require('./session/routes');
+const createCookieService = require('./cookie/cookie-service');
 
 const app = express();
 
@@ -36,7 +38,6 @@ nunjucks
     )
     .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID)
     .addGlobal('CW_URL', process.env.CW_URL)
-    .addGlobal('CW_SESSION_DURATION', process.env.CW_SESSION_DURATION)
     .addGlobal('CW_LIVECHAT_CHAT_ID', process.env.CW_LIVECHAT_CHAT_ID)
     .addGlobal(
         'CW_LIVECHAT_MAINTENANCE_MESSAGE',
@@ -78,7 +79,7 @@ app.use(
                     "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='", // hash of the inline script in frontend template.njk.
                     'www.googletagmanager.com'
                 ],
-                imgSrc: ["'self'", 'data:', 'www.google-analytics.com'],
+                imgSrc: ["'self'", 'data:', 'www.google-analytics.com', 'www.googletagmanager.com'],
                 objectSrc: ["'none'"],
                 frameSrc: ['*.ccng.bt.com'],
                 connectSrc: ["'self'", 'www.google-analytics.com']
@@ -100,9 +101,10 @@ app.use(
         httpOnly: true
     })
 );
+
 app.use(
     clientSessions({
-        cookieName: 'cicaSession', // cookie name dictates the key name added to the request object
+        cookieName: 'session', // cookie name dictates the key name added to the request object
         secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
         duration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // how long the session will stay valid in ms
         activeDuration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
@@ -119,37 +121,9 @@ app.use(
 app.use(
     csrf({
         cookie: false,
-        sessionKey: 'cicaSession'
+        sessionKey: 'session'
     })
 );
-
-// Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
-// eslint-disable-next-line consistent-return
-app.use(['/apply', '/download'], async (req, res, next) => {
-    // check if client sent cookie
-    const cookie = req.cicaSession.questionnaireId;
-    if (cookie === undefined) {
-        // no: set it and redirect.
-        try {
-            const response = await qService.createQuestionnaire();
-            req.cicaSession.questionnaireId = response.body.data.attributes.id;
-            const initialSection = formHelper.removeSectionIdPrefix(
-                response.body.data.attributes.routes.initial
-            );
-            const baseUrl = req.baseUrl === '/download' ? '/apply' : req.baseUrl;
-            let redirectionUrl = `${baseUrl}/${initialSection}`;
-            // query param passed from Tempus launch page
-            if (req.query.isCica) {
-                redirectionUrl = `${redirectionUrl}?isCica=true`;
-            }
-            return res.redirect(redirectionUrl);
-        } catch (err) {
-            res.status(404).render('404.njk');
-            next(err);
-        }
-    }
-    next(); // <-- important!
-});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -169,8 +143,65 @@ app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
+
+app.use(async (req, res, next) => {
+    try {
+        if (!req.originalUrl.startsWith('/session') && req.session.questionnaireId) {
+            const cookieExpiryService = createCookieService({
+                req,
+                res,
+                cookieName: 'sessionExpiry'
+            });
+
+            if (cookieExpiryService.isSet('expires') && cookieExpiryService.isExpired()) {
+                req.session.destroy();
+                cookieExpiryService.set('expires', '');
+                return res.status(403).render('500.badToken.njk');
+            }
+            const response = await qService.keepAlive(req.session.questionnaireId);
+            const sessionResource = response.body.data[0].attributes;
+            cookieExpiryService.set({
+                alive: sessionResource.alive,
+                created: sessionResource.created,
+                duration: sessionResource.duration,
+                expires: sessionResource.expires
+            });
+        }
+    } catch (err) {
+        return res.status(403).render('500.badToken.njk');
+    }
+
+    return next();
+});
+
+// Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
+// eslint-disable-next-line consistent-return
+app.use(['/apply', '/download'], async (req, res, next) => {
+    if (!req.session.questionnaireId) {
+        // no: set it and redirect.
+        try {
+            const response = await qService.createQuestionnaire();
+            req.session.questionnaireId = response.body.data.attributes.id;
+            const initialSection = formHelper.removeSectionIdPrefix(
+                response.body.data.attributes.routes.initial
+            );
+            const baseUrl = req.baseUrl === '/download' ? '/apply' : req.baseUrl;
+            let redirectionUrl = `${baseUrl}/${initialSection}`;
+            // query param passed from Tempus launch page
+            if (req.query.isCica) {
+                redirectionUrl = `${redirectionUrl}?isCica=true`;
+            }
+            return res.redirect(redirectionUrl);
+        } catch (err) {
+            return res.status(404).render('404.njk');
+        }
+    }
+    next(); // <-- important!
+});
+
 app.use('/download', downloadRouter);
 app.use('/apply', applicationRouter);
+app.use('/session', sessionRouter);
 app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
