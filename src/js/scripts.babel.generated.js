@@ -360,6 +360,10 @@ require("core-js/modules/web.url.to-json.js");
 
 require("core-js/modules/web.url-search-params.js");
 
+var axios = _interopRequireWildcard(require("axios"));
+
+var jsCookies = _interopRequireWildcard(require("js-cookie"));
+
 var _ga = _interopRequireDefault(require("../modules/ga"));
 
 var _autocomplete = _interopRequireDefault(require("../modules/autocomplete/autocomplete"));
@@ -374,10 +378,18 @@ var _newWindowAnchors = _interopRequireDefault(require("../modules/new-window-an
 
 var _liveChat = _interopRequireDefault(require("../modules/live-chat"));
 
+var _msToMinutesAndSeconds = _interopRequireDefault(require("../modules/modal-timeout/utils/msToMinutesAndSeconds"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-// eslint-disable-next-line import/no-extraneous-dependencies
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 (() => {
   var cookiePreference = (0, _cookiePreference.default)('_prefs', ['essential', 'analytics']);
 
@@ -396,44 +408,200 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
   });
   cookieBanner.show();
-  var pathName = window.location.pathname;
+  /* ****************************************** */
 
-  if (pathName.startsWith('/apply')) {
-    var sessionTimeoutModalElement = window.document.querySelector('#govuk-modal-session-timing-out');
-    sessionTimeoutModalElement.addEventListener('TIMED_OUT', () => {
-      var timeoutEndedModal = (0, _modalTimeout.default)(window);
-      timeoutEndedModal.init({
-        element: '#govuk-modal-session-ended',
-        resumeElement: '.govuk-modal__continue'
-      });
-    });
-    sessionTimeoutModalElement.addEventListener('MODAL_ERROR_RESUME_FAILURE', () => {
-      var timeoutEndedModal = (0, _modalTimeout.default)(window);
-      timeoutEndedModal.init({
-        element: '#govuk-modal-session-resume-error',
-        closeElement: '.govuk-modal__close'
-      });
-    });
-    var timeoutModal = (0, _modalTimeout.default)(window);
-    timeoutModal.init({
-      element: '#govuk-modal-session-timing-out',
-      resumeElement: '.govuk-modal__continue',
-      showIn: [// show a modal at two-thirds, and fourteen-fifteenths of the session
-      // length (rounded down to the nearest 1000).
-      // e.g. a session length of 15 minutes results in a modal being
-      // shown at 10 minutes, and 14 minutes.
-      Math.floor(window.CICA.SESSION_DURATION * (2 / 3) / 1000) * 1000, Math.floor(window.CICA.SESSION_DURATION * (14 / 15) / 1000) * 1000]
-    });
-    window.document.querySelectorAll('.govuk-modal').forEach(modalElement => {
-      modalElement.addEventListener('MODAL_OPEN', () => {
-        // TODO: make this `DRY`!
-        window.gtag('event', 'open', {
-          event_category: modalElement.id,
-          non_interaction: true
-        });
-      }, false);
-    });
+  /* ** MODAL + TIMEOUT IMPLEMENTATION START ** */
+
+  /* ****************************************** */
+
+  function modalTimout() {
+    return _modalTimout.apply(this, arguments);
   }
+
+  function _modalTimout() {
+    _modalTimout = _asyncToGenerator(function* () {
+      var modalElements = window.document.querySelectorAll('[data-module~="govuk-modal"]');
+      var sessionEndedModal;
+      var errorModal;
+      var sessionTimingOutModal; // const SESSION_DURATION_BUFFER = 30000;
+
+      var sessionData;
+      var eventHandlers = {};
+      var documentVisible = true;
+
+      function refreshSessionAndModalTimeout() {
+        return _refreshSessionAndModalTimeout.apply(this, arguments);
+      }
+
+      function _refreshSessionAndModalTimeout() {
+        _refreshSessionAndModalTimeout = _asyncToGenerator(function* () {
+          var response = yield axios.get('/session/keep-alive');
+          sessionData = response.data.data[0].attributes;
+          sessionTimingOutModal.close();
+          sessionTimingOutModal.refresh({
+            startTime: sessionData.created
+          });
+        });
+        return _refreshSessionAndModalTimeout.apply(this, arguments);
+      }
+
+      function getSessionData() {
+        return JSON.parse(jsCookies.get('sessionExpiry'));
+      }
+
+      function checkShouldOpenModal() {
+        if (documentVisible && // session hasn't already ended. Avoids the modal opening
+        // when a user blurs and focuses a tab after the session
+        // has ended.
+        Date.now() < sessionData.expires && // session is nearing its end.
+        sessionTimingOutModal.timer.timeRemaining < sessionData.duration / 6) {
+          sessionTimingOutModal.open();
+        }
+      }
+
+      if (modalElements.length) {
+        window.document.addEventListener('visibilitychange', () => {
+          documentVisible = window.document.visibilityState === 'visible';
+
+          if (documentVisible) {
+            sessionData = getSessionData();
+            checkShouldOpenModal();
+          }
+        });
+        sessionData = getSessionData(); // haven't hit `/apply` yet.
+
+        if (!sessionData) {
+          return;
+        }
+
+        if (modalElements.length) {
+          var TimeoutModal = (0, _modalTimeout.default)(window);
+          sessionEndedModal = new TimeoutModal({
+            element: '#govuk-modal-session-ended',
+            closeElement: '.govuk-modal__close',
+            onOpen: () => {
+              window.gtag('event', 'open', {
+                event_category: 'govuk-modal-session-ended',
+                non_interaction: true
+              });
+            }
+          });
+          errorModal = new TimeoutModal({
+            element: '#govuk-modal-session-resume-error',
+            closeElement: '.govuk-modal__close',
+            onOpen: () => {
+              window.gtag('event', 'open', {
+                event_category: '#govuk-modal-session-resume-error',
+                non_interaction: true
+              });
+            }
+          });
+          sessionTimingOutModal = new TimeoutModal({
+            element: '#govuk-modal-session-timing-out',
+            resumeElement: '.govuk-modal__continue',
+            // openIn: Math.floor((sessionData.duration * (1 / 4)) / 1000) * 1000,
+            onBeforeOpen: () => {
+              // if a user opens a new tab with another instance of `/apply` the
+              // session will have been refreshed. Because of this the timeout modal
+              // will open prematurely due to it working from a previously-set session
+              // update date. check if the timers end time is less than the actual
+              // session end time and calibrate the timeout to open the modal
+              // accordingly.
+              sessionData = getSessionData();
+              var expectedEndTime = sessionTimingOutModal.timer.endTime;
+              var actualEndTime = sessionData.expires;
+
+              if (expectedEndTime < actualEndTime) {
+                var now = Date.now();
+                sessionTimingOutModal.close();
+                sessionTimingOutModal.refresh({
+                  startTime: now,
+                  duration: sessionData.expires - now
+                });
+                return false;
+              }
+
+              return true;
+            },
+            onOpen: () => {
+              window.gtag('event', 'open', {
+                event_category: 'govuk-modal-session-timing-out',
+                non_interaction: true
+              });
+
+              if (!eventHandlers.onOpenResumeElement) {
+                var resumeElement = sessionTimingOutModal.config.element.querySelector('.govuk-modal__continue');
+                eventHandlers.onOpenResumeElement = {
+                  element: resumeElement,
+                  handler: e => {
+                    e.preventDefault();
+                    refreshSessionAndModalTimeout().catch(() => {
+                      errorModal.open();
+                    });
+                  }
+                };
+              }
+
+              eventHandlers.onOpenResumeElement.element.addEventListener('click', eventHandlers.onOpenResumeElement.handler);
+            },
+            onClose: () => {
+              eventHandlers.onOpenResumeElement.element.removeEventListener('click', eventHandlers.onOpenResumeElement.handler);
+            },
+            timer: {
+              duration: sessionData.duration,
+              startTime: new Date(sessionData.created) * 1,
+              interval: 700,
+              onTick: timeRemaining => {
+                if (!documentVisible) {
+                  return;
+                } // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions
+                // aria-live="assertive" is an attribute of the span that contains the time remaining.
+                // Only update the DOM when the modal is actually visible. This will prevent screen
+                // readers from announcing every single DOM update that happens in the "background".
+
+
+                if (sessionTimingOutModal.isOpen) {
+                  sessionTimingOutModal.content(title => {
+                    var titleElement = title;
+                    var timeRemainingElement = titleElement.querySelector('.govuk-modal__time-remaining');
+                    timeRemainingElement.innerHTML = (0, _msToMinutesAndSeconds.default)(timeRemaining);
+                  });
+                }
+
+                checkShouldOpenModal();
+              },
+              onEnd: () => {
+                sessionTimingOutModal.close();
+                sessionEndedModal.open();
+              }
+            }
+          });
+          var textAreaElements = window.document.querySelectorAll('.govuk-textarea');
+          textAreaElements.forEach(element => {
+            element.addEventListener('paste', () => {
+              refreshSessionAndModalTimeout();
+            }, false);
+            element.addEventListener('input', () => {
+              var now = new Date() * 1; // if there is less than half the session length left when a user
+              // updates a textarea, then refresh the session.
+
+              if (now > new Date(sessionData.expires) * 1 - sessionData.duration / 2) {
+                refreshSessionAndModalTimeout();
+              }
+            }, false);
+          });
+        }
+      }
+    });
+    return _modalTimout.apply(this, arguments);
+  }
+
+  modalTimout();
+  /* ****************************************** */
+
+  /* ** MODAL + TIMEOUT IMPLEMENTATION END   ** */
+
+  /* ****************************************** */
 
   (0, _newWindowAnchors.default)(window.document.querySelectorAll('[open-new-window]'));
   (0, _liveChat.default)(window.document.querySelector('#chat-iframe'));
