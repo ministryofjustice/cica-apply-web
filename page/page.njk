@@ -91,6 +91,7 @@
 {% endblock %}
 
 {% block bodyEnd %}
+    {% include "modal-timeout.njk" %}
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
     <script nonce="{{ nonce }}">
         window.CICA = {
