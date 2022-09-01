@@ -10,7 +10,7 @@ When this element is clicked the `.open()` method is called
 ## focusElement [`Optional`]
 Type: `HTMLElement`
 
-Element that will be initially focus on when the dialog opens
+Element that will be initially focused on when the dialog opens
 
 ## content [`Optional`]
 Type: `Object`
@@ -20,17 +20,22 @@ Contains the data to populate the modal.
 The object contains the following properties:
 
 * title - `String ` - Modal title. Can be a String, or HTML string
-* content - `String ` - Modal content. Can be a String, or HTML string
+* body - `String ` - Modal content. Can be a String, or HTML string
 
 ## onOpen [`Optional`]
 Type: `Function`
 
-A function definition that will be executed each time the modal is opened
+A function that will be executed each time the modal is opened
+
+## onBeforeOpen [`Optional`]
+Type: `Function`
+
+A function that will be executed immediately before the modal is opened
 
 ## onClose [`Optional`]
 Type: `Function`
 
-A function definition that will be executed each time the modal is closed
+A function that will be executed each time the modal is closed
 
 ## Methods
 
@@ -48,15 +53,15 @@ Call this method to open the modal and make it visible. If you have defined an `
 
 Call this method to close the modal and make it invisible. If you have defined an `onClose` callback, it will be executed after this method
 
-## content - `content<Object>`
+## content - `updater<Function>`
 
-content - `Required`
+updater - `Required`
 
-Updates the content of the modal instance.
+Updates the content of the title and body elements.
 
-The `content` parameter contains the following properties:
-* title - `String ` - Modal title. Can be a String, or HTML string
-* content - `String ` - Modal content. Can be a String, or HTML string
+The `content` parameter is a callack function with the following parameters:
+* title - `HTMLElement` - Modal title element.
+* body - `HTMLElement ` - Modal body element.
 
 ## Usage
 
@@ -67,16 +72,19 @@ const modalElement = document.querySelector('#myModal');
 const modalOptions = {
     triggerElement: document.querySelector('#someElement'),
     focusElement: document.querySelector('#someOtherElement'),
-    content: {
-        title: 'My Modal Title',
-        content: '<p>This is my modal contents</p><p>It is very nice!</p>',
+    content: (title, body) => {
+        title.innerHTML = 'My new title';
+        body.innerHTML = '<p>My new body html</p>';
     },
     onOpen: () => {
         console.log('modal opened!');
-    }),
+    },
+    onBeforeOpen: () => {
+        console.log('not opened yet!');
+    },
     onClose: : () => {
         console.log('modal closed!!');
-    })
+    }
 };
 const modal = createTimeoutModal(window);
 timeoutEndedModal.init(modalOption);

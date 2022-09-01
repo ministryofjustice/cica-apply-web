@@ -163,17 +163,21 @@ describe('Modal component', () => {
                 <div class="govuk-modal__overlay"></div>
             </div>`;
         const modal = new Modal(document.querySelector('#govuk-modal-test-1')).init();
-        modal.content({
-            heading: 'My new modal heading',
-            content: 'My new modal content'
+
+        modal.content((title, body) => {
+            /* eslint-disable no-param-reassign */
+            title.innerHTML = 'My new modal heading';
+            body.innerHTML = 'My new modal content';
+            /* eslint-enable no-param-reassign */
         });
+
         const modalHeading = document.querySelector('.govuk-modal__heading');
         const modalContent = document.querySelector('.govuk-modal__content');
         expect(modalHeading.innerHTML).toEqual('My new modal heading');
         expect(modalContent.innerHTML).toEqual('My new modal content');
     });
 
-    it('should initilise the Modal instance with custom content options ', () => {
+    it('should initilise the Modal instance with custom content option', () => {
         document.body.innerHTML = `<div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
                 <div class="govuk-modal__wrapper">
                     <dialog
@@ -203,17 +207,18 @@ describe('Modal component', () => {
             </div>`;
         new Modal(document.querySelector('#govuk-modal-test-1')).init({
             content: {
-                heading: 'foo heading',
-                content: 'bar content'
+                title: 'foo heading',
+                body: 'bar content'
             }
         });
+
         const modalHeading = document.querySelector('.govuk-modal__heading');
         const modalContent = document.querySelector('.govuk-modal__content');
         expect(modalHeading.innerHTML).toEqual('foo heading');
         expect(modalContent.innerHTML).toEqual('bar content');
     });
 
-    it('should initilise the Modal instance with custom trigger element options ', () => {
+    it('should initilise the Modal instance with custom trigger element option', () => {
         document.body.innerHTML = `<span id="trigger-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
                 <div class="govuk-modal__wrapper">
                     <dialog
@@ -249,7 +254,7 @@ describe('Modal component', () => {
         expect(modal.isOpen).toEqual(true);
     });
 
-    it('should initilise the Modal instance with custom close element options ', () => {
+    it('should initilise the Modal instance with custom close element option', () => {
         document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
                 <div class="govuk-modal__wrapper">
                     <dialog
@@ -286,7 +291,7 @@ describe('Modal component', () => {
         expect(modal.isOpen).toEqual(false);
     });
 
-    it('should initilise the Modal instance with custom close callback options ', () => {
+    it('should initilise the Modal instance with custom close callback option', () => {
         let hasBeenClosed = 'foo';
         document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
                 <div class="govuk-modal__wrapper">
@@ -325,7 +330,7 @@ describe('Modal component', () => {
         expect(hasBeenClosed).toEqual('bar');
     });
 
-    it('should initilise the Modal instance with custom open callback options ', () => {
+    it('should initilise the Modal instance with custom open callback option', () => {
         let hasBeenOpened = 'foo';
         document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
                 <div class="govuk-modal__wrapper">
@@ -362,5 +367,172 @@ describe('Modal component', () => {
         modal.close();
         modal.open();
         expect(hasBeenOpened).toEqual('bar');
+    });
+
+    it('should execute beforeOpen function', () => {
+        let hasBeenOpened = 'foo';
+        document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
+                <div class="govuk-modal__wrapper">
+                    <dialog
+                        id="test-1"
+                        class="govuk-modal__box"
+                        aria-labelledby="test-1-title"
+                        aria-describedby="test-1-content"
+                        aria-modal="true"
+                        role="alertdialog"
+                        tabindex="0"
+                    >
+                        <div class="govuk-modal__header">
+                            header
+                        </div>
+                        <div class="govuk-modal__main">
+                            <span class="govuk-modal__heading govuk-heading-l" id="test-1-title">Test 1 heading</span>
+                            <div class="govuk-modal__content" id="test-1-content">
+                                <p class="govuk-body">Test 1 modal body text</p>
+                            </div>
+                            <button type="button" class="govuk-button govuk-modal__continue" data-module="govuk-button">
+                                Continue application
+                            </button>
+                        </div>
+                    </dialog>
+                </div>
+                <div class="govuk-modal__overlay"></div>
+            </div>`;
+        const modal = new Modal(document.querySelector('#govuk-modal-test-1')).init({
+            onBeforeOpen: () => {
+                hasBeenOpened = 'bar';
+            }
+        });
+        modal.close();
+        modal.open();
+        expect(hasBeenOpened).toEqual('bar');
+    });
+
+    it('should open the modal if beforeOpen returns true', () => {
+        let hasBeenOpened = 'foo';
+        document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
+                <div class="govuk-modal__wrapper">
+                    <dialog
+                        id="test-1"
+                        class="govuk-modal__box"
+                        aria-labelledby="test-1-title"
+                        aria-describedby="test-1-content"
+                        aria-modal="true"
+                        role="alertdialog"
+                        tabindex="0"
+                    >
+                        <div class="govuk-modal__header">
+                            header
+                        </div>
+                        <div class="govuk-modal__main">
+                            <span class="govuk-modal__heading govuk-heading-l" id="test-1-title">Test 1 heading</span>
+                            <div class="govuk-modal__content" id="test-1-content">
+                                <p class="govuk-body">Test 1 modal body text</p>
+                            </div>
+                            <button type="button" class="govuk-button govuk-modal__continue" data-module="govuk-button">
+                                Continue application
+                            </button>
+                        </div>
+                    </dialog>
+                </div>
+                <div class="govuk-modal__overlay"></div>
+            </div>`;
+        const modal = new Modal(document.querySelector('#govuk-modal-test-1')).init({
+            onBeforeOpen: () => {
+                return true;
+            },
+            onOpen: () => {
+                hasBeenOpened = 'bar';
+            }
+        });
+        modal.close();
+        modal.open();
+        expect(hasBeenOpened).toEqual('bar');
+    });
+
+    it('should not open the modal if beforeOpen returns false', () => {
+        let hasBeenOpened = 'foo';
+        document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
+                <div class="govuk-modal__wrapper">
+                    <dialog
+                        id="test-1"
+                        class="govuk-modal__box"
+                        aria-labelledby="test-1-title"
+                        aria-describedby="test-1-content"
+                        aria-modal="true"
+                        role="alertdialog"
+                        tabindex="0"
+                    >
+                        <div class="govuk-modal__header">
+                            header
+                        </div>
+                        <div class="govuk-modal__main">
+                            <span class="govuk-modal__heading govuk-heading-l" id="test-1-title">Test 1 heading</span>
+                            <div class="govuk-modal__content" id="test-1-content">
+                                <p class="govuk-body">Test 1 modal body text</p>
+                            </div>
+                            <button type="button" class="govuk-button govuk-modal__continue" data-module="govuk-button">
+                                Continue application
+                            </button>
+                        </div>
+                    </dialog>
+                </div>
+                <div class="govuk-modal__overlay"></div>
+            </div>`;
+        const modal = new Modal(document.querySelector('#govuk-modal-test-1')).init({
+            onBeforeOpen: () => {
+                return false;
+            },
+            onOpen: () => {
+                hasBeenOpened = 'bar';
+            }
+        });
+        modal.close();
+        modal.open();
+        expect(hasBeenOpened).toEqual('foo');
+    });
+
+    it('should return early and not execute the beforeOpen function if modal is already open', () => {
+        let hasBeenOpened = '';
+        document.body.innerHTML = `<span id="close-element">click me</span><div class="govuk-modal" id="govuk-modal-test-1" data-module="govuk-modal">
+                <div class="govuk-modal__wrapper">
+                    <dialog
+                        id="test-1"
+                        class="govuk-modal__box"
+                        aria-labelledby="test-1-title"
+                        aria-describedby="test-1-content"
+                        aria-modal="true"
+                        role="alertdialog"
+                        tabindex="0"
+                    >
+                        <div class="govuk-modal__header">
+                            header
+                        </div>
+                        <div class="govuk-modal__main">
+                            <span class="govuk-modal__heading govuk-heading-l" id="test-1-title">Test 1 heading</span>
+                            <div class="govuk-modal__content" id="test-1-content">
+                                <p class="govuk-body">Test 1 modal body text</p>
+                            </div>
+                            <button type="button" class="govuk-button govuk-modal__continue" data-module="govuk-button">
+                                Continue application
+                            </button>
+                        </div>
+                    </dialog>
+                </div>
+                <div class="govuk-modal__overlay"></div>
+            </div>`;
+        const modal = new Modal(document.querySelector('#govuk-modal-test-1')).init({
+            onBeforeOpen: () => {
+                hasBeenOpened += 'foo';
+                return true;
+            },
+            onOpen: () => {
+                hasBeenOpened += 'bar';
+            }
+        });
+        modal.close();
+        modal.open();
+        modal.open();
+        expect(hasBeenOpened).toEqual('foobar');
     });
 });

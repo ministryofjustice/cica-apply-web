@@ -30,6 +30,7 @@ Modal.prototype.init = function(options) {
     this.options = options || {};
 
     this.open = this.handleOpen.bind(this);
+    this.beforeOpen = this.handleBeforeOpen.bind(this);
     this.close = this.handleClose.bind(this);
     this.focus = this.handleFocus.bind(this);
     this.boundKeyDown = this.handleKeyDown.bind(this);
@@ -38,7 +39,6 @@ Modal.prototype.init = function(options) {
     this.focusable = this.dialogBox.querySelectorAll(this.focusable.toString());
     this.focusableLast = this.focusable[this.focusable.length - 1];
     this.focusElement = this.options.focusElement || this.dialogBox;
-    this.dialogContent = this.options.content;
     this.isOpen = this.dialogBox.hasAttribute('open');
 
     if (this.options.triggerElement) {
@@ -46,7 +46,18 @@ Modal.prototype.init = function(options) {
     }
 
     if (this.options.content) {
-        this.content(this.options.content);
+        this.content((title, body) => {
+            const titleElement = title;
+            const bodyElement = body;
+
+            if (this.options.content.title && typeof this.options.content.title === 'string') {
+                titleElement.innerHTML = this.options.content.title;
+            }
+
+            if (this.options.content.body && typeof this.options.content.body === 'string') {
+                bodyElement.innerHTML = this.options.content.body;
+            }
+        });
     }
 
     if (this.options.closeElement) {
@@ -56,12 +67,33 @@ Modal.prototype.init = function(options) {
     return this;
 };
 
+Modal.prototype.handleBeforeOpen = function(e) {
+    let shouldOpen = true;
+
+    if (e) {
+        e.preventDefault();
+    }
+
+    if (typeof this.options.onBeforeOpen === 'function') {
+        const response = this.options.onBeforeOpen();
+        if (response === false) {
+            shouldOpen = false;
+        }
+    }
+
+    return shouldOpen;
+};
+
 Modal.prototype.handleOpen = function(e) {
     if (e) {
         e.preventDefault();
     }
 
     if (this.isOpen) {
+        return;
+    }
+    const beforeOpen = this.beforeOpen();
+    if (!beforeOpen) {
         return;
     }
 
@@ -159,11 +191,10 @@ Modal.prototype.handleKeyDown = function(e) {
         }
     }
 };
-Modal.prototype.handleContent = function(options) {
-    const dialogTitle = this.dialogBox.querySelector('.govuk-modal__heading');
-    const dialogContent = this.dialogBox.querySelector('.govuk-modal__content');
-    dialogTitle.innerHTML = options.heading;
-    dialogContent.innerHTML = options.content;
+Modal.prototype.handleContent = function(updateContent) {
+    const titleElement = this.dialogBox.querySelector('.govuk-modal__heading');
+    const bodyElement = this.dialogBox.querySelector('.govuk-modal__content');
+    updateContent(titleElement, bodyElement);
 };
 
 export default Modal;
