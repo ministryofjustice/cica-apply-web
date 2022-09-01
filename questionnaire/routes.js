@@ -6,9 +6,9 @@ const qService = require('./questionnaire-service')();
 
 const router = express.Router();
 
-router.route('/').get(async (req, res, next) => {
+router.route('/').get(async (req, res) => {
     try {
-        const response = await qService.getFirstSection(req.cicaSession.questionnaireId);
+        const response = await qService.getFirstSection(req.session.questionnaireId);
         const responseBody = response.body;
         const initialSection = formHelper.removeSectionIdPrefix(
             responseBody.data[0].attributes.sectionId
@@ -16,14 +16,13 @@ router.route('/').get(async (req, res, next) => {
         res.redirect(`${req.baseUrl}/${initialSection}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
-        next(err);
     }
 });
 
-router.route('/previous/:section').get(async (req, res, next) => {
+router.route('/previous/:section').get(async (req, res) => {
     try {
         const sectionId = formHelper.addPrefix(req.params.section);
-        const response = await qService.getPrevious(req.cicaSession.questionnaireId, sectionId);
+        const response = await qService.getPrevious(req.session.questionnaireId, sectionId);
         if (response.body.data[0].attributes && response.body.data[0].attributes.url !== null) {
             const overwriteId = response.body.data[0].attributes.url;
             return res.redirect(overwriteId);
@@ -33,8 +32,7 @@ router.route('/previous/:section').get(async (req, res, next) => {
         );
         return res.redirect(`${req.baseUrl}/${previousSectionId}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
-        return next(err);
+        return res.status(err.statusCode || 404).render('404.njk');
     }
 });
 
@@ -43,7 +41,7 @@ router
     .get(async (req, res, next) => {
         try {
             const sectionId = formHelper.addPrefix(req.params.section);
-            const response = await qService.getSection(req.cicaSession.questionnaireId, sectionId);
+            const response = await qService.getSection(req.session.questionnaireId, sectionId);
             if (
                 response.body.data &&
                 response.body.data[0].attributes &&
@@ -67,7 +65,7 @@ router
                 res.locals.nonce
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
-                req.cicaSession.reset();
+                req.session.reset();
             }
             res.send(html);
         } catch (err) {
@@ -84,7 +82,7 @@ router
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
             const response = await qService.postSection(
-                req.cicaSession.questionnaireId,
+                req.session.questionnaireId,
                 sectionId,
                 body
             );
@@ -94,9 +92,9 @@ router
                     formHelper.getSectionContext(sectionId) === 'submission';
                 if (isApplicationSubmission) {
                     try {
-                        await qService.postSubmission(req.cicaSession.questionnaireId);
+                        await qService.postSubmission(req.session.questionnaireId);
                         const submissionResponse = await qService.getSubmissionStatus(
-                            req.cicaSession.questionnaireId,
+                            req.session.questionnaireId,
                             Date.now()
                         );
 
@@ -114,7 +112,7 @@ router
 
                 if ('next' in req.query) {
                     const progressEntryResponse = await qService.getSection(
-                        req.cicaSession.questionnaireId,
+                        req.session.questionnaireId,
                         formHelper.addPrefix(req.query.next)
                     );
 
@@ -127,7 +125,7 @@ router
                 }
 
                 const progressEntryResponse = await qService.getCurrentSection(
-                    req.cicaSession.questionnaireId
+                    req.session.questionnaireId
                 );
                 nextSectionId = formHelper.removeSectionIdPrefix(
                     progressEntryResponse.body.data[0].attributes.sectionId

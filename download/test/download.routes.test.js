@@ -4,6 +4,7 @@ const request = require('supertest');
 
 const createQuestionnaire = require('../../test/test-fixtures/res/get_questionnaire.json');
 const getSectionValid = require('../../test/test-fixtures/res/get_schema_valid');
+const getKeepAlive = require('../../test/test-fixtures/res/get_keep_alive');
 
 const summaryHtml = '<!DOCTYPE html><html><head><title></title></head><body>Summary</body></html>';
 
@@ -20,7 +21,8 @@ describe('Download route service endpoint', () => {
                         jest.doMock('../../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
                                 getSection: () => getSectionValid,
-                                createQuestionnaire: () => createQuestionnaire
+                                createQuestionnaire: () => createQuestionnaire,
+                                keepAlive: () => getKeepAlive
                             }))
                         );
                         jest.doMock('../../questionnaire/form-helper', () => ({
@@ -42,7 +44,7 @@ describe('Download route service endpoint', () => {
                                 .get('/download/application-summary')
                                 .set(
                                     'Cookie',
-                                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
+                                    'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA'
                                 )
                                 .then(response => {
                                     expect(response.statusCode).toBe(200);
@@ -57,32 +59,32 @@ describe('Download route service endpoint', () => {
                         jest.resetModules();
                         jest.doMock('../../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
-                                createQuestionnaire: () => createQuestionnaire
+                                createQuestionnaire: () => createQuestionnaire,
+                                getSection: () => getSectionValid,
+                                keepAlive: () => getKeepAlive
                             }))
                         );
                         jest.doMock('../../questionnaire/form-helper', () => ({
                             removeSectionIdPrefix: () => initial
                         }));
-
-                        // eslint-disable-next-line global-require
-                        app = require('../../app');
                         jest.doMock('../download-helper', () => ({
                             getSummaryHtml: () => {
                                 throw new Error();
                             }
                         }));
+
+                        // eslint-disable-next-line global-require
+                        app = require('../../app');
+
                         const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() => {
-                            currentAgent
-                                .get('/download/application-summary')
-                                .set(
-                                    'Cookie',
-                                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(404);
-                                });
-                        });
+                        await currentAgent.get('/apply/');
+                        const response = await currentAgent
+                            .get('/download/application-summary')
+                            .set(
+                                'Cookie',
+                                'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
+                            );
+                        expect(response.statusCode).toBe(404);
                     });
                 });
 

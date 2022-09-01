@@ -11,7 +11,7 @@ const router = express.Router();
 router.route('/application-summary').get(async (req, res, next) => {
     try {
         const response = await qService.getSection(
-            req.cicaSession.questionnaireId,
+            req.session.questionnaireId,
             'p--check-your-answers'
         );
         const timestamp = moment().tz('Europe/London');

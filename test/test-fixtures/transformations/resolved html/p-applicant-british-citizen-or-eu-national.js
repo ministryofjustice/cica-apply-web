@@ -541,8 +541,7 @@ const html = `<!DOCTYPE html>
 <script nonce="somenonce">
 window.CICA = {
   SERVICE_URL: '',
-  ANALYTICS_TRACKING_ID: '',
-  SESSION_DURATION:
+  ANALYTICS_TRACKING_ID: ''
 };
 </script>
 <script src="/govuk-frontend/all.js"></script>
