@@ -13,6 +13,7 @@ metadata:
       SecRuleEngine On
       SecAuditEngine RelevantOnly
       SecAuditLog /var/log/nginx/error.log
+      SecRuleUpdateTargetById 942100 "!REQUEST_COOKIES"
       SecAuditLogType Serial
         SecMarker BEGIN_VALID_URL_CHECK
           SecRule REQUEST_URI "@beginsWith /apply" "id:700004, phase:1,log,pass,skipAfter:END_VALID_URL_CHECK"
