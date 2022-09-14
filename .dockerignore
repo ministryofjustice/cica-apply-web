@@ -20,6 +20,8 @@
 !partials
 !src
 !components
+!session
+!cookie
 
 !package.json
 !package-lock.json
