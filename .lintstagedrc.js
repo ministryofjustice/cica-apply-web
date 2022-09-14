@@ -1,7 +1,7 @@
 /*! m0-start */
 const config = {
-    '*.js': ['eslint --fix --color', 'git add'],
-    '*.{json,yml,yaml}': ['prettier --write', 'git add']
+    '*.js': ['eslint --fix --color'],
+    '*.{json,yml,yaml}': ['prettier --write']
 };
 /*! m0-end */
 
