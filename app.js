@@ -16,6 +16,7 @@ const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const createCookieService = require('./cookie/cookie-service');
+const addBuffer = require('./session/utils/addBuffer');
 
 const DURATION_LIMIT = 3600000;
 
@@ -164,8 +165,8 @@ app.use(async (req, res, next) => {
             cookieExpiryService.set({
                 alive: sessionResource.alive,
                 created: sessionResource.created,
-                duration: sessionResource.duration,
-                expires: sessionResource.expires
+                duration: addBuffer(sessionResource.duration),
+                expires: addBuffer(sessionResource.expires)
             });
         }
     } catch (err) {

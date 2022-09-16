@@ -3,6 +3,7 @@
 const express = require('express');
 const qService = require('../questionnaire/questionnaire-service')();
 const createCookieService = require('../cookie/cookie-service');
+const addBuffer = require('./utils/addBuffer');
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.route('/keep-alive').get(async (req, res) => {
                 res,
                 cookieName: 'sessionExpiry'
             });
-            cookieService.set('expires', sessionResource.expires);
+            cookieService.set('expires', addBuffer(sessionResource.expires));
         }
         res.json(response.body);
     } catch (err) {
