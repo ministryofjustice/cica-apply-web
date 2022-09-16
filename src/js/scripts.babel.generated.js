@@ -446,7 +446,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       function getSessionData() {
-        return JSON.parse(jsCookies.get('sessionExpiry'));
+        return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
       }
 
       function checkShouldOpenModal() {
