@@ -16,7 +16,7 @@ function createCookieService({req, res, cookieName}) {
         if (!isSet('expires')) {
             return true;
         }
-        return new Date(req.cookies[cookieName].expires) < new Date();
+        return new Date(getCookieJson().expires) < new Date();
     }
 
     function set(propertyName, propertyValue) {
