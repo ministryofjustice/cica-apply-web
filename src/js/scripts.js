@@ -59,7 +59,7 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
         }
 
         function getSessionData() {
-            return JSON.parse(jsCookies.get('sessionExpiry'));
+            return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
         }
 
         function checkShouldOpenModal() {
