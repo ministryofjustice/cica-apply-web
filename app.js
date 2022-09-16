@@ -17,6 +17,8 @@ const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const createCookieService = require('./cookie/cookie-service');
 
+const DURATION_LIMIT = 3600000;
+
 const app = express();
 
 nunjucks
@@ -106,8 +108,7 @@ app.use(
     clientSessions({
         cookieName: 'session', // cookie name dictates the key name added to the request object
         secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
-        duration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // how long the session will stay valid in ms
-        activeDuration: Number.parseInt(process.env.CW_SESSION_DURATION, 10), // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+        duration: DURATION_LIMIT, // how long the session will stay valid in ms
         cookie: {
             ephemeral: true, // when true, cookie expires when the browser closes
             httpOnly: true, // when true, cookie is not accessible from javascript
