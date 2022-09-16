@@ -157,7 +157,7 @@ app.use(async (req, res, next) => {
             if (cookieExpiryService.isSet('expires') && cookieExpiryService.isExpired()) {
                 req.session.destroy();
                 cookieExpiryService.set('expires', '');
-                return res.status(403).render('500.badToken.njk');
+                return next();
             }
             const response = await qService.keepAlive(req.session.questionnaireId);
             const sessionResource = response.body.data[0].attributes;

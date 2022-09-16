@@ -754,7 +754,8 @@ describe('/apply', () => {
                 jest.doMock('client-sessions', () => () => (req, res, next) => {
                     req.session = {
                         cookie: {},
-                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd'
+                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
+                        destroy: jest.fn()
                     };
 
                     next();
@@ -813,7 +814,8 @@ describe('/apply', () => {
                 jest.doMock('client-sessions', () => () => (req, res, next) => {
                     req.session = {
                         cookie: {},
-                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd'
+                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
+                        destroy: jest.fn()
                     };
 
                     next();
@@ -868,7 +870,6 @@ describe('/apply', () => {
             const response = await currentAgent.post(
                 '/apply/applicant-are-you-18-or-over?next=check-your-answers'
             );
-
             expect(response.statusCode).toBe(302);
             expect(response.res.text).toBe(
                 'Found. Redirecting to /apply/applicant-redirect-to-our-other-application'
