@@ -7,6 +7,7 @@ const createTemplateEngineService = require('../templateEngine');
 
 const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
+const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
@@ -31,7 +32,8 @@ function renderSection({
     sectionId,
     showBackLink = true,
     csrfToken,
-    cspNonce
+    cspNonce,
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema)
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
@@ -63,6 +65,9 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
+                {% if ${showSignInLink} %}
+                    <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
+                {% endif %}
             {% endblock %}
         `,
         {nonce: cspNonce}
