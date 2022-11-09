@@ -4,6 +4,9 @@ const formHelper = require('../questionnaire/form-helper');
 const validTransformation = require('./test-fixtures/transformations/p-applicant-british-citizen-or-eu-national');
 const validResolvedHtml = require('./test-fixtures/transformations/resolved html/p-applicant-british-citizen-or-eu-national');
 
+const shouldShowSignInLink = require('../questionnaire/utils/shouldShowSignInLink');
+const uiSchema = require('../questionnaire/questionnaireUISchema');
+
 describe('form-helper functions', () => {
     describe('Remove sectionId prefix', () => {
         it('Should remove p- or p-- from the beginning of a valid sectionId', () => {
@@ -154,6 +157,66 @@ describe('form-helper functions', () => {
                 .replace(/\s+/g, '');
 
             expect(actual).toMatch(expected);
+        });
+
+        it('Should show sign-in link when explicitly specified', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-when-did-the-crime-stop';
+            const sectionId = 'p-applicant-when-did-the-crime-stop';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const showSignInLink = shouldShowSignInLink(sectionId, uiSchema);
+            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInLink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.stringContaining(expected));
+        });
+
+        it('Should not show sign-in link when explicitly specified', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
+            const sectionId = 'p-applicant-who-are-you-applying-for';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const showSignInLink = shouldShowSignInLink(sectionId, uiSchema);
+            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInLink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.not.stringContaining(expected));
         });
     });
 

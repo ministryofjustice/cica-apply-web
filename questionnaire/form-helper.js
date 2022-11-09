@@ -5,6 +5,8 @@ const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
 
+const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
+
 nunjucks.configure(
     [
         'node_modules/@ministryofjustice/frontend/',
@@ -44,7 +46,8 @@ function renderSection({
     sectionId,
     showBackLink = true,
     csrfToken,
-    cspNonce
+    cspNonce,
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema)
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
@@ -76,6 +79,9 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
+                {% if ${showSignInLink} %}
+                    <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
+                {% endif %}
             {% endblock %}
         `,
         {nonce: cspNonce}
