@@ -225,7 +225,7 @@ const html = `<!DOCTYPE html>
 <input type="hidden" name="_csrf" value="sometoken">
 
                 </form>
-
+                <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
         </div>
     </div>
 

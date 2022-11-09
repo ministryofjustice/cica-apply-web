@@ -1,6 +1,145 @@
 'use strict';
 
 module.exports = {
+    'p--new-or-existing-application': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p--contact-cica': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-fatal-claim': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p--was-the-crime-reported-to-police': {
+        options: {
+            outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported'],
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-you-cannot-get-compensation': {
+        options: {
+            buttonText: 'Continue anyway',
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-has-crime-reference-number': {
+        options: {
+            outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info'],
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-who-are-you-applying-for': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-are-you-18-or-over': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p--transition': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-british-citizen-or-eu-national': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p--context-applicant-details': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-confirmation-method': {
+        options: {
+            transformOrder: [
+                'q-applicant-enter-your-email-address',
+                'q-applicant-enter-your-telephone-number',
+                'q-applicant-confirmation-method'
+            ],
+            outputOrder: ['q-applicant-confirmation-method'],
+            properties: {
+                'q-applicant-confirmation-method': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'email',
+                                componentIds: ['q-applicant-enter-your-email-address']
+                            },
+                            {
+                                itemValue: 'text',
+                                componentIds: ['q-applicant-enter-your-telephone-number']
+                            }
+                        ],
+                        additionalMapping: [
+                            {
+                                itemType: 'divider',
+                                itemValue: 'or',
+                                itemIndex: 2
+                            }
+                        ]
+                    }
+                },
+                'q-applicant-enter-your-email-address': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'email'
+                        }
+                    }
+                },
+                'q-applicant-enter-your-telephone-number': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20',
+                            autocomplete: 'tel'
+                        }
+                    }
+                }
+            },
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
+    'p--transition-no-phone-or-email': {
+        options: {
+            signInHyperlink: {
+                visible: false
+            }
+        }
+    },
     'p-applicant-have-you-applied-to-us-before': {
         // transformer: 'form',
         options: {
@@ -127,11 +266,6 @@ module.exports = {
             ]
         }
     },
-    'p--was-the-crime-reported-to-police': {
-        options: {
-            outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported']
-        }
-    },
     'p-applicant-enter-your-name': {
         options: {
             outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name'],
@@ -232,11 +366,6 @@ module.exports = {
             showBackButton: false
         }
     },
-    'p-applicant-you-cannot-get-compensation': {
-        options: {
-            buttonText: 'Continue anyway'
-        }
-    },
     'p--which-police-force-is-investigating-the-crime': {
         options: {
             properties: {
@@ -272,55 +401,6 @@ module.exports = {
                 'q-applicant-enter-your-telephone-number': {
                     options: {
                         macroOptions: {
-                            autocomplete: 'tel'
-                        }
-                    }
-                }
-            }
-        }
-    },
-    'p-applicant-confirmation-method': {
-        options: {
-            transformOrder: [
-                'q-applicant-enter-your-email-address',
-                'q-applicant-enter-your-telephone-number',
-                'q-applicant-confirmation-method'
-            ],
-            outputOrder: ['q-applicant-confirmation-method'],
-            properties: {
-                'q-applicant-confirmation-method': {
-                    options: {
-                        conditionalComponentMap: [
-                            {
-                                itemValue: 'email',
-                                componentIds: ['q-applicant-enter-your-email-address']
-                            },
-                            {
-                                itemValue: 'text',
-                                componentIds: ['q-applicant-enter-your-telephone-number']
-                            }
-                        ],
-                        additionalMapping: [
-                            {
-                                itemType: 'divider',
-                                itemValue: 'or',
-                                itemIndex: 2
-                            }
-                        ]
-                    }
-                },
-                'q-applicant-enter-your-email-address': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-20',
-                            autocomplete: 'email'
-                        }
-                    }
-                },
-                'q-applicant-enter-your-telephone-number': {
-                    options: {
-                        macroOptions: {
-                            classes: 'govuk-input--width-20',
                             autocomplete: 'tel'
                         }
                     }
@@ -1243,11 +1323,6 @@ module.exports = {
     'p-offender-enter-offenders-name': {
         options: {
             outputOrder: ['q-offender-enter-offenders-name', 'additional-info-help-text']
-        }
-    },
-    'p-applicant-has-crime-reference-number': {
-        options: {
-            outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info']
         }
     },
     'p-mainapplicant-confirmation-method': {

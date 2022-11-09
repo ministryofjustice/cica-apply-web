@@ -44,7 +44,8 @@ function renderSection({
     sectionId,
     showBackLink = true,
     csrfToken,
-    cspNonce
+    cspNonce,
+    showSignInHyperlink = true
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
@@ -76,6 +77,9 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
+                {% if ${showSignInHyperlink} %}
+                    <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
+                {% endif %}
             {% endblock %}
         `,
         {nonce: cspNonce}
@@ -211,6 +215,14 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
+function shouldShowSignInHyperlink(sectionId) {
+    const uiSchemaValue = uiSchema[sectionId]?.options?.signInHyperlink?.visible;
+    if (uiSchemaValue !== undefined) {
+        return !!uiSchemaValue;
+    }
+    return true;
+}
+
 function getSectionHtml(sectionData, csrfToken, cspNonce) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
@@ -237,7 +249,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce) {
         sectionId,
         showBackLink,
         csrfToken,
-        cspNonce
+        cspNonce,
+        showSignInHyperlink: shouldShowSignInHyperlink(sectionId)
     });
 }
 
@@ -277,7 +290,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
         backTarget: backLink,
         sectionId,
         csrfToken,
-        cspNonce
+        cspNonce,
+        showSignInHyperlink: shouldShowSignInHyperlink(sectionId)
     });
 }
 

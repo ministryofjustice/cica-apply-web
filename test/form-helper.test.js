@@ -155,6 +155,94 @@ describe('form-helper functions', () => {
 
             expect(actual).toMatch(expected);
         });
+
+        it('Should show sign-in hyperlink by default', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.stringContaining(expected));
+        });
+
+        it('Should show sign-in hyperlink when explicitly specified', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const showSignInHyperlink = true;
+            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInHyperlink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.stringContaining(expected));
+        });
+
+        it('Should not show sign-in hyperlink when explicitly specified', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const showSignInHyperlink = false;
+            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInHyperlink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.not.stringContaining(expected));
+        });
     });
 
     describe('Process errors', () => {
