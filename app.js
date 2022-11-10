@@ -15,6 +15,7 @@ const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
+const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
 
 const DURATION_LIMIT = 3600000;
@@ -200,6 +201,7 @@ app.use(['/apply', '/download'], async (req, res, next) => {
     next(); // <-- important!
 });
 
+app.use('/account', accountRouter);
 app.use('/download', downloadRouter);
 app.use('/apply', applicationRouter);
 app.use('/session', sessionRouter);
