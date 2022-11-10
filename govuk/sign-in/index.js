@@ -3,8 +3,8 @@
 const createIssuerService = require('./issuer/index');
 const createAuthorisationService = require('./authorisation/index');
 
-function signInService(){
-    async function getServiceUrl(redirectUri){
+function signInService() {
+    async function getServiceUrl(redirectUri) {
         const issuerService = createIssuerService();
         const authorisationService = createAuthorisationService();
         const issuer = await issuerService.identify();

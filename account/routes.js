@@ -5,15 +5,15 @@ const signInService = require('../govuk/sign-in/index')();
 
 const router = express.Router();
 
-router.get('/sign-in', async (req, res) => {
+router.get('/sign-in', async (req, res, next) => {
     try {
         // const redirectUri = req.protocol + '://' + req.get('host') + '/account/save';
         const redirectUri = 'http://127.0.0.1:6987/loggedIn';
         const url = await signInService.getServiceUrl(redirectUri);
-        res.redirect(302, url);
+        return res.redirect(302, url);
     } catch (err) {
         console.log({err});
-        next(err);
+        return next(err);
     }
 });
 

@@ -1,3 +1,5 @@
+'use strict';
+
 function createAuthorisationService() {
     function getAuthorisationURI(issuer, redirectUri) {
         const opts = {
