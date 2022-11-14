@@ -2,6 +2,7 @@
 
 const createIssuerService = require('./issuer/index');
 const createAuthorisationService = require('./authorisation/index');
+const createTokenService = require('./token/index');
 
 function signInService() {
     async function getServiceUrl(redirectUri) {
@@ -11,8 +12,14 @@ function signInService() {
         return authorisationService.getAuthorisationURI({issuer, redirectUri});
     }
 
+    async function getUserIdToken(authToken) {
+        const tokenService = createTokenService();
+        return tokenService.getUserIdToken(authToken);
+    }
+
     return Object.freeze({
-        getServiceUrl
+        getServiceUrl,
+        getUserIdToken
     });
 }
 
