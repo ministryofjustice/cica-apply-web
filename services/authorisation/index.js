@@ -1,13 +1,16 @@
 'use strict';
 
+const {getSignedInURI} = require('../../account/utils/getActionURIs');
+const config = require('../../config');
+
 function createAuthorisationService() {
-    function getAuthorisationURI(issuer) {
+    function getAuthorisationURI(issuer, referrerUri) {
         const opts = {
             scope: ['openid'],
             response_type: 'code',
-            client_id: 'RSsuV9e2KzU9IgtvOJsyZIOVy8U',
-            redirect_uri: 'http://127.0.0.1:6987/loggedIn', // 1 of multiple that have been previously registered.
-            state: 'STATE',
+            client_id: config.clientId,
+            redirect_uri: getSignedInURI(), // 1 of multiple that have been previously registered.
+            state: referrerUri,
             nonce: 'NONCE',
             vtr: '[Cl.Cm]'
         };

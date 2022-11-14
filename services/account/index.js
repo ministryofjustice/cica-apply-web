@@ -4,13 +4,22 @@
 const createCookieService = require('../../cookie/cookie-service');
 
 function createAccountService({req, res}) {
-    function signIn(userId) {
+    function signIn(userId, idToken) {
         const signedInCookie = createCookieService({
             req,
             res,
             cookieName: 'signedinuser'
         });
-        signedInCookie.set({userId});
+        signedInCookie.set({userId, idToken});
+    }
+
+    function signOut() {
+        const signedInCookie = createCookieService({
+            req,
+            res,
+            cookieName: 'signedinuser'
+        });
+        signedInCookie.set({userId: ''});
     }
 
     function isSignedIn() {
@@ -23,6 +32,7 @@ function createAccountService({req, res}) {
         // console.log({isSignedIn: signedInCookie.isSet('userId')});
         return signedInCookie.isSet('userId');
     }
+
     // const db = createAccountsDAL();
     // function getAuthenticatedUserId() {
     //     return db.get('userid');
@@ -44,7 +54,8 @@ function createAccountService({req, res}) {
 
     return Object.freeze({
         isSignedIn,
-        signIn
+        signIn,
+        signOut
     });
 }
 

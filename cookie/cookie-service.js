@@ -26,7 +26,6 @@ function createCookieService({req, res, cookieName}) {
         } else {
             newProperties = {[propertyName]: propertyValue};
         }
-
         res.cookie(
             cookieName,
             JSON.stringify({

@@ -11,7 +11,6 @@ function requestService() {
                 accept: 'application/vnd.api+json',
                 'Content-Type': 'application/vnd.api+json'
             },
-            responseType: 'json',
             throwHttpErrors: false
         };
         opts = merge(opts, options);

@@ -147,6 +147,7 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
+    console.log({HEADERS: req.headers});
     try {
         if (!req.originalUrl.startsWith('/session') && req.session.questionnaireId) {
             const cookieExpiryService = createCookieService({
@@ -183,9 +184,11 @@ app.use(['/apply', '/download'], async (req, res, next) => {
         // no: set it and redirect.
         try {
             const response = await qService.createQuestionnaire();
-            req.session.questionnaireId = response.body.data.attributes.id;
+            const requestBody = JSON.parse(response.body); // why is this now needed. what deps have been updated that changed this from an object to a string reresentation of an object????
+
+            req.session.questionnaireId = requestBody.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
-                response.body.data.attributes.routes.initial
+                requestBody.data.attributes.routes.initial
             );
             const baseUrl = req.baseUrl === '/download' ? '/apply' : req.baseUrl;
             let redirectionUrl = `${baseUrl}/${initialSection}`;
