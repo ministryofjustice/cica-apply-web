@@ -7,7 +7,7 @@ let app;
 describe('Account route service endpoint', () => {
     describe('/account/sign-in', () => {
         describe('GET', () => {
-            describe('200', () => {
+            describe('302', () => {
                 beforeAll(() => {
                     jest.resetModules();
                     jest.doMock('../govuk/sign-in/index', () =>
@@ -19,7 +19,7 @@ describe('Account route service endpoint', () => {
                     app = require('../app');
                 });
 
-                it('Should respond with a success status', async () => {
+                it('Should respond with a redirect status', async () => {
                     const currentAgent = request.agent(app);
                     const response = await currentAgent.get('/account/sign-in');
                     expect(response.statusCode).toBe(302);

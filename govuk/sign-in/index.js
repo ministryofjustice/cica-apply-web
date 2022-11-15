@@ -8,7 +8,7 @@ function signInService() {
         const issuerService = createIssuerService();
         const authorisationService = createAuthorisationService();
         const issuer = await issuerService.identify();
-        return authorisationService.getAuthorisationURI(issuer, redirectUri);
+        return authorisationService.getAuthorisationURI({issuer, redirectUri});
     }
 
     return Object.freeze({
