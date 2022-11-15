@@ -13,6 +13,7 @@ import createCookiePreference from '../modules/cookie-preference';
 import createTimeoutModal from '../modules/modal-timeout';
 import createNewWindowAnchors from '../modules/new-window-anchors';
 import createLiveChat from '../modules/live-chat';
+import createPostcodeLookup from '../modules/postcode-lookup';
 
 import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAndSeconds';
 
@@ -27,6 +28,8 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
 
     const autocomplete = createAutocomplete(window);
     autocomplete.init('.govuk-select');
+    const postcodeLookup = createPostcodeLookup(window);
+    postcodeLookup.init();
 
     const cookieBanner = createCookieBanner(window, cookiePreference, {
         cookieBannerElement: '#cookie-banner',
