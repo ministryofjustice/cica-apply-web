@@ -14,6 +14,7 @@ const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
+const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 
@@ -165,6 +166,7 @@ app.use(['/apply', '/download'], async (req, res, next) => {
 app.use('/download', downloadRouter);
 app.use('/apply', applicationRouter);
 app.use('/session', sessionRouter);
+app.use('/account', accountRouter);
 app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
