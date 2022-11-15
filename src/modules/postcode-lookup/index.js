@@ -1,6 +1,9 @@
+function findAddress() {
+    return null;
+}
+
 function createPostcodeLookup(window) {
     function createContentElements() {
-        // Consider changing vars to consts
         // CREATE CONTENT ELEMENT
         const descriptionDiv = window.document.createElement('div');
         descriptionDiv.appendChild(
@@ -53,6 +56,8 @@ function createPostcodeLookup(window) {
         window.document
             .getElementById('postcode-search')
             .insertAdjacentElement('afterend', searchButton);
+        // Add an event listener to handle when the user clicks the 'Find Address' button.
+        searchButton.addEventListener('click', findAddress);
     }
 
     function createSearchResultsElements() {
