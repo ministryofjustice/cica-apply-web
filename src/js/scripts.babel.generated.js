@@ -378,6 +378,8 @@ var _newWindowAnchors = _interopRequireDefault(require("../modules/new-window-an
 
 var _liveChat = _interopRequireDefault(require("../modules/live-chat"));
 
+var _postcodeLookup = _interopRequireDefault(require("../modules/postcode-lookup"));
+
 var _msToMinutesAndSeconds = _interopRequireDefault(require("../modules/modal-timeout/utils/msToMinutesAndSeconds"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -402,6 +404,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
   var autocomplete = (0, _autocomplete.default)(window);
   autocomplete.init('.govuk-select');
+  var postcodeLookup = (0, _postcodeLookup.default)(window);
+  postcodeLookup.init();
   var cookieBanner = (0, _cookieBanner.default)(window, cookiePreference, {
     cookieBannerElement: '#cookie-banner',
     cookieBannerVisibleClass: 'cookie-banner--visible',
