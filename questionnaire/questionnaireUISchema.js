@@ -96,6 +96,17 @@ module.exports = {
                         }
                     }
                 },
+                'q-applicant-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line3',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
                 'q-applicant-town-or-city': {
                     options: {
                         macroOptions: {
@@ -121,6 +132,7 @@ module.exports = {
             outputOrder: [
                 'q-applicant-building-and-street',
                 'q-applicant-building-and-street-2',
+                'q-applicant-building-and-street-3',
                 'q-applicant-town-or-city',
                 'q-applicant-county',
                 'q-applicant-postcode'
@@ -1353,6 +1365,17 @@ module.exports = {
                         }
                     }
                 },
+                'q-mainapplicant-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line3',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
                 'q-mainapplicant-town-or-city': {
                     options: {
                         macroOptions: {
@@ -1378,6 +1401,7 @@ module.exports = {
             outputOrder: [
                 'q-mainapplicant-building-and-street',
                 'q-mainapplicant-building-and-street-2',
+                'q-mainapplicant-building-and-street-3',
                 'q-mainapplicant-town-or-city',
                 'q-mainapplicant-county',
                 'q-mainapplicant-postcode'
