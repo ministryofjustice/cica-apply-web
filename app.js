@@ -14,6 +14,7 @@ const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
+const addressFinderRouter = require('./address-finder/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 
@@ -139,7 +140,7 @@ app.use(async (req, res, next) => {
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
-app.use(['/apply', '/download'], async (req, res, next) => {
+app.use(['/apply', '/download', '/address-finder'], async (req, res, next) => {
     if (!req.session.questionnaireId) {
         // no: set it and redirect.
         try {
@@ -162,6 +163,7 @@ app.use(['/apply', '/download'], async (req, res, next) => {
     next(); // <-- important!
 });
 
+app.use('/address-finder', addressFinderRouter);
 app.use('/download', downloadRouter);
 app.use('/apply', applicationRouter);
 app.use('/session', sessionRouter);
