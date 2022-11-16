@@ -18,9 +18,12 @@ describe('Address finder service', () => {
         });
         it('Should respond with status code 400 and return an error response when no postcode parameter provided', async () => {
             const noPostcodeProvidedError = {
-                error: {
-                    statuscode: 400,
-                    message: 'No postcode parameter provided.'
+                statusCode: 400,
+                body: {
+                    error: {
+                        statuscode: 400,
+                        message: 'No postcode parameter provided.'
+                    }
                 }
             };
 
@@ -38,10 +41,13 @@ describe('Address finder service', () => {
 
         it('Should respond with status code 400 and return an error response when an invalid postcode parameter provided', async () => {
             const invalidPostcodeProvidedError = {
-                error: {
-                    statuscode: 400,
-                    message:
-                        'Parameter £"1 is not a valid parameter for resource postcode. Valid parameters for requested resource are postcode, format, dataset, maxresults, offset, lr, fq, output_srs.'
+                statusCode: 400,
+                body: {
+                    error: {
+                        statuscode: 400,
+                        message:
+                            'Parameter £"1 is not a valid parameter for resource postcode. Valid parameters for requested resource are postcode, format, dataset, maxresults, offset, lr, fq, output_srs.'
+                    }
                 }
             };
 
@@ -58,10 +64,13 @@ describe('Address finder service', () => {
         });
         it('Should respond with status code 401 and return an error response for invalid api key', async () => {
             const apiKeyInvalidFault = {
-                fault: {
-                    faultstring: 'Invalid ApiKey',
-                    detail: {
-                        errorcode: 'oauth.v2.InvalidApiKey'
+                statusCode: 401,
+                body: {
+                    fault: {
+                        faultstring: 'Invalid ApiKey',
+                        detail: {
+                            errorcode: 'oauth.v2.InvalidApiKey'
+                        }
                     }
                 }
             };
@@ -80,9 +89,12 @@ describe('Address finder service', () => {
 
         it('Should respond with status code 500 and return an error response for internal service error', async () => {
             const internalServiceError = {
-                error: {
-                    statuscode: 500,
-                    message: 'The provided request resulted in an internal server error.'
+                statusCode: 500,
+                body: {
+                    error: {
+                        statuscode: 500,
+                        message: 'The provided request resulted in an internal server error.'
+                    }
                 }
             };
 
