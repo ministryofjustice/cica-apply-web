@@ -9,7 +9,16 @@ router.get('/sign-in', async (req, res, next) => {
     try {
         const signInService = createSignInService();
         const redirectUri = `${req.protocol}://${req.get('host')}/account/signed-in`;
-        const url = await signInService.getServiceUrl(redirectUri);
+        const referrer = req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`;
+        const stateObject = {
+            qid: req.session.questionnaireId,
+            referrer
+        };
+        const options = {
+            state: Buffer.from(JSON.stringify(stateObject)).toString('base64'),
+            redirect_uri: redirectUri
+        };
+        const url = await signInService.getServiceUrl(options);
         return res.redirect(302, url);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -29,13 +38,14 @@ router.get('/signed-in', async (req, res, next) => {
             throw err;
         }
         // Validate state
-        /* if (queryParams.state !== config.state) {
+        const stateObject = JSON.parse(Buffer.from(queryParams.state, 'base64').toString('ascii'));
+        if (stateObject.qid !== req.session.questionnaireId) {
             const err = Error(`Received incorrect value for "state"`);
             err.name = 'IncorrectStateReceived';
             err.statusCode = 500;
             err.error = '500 Internal Server Error';
             throw err;
-        } */
+        }
 
         // Get redirectUri
         const redirectUri = `${req.protocol}://${req.get('host')}/account/signed-in`;
@@ -53,20 +63,7 @@ router.get('/signed-in', async (req, res, next) => {
         console.log(`HERE'S OUR NEW COOKIE VALUE: ${req.session.userId}`);
 
         // Redirect user back to current progress entry
-        // ToDo: This logic should live elsewhere, this routes file shouldn't know about formHelper or qService
-        // eslint-disable-next-line global-require
-        const formHelper = require('../questionnaire/form-helper');
-        // eslint-disable-next-line global-require
-        const qService = require('../questionnaire/questionnaire-service')();
-
-        const progressEntryResponse = await qService.getCurrentSection(req.session.questionnaireId);
-        const nextSectionId = formHelper.removeSectionIdPrefix(
-            progressEntryResponse.body.data[0].attributes.sectionId
-        );
-
-        console.log(nextSectionId);
-
-        return res.redirect(302, `${req.protocol}://${req.get('host')}/apply/${nextSectionId}`);
+        return res.redirect(302, stateObject.referrer);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
         console.log(err);
