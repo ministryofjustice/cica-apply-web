@@ -1,8 +1,76 @@
-function findAddress() {
-    return null;
-}
-
+/**
+ * Returns a postocde lookup module.
+ * @param {Object} window  Global window object
+ */
 function createPostcodeLookup(window) {
+    // Define an empty JSON object to temporarily store matched address results.
+    // eslint-disable-next-line no-unused-vars
+    let tmpAddressSearchResultsJson = {};
+    async function fetchData(postcodeInput) {
+        return fetch(`/address-finder/postcode?postcode=${postcodeInput}`)
+            .then(async response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                // TODO proper error handling
+                const msg = 'TBC API Error Status error handling.';
+                throw msg;
+            })
+            .then(data => {
+                // TODO add proper error handling for no results found
+                if (data.header.totalresults === 0 || !data.results) {
+                    const msg = 'TBC No matching results found.';
+                    throw msg;
+                }
+
+                const selectElementResults = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                // Clear the results drop-down list.
+                const options = window.document.querySelectorAll(
+                    '#address-search-results-dropdown option'
+                );
+                options.forEach(o => o.remove());
+
+                // Update the JSON object with the data results.
+                tmpAddressSearchResultsJson = data.results;
+                const option = window.document.createElement('option');
+                option.text =
+                    data.header.totalresults === 1
+                        ? '1 address found'
+                        : `${data.header.totalresults} addresses found`;
+                selectElementResults.add(option);
+
+                // See also {@link https://apidocs.os.uk/reference/os-places-dpa-output}
+                const dataset = 'DPA';
+                // Loop through the data results; adding the address string as a new option
+                // to the results drop-down list.
+                data.results.forEach(function addElemets(val, i) {
+                    const opt = window.document.createElement('option');
+                    opt.value = i;
+                    opt.text = val[dataset.toUpperCase()].ADDRESS;
+                    selectElementResults.add(opt);
+                });
+
+                // Scroll the results drop-down list back to the top.
+                // TODO look into why this isn't working...
+                // Is this necessary, it aslways seems to be correct?
+                // selectElementResults.scrollTo(0, 0);
+
+                // Display the hidden search results div
+                const searchResultsDiv = window.document.getElementById('address-search-results');
+                searchResultsDiv.style.display = 'block';
+            });
+    }
+    async function addressSearch() {
+        const postcodeInput = window.document.getElementById('postcode-search-input').value;
+        await fetchData(postcodeInput).catch(e => {
+            // TODO something meaning full with error objects
+            // and review handling of error objects.
+            throw e;
+        });
+    }
+
     function createContentElements() {
         // CREATE CONTENT ELEMENT
         const descriptionDiv = window.document.createElement('div');
@@ -30,7 +98,7 @@ function createPostcodeLookup(window) {
         // text or search?
         postcodeSearchInput.setAttribute('type', 'search');
         // TODO content for aria-label, is the label required
-        postcodeSearchInput.setAttribute('aria-label', 'Find Address lookup');
+        postcodeSearchInput.setAttribute('aria-label', 'Enter a postcode');
         // do we want the autocomplete here?
         postcodeSearchInput.setAttribute('autocomplete', 'postal-code');
         const postcodeSearchLabel = window.document.createElement('label');
@@ -45,10 +113,10 @@ function createPostcodeLookup(window) {
             .insertAdjacentElement('afterend', postcodeSearchDiv);
     }
 
-    function createFindAddressButton() {
+    async function createFindAddressButton() {
         // CREATE POSTCODE SEARCH FIND ADDRESS BUTTON
         const searchButton = window.document.createElement('button');
-        searchButton.setAttribute('id', 'search-button-id');
+        searchButton.setAttribute('id', 'search-button');
         searchButton.setAttribute('class', 'govuk-button govuk-button--secondary');
         searchButton.setAttribute('data-module', 'govuk-button');
         searchButton.setAttribute('type', 'button');
@@ -57,7 +125,9 @@ function createPostcodeLookup(window) {
             .getElementById('postcode-search')
             .insertAdjacentElement('afterend', searchButton);
         // Add an event listener to handle when the user clicks the 'Find Address' button.
-        searchButton.addEventListener('click', findAddress);
+        searchButton.addEventListener('click', async () => {
+            await addressSearch();
+        });
     }
 
     function createSearchResultsElements() {
@@ -75,28 +145,30 @@ function createPostcodeLookup(window) {
         searchResultsDiv.appendChild(addressSearchResultsLabel);
         const searchResults = window.document.createElement('select');
         searchResults.setAttribute('class', 'govuk-select');
-        searchResults.setAttribute('id', 'results');
-        searchResults.setAttribute('name', 'results');
+        searchResults.setAttribute('id', 'address-search-results-dropdown');
+        searchResults.setAttribute('name', 'address-search-results-dropdown');
         searchResultsDiv.appendChild(searchResults);
         searchResultsDiv.style.display = 'none';
 
         window.document
-            .getElementById('search-button-id')
+            .getElementById('search-button')
             .insertAdjacentElement('afterend', searchResultsDiv);
     }
 
-    function init() {
+    async function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
         if (window.document.querySelector('[id *= "applicant-building-and-street"]') == null) {
             return;
         }
         createContentElements();
         createPostcodeSearchElements();
-        createFindAddressButton();
+        await createFindAddressButton();
         createSearchResultsElements();
     }
 
     return Object.freeze({
+        fetchData,
+        addressSearch,
         createContentElements,
         createPostcodeSearchElements,
         createFindAddressButton,
