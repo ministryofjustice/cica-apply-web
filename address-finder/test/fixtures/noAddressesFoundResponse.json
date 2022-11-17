@@ -1,0 +1,18 @@
+{
+    "statusCode": 200,
+    "body": {
+        "header": {
+            "uri": "https://api.os.uk/search/places/v1/postcode?postcode=A123AB",
+            "query": "postcode=A123AB",
+            "offset": 0,
+            "totalresults": 0,
+            "format": "JSON",
+            "dataset": "DPA",
+            "lr": "EN,CY",
+            "maxresults": 100,
+            "epoch": "97",
+            "lastupdate": "2022-11-16",
+            "output_srs": "EPSG:27700"
+        }
+    }
+}

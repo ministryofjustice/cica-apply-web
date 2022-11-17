@@ -5,6 +5,7 @@ const createQuestionnaire = require('../../test/test-fixtures/res/get_questionna
 const getSectionValid = require('../../test/test-fixtures/res/get_schema_valid');
 const getKeepAlive = require('../../test/test-fixtures/res/get_keep_alive');
 const getAddressCollectionResponse = require('./fixtures/validAddressCollectionResponse.json');
+const noAddressesFoundResponse = require('./fixtures/noAddressesFoundResponse.json');
 
 let app;
 
@@ -46,6 +47,30 @@ describe('Address finder route proxy endpoint address-finder/postcode', () => {
                     .then(response => {
                         expect(response.statusCode).toBe(200);
                         expect(response.body).toEqual(getAddressCollectionResponse.body);
+                    })
+            );
+        });
+
+        it('Should respond with status code 200 and return the correct header response when no addresses found', async () => {
+            jest.doMock('../address-finder-service', () =>
+                jest.fn(() => ({
+                    lookupPostcode: () => noAddressesFoundResponse
+                }))
+            );
+
+            // eslint-disable-next-line global-require
+            app = require('../../app');
+            const currentAgent = request.agent(app);
+            return currentAgent.get('/apply/').then(() =>
+                currentAgent
+                    .get('/address-finder/postcode?postcode=AB125CD')
+                    .set(
+                        'Cookie',
+                        'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA'
+                    )
+                    .then(response => {
+                        expect(response.statusCode).toBe(200);
+                        expect(response.body).toEqual(noAddressesFoundResponse.body);
                     })
             );
         });
