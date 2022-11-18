@@ -12,7 +12,7 @@ describe('Account route service endpoint', () => {
                     jest.resetModules();
                     jest.doMock('../govuk/sign-in/index', () =>
                         jest.fn(() => ({
-                            getServiceUrl: () => 'A_VALID_URL'
+                            getAuthorisationURI: () => 'A_VALID_URL'
                         }))
                     );
                     // eslint-disable-next-line global-require
@@ -31,7 +31,7 @@ describe('Account route service endpoint', () => {
                     jest.resetModules();
                     jest.doMock('../govuk/sign-in/index', () =>
                         jest.fn(() => ({
-                            getServiceUrl: () => {
+                            getAuthorisationURI: () => {
                                 throw new Error();
                             }
                         }))
@@ -55,7 +55,7 @@ describe('Account route service endpoint', () => {
                     jest.resetModules();
                     jest.doMock('../govuk/sign-in/index', () =>
                         jest.fn(() => ({
-                            getUserIdToken: () => 'A Token'
+                            getIdToken: () => 'A Token'
                         }))
                     );
                     jest.doMock('../questionnaire/form-helper', () =>
@@ -105,7 +105,7 @@ describe('Account route service endpoint', () => {
                     jest.resetModules();
                     jest.doMock('../govuk/sign-in/index', () =>
                         jest.fn(() => ({
-                            getUserIdToken: () => {
+                            getIdToken: () => {
                                 throw new Error();
                             }
                         }))
