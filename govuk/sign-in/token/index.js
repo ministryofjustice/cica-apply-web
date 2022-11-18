@@ -3,7 +3,7 @@
 // const request = require('../../../questionnaire/request-service')();
 
 function createTokenService() {
-    async function getUserIdToken(options) {
+    async function getIdToken(options) {
         /* const opts = {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -24,7 +24,7 @@ function createTokenService() {
     }
 
     return Object.freeze({
-        getUserIdToken
+        getIdToken
     });
 }
 
