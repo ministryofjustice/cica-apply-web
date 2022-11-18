@@ -7,18 +7,21 @@ const router = express.Router();
 
 router.get('/sign-in', async (req, res, next) => {
     try {
+        // check if `req.session.userId` exits, and if so, redirect the user to the appropriate page.
+
         const signInService = createSignInService();
         const redirectUri = `${req.protocol}://${req.get('host')}/account/signed-in`;
-        const referrer = req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`;
         const stateObject = {
             qid: req.session.questionnaireId,
-            referrer
+            referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
         };
+        const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
+
         const options = {
-            state: Buffer.from(JSON.stringify(stateObject)).toString('base64'),
+            state: encodedState,
             redirect_uri: redirectUri
         };
-        const url = await signInService.getServiceUrl(options);
+        const url = await signInService.getAuthorisationURI(options);
         return res.redirect(302, url);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -28,6 +31,8 @@ router.get('/sign-in', async (req, res, next) => {
 
 router.get('/signed-in', async (req, res, next) => {
     try {
+        // check if signed in already and do appropriate action.
+
         // Get query strings
         const queryParams = req.query;
         if (queryParams.error) {
@@ -38,7 +43,7 @@ router.get('/signed-in', async (req, res, next) => {
             throw err;
         }
         // Validate state
-        const stateObject = JSON.parse(Buffer.from(queryParams.state, 'base64').toString('ascii'));
+        const stateObject = JSON.parse(Buffer.from(queryParams.state, 'base64').toString('UTF-8'));
         if (stateObject.qid !== req.session.questionnaireId) {
             const err = Error(`Received incorrect value for "state"`);
             err.name = 'IncorrectStateReceived';
@@ -56,7 +61,7 @@ router.get('/signed-in', async (req, res, next) => {
             code: queryParams.code,
             redirectUri
         };
-        const userIdToken = await signInService.getUserIdToken(options);
+        const userIdToken = await signInService.getIdToken(options);
 
         // Save unique userId as system answer
         req.session.userId = userIdToken;

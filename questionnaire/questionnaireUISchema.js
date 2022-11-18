@@ -4,7 +4,7 @@ module.exports = {
     'p--new-or-existing-application': {
         options: {
             signInLink: {
-                visible: false
+                visible: true
             }
         }
     },

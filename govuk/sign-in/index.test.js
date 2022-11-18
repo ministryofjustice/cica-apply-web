@@ -6,7 +6,13 @@ describe('Sign In service', () => {
             jest.resetModules();
             jest.doMock('./issuer/index', () =>
                 jest.fn(() => ({
-                    identify: () => 'issuer identified'
+                    identify: () => {
+                        return {
+                            metadata: {
+                                authorization_endpoint: 'blah'
+                            }
+                        };
+                    }
                 }))
             );
             jest.doMock('./authorisation/index', () =>
@@ -20,7 +26,7 @@ describe('Sign In service', () => {
             // eslint-disable-next-line global-require
             const createSignInService = require('./index');
             const signInService = createSignInService();
-            const actual = await signInService.getServiceUrl();
+            const actual = await signInService.getAuthorisationURI();
 
             expect(actual).toEqual('A_VALID_URL');
         });
@@ -31,7 +37,7 @@ describe('Sign In service', () => {
             jest.resetModules();
             jest.doMock('./token/index', () =>
                 jest.fn(() => ({
-                    getUserIdToken: () => 'A Token'
+                    getIdToken: () => 'A Token'
                 }))
             );
         });
@@ -40,7 +46,7 @@ describe('Sign In service', () => {
             // eslint-disable-next-line global-require
             const createSignInService = require('./index');
             const signInService = createSignInService();
-            const actual = await signInService.getUserIdToken({});
+            const actual = await signInService.getIdToken({});
 
             expect(actual).toEqual('A Token');
         });
