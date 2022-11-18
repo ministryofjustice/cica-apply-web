@@ -1,5 +1,7 @@
 'use strict';
 
+const url = require('../utils/url');
+
 function createAuthorisationService() {
     const defaults = {
         scope: 'openid',
@@ -10,10 +12,12 @@ function createAuthorisationService() {
         nonce: 'NONCE',
         vtr: '[Cl.Cm]'
     };
-    function getAuthorisationURI({issuer, options}) {
-        const opts = {...defaults, ...options};
-        const searchParams = new URLSearchParams(opts);
-        return `${issuer.metadata.authorization_endpoint}?${searchParams.toString()}`;
+
+    function getAuthorisationURI(host, urlSearch = {}) {
+        const opts = {...defaults, ...urlSearch};
+        return url.build(host, {
+            search: opts
+        });
     }
 
     return Object.freeze({

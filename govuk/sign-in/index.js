@@ -5,21 +5,24 @@ const createAuthorisationService = require('./authorisation/index');
 const createTokenService = require('./token/index');
 
 function signInService() {
-    async function getServiceUrl(options) {
+    async function getAuthorisationURI(options) {
         const issuerService = createIssuerService();
         const authorisationService = createAuthorisationService();
         const issuer = await issuerService.identify();
-        return authorisationService.getAuthorisationURI({issuer, options});
+        return authorisationService.getAuthorisationURI(
+            issuer.metadata.authorization_endpoint,
+            options
+        );
     }
 
-    async function getUserIdToken(options) {
+    async function getIdToken(options) {
         const tokenService = createTokenService();
-        return tokenService.getUserIdToken(options);
+        return tokenService.getIdToken(options);
     }
 
     return Object.freeze({
-        getServiceUrl,
-        getUserIdToken
+        getAuthorisationURI,
+        getIdToken
     });
 }
 
