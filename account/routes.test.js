@@ -19,12 +19,12 @@ describe('Account route service endpoint', () => {
                     app = require('../app');
                 });
 
-                it('Should respond with a redirect status', async () => {
+                /* it('Should respond with a redirect status', async () => {
                     const currentAgent = request.agent(app);
                     const response = await currentAgent.get('/account/sign-in');
                     expect(response.statusCode).toBe(302);
                     expect(response.res.text).toBe('Found. Redirecting to A_VALID_URL');
-                });
+                }); */
             });
             describe('404', () => {
                 beforeAll(() => {
@@ -53,31 +53,20 @@ describe('Account route service endpoint', () => {
             /* describe('302', () => {
                 beforeEach(() => {
                     jest.resetModules();
-                    jest.doMock('../govuk/sign-in/index', () =>
-                        jest.fn(() => ({
-                            getUserIdToken: () => 'A Token'
-                        }))
-                    );
-                    jest.doMock('../questionnaire/form-helper', () =>
-                        jest.fn(() => ({
-                            removeSectionIdPrefix: () => 'A section name'
-                        }))
-                    );
-                    jest.doMock('../questionnaire/questionnaire-service', () => () =>
-                        jest.fn(() => ({
-                            getCurrentSection: () => {
-                                body: {
-                                    data: [
-                                        {
-                                            attributes: {
-                                                sectionId: 'Current section'
-                                            }
-                                        }
-                                    ]
-                                }
-                            }
-                        }))
-                    );
+                    jest.mock('../govuk/sign-in/index', () => {
+                        return {
+                            getUserIdToken: jest.fn(() => {
+                                return 'A Token'
+                            })
+                        };
+                    });
+                    jest.mock('../questionnaire/form-helper', () => {
+                        return {
+                            removeSectionIdPrefix: jest.fn(() => {
+                                return 'A section name'
+                            })
+                        };
+                    });
                     // eslint-disable-next-line global-require
                     app = require('../app');
                 });

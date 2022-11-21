@@ -10,11 +10,13 @@ describe('authorisation service', () => {
                 authorization_endpoint: 'http://www.this_is_a_host.com/'
             }
         };
-        const redirectUri = 'http://www.redirect.com';
+        const options = {
+            client_id: 'some_id'
+        };
         const expected =
-            'http://www.this_is_a_host.com/?scope=openid&response_type=code&client_id=RSsuV9e2KzU9IgtvOJsyZIOVy8U&redirect_uri=https%3A%2F%2Fwww.gov.uk%2F&state=STATE&nonce=NONCE&vtr=%5BCl.Cm%5D';
+            'http://www.this_is_a_host.com/?scope=openid&response_type=code&client_id=some_id&redirect_uri=https%3A%2F%2Fwww.gov.uk%2F&state=STATE&nonce=NONCE&vtr=%5BCl.Cm%5D';
 
-        const actual = authorisationService.getAuthorisationURI({issuer, redirectUri});
+        const actual = authorisationService.getAuthorisationURI({issuer, options});
 
         expect(actual).toEqual(expected);
     });

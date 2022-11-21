@@ -31,7 +31,30 @@ describe('Sign In service', () => {
             jest.resetModules();
             jest.doMock('./token/index', () =>
                 jest.fn(() => ({
-                    getUserIdToken: () => 'A Token'
+                    getUserIdToken: () => {
+                        return {
+                            body: {
+                                id_token: 'A token'
+                            }
+                        };
+                    }
+                }))
+            );
+            jest.doMock('../../utils/jwt/index', () =>
+                jest.fn(() => ({
+                    generateJWT: () => 'A signed Token',
+                    verifyJTW: () => {
+                        return {
+                            sub: 'A Token'
+                        };
+                    }
+                }))
+            );
+            jest.doMock('./issuer/index', () =>
+                jest.fn(() => ({
+                    identify: () => {
+                        return {token_endpoint: 'http://token-endpoint.com'};
+                    }
                 }))
             );
         });
@@ -40,7 +63,7 @@ describe('Sign In service', () => {
             // eslint-disable-next-line global-require
             const createSignInService = require('./index');
             const signInService = createSignInService();
-            const actual = await signInService.getUserIdToken({});
+            const actual = await signInService.getUserId({});
 
             expect(actual).toEqual('A Token');
         });
