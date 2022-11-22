@@ -6,7 +6,9 @@ function createPostcodeLookup(window) {
     // Define an empty JSON object to temporarily store matched address results.
     // eslint-disable-next-line no-unused-vars
     let tmpAddressSearchResultsJson = {};
-    async function fetchData(postcodeInput) {
+    async function addressSearch() {
+        const postcodeInput = window.document.getElementById('postcode-search-input').value;
+
         return fetch(`/address-finder/postcode?postcode=${postcodeInput}`)
             .then(async response => {
                 if (response.ok) {
@@ -52,23 +54,13 @@ function createPostcodeLookup(window) {
                     selectElementResults.add(opt);
                 });
 
-                // Scroll the results drop-down list back to the top.
-                // TODO look into why this isn't working...
-                // Is this necessary, it aslways seems to be correct?
-                // selectElementResults.scrollTo(0, 0);
-
                 // Display the hidden search results div
                 const searchResultsDiv = window.document.getElementById('address-search-results');
                 searchResultsDiv.style.display = 'block';
+            })
+            .catch(e => {
+                throw e;
             });
-    }
-    async function addressSearch() {
-        const postcodeInput = window.document.getElementById('postcode-search-input').value;
-        await fetchData(postcodeInput).catch(e => {
-            // TODO something meaning full with error objects
-            // and review handling of error objects.
-            throw e;
-        });
     }
 
     function createContentElements() {
@@ -167,7 +159,6 @@ function createPostcodeLookup(window) {
     }
 
     return Object.freeze({
-        fetchData,
         addressSearch,
         createContentElements,
         createPostcodeSearchElements,
