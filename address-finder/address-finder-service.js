@@ -3,7 +3,7 @@
 const service = require('../questionnaire/request-service')();
 
 const addressFinderEndpoint = 'https://api.os.uk/search/places/v1/postcode';
-const apikey = 'TO_BE_DEFINED';
+const apikey = `${process.env.CW_OS_PLACES_API_KEY}`;
 
 // TODO should this be async?
 function addressFinderService() {

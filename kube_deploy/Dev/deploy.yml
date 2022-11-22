@@ -74,6 +74,11 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_maintenance_message_enabled
+            - name: CW_OS_PLACES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_os_places_api_key
   selector:
     matchLabels:
       app: webapp-dev
