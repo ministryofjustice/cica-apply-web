@@ -74,4 +74,15 @@ router.get('/signed-in', async (req, res, next) => {
     }
 });
 
+router.get('/sign-out', async (req, res, next) => {
+    try {
+        const signInService = createSignInService();
+        const url = await signInService.getLogoutUrl();
+        return res.redirect(302, url);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
 module.exports = router;
