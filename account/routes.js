@@ -44,6 +44,7 @@ router.get('/signed-in', async (req, res, next) => {
         }
         // Validate state
         const stateObject = JSON.parse(Buffer.from(queryParams.state, 'base64').toString('UTF-8'));
+        // TODO: check referrer too?
         if (stateObject.qid !== req.session.questionnaireId) {
             const err = Error(`Received incorrect value for "state"`);
             err.name = 'IncorrectStateReceived';
@@ -52,26 +53,18 @@ router.get('/signed-in', async (req, res, next) => {
             throw err;
         }
 
-        // Get redirectUri
-        const redirectUri = `${req.protocol}://${req.get('host')}/account/signed-in`;
-
         // Get UserIdToken
         const signInService = createSignInService();
-        const options = {
-            code: queryParams.code,
-            redirectUri
-        };
-        const userIdToken = await signInService.getIdToken(options);
+        const authorisationCode = queryParams.code;
+        const userIdToken = await signInService.getIdToken(authorisationCode);
 
         // Save unique userId as system answer
         req.session.userId = userIdToken;
-        console.log(`HERE'S OUR NEW COOKIE VALUE: ${req.session.userId}`);
 
         // Redirect user back to current progress entry
         return res.redirect(302, stateObject.referrer);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
-        console.log(err);
         return next(err);
     }
 });

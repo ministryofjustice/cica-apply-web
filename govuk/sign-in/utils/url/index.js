@@ -9,9 +9,9 @@ function build(
     }
 ) {
     const builtUrl = new URL(base);
-    if (Object.keys(urlParts.search).length) {
-        builtUrl.search = new URLSearchParams(urlParts.search).toString();
-    }
+    Object.keys(urlParts.search).forEach(paramKey => {
+        builtUrl.searchParams.set(paramKey, urlParts.search[paramKey]);
+    });
     return builtUrl.toString();
 }
 

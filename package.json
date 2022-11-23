@@ -37,13 +37,16 @@
         "govuk-frontend": "^3.10.2",
         "helmet": "^3.15.0",
         "js-cookie": "^2.2.1",
+        "jsonwebtoken": "^8.5.1",
+        "jwks-rsa": "^3.0.0",
         "lodash.merge": "^4.6.1",
         "moment-timezone": "^0.5.33",
         "morgan": "~1.9.0",
         "nanoid": "^3.2.0",
         "nunjucks": "^3.2.1",
         "openid-client": "^5.2.1",
-        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v4.3.1"
+        "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v4.3.1",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.18.9",

@@ -6,7 +6,7 @@ function createAuthorisationService() {
     const defaults = {
         scope: 'openid',
         response_type: 'code',
-        client_id: 'RSsuV9e2KzU9IgtvOJsyZIOVy8U',
+        client_id: process.env.CW_GOVUK_CLIENT_ID,
         redirect_uri: 'https://www.gov.uk/',
         state: 'STATE',
         nonce: 'NONCE',
