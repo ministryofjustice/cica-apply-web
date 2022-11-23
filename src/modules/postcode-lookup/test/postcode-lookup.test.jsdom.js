@@ -42,8 +42,30 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('fill-out-the-fields-manually-hint')
                 ).toBeNull();
             });
+            it('Should not add the postcode lookup when the page contains a mainapplicant address', async () => {
+                window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading">
+                Your address
+                </h1>
+                </legend>
+
+                <div class="govuk-form-group">
+                <label class="govuk-label" for=q-mainapplicant-building-and-street">
+                Building and street
+                </label>
+                <input class="govuk-input" id="q-mainapplicant-building-and-street" name="q-mainapplicant-building-and-street"
+                type="text" autocomplete="address-line1">
+                </div>
+                </fieldset>`;
+                postcodeLookup = createPostcodeLookup(window);
+                await postcodeLookup.init();
+                expect(
+                    window.document.getElementById('fill-out-the-fields-manually-hint')
+                ).toBeNull();
+            });
             it('Should not add the postcode lookup when the page contains a rep address', async () => {
-                window.document.body.innerHTML = `<<fieldset class="govuk-fieldset">
+                window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading">
                 Your address
