@@ -153,7 +153,7 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBeNull();
             });
         });
-        describe('on postcode lookup find address button click', () => {
+        describe('on postcode lookup find address button simulated click', () => {
             describe('200', () => {
                 it('Should return 3 results for valid postcode', async () => {
                     fetch.mockResponse(async () => {
@@ -161,27 +161,23 @@ describe('postcode lookup progressive enhancement', () => {
                     });
 
                     await postcodeLookup.init();
-                    window.document.querySelector('#search-button').click(() => {
-                        expect(
-                            window.document.getElementById('address-search-results-dropdown')[0]
-                                .text
-                        ).toEqual('3 addresses found');
+                    await postcodeLookup.addressSearch();
 
-                        expect(
-                            window.document.getElementById('address-search-results-dropdown')[1]
-                                .text
-                        ).toEqual('2, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[0].text
+                    ).toEqual('3 addresses found');
 
-                        expect(
-                            window.document.getElementById('address-search-results-dropdown')[2]
-                                .text
-                        ).toEqual('BARUCH, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[1].text
+                    ).toEqual('2, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
 
-                        expect(
-                            window.document.getElementById('address-search-results-dropdown')[3]
-                                .text
-                        ).toEqual('CHURCH HOUSE, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
-                    });
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[2].text
+                    ).toEqual('BARUCH, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[3].text
+                    ).toEqual('CHURCH HOUSE, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
                 });
                 it('Should return 1 results for valid postcode', async () => {
                     fetch.mockResponse(async () => {
@@ -189,17 +185,14 @@ describe('postcode lookup progressive enhancement', () => {
                     });
 
                     await postcodeLookup.init();
-                    window.document.querySelector('#search-button').click(() => {
-                        expect(
-                            window.document.getElementById('address-search-results-dropdown')[0]
-                                .text
-                        ).toEqual('12 address found');
+                    await postcodeLookup.addressSearch();
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[0].text
+                    ).toEqual('1 address found');
 
-                        expect(
-                            window.document.getElementById('address-search-results-dropdown')[1]
-                                .text
-                        ).toEqual('2, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
-                    });
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[1].text
+                    ).toEqual('2, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
                 });
                 // TODO further analyis on Error handling
                 it('promise rejected when no results found for valid postcode', async () => {
