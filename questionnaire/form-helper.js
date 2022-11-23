@@ -47,6 +47,7 @@ function renderSection({
     showBackLink = true,
     csrfToken,
     cspNonce,
+    loggedInUser,
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema)
 }) {
     const showButton = !isFinal;
@@ -84,7 +85,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
         `,
-        {nonce: cspNonce}
+        {nonce: cspNonce, loggedInUser}
     );
 }
 
@@ -217,7 +218,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, loggedInUser) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -243,7 +244,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce) {
         sectionId,
         showBackLink,
         csrfToken,
-        cspNonce
+        cspNonce,
+        loggedInUser
     });
 }
 
@@ -265,7 +267,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, loggedInUser) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -283,7 +285,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
         backTarget: backLink,
         sectionId,
         csrfToken,
-        cspNonce
+        cspNonce,
+        loggedInUser
     });
 }
 
