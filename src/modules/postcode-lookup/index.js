@@ -9,58 +9,52 @@ function createPostcodeLookup(window) {
     async function addressSearch() {
         const postcodeInput = window.document.getElementById('postcode-search-input').value;
 
-        return fetch(`/address-finder/postcode?postcode=${postcodeInput}`)
-            .then(async response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                // TODO proper error handling
-                const msg = 'TBC API Error Status error handling.';
-                throw msg;
-            })
-            .then(data => {
-                // TODO add proper error handling for no results found
-                if (data.header.totalresults === 0 || !data.results) {
-                    const msg = 'TBC No matching results found.';
-                    throw msg;
-                }
+        const response = await fetch(`/address-finder/postcode?postcode=${postcodeInput}`);
+        if (!response.ok) {
+            // throw new Error(`HTTP error! status: ${response.status}`);
+            // TODO proper error handling
+            const msg = 'TBC API Error Status error handling.';
+            throw msg;
+        }
 
-                const selectElementResults = window.document.getElementById(
-                    'address-search-results-dropdown'
-                );
-                // Clear the results drop-down list.
-                const options = window.document.querySelectorAll(
-                    '#address-search-results-dropdown option'
-                );
-                options.forEach(o => o.remove());
+        const data = await response.json();
 
-                // Update the JSON object with the data results.
-                tmpAddressSearchResultsJson = data.results;
-                const option = window.document.createElement('option');
-                option.text =
-                    data.header.totalresults === 1
-                        ? '1 address found'
-                        : `${data.header.totalresults} addresses found`;
-                selectElementResults.add(option);
+        // TODO add proper error handling for no results found
+        if (data.header.totalresults === 0 || !data.results) {
+            const msg = 'TBC No matching results found.';
+            throw msg;
+        }
 
-                // See also {@link https://apidocs.os.uk/reference/os-places-dpa-output}
-                const dataset = 'DPA';
-                // Loop through the data results; adding the address string as a new option
-                // to the results drop-down list.
-                data.results.forEach(function addElemets(val, i) {
-                    const opt = window.document.createElement('option');
-                    opt.value = i;
-                    opt.text = val[dataset.toUpperCase()].ADDRESS;
-                    selectElementResults.add(opt);
-                });
+        const selectElementResults = window.document.getElementById(
+            'address-search-results-dropdown'
+        );
+        // Clear the results drop-down list.
+        const options = window.document.querySelectorAll('#address-search-results-dropdown option');
+        options.forEach(o => o.remove());
 
-                // Display the hidden search results div
-                const searchResultsDiv = window.document.getElementById('address-search-results');
-                searchResultsDiv.style.display = 'block';
-            })
-            .catch(e => {
-                throw e;
-            });
+        // Update the JSON object with the data results.
+        tmpAddressSearchResultsJson = data.results;
+        const option = window.document.createElement('option');
+        option.text =
+            data.header.totalresults === 1
+                ? '1 address found'
+                : `${data.header.totalresults} addresses found`;
+        selectElementResults.add(option);
+
+        // See also {@link https://apidocs.os.uk/reference/os-places-dpa-output}
+        const dataset = 'DPA';
+        // Loop through the data results; adding the address string as a new option
+        // to the results drop-down list.
+        data.results.forEach(function addElemets(val, i) {
+            const opt = window.document.createElement('option');
+            opt.value = i;
+            opt.text = val[dataset.toUpperCase()].ADDRESS;
+            selectElementResults.add(opt);
+        });
+
+        // Display the hidden search results div
+        const searchResultsDiv = window.document.getElementById('address-search-results');
+        searchResultsDiv.style.display = 'block';
     }
 
     function createContentElements() {
