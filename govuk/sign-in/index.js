@@ -17,9 +17,16 @@ function signInService() {
         return tokenService.getUserIdToken(options);
     }
 
+    async function getLogoutUrl() {
+        const issuerService = createIssuerService();
+        const issuer = await issuerService.identify();
+        return issuer.end_session_endpoint;
+    }
+
     return Object.freeze({
         getServiceUrl,
-        getUserIdToken
+        getUserIdToken,
+        getLogoutUrl
     });
 }
 
