@@ -22,6 +22,8 @@
 !components
 !session
 !cookie
+!account
+!govuk
 
 !package.json
 !package-lock.json
