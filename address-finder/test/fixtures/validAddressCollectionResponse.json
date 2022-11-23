@@ -5,7 +5,7 @@
             "uri": "https://api.os.uk/search/places/v1/postcode?postcode=CF645UL",
             "query": "postcode=CF645UL",
             "offset": 0,
-            "totalresults": 18,
+            "totalresults": 3,
             "format": "JSON",
             "dataset": "DPA",
             "lr": "EN,CY",
