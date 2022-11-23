@@ -6,25 +6,8 @@ function createPostcodeLookup(window) {
     // Define an empty JSON object to temporarily store matched address results.
     // eslint-disable-next-line no-unused-vars
     let tmpAddressSearchResultsJson = {};
-    async function addressSearch() {
-        const postcodeInput = window.document.getElementById('postcode-search-input').value;
 
-        const response = await fetch(`/address-finder/postcode?postcode=${postcodeInput}`);
-        if (!response.ok) {
-            // throw new Error(`HTTP error! status: ${response.status}`);
-            // TODO proper error handling
-            const msg = 'TBC API Error Status error handling.';
-            throw msg;
-        }
-
-        const data = await response.json();
-
-        // TODO add proper error handling for no results found
-        if (data.header.totalresults === 0 || !data.results) {
-            const msg = 'TBC No matching results found.';
-            throw msg;
-        }
-
+    function addSearchResultsToSelectElement(data) {
         const selectElementResults = window.document.getElementById(
             'address-search-results-dropdown'
         );
@@ -55,6 +38,28 @@ function createPostcodeLookup(window) {
         // Display the hidden search results div
         const searchResultsDiv = window.document.getElementById('address-search-results');
         searchResultsDiv.style.display = 'block';
+    }
+
+    async function addressSearch() {
+        const postcodeInput = window.document.getElementById('postcode-search-input').value;
+
+        const response = await fetch(`/address-finder/postcode?postcode=${postcodeInput}`);
+        if (!response.ok) {
+            // throw new Error(`HTTP error! status: ${response.status}`);
+            // TODO proper error handling
+            const msg = 'TBC API Error Status error handling.';
+            throw msg;
+        }
+
+        const data = await response.json();
+
+        // TODO add proper error handling for no results found
+        if (data.header.totalresults === 0 || !data.results) {
+            const msg = 'TBC No matching results found.';
+            throw msg;
+        }
+
+        addSearchResultsToSelectElement(data);
     }
 
     function createContentElements() {
