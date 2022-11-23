@@ -24,6 +24,8 @@
 !cookie
 !templateEngine
 !address-finder
+!account
+!govuk
 
 !package.json
 !package-lock.json
