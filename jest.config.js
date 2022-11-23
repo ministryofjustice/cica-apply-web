@@ -10,7 +10,7 @@ const config = {
 config.setupFilesAfterEnv = ['./jest.setup.js'];
 
 config.coverageThreshold = {
-    './**/*.js': {
+    './!(token)!(jwt)': {
         branches: 60,
         functions: 60,
         lines: 60,
