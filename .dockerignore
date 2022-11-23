@@ -23,6 +23,8 @@
 !session
 !cookie
 !templateEngine
+!account
+!govuk
 
 !package.json
 !package-lock.json
