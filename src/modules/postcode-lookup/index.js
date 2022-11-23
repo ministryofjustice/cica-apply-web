@@ -158,6 +158,7 @@ function createPostcodeLookup(window) {
     }
 
     return Object.freeze({
+        addSearchResultsToSelectElement,
         addressSearch,
         createContentElements,
         createPostcodeSearchElements,

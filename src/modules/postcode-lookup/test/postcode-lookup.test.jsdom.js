@@ -87,7 +87,7 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBeNull();
             });
             it('Should not add the postcode lookup when the page contains a gp address', async () => {
-                window.document.body.innerHTML = `<<fieldset class="govuk-fieldset">
+                window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading">
                 What is the GP's address?
@@ -109,7 +109,7 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBeNull();
             });
             it('Should not add the postcode lookup when the page contains a dentist address', async () => {
-                window.document.body.innerHTML = `<<fieldset class="govuk-fieldset">
+                window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading">
                 What is the dentist's address?
@@ -131,7 +131,7 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBeNull();
             });
             it('Should not add the postcode lookup when the page contains a treatment address', async () => {
-                window.document.body.innerHTML = `<<fieldset class="govuk-fieldset">
+                window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading">
                 Where did you have treatment?
@@ -193,7 +193,7 @@ describe('postcode lookup progressive enhancement', () => {
                         expect(
                             window.document.getElementById('address-search-results-dropdown')[0]
                                 .text
-                        ).toEqual('1 address found');
+                        ).toEqual('12 address found');
 
                         expect(
                             window.document.getElementById('address-search-results-dropdown')[1]
