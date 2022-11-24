@@ -169,15 +169,15 @@ describe('postcode lookup progressive enhancement', () => {
 
                     expect(
                         window.document.getElementById('address-search-results-dropdown')[1].text
-                    ).toEqual('2, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+                    ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
 
                     expect(
                         window.document.getElementById('address-search-results-dropdown')[2].text
-                    ).toEqual('BARUCH, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+                    ).toEqual('BARUFOO, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
 
                     expect(
                         window.document.getElementById('address-search-results-dropdown')[3].text
-                    ).toEqual('CHURCH HOUSE, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+                    ).toEqual('CHURCH HOUSE, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
                 });
                 it('Should return 1 results for valid postcode', async () => {
                     fetch.mockResponse(async () => {
@@ -192,7 +192,7 @@ describe('postcode lookup progressive enhancement', () => {
 
                     expect(
                         window.document.getElementById('address-search-results-dropdown')[1].text
-                    ).toEqual('2, FORT ROAD, LARNOG, PENARTH, CF64 5UL');
+                    ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
                 });
                 // TODO further analyis on Error handling
                 it('promise rejected when no results found for valid postcode', async () => {

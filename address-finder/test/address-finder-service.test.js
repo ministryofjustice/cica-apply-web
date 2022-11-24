@@ -15,7 +15,7 @@ describe('find Address by Postcode lookup', () => {
             jest.resetModules();
             // eslint-disable-next-line global-require
             const addressFinderService = require('../address-finder-service')();
-            const response = await addressFinderService.lookupPostcode('CF645UL');
+            const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(getAddressCollectionResponse);
         });
 
@@ -28,7 +28,7 @@ describe('find Address by Postcode lookup', () => {
             jest.resetModules();
             // eslint-disable-next-line global-require
             const addressFinderService = require('../address-finder-service')();
-            const response = await addressFinderService.lookupPostcode('AB125CD');
+            const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(noAddressesFoundResponse);
         });
     });
@@ -128,7 +128,7 @@ describe('find Address by Postcode lookup', () => {
             jest.resetModules();
             // eslint-disable-next-line global-require
             const addressFinderService = require('../address-finder-service')();
-            const response = await addressFinderService.lookupPostcode('CF645UL');
+            const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(apiKeyInvalidFault);
         });
     });
@@ -152,7 +152,7 @@ describe('find Address by Postcode lookup', () => {
             jest.resetModules();
             // eslint-disable-next-line global-require
             const addressFinderService = require('../address-finder-service')();
-            const response = await addressFinderService.lookupPostcode('CF645UL');
+            const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(internalServiceError);
         });
     });
