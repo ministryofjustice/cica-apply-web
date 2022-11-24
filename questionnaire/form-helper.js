@@ -53,6 +53,7 @@ function renderSection({
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
+    const showLink = showSignInLink && !loggedInUser;
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
@@ -80,7 +81,7 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
-                {% if ${showSignInLink} %}
+                {% if ${showLink} %}
                     <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
                 {% endif %}
             {% endblock %}
