@@ -1,0 +1,6 @@
+@import "../node_modules/@ministryofjustice/frontend/moj/components/header/header";
+
+.govuk-header__navigation__right{
+    @extend .govuk-header__navigation;
+    float: right;
+}
