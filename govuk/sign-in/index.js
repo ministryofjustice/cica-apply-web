@@ -15,9 +15,9 @@ function signInService() {
         );
     }
 
-    async function getIdToken(authorisationCode) {
+    async function getIdToken(options) {
         const tokenService = createTokenService();
-        return tokenService.getIdToken(authorisationCode);
+        return tokenService.getIdToken(options);
     }
 
     return Object.freeze({

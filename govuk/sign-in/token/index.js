@@ -41,8 +41,7 @@ function createTokenService() {
         return response.body;
     }
 
-    async function validateIdToken(idToken) {
-        const nonce = 'NONCE'; // TODO: ad to env vars.
+    async function validateIdToken(idToken, nonce) {
         const issuerService = createIssuerService();
         const issuer = await issuerService.identify(); // TODO: pass in issuer in function signature.
 
@@ -55,9 +54,9 @@ function createTokenService() {
         });
     }
 
-    async function getIdToken(authorisationCode) {
-        const response = await getTokenData(authorisationCode);
-        return validateIdToken(response.id_token);
+    async function getIdToken(options) {
+        const response = await getTokenData(options.authorisationCode);
+        return validateIdToken(response.id_token, options.expectedNonce);
     }
 
     return Object.freeze({

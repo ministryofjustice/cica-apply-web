@@ -2,6 +2,7 @@
 
 const express = require('express');
 const createSignInService = require('../govuk/sign-in/index');
+const createCryptoService = require('./utils/crypto/index');
 
 const router = express.Router();
 
@@ -10,16 +11,19 @@ router.get('/sign-in', async (req, res, next) => {
         // check if `req.session.userId` exits, and if so, redirect the user to the appropriate page.
 
         const signInService = createSignInService();
+        const cryptoService = createCryptoService();
         const redirectUri = `${req.protocol}://${req.get('host')}/account/signed-in`;
         const stateObject = {
             qid: req.session.questionnaireId,
             referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
+        const nonce = cryptoService.encrypt(req.session.questionnaireId);
 
         const options = {
             state: encodedState,
-            redirect_uri: redirectUri
+            redirect_uri: redirectUri,
+            nonce
         };
         const url = await signInService.getAuthorisationURI(options);
         return res.redirect(302, url);
@@ -55,8 +59,13 @@ router.get('/signed-in', async (req, res, next) => {
 
         // Get UserIdToken
         const signInService = createSignInService();
-        const authorisationCode = queryParams.code;
-        const userIdToken = await signInService.getIdToken(authorisationCode);
+        const cryptoService = createCryptoService();
+        const expectedNonce = cryptoService.encrypt(req.session.questionnaireId);
+        const options = {
+            authorisationCode: queryParams.code,
+            expectedNonce
+        };
+        const userIdToken = await signInService.getIdToken(options);
 
         // Save unique userId as system answer
         req.session.userId = userIdToken;
