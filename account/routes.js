@@ -17,6 +17,7 @@ router.get('/sign-in', async (req, res, next) => {
             referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
+
         req.session.nonce = uuidv4();
         const options = {
             state: encodedState,
