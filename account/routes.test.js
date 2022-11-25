@@ -15,6 +15,11 @@ describe('Account route service endpoint', () => {
                             getAuthorisationURI: () => 'A_VALID_URL'
                         }))
                     );
+                    jest.doMock('./utils/crypto/index', () =>
+                        jest.fn(() => ({
+                            encrypt: () => 'A_NONCE'
+                        }))
+                    );
                     // eslint-disable-next-line global-require
                     app = require('../app');
                 });
