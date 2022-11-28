@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const {v4: uuidv4} = require('uuid');
 const createSignInService = require('../govuk/sign-in/index');
 
 const router = express.Router();
@@ -16,11 +17,13 @@ router.get('/sign-in', async (req, res, next) => {
             referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
-
+        req.session.nonce = uuidv4();
         const options = {
             state: encodedState,
-            redirect_uri: redirectUri
+            redirect_uri: redirectUri,
+            nonce: req.session.nonce
         };
+
         const url = await signInService.getAuthorisationURI(options);
         return res.redirect(302, url);
     } catch (err) {
@@ -55,9 +58,10 @@ router.get('/signed-in', async (req, res, next) => {
 
         // Get UserIdToken
         const signInService = createSignInService();
-        const authorisationCode = queryParams.code;
-        const userIdToken = await signInService.getIdToken(authorisationCode);
+        const userIdToken = await signInService.getIdToken(queryParams.code, req.session.nonce);
 
+        // delete the nonce
+        req.session.nonce = undefined;
         // Save unique userId as system answer
         req.session.userId = userIdToken;
 
