@@ -7,9 +7,6 @@ function createAuthorisationService() {
         scope: 'openid',
         response_type: 'code',
         client_id: process.env.CW_GOVUK_CLIENT_ID,
-        redirect_uri: 'https://www.gov.uk/',
-        state: 'STATE',
-        nonce: 'NONCE',
         vtr: '[Cl.Cm]'
     };
 
