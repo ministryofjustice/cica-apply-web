@@ -1,6 +1,5 @@
 {% extends "template.njk" %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
-{%- from "moj/components/header/macro.njk" import mojHeader -%}
 
 {% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}
 {% block head %}
@@ -47,7 +46,7 @@
 {% endblock %}
 
 {% block header %}
-    {% if loggedInUser %}
+    {% if isAuthenticated %}
         {{govukHeader({
             serviceName: "Claim criminal injuries compensation",
             serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",

@@ -47,13 +47,12 @@ function renderSection({
     showBackLink = true,
     csrfToken,
     cspNonce,
-    loggedInUser,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema)
+    isAuthenticated,
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
-    const showLink = showSignInLink && !loggedInUser;
     return nunjucks.renderString(
         `
             {% extends "page.njk" %}
@@ -81,12 +80,12 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
-                {% if ${showLink} %}
+                {% if ${showSignInLink} %}
                     <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
                 {% endif %}
             {% endblock %}
         `,
-        {nonce: cspNonce, loggedInUser}
+        {nonce: cspNonce, isAuthenticated}
     );
 }
 
@@ -219,7 +218,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce, loggedInUser) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -246,7 +245,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, loggedInUser) {
         showBackLink,
         csrfToken,
         cspNonce,
-        loggedInUser
+        isAuthenticated
     });
 }
 
@@ -268,7 +267,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, loggedInUser) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, isAuthenticated) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -287,7 +286,7 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, l
         sectionId,
         csrfToken,
         cspNonce,
-        loggedInUser
+        isAuthenticated
     });
 }
 

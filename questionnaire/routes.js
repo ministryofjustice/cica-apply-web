@@ -59,12 +59,12 @@ router
                     });
                 }
             }
-            const loggedInUser = !!req.session.userId;
+            const isAuthenticated = !!req.session.userId;
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
                 res.locals.nonce,
-                loggedInUser
+                isAuthenticated
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 req.session.reset();
@@ -135,13 +135,13 @@ router
 
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
-            const loggedInUser = !!req.session.userId;
+            const isAuthenticated = !!req.session.userId;
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
                 req.csrfToken(),
                 res.locals.nonce,
-                loggedInUser
+                isAuthenticated
             );
             return res.send(html);
         } catch (err) {
