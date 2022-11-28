@@ -33,7 +33,8 @@ function renderSection({
     showBackLink = true,
     csrfToken,
     cspNonce,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema)
+    isAuthenticated,
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
@@ -70,7 +71,7 @@ function renderSection({
                 {% endif %}
             {% endblock %}
         `,
-        {nonce: cspNonce}
+        {nonce: cspNonce, isAuthenticated}
     );
 }
 
@@ -203,7 +204,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -229,7 +230,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce) {
         sectionId,
         showBackLink,
         csrfToken,
-        cspNonce
+        cspNonce,
+        isAuthenticated
     });
 }
 
@@ -251,7 +253,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, isAuthenticated) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -269,7 +271,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
         backTarget: backLink,
         sectionId,
         csrfToken,
-        cspNonce
+        cspNonce,
+        isAuthenticated
     });
 }
 
