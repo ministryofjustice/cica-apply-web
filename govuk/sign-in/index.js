@@ -20,9 +20,16 @@ function signInService() {
         return tokenService.getIdToken(authToken, nonce);
     }
 
+    async function getLogoutUrl() {
+        const issuerService = createIssuerService();
+        const issuer = await issuerService.identify();
+        return issuer.end_session_endpoint;
+    }
+
     return Object.freeze({
         getAuthorisationURI,
-        getIdToken
+        getIdToken,
+        getLogoutUrl
     });
 }
 
