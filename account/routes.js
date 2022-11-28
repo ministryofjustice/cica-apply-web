@@ -17,6 +17,7 @@ router.get('/sign-in', async (req, res, next) => {
             referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
+
         req.session.nonce = uuidv4();
         const options = {
             state: encodedState,
@@ -67,6 +68,18 @@ router.get('/signed-in', async (req, res, next) => {
 
         // Redirect user back to current progress entry
         return res.redirect(302, stateObject.referrer);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
+router.get('/sign-out', async (req, res, next) => {
+    try {
+        const signInService = createSignInService();
+        const url = await signInService.getLogoutUrl();
+        req.session.userId = undefined;
+        return res.redirect(302, url);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
         return next(err);
