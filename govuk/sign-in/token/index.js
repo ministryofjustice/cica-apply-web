@@ -54,9 +54,9 @@ function createTokenService() {
         });
     }
 
-    async function getIdToken(options) {
-        const response = await getTokenData(options.authorisationCode);
-        return validateIdToken(response.id_token, options.expectedNonce);
+    async function getIdToken(authToken, nonce) {
+        const response = await getTokenData(authToken);
+        return validateIdToken(response.id_token, nonce);
     }
 
     return Object.freeze({

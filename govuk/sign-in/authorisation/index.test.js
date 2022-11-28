@@ -6,9 +6,14 @@ describe('authorisation service', () => {
     it('should build a correctly formed URL for authorisation', () => {
         const authorisationService = createAuthorisationService();
         const host = 'http://www.this_is_a_host.com/';
-        const expected = `http://www.this_is_a_host.com/?scope=openid&response_type=code&client_id=${process.env.CW_GOVUK_CLIENT_ID}&redirect_uri=https%3A%2F%2Fwww.gov.uk%2F&state=STATE&nonce=NONCE&vtr=%5BCl.Cm%5D`;
+        const opts = {
+            redirect_uri: 'https://www.gov.uk/',
+            state: 'STATE',
+            nonce: 'NONCE'
+        };
+        const expected = `http://www.this_is_a_host.com/?scope=openid&response_type=code&client_id=${process.env.CW_GOVUK_CLIENT_ID}&vtr=%5BCl.Cm%5D&redirect_uri=https%3A%2F%2Fwww.gov.uk%2F&state=STATE&nonce=NONCE`;
 
-        const actual = authorisationService.getAuthorisationURI(host);
+        const actual = authorisationService.getAuthorisationURI(host, opts);
 
         expect(actual).toEqual(expected);
     });
@@ -26,7 +31,7 @@ describe('authorisation service', () => {
             vtr: '[untrusted]'
         };
         const expected =
-            'http://www.this_is_a_host.com/?scope=closedid&response_type=chaos&client_id=iAmGuessable&redirect_uri=http%3A%2F%2Fwww.redirect.com&state=STATELESS&nonce=ECNON&vtr=%5Buntrusted%5D';
+            'http://www.this_is_a_host.com/?scope=closedid&response_type=chaos&client_id=iAmGuessable&vtr=%5Buntrusted%5D&redirect_uri=http%3A%2F%2Fwww.redirect.com&state=STATELESS&nonce=ECNON';
 
         const actual = authorisationService.getAuthorisationURI(host, options);
 

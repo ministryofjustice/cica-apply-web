@@ -17,9 +17,6 @@ router.get('/sign-in', async (req, res, next) => {
             referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
-        if (req.session.nonce) {
-            req.session.nonce = undefined;
-        }
         req.session.nonce = uuidv4();
         const options = {
             state: encodedState,
@@ -61,11 +58,7 @@ router.get('/signed-in', async (req, res, next) => {
 
         // Get UserIdToken
         const signInService = createSignInService();
-        const options = {
-            authorisationCode: queryParams.code,
-            expectedNonce: req.session.nonce
-        };
-        const userIdToken = await signInService.getIdToken(options);
+        const userIdToken = await signInService.getIdToken(queryParams.code, req.session.nonce);
 
         // delete the nonce
         req.session.nonce = undefined;
