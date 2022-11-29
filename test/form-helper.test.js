@@ -168,7 +168,7 @@ describe('form-helper functions', () => {
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const showSignInLink = shouldShowSignInLink(sectionId, uiSchema);
-            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+            const expected = '<a href="/account/sign-in" class="govuk-link">Save and complete later</a>'.replace(
                 /\s+/g,
                 ''
             );
@@ -198,7 +198,7 @@ describe('form-helper functions', () => {
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const showSignInLink = shouldShowSignInLink(sectionId, uiSchema);
-            const expected = '<a href="/account/sign-in" class="govuk-link">Sign in and continue</a>'.replace(
+            const expected = '<a href="/account/sign-in" class="govuk-link">Save and complete later</a>'.replace(
                 /\s+/g,
                 ''
             );

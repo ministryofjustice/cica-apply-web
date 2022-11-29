@@ -81,7 +81,7 @@ function renderSection({
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
                 {% if ${showSignInLink} %}
-                    <a href="/account/sign-in" class="govuk-link">Sign in and continue</a>
+                    <a href="/account/sign-in" class="govuk-link">Save and complete later</a>
                 {% endif %}
             {% endblock %}
         `,
