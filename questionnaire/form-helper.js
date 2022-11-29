@@ -6,6 +6,7 @@ const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
 
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
+const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 
 nunjucks.configure(
     [
@@ -22,14 +23,6 @@ nunjucks.configure(
         autoescape: true
     }
 );
-
-function getButtonText(sectionId) {
-    return sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.buttonText
-        ? uiSchema[sectionId].options.buttonText
-        : 'Continue';
-}
 
 function getSectionContext(sectionId) {
     return (
@@ -48,10 +41,10 @@ function renderSection({
     csrfToken,
     cspNonce,
     isAuthenticated,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated),
+    submitButtonText = getFormSubmitButtonText(sectionId, uiSchema, isAuthenticated)
 }) {
     const showButton = !isFinal;
-    const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return nunjucks.renderString(
         `
@@ -74,7 +67,7 @@ function renderSection({
                         ${transformation.content}
                     {% if ${showButton} %}
                         {{ govukButton({
-                            text: "${buttonTitle}",
+                            text: "${submitButtonText}",
                             preventDoubleClick: true
                         }) }}
                     {% endif %}
@@ -291,7 +284,7 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, i
 }
 
 module.exports = {
-    getButtonText,
+    getFormSubmitButtonText,
     renderSection,
     removeSectionIdPrefix,
     processRequest,
