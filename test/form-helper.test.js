@@ -449,7 +449,7 @@ describe('form-helper functions', () => {
             const sectionName = 'p-applicant-declaration';
             const expected = 'Agree and submit';
 
-            const actual = formHelper.getButtonText(sectionName);
+            const actual = formHelper.getFormSubmitButtonText(sectionName, uiSchema, false);
 
             expect(actual).toMatch(expected);
         });
@@ -458,7 +458,7 @@ describe('form-helper functions', () => {
             const sectionName = 'p--check-your-answers';
             const expected = 'Continue';
 
-            const actual = formHelper.getButtonText(sectionName);
+            const actual = formHelper.getFormSubmitButtonText(sectionName, uiSchema, false);
 
             expect(actual).toMatch(expected);
         });
