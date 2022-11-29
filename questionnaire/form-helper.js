@@ -8,6 +8,7 @@ const createTemplateEngineService = require('../templateEngine');
 const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
+const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
@@ -34,10 +35,10 @@ function renderSection({
     csrfToken,
     cspNonce,
     isAuthenticated,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated),
+    submitButtonText = getFormSubmitButtonText(sectionId, uiSchema, isAuthenticated)
 }) {
     const showButton = !isFinal;
-    const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return render(
         `
@@ -60,7 +61,7 @@ function renderSection({
                         ${transformation.content}
                     {% if ${showButton} %}
                         {{ govukButton({
-                            text: "${buttonTitle}",
+                            text: "${submitButtonText}",
                             preventDoubleClick: true
                         }) }}
                     {% endif %}
@@ -289,7 +290,7 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, i
 }
 
 module.exports = {
-    getButtonText,
+    getFormSubmitButtonText,
     renderSection,
     removeSectionIdPrefix,
     processRequest,
