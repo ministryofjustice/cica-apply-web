@@ -1,6 +1,6 @@
 'use strict';
 
-const service = require('../questionnaire/request-service')();
+const {get} = require('../questionnaire/request-service')();
 
 const addressFinderEndpoint = 'https://api.os.uk/search/places/v1/postcode';
 const apikey = `${process.env.CW_OS_PLACES_API_KEY}`;
@@ -13,7 +13,7 @@ function addressFinderService() {
                 Key: apikey
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
     return Object.freeze({
         lookupPostcode
