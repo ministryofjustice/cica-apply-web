@@ -14,10 +14,12 @@ describe('Live Chat', () => {
 
     beforeEach(() => {
         jest.resetModules();
+        jest.spyOn(Date, 'now').mockImplementation(() => 1631538356000);
         process.env = {...OLD_ENV};
     });
 
     afterEach(() => {
+        jest.clearAllMocks();
         process.env = OLD_ENV;
     });
 
@@ -82,7 +84,7 @@ describe('Live Chat', () => {
         });
 
         describe('Maintenance message content', () => {
-            it('Should display default maintenance banner content if env var is nor present', async () => {
+            it('Should display default maintenance banner content if env var is not present', async () => {
                 process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED = 'true';
                 delete process.env.CW_LIVECHAT_MAINTENANCE_MESSAGE;
                 startApp();

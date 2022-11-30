@@ -30,7 +30,7 @@ function createLiveChatHelper() {
     }
 
     function isBankHoliday() {
-        return bankHolidays.events.some(x => moment(x.date).isSame(new Date(), 'day'));
+        return bankHolidays.events.some(x => moment(x.date).isSame(new Date(Date.now()), 'day'));
     }
 
     function isLiveChatActive(startTimes, endTimes) {
@@ -39,7 +39,7 @@ function createLiveChatHelper() {
         }
         const startTimesArray = getOperationalTimesOfDayFromString(startTimes);
         const endTimesArray = getOperationalTimesOfDayFromString(endTimes);
-        const today = new Date();
+        const today = new Date(Date.now());
         const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6.
 
         if (startTimesArray[dayOfWeek] !== 'false') {
