@@ -117,7 +117,7 @@ function createPostcodeLookup(window) {
         const addressCounty = window.document.querySelector('[id *= "county"]');
         addressCounty.value = dpaCounty || '';
 
-        const addressPostcode = window.document.querySelector('[id *= "-postcode"]');
+        const addressPostcode = window.document.querySelector('[id *= "postcode"]');
         addressPostcode.value = dpaPostcode;
     }
 
@@ -153,9 +153,9 @@ function createPostcodeLookup(window) {
     }
 
     async function addressSearch() {
-        const postcodeInput = window.document.getElementById('postcode-search-input').value;
+        const addressSearchInput = window.document.getElementById('address-search-input').value;
 
-        const response = await fetch(`/address-finder/postcode?postcode=${postcodeInput}`);
+        const response = await fetch(`/address-finder/postcode?postcode=${addressSearchInput}`);
         if (!response.ok) {
             // throw new Error(`HTTP error! status: ${response.status}`);
             // TODO proper error handling
@@ -189,29 +189,29 @@ function createPostcodeLookup(window) {
     }
 
     function createPostcodeSearchElements() {
-        const postcodeSearchLabelContent = window.document.createTextNode('Postcode');
+        const addressSearchLabelContent = window.document.createTextNode('Postcode');
 
-        const postcodeSearchLabel = window.document.createElement('label');
-        postcodeSearchLabel.appendChild(postcodeSearchLabelContent);
-        postcodeSearchLabel.setAttribute('class', 'govuk-label');
-        postcodeSearchLabel.setAttribute('for', 'postcode-search-input');
+        const addressSearchLabel = window.document.createElement('label');
+        addressSearchLabel.appendChild(addressSearchLabelContent);
+        addressSearchLabel.setAttribute('class', 'govuk-label');
+        addressSearchLabel.setAttribute('for', 'address-search-input');
 
-        const postcodeSearchInput = window.document.createElement('input');
-        postcodeSearchInput.setAttribute('class', 'govuk-input govuk-input--width-10');
-        postcodeSearchInput.setAttribute('id', 'postcode-search-input');
-        postcodeSearchInput.setAttribute('name', 'postcode-search-input');
-        postcodeSearchInput.setAttribute('type', 'search');
-        postcodeSearchInput.setAttribute('autocomplete', 'postal-code');
+        const addressSearchInput = window.document.createElement('input');
+        addressSearchInput.setAttribute('class', 'govuk-input govuk-input--width-10');
+        addressSearchInput.setAttribute('id', 'address-search-input');
+        addressSearchInput.setAttribute('name', 'address-search-input');
+        addressSearchInput.setAttribute('type', 'search');
+        addressSearchInput.setAttribute('autocomplete', 'postal-code');
 
-        const postcodeSearchDiv = window.document.createElement('div');
-        postcodeSearchDiv.setAttribute('id', 'postcode-search');
-        postcodeSearchDiv.setAttribute('class', 'govuk-form-group');
-        postcodeSearchDiv.appendChild(postcodeSearchLabel);
-        postcodeSearchDiv.appendChild(postcodeSearchInput);
+        const addressSearchDiv = window.document.createElement('div');
+        addressSearchDiv.setAttribute('id', 'address-search');
+        addressSearchDiv.setAttribute('class', 'govuk-form-group');
+        addressSearchDiv.appendChild(addressSearchLabel);
+        addressSearchDiv.appendChild(addressSearchInput);
 
         window.document
             .getElementById('fill-out-the-fields-manually-hint')
-            .insertAdjacentElement('afterend', postcodeSearchDiv);
+            .insertAdjacentElement('afterend', addressSearchDiv);
     }
 
     async function createFindAddressButton() {
@@ -222,7 +222,7 @@ function createPostcodeLookup(window) {
         searchButton.setAttribute('type', 'button');
         searchButton.appendChild(window.document.createTextNode('Find Address'));
         window.document
-            .getElementById('postcode-search')
+            .getElementById('address-search')
             .insertAdjacentElement('afterend', searchButton);
 
         searchButton.addEventListener('click', async () => {
