@@ -1,27 +1,11 @@
 'use strict';
 
-const nunjucks = require('nunjucks');
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
 const sectionList = require('./non-complex-sexual-assault-id-mapper');
+const createNunjucksService = require('../utils/nunjucks/index');
 
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
-
-nunjucks.configure(
-    [
-        'node_modules/@ministryofjustice/frontend/',
-        'components/',
-        'node_modules/govuk-frontend/govuk/',
-        'node_modules/govuk-frontend/govuk/components/',
-        'index/',
-        'questionnaire/',
-        'page/',
-        'partials/'
-    ],
-    {
-        autoescape: true
-    }
-);
 
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
@@ -50,10 +34,11 @@ function renderSection({
     isAuthenticated,
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
 }) {
+    const nunjucksService = createNunjucksService();
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
-    return nunjucks.renderString(
+    return nunjucksService.renderNunjucksString(
         `
             {% extends "page.njk" %}
             {% block pageTitle %}

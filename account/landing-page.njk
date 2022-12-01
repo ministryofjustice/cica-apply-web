@@ -1,0 +1,18 @@
+{% extends "page.njk" %}
+
+{% block pageTitle %}Progress saved - {{ super() }}{% endblock %}
+
+{% block innerContent %}
+
+    <h1 class="govuk-heading-xl">Application progress saved</h1>
+
+    <form id="cookie-preferences" method="get" action={{ nextPage }}>
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <h1 class="govuk-heading-xl">We'll keep this application until we don't</p>
+                <p class="govuk-body">If you do not submit this application before this date, it will expire and you'll need to start a new application</p>
+            </fieldset>
+        </div>
+        <input type="submit" class="govuk-button" id="save-preferences" value="Save changes" />
+    </form>
+{% endblock %}

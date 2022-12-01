@@ -67,6 +67,8 @@ router.get('/signed-in', async (req, res, next) => {
         req.session.userId = userIdToken;
 
         // Redirect user back to current progress entry
+        const nunjucksService = createNunjucksService();
+        const html = nunjucksService.renderNunjucksString(landingPageString, {})
         return res.redirect(302, stateObject.referrer);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
