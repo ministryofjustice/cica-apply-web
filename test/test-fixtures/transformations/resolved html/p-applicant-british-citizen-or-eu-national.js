@@ -540,7 +540,7 @@ const html = `<!DOCTYPE html>
 
 <script nonce="somenonce">
 window.CICA = {
-  SERVICE_URL: '',
+  SERVICE_URL: 'http://www.cw.com',
   ANALYTICS_TRACKING_ID: ''
 };
 </script>
