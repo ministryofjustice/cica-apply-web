@@ -67,7 +67,7 @@ describe('postcode lookup progressive enhancement', () => {
     });
     describe('clicking postcode lookup find address button', () => {
         describe('200', () => {
-            it('Should return all results for valid postcode', async () => {
+            it('Should return all results for valid postcode and set focus to the results dropdown', async () => {
                 fetch.mockResponse(async () => {
                     return JSON.stringify(addressSearchThreeAddressesFoundResponse);
                 });
@@ -78,6 +78,7 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(
                     window.document.getElementById('address-search-results-dropdown')[0].text
                 ).toEqual('8 addresses found');
+                expect(window.document.activeElement.id).toEqual('address-search-results-dropdown');
             });
             it('Should return 1 results for valid postcode', async () => {
                 fetch.mockResponse(async () => {
