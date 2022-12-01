@@ -10,14 +10,6 @@ const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 
-function getButtonText(sectionId) {
-    return sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.buttonText
-        ? uiSchema[sectionId].options.buttonText
-        : 'Continue';
-}
-
 function getSectionContext(sectionId) {
     return (
         sectionId in uiSchema &&
