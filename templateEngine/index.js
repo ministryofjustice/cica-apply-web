@@ -29,7 +29,8 @@ function createTemplateEngineService(app) {
                     `index/`,
                     `questionnaire/`,
                     `page/`,
-                    `partials/`
+                    `partials/`,
+                    `account/partials`
                 ],
                 configObject
             )
