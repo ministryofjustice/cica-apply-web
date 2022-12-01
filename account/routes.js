@@ -4,6 +4,8 @@ const express = require('express');
 const {v4: uuidv4} = require('uuid');
 const createSignInService = require('../govuk/sign-in/index');
 
+const {getSignedInURI} = require('./utils/getActionURIs');
+
 const router = express.Router();
 
 router.get('/sign-in', async (req, res, next) => {
@@ -11,10 +13,10 @@ router.get('/sign-in', async (req, res, next) => {
         // check if `req.session.userId` exits, and if so, redirect the user to the appropriate page.
 
         const signInService = createSignInService();
-        const redirectUri = `${req.protocol}://${req.get('host')}/account/signed-in`;
+        const redirectUri = getSignedInURI();
         const stateObject = {
             qid: req.session.questionnaireId,
-            referrer: req.get('Referrer') || `${req.protocol}://${req.get('host')}/apply/`
+            referrer: req.get('Referrer') || '/apply/'
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
 
