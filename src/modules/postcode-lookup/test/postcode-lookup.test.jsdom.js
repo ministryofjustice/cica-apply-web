@@ -435,5 +435,37 @@ describe('postcode lookup progressive enhancement', () => {
                 );
             });
         });
+        describe('selection contains address header', () => {
+            it('does nothing, no state is changed, no errors are thrown', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                });
+                await postcodeLookup.init();
+                await postcodeLookup.addressSearch();
+
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+
+                searchResultsDropDown.value = '8 addresses found';
+                searchResultsDropDown.dispatchEvent(new Event('change'));
+
+                expect(searchResultsDropDown.value).toEqual('8 addresses found');
+
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street').value
+                ).toBe('');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-2').value
+                ).toBe('');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-3').value
+                ).toBe('');
+                expect(window.document.getElementById('q-applicant-town-or-city').value).toBe('');
+                expect(window.document.getElementById('q-applicant-county').value).toBe('');
+                expect(window.document.getElementById('q-applicant-postcode').value).toBe('');
+            });
+        });
     });
 });

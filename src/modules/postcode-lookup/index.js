@@ -7,8 +7,24 @@ function createPostcodeLookup(window) {
     // eslint-disable-next-line no-unused-vars
     let tmpAddressSearchResultsJson = {};
 
+    function isSelectedValueInteger(str) {
+        if (typeof str !== 'string') {
+            return false;
+        }
+
+        const num = Number(str);
+        if (Number.isInteger(num)) {
+            return true;
+        }
+
+        return false;
+    }
+
     function mapSelectionToAddressFormInputs() {
         const selectedValue = this.options[this.selectedIndex].value;
+        if (!isSelectedValueInteger(selectedValue)) {
+            return;
+        }
         const dataset = 'DPA';
         const result = tmpAddressSearchResultsJson[selectedValue][dataset];
 
@@ -258,6 +274,7 @@ function createPostcodeLookup(window) {
     }
 
     return Object.freeze({
+        isSelectedValueInteger,
         mapSelectionToAddressFormInputs,
         addSearchResultsToSelectElement,
         addressSearch,
