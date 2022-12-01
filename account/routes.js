@@ -3,6 +3,7 @@
 const express = require('express');
 const {v4: uuidv4} = require('uuid');
 const createSignInService = require('../govuk/sign-in/index');
+const createTemplateEngineService = require('../templateEngine');
 
 const router = express.Router();
 
@@ -66,8 +67,11 @@ router.get('/signed-in', async (req, res, next) => {
         // Save unique userId as system answer
         req.session.userId = userIdToken;
 
-        // Redirect user back to current progress entry
-        return res.redirect(302, stateObject.referrer);
+        // Send the user to the landing page
+        const templateEngineService = createTemplateEngineService();
+        const {render} = templateEngineService;
+        const html = render('landing-page.njk', {nextPageUrl: stateObject.referrer});
+        return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
         return next(err);
