@@ -150,6 +150,7 @@ function createPostcodeLookup(window) {
         // Display the hidden search results div
         const searchResultsDiv = window.document.getElementById('address-search-results');
         searchResultsDiv.style.display = 'block';
+        selectElementResults.focus();
     }
 
     async function addressSearch() {
