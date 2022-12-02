@@ -1,4 +1,4 @@
-const victimAddressHtml = `<fieldset class="govuk-fieldset">
+const victimAddressHtml = `<form method="post" autocomplete="off"><fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
 <h1 class="govuk-fieldset__heading">
 Your address
@@ -52,9 +52,9 @@ Postcode (optional)
 <input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode"
 type="text" autocomplete="postal-code">
 </div>
-</fieldset>`;
+</fieldset></form>`;
 
-const postcodeLookupHtmlEnhanced = `<fieldset class="govuk-fieldset">
+const postcodeLookupHtmlEnhanced = `<form method="post" autocomplete="off"><fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
 <h1 class="govuk-fieldset__heading">
 Your address
@@ -103,6 +103,9 @@ Postcode (optional)
 <input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
 </div>
 
-</fieldset>`;
+</fieldset></form>`;
 
-module.exports = {victimAddressHtml, postcodeLookupHtmlEnhanced};
+module.exports = {
+    victimAddressHtml,
+    postcodeLookupHtmlEnhanced
+};
