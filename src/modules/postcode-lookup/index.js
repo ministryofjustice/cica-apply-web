@@ -276,14 +276,7 @@ function createPostcodeLookup(window) {
     }
 
     return Object.freeze({
-        isSelectedValueInteger,
-        mapSelectionToAddressFormInputs,
-        addSearchResultsToSelectElement,
-        addressSearch,
-        createContentElements,
-        createPostcodeSearchElements,
-        createFindAddressButton,
-        createSearchResultsElements,
+        addressSearch, // TODO remove on next iteration
         init
     });
 }
