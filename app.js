@@ -140,7 +140,7 @@ app.use(async (req, res, next) => {
 
 // Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
 // eslint-disable-next-line consistent-return
-app.use(['/apply', '/download', '/address-finder'], async (req, res, next) => {
+app.use(['/apply', '/download'], async (req, res, next) => {
     if (!req.session.questionnaireId) {
         // no: set it and redirect.
         try {
