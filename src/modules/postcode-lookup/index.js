@@ -8,10 +8,6 @@ function createPostcodeLookup(window) {
     let tmpAddressSearchResultsJson = {};
 
     function isSelectedValueInteger(str) {
-        if (typeof str !== 'string') {
-            return false;
-        }
-
         const num = Number(str);
         if (Number.isInteger(num)) {
             return true;
@@ -48,9 +44,9 @@ function createPostcodeLookup(window) {
         const dpaDependentThoroughfareName = result.DEPENDENT_THOROUGHFARE_NAME || '';
         const dpaThoroughfareName = result.THOROUGHFARE_NAME || '';
         const dpaDependentLocality = result.DEPENDENT_LOCALITY || '';
-        const dpaPostTown = result.POST_TOWN || '';
-        const dpaPostcode = result.POSTCODE || '';
-        const dpaCounty = result.LOCAL_CUSTODIAN_CODE_DESCRIPTION || '';
+        const dpaPostTown = result.POST_TOWN;
+        const dpaPostcode = result.POSTCODE;
+        const dpaCounty = result.LOCAL_CUSTODIAN_CODE_DESCRIPTION;
 
         // Add a "PO BOX " prefix to the PO Box Number integer.
         if (dpaPOBoxNumber !== '') {
@@ -115,7 +111,7 @@ function createPostcodeLookup(window) {
         addressTown.value = dpaPostTown;
 
         const addressCounty = window.document.querySelector('[id *= "county"]');
-        addressCounty.value = dpaCounty || '';
+        addressCounty.value = dpaCounty;
 
         const addressPostcode = window.document.querySelector('[id *= "postcode"]');
         addressPostcode.value = dpaPostcode;
@@ -204,6 +200,13 @@ function createPostcodeLookup(window) {
         addressSearchInput.setAttribute('type', 'search');
         addressSearchInput.setAttribute('autocomplete', 'postal-code');
 
+        addressSearchInput.addEventListener('keypress', function(event) {
+            if (event.code === 'Enter') {
+                event.preventDefault();
+                window.document.getElementById('search-button').click();
+            }
+        });
+
         const addressSearchDiv = window.document.createElement('div');
         addressSearchDiv.setAttribute('id', 'address-search');
         addressSearchDiv.setAttribute('class', 'govuk-form-group');
@@ -215,7 +218,7 @@ function createPostcodeLookup(window) {
             .insertAdjacentElement('afterend', addressSearchDiv);
     }
 
-    async function createFindAddressButton() {
+    function createFindAddressButton() {
         const searchButton = window.document.createElement('button');
         searchButton.setAttribute('id', 'search-button');
         searchButton.setAttribute('class', 'govuk-button govuk-button--secondary');
@@ -226,9 +229,7 @@ function createPostcodeLookup(window) {
             .getElementById('address-search')
             .insertAdjacentElement('afterend', searchButton);
 
-        searchButton.addEventListener('click', async () => {
-            await addressSearch();
-        });
+        searchButton.addEventListener('click', addressSearch);
     }
 
     function createSearchResultsElements() {
@@ -263,14 +264,14 @@ function createPostcodeLookup(window) {
         selectElementResults = window.document.getElementById('address-search-results-dropdown');
     }
 
-    async function init() {
+    function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
         if (window.document.querySelector('[id *= "q-applicant-building-and-street"]') == null) {
             return;
         }
         createContentElements();
         createPostcodeSearchElements();
-        await createFindAddressButton();
+        createFindAddressButton();
         createSearchResultsElements();
     }
 

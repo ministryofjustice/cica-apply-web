@@ -1,4 +1,4 @@
-const addressSearchThreeAddressesFoundResponse = {
+const addressSearchCollectionResponse = {
     header: {
         uri: 'https://api.os.uk/search/places/v1/postcode?postcode=FO123BA',
         query: 'postcode=FO123BA',
@@ -305,6 +305,76 @@ const addressSearchThreeAddressesFoundResponse = {
                 MATCH_DESCRIPTION: 'EXACT',
                 DELIVERY_POINT_SUFFIX: '1Q'
             }
+        },
+        {
+            DPA: {
+                UPRN: '906700299841',
+                UDPRN: '56339507',
+                ADDRESS: '41, NITHSDALE DRIVE, GLASGOW, G41 2PT',
+                BUILDING_NUMBER: '41',
+                THOROUGHFARE_NAME: 'NITHSDALE DRIVE',
+                POST_TOWN: 'GLASGOW',
+                POSTCODE: 'G41 2PT',
+                RPC: '2',
+                X_COORDINATE: 257977.0,
+                Y_COORDINATE: 662847.0,
+                STATUS: 'APPROVED',
+                LOGICAL_STATUS_CODE: '1',
+                CLASSIFICATION_CODE: 'RD06',
+                CLASSIFICATION_CODE_DESCRIPTION:
+                    'Self Contained Flat (Includes Maisonette / Apartment)',
+                LOCAL_CUSTODIAN_CODE: 9067,
+                LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'CITY OF GLASGOW',
+                COUNTRY_CODE: 'S',
+                COUNTRY_CODE_DESCRIPTION: 'This record is within Scotland',
+                POSTAL_ADDRESS_CODE: 'D',
+                POSTAL_ADDRESS_CODE_DESCRIPTION: 'A record which is linked to PAF',
+                BLPU_STATE_CODE: '2',
+                BLPU_STATE_CODE_DESCRIPTION: 'In use',
+                TOPOGRAPHY_LAYER_TOID: 'osgb1000040387524',
+                LAST_UPDATE_DATE: '27/01/2022',
+                ENTRY_DATE: '26/01/2004',
+                BLPU_STATE_DATE: '23/11/2021',
+                LANGUAGE: 'EN',
+                MATCH: 1.0,
+                MATCH_DESCRIPTION: 'EXACT',
+                DELIVERY_POINT_SUFFIX: '2W'
+            }
+        },
+        {
+            DPA: {
+                UPRN: '906700299841',
+                UDPRN: '56339507',
+                ADDRESS: '1, FOOBAR DRIVE, FOOTOWN, A12 2BC',
+                BUILDING_NUMBER: '1',
+                THOROUGHFARE_NAME: 'FOOBAR DRIVE',
+                POST_TOWN: 'FOOTOWN',
+                POSTCODE: 'A12 2BC',
+                RPC: '2',
+                X_COORDINATE: 257977.0,
+                Y_COORDINATE: 662847.0,
+                STATUS: 'APPROVED',
+                LOGICAL_STATUS_CODE: '1',
+                CLASSIFICATION_CODE: 'RD06',
+                CLASSIFICATION_CODE_DESCRIPTION:
+                    'Self Contained Flat (Includes Maisonette / Apartment)',
+                LOCAL_CUSTODIAN_CODE: 9067,
+                LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'CITY OF FOOBAR',
+                COUNTRY_CODE: 'S',
+                COUNTRY_CODE_DESCRIPTION: 'This record is within Scotland',
+                POSTAL_ADDRESS_CODE: 'D',
+                POSTAL_ADDRESS_CODE_DESCRIPTION: 'A record which is linked to PAF',
+                BLPU_STATE_CODE: '2',
+                BLPU_STATE_CODE_DESCRIPTION: 'In use',
+                TOPOGRAPHY_LAYER_TOID: 'osgb1000040387524',
+                LAST_UPDATE_DATE: '27/01/2022',
+                ENTRY_DATE: '26/01/2004',
+                BLPU_STATE_DATE: '23/11/2021',
+                LANGUAGE: 'EN',
+                MATCH: 1.0,
+                MATCH_DESCRIPTION: 'EXACT',
+                DELIVERY_POINT_SUFFIX: '2W'
+            }
         }
     ]
 };
@@ -363,4 +433,4 @@ const addressSearchOneAddressFoundResponse = {
     ]
 };
 
-export {addressSearchThreeAddressesFoundResponse, addressSearchOneAddressFoundResponse};
+export {addressSearchCollectionResponse, addressSearchOneAddressFoundResponse};
