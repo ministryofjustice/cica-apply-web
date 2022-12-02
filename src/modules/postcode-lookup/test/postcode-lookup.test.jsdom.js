@@ -1,12 +1,21 @@
+import {setTimeout} from 'timers/promises';
 import createPostcodeLookup from '../index';
 import {victimAddressHtml, postcodeLookupHtmlEnhanced} from './fixtures/postcode-lookup-html';
 import {
-    addressSearchThreeAddressesFoundResponse,
+    addressSearchCollectionResponse,
     addressSearchOneAddressFoundResponse
 } from './fixtures/validAddressCollectionResponse';
 
 /* eslint-disable import/no-extraneous-dependencies */
 require('jest-fetch-mock').enableMocks();
+
+function addressSelectionIndexFinder(selectionText) {
+    const elementToSelect = Array.from(
+        window.document.querySelectorAll('#address-search-results-dropdown option')
+    ).find(option => option.text === selectionText);
+
+    return +elementToSelect.value + 1;
+}
 
 describe('postcode lookup progressive enhancement', () => {
     let postcodeLookup;
@@ -18,7 +27,7 @@ describe('postcode lookup progressive enhancement', () => {
     describe('adding postcode elements to a page', () => {
         describe('on page load', () => {
             it('Should add the postcode lookup html when the page contains victim building and street question', async () => {
-                await postcodeLookup.init();
+                postcodeLookup.init();
                 expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
                     postcodeLookupHtmlEnhanced.replace(/[\n\r]/g, '')
                 );
@@ -58,7 +67,7 @@ describe('postcode lookup progressive enhancement', () => {
                 </div>
                 </fieldset>`;
                 postcodeLookup = createPostcodeLookup(window);
-                await postcodeLookup.init();
+                postcodeLookup.init();
                 expect(
                     window.document.getElementById('fill-out-the-fields-manually-hint')
                 ).toBeNull();
@@ -69,11 +78,12 @@ describe('postcode lookup progressive enhancement', () => {
         describe('200', () => {
             it('Should return all results for valid postcode and set focus to the results dropdown', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
 
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 expect(
                     window.document.getElementById('address-search-results-dropdown')[0].text
@@ -85,8 +95,9 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchOneAddressFoundResponse);
                 });
 
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
                 expect(
                     window.document.getElementById('address-search-results-dropdown')[0].text
                 ).toEqual('1 address found');
@@ -115,7 +126,7 @@ describe('postcode lookup progressive enhancement', () => {
                     });
                 });
 
-                await postcodeLookup.init();
+                postcodeLookup.init();
                 expect.assertions(1);
                 await expect(postcodeLookup.addressSearch()).rejects.toEqual(
                     'TBC No matching results found.'
@@ -129,7 +140,7 @@ describe('postcode lookup progressive enhancement', () => {
                     headers: {'content-type': 'application/json'}
                 });
 
-                await postcodeLookup.init();
+                postcodeLookup.init();
                 expect.assertions(1);
                 await expect(postcodeLookup.addressSearch()).rejects.toEqual(
                     'TBC API Error Status error handling.'
@@ -137,23 +148,77 @@ describe('postcode lookup progressive enhancement', () => {
             });
         });
     });
-    describe('selecting an option from the search results drop down', () => {
-        describe('selection contains sub building name', () => {
-            it('maps to correct fields when building name contains number and letter suffix', async () => {
+    describe('pressing a key on postcode lookup find input field', () => {
+        describe('Pressing enter for valid postcode', () => {
+            it('Should return all results for valid postcode and set focus to the results dropdown', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+
+                postcodeLookup.init();
+
+                // eslint-disable-next-line
+                const event = new KeyboardEvent('keypress', {
+                    code: 'Enter'
+                });
+
+                window.document.getElementById('address-search-input').dispatchEvent(event);
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
+            });
+        });
+        describe('Pressing any other key for valid postcode', () => {
+            it('Should do nothing', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchCollectionResponse);
+                });
 
-                searchResultsDropDown.selectedIndex = 1;
-                searchResultsDropDown.dispatchEvent(new Event('change'));
-                expect(searchResultsDropDown[1].text).toEqual(
+                postcodeLookup.init();
+
+                // eslint-disable-next-line
+                const event = new KeyboardEvent('keypress', {
+                    code: 'SomethingElse'
+                });
+
+                window.document.getElementById('address-search-input').dispatchEvent(event);
+                await setTimeout(0);
+
+                const searchResultsDiv = window.document.getElementById('address-search-results');
+                expect(searchResultsDiv.style.display).toBe('none');
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0]).not.toBeDefined();
+            });
+        });
+    });
+    describe('selecting an option from the search results drop down', () => {
+        describe('selection contains sub building name', () => {
+            it('maps to correct fields when building name contains number and letter suffix', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchCollectionResponse);
+                });
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
+
+                const selectionIndex = addressSelectionIndexFinder(
+                    'FLAT B, 41A, FOOBAR DRIVE, FOOTOWN, B41 2FO'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
+                searchResultsDropDown.selectedIndex = searchResultsDropDown.dispatchEvent(
+                    new Event('change')
+                );
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     'FLAT B, 41A, FOOBAR DRIVE, FOOTOWN, B41 2FO'
                 );
 
@@ -178,20 +243,24 @@ describe('postcode lookup progressive enhancement', () => {
             });
             it('maps to correct fields when building name contains number range', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 2;
+                const selectionIndex = addressSelectionIndexFinder(
+                    'CARETAKERS FLAT, 110-114, FOO STREET WEST, BARTOL, A12 2FO'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
 
-                expect(searchResultsDropDown[2].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     'CARETAKERS FLAT, 110-114, FOO STREET WEST, BARTOL, A12 2FO'
                 );
 
@@ -216,20 +285,24 @@ describe('postcode lookup progressive enhancement', () => {
             });
             it('maps to the correct fields when building name does not contain number and letter suffix or number range', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 3;
+                const selectionIndex = addressSelectionIndexFinder(
+                    'FLAT 3, BARWOOD, 7, ST. FOOBAR STREET, ST. FIVES, FO26 1BA'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
 
-                expect(searchResultsDropDown[3].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     'FLAT 3, BARWOOD, 7, ST. FOOBAR STREET, ST. FIVES, FO26 1BA'
                 );
 
@@ -254,20 +327,24 @@ describe('postcode lookup progressive enhancement', () => {
         describe('selection contains no sub building name', () => {
             it('maps to the correct address when building name does not contain letters and numbers', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 4;
+                const selectionIndex = addressSelectionIndexFinder(
+                    'CHURCH HOUSE, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
 
-                expect(searchResultsDropDown[4].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     'CHURCH HOUSE, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA'
                 );
 
@@ -293,19 +370,23 @@ describe('postcode lookup progressive enhancement', () => {
 
             it('maps to the correct address fields when building number and thouroughfare present', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 5;
+                const selectionIndex = addressSelectionIndexFinder(
+                    '0/1, 55, FOOBAR DRIVE, FOOTOWN, A12 2BC'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
-                expect(searchResultsDropDown[5].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     '0/1, 55, FOOBAR DRIVE, FOOTOWN, A12 2BC'
                 );
                 expect(
@@ -327,19 +408,23 @@ describe('postcode lookup progressive enhancement', () => {
             });
             it('maps to the correct address fields when a PO Box is present', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 6;
+                const selectionIndex = addressSelectionIndexFinder(
+                    'PO BOX 12345, FOO COMPANY, FOOBURGH, AB12 3CD'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
-                expect(searchResultsDropDown[6].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     'PO BOX 12345, FOO COMPANY, FOOBURGH, AB12 3CD'
                 );
                 expect(
@@ -361,19 +446,23 @@ describe('postcode lookup progressive enhancement', () => {
             });
             it('maps to the correct address fields when a dependent thouroughfare name', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 7;
+                const selectionIndex = addressSelectionIndexFinder(
+                    '1, FOOBAR VIEW, BAR ROAD, FOOBARHALL, FOOBARHAM, FB17 1BO'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
-                expect(searchResultsDropDown[7].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     '1, FOOBAR VIEW, BAR ROAD, FOOBARHALL, FOOBARHAM, FB17 1BO'
                 );
                 expect(
@@ -396,23 +485,70 @@ describe('postcode lookup progressive enhancement', () => {
                 );
             });
         });
-        describe('selection contains organisation name', () => {
-            it('maps to the correct address fields', async () => {
+
+        describe('selection contains building number and thouroughfare only', () => {
+            it('maps to the correct address fields when building number and thouroughfare present', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
-                searchResultsDropDown.selectedIndex = 8;
+                const selectionIndex = addressSelectionIndexFinder(
+                    '1, FOOBAR DRIVE, FOOTOWN, A12 2BC'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
+                searchResultsDropDown.dispatchEvent(new Event('change'));
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
+                    '1, FOOBAR DRIVE, FOOTOWN, A12 2BC'
+                );
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street').value
+                ).toBe('1 FOOBAR DRIVE');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-2').value
+                ).toBe('');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-3').value
+                ).toBe('');
+                expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
+                    'FOOTOWN'
+                );
+                expect(window.document.getElementById('q-applicant-county').value).toBe(
+                    'CITY OF FOOBAR'
+                );
+                expect(window.document.getElementById('q-applicant-postcode').value).toBe(
+                    'A12 2BC'
+                );
+            });
+        });
+        describe('selection contains organisation name', () => {
+            it('maps to the correct address fields', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchCollectionResponse);
+                });
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
+
+                const selectionIndex = addressSelectionIndexFinder(
+                    'BRIGHTERFOO HOME, CLAREBAR COURT, 234, FOO ROAD, FOOTOWN, F11 7BA'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
                 searchResultsDropDown.dispatchEvent(new Event('change'));
 
-                expect(searchResultsDropDown[8].text).toEqual(
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
                     'BRIGHTERFOO HOME, CLAREBAR COURT, 234, FOO ROAD, FOOTOWN, F11 7BA'
                 );
 
@@ -439,15 +575,16 @@ describe('postcode lookup progressive enhancement', () => {
         describe('selection contains address header', () => {
             it('does nothing, no state is changed, no errors are thrown', async () => {
                 fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchThreeAddressesFoundResponse);
+                    return JSON.stringify(addressSearchCollectionResponse);
                 });
-                await postcodeLookup.init();
-                await postcodeLookup.addressSearch();
+                postcodeLookup.init();
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
-                expect(searchResultsDropDown[0].text).toEqual('8 addresses found');
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
 
                 searchResultsDropDown.value = '8 addresses found';
                 searchResultsDropDown.dispatchEvent(new Event('change'));
