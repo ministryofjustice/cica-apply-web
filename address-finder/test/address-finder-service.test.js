@@ -1,5 +1,11 @@
 'use strict';
 
+const requestServiceMethodsMock = {get: jest.fn()};
+jest.doMock('../../questionnaire/request-service', () => () => requestServiceMethodsMock);
+
+// eslint-disable-next-line global-require
+const addressFinderService = require('../address-finder-service')();
+
 const getAddressCollectionResponse = require('./fixtures/validAddressCollectionResponse.json');
 const noAddressesFoundResponse = require('./fixtures/noAddressesFoundResponse.json');
 
@@ -7,27 +13,14 @@ const noAddressesFoundResponse = require('./fixtures/noAddressesFoundResponse.js
 describe('find Address by Postcode lookup', () => {
     describe('200', () => {
         it('Should respond with status code 200 and return an Adress collection response given a valid postcode', async () => {
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => getAddressCollectionResponse
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(getAddressCollectionResponse);
+
             const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(getAddressCollectionResponse);
         });
 
         it('Should respond with status code 200 and return the correct header response when no addresses found', async () => {
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => noAddressesFoundResponse
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(noAddressesFoundResponse);
             const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(noAddressesFoundResponse);
         });
@@ -45,14 +38,7 @@ describe('find Address by Postcode lookup', () => {
                 }
             };
 
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => noPostcodeProvidedError
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(noPostcodeProvidedError);
             const response = await addressFinderService.lookupPostcode();
             expect(response).toEqual(noPostcodeProvidedError);
         });
@@ -69,14 +55,7 @@ describe('find Address by Postcode lookup', () => {
                 }
             };
 
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => invalidPostcodeProvidedError
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(invalidPostcodeProvidedError);
             const response = await addressFinderService.lookupPostcode();
             expect(response).toEqual(invalidPostcodeProvidedError);
         });
@@ -93,14 +72,7 @@ describe('find Address by Postcode lookup', () => {
                 }
             };
 
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => invalidPostcodeProvidedError
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(invalidPostcodeProvidedError);
             const response = await addressFinderService.lookupPostcode();
             expect(response).toEqual(invalidPostcodeProvidedError);
         });
@@ -120,14 +92,7 @@ describe('find Address by Postcode lookup', () => {
                 }
             };
 
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => apiKeyInvalidFault
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(apiKeyInvalidFault);
             const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(apiKeyInvalidFault);
         });
@@ -144,14 +109,7 @@ describe('find Address by Postcode lookup', () => {
                 }
             };
 
-            jest.doMock('../../questionnaire/request-service', () =>
-                jest.fn(() => ({
-                    get: () => internalServiceError
-                }))
-            );
-            jest.resetModules();
-            // eslint-disable-next-line global-require
-            const addressFinderService = require('../address-finder-service')();
+            requestServiceMethodsMock.get.mockReturnValueOnce(internalServiceError);
             const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(internalServiceError);
         });
