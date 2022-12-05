@@ -9,6 +9,8 @@ const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
+const passport = require('passport');
+const {Issuer, Strategy} = require('openid-client');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
@@ -17,6 +19,7 @@ const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
+const authorisation = require('./authorisation');
 
 const DURATION_LIMIT = 3600000;
 
@@ -124,6 +127,45 @@ app.use(
     csrf({
         cookie: false,
         sessionKey: 'session'
+    })
+);
+
+let client;
+
+passport.use(
+    'oidc',
+    new Strategy({Issuer}, (tokenSet, userinfo, done) => {
+        return done(null, tokenSet.claims());
+    })
+);
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+
+const issuer = awit Issuer.discover(process.env.CW_GOVUK_ISSUER_URL);
+
+client = new issuer.Client({
+    client_id: 'oidcCLIENT',
+    client_secret: 'client_super_secret',
+    redirect_uris: ['http://localhost:8080/login/callback'],
+    response_types: ['code']
+});
+
+passport.use(
+    'oidc',
+    new Strategy({client, passReqToCallback: true}, (req, tokenSet, userinfo, done) => {
+        console.log('tokenSet', tokenSet);
+        console.log('userinfo', userinfo);
+        // do whatever you want with tokenset and userinfo
+        req.session.tokenSet = tokenSet;
+        req.session.userinfo = userinfo;
+
+        return done(null, tokenSet.claims());
     })
 );
 
