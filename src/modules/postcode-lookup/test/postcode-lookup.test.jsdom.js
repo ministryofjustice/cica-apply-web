@@ -1,6 +1,10 @@
 import {setTimeout} from 'timers/promises';
 import createPostcodeLookup from '../index';
-import {victimAddressHtml, postcodeLookupHtmlEnhanced} from './fixtures/postcode-lookup-html';
+import {
+    victimAddressHtml,
+    postcodeLookupHtmlEnhanced,
+    noResultsFoundErrorEnhancedHtml
+} from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
     addressSearchOneAddressFoundResponse
@@ -82,12 +86,14 @@ describe('postcode lookup progressive enhancement', () => {
                 });
 
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
-                expect(
-                    window.document.getElementById('address-search-results-dropdown')[0].text
-                ).toEqual('8 addresses found');
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
                 expect(window.document.activeElement.id).toEqual('address-search-results-dropdown');
             });
             it('Should return 1 results for valid postcode', async () => {
@@ -96,6 +102,7 @@ describe('postcode lookup progressive enhancement', () => {
                 });
 
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
                 expect(
@@ -106,46 +113,72 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('address-search-results-dropdown')[1].text
                 ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
             });
-            // TODO further analyis on Error handling
-            it('promise rejected when no results found for valid postcode', async () => {
-                fetch.mockResponse(async () => {
-                    return JSON.stringify({
-                        header: {
-                            uri: 'https://api.os.uk/search/places/v1/postcode?postcode=A123AB',
-                            query: 'postcode=A123AB',
-                            offset: 0,
-                            totalresults: 0,
-                            format: 'JSON',
-                            dataset: 'DPA',
-                            lr: 'EN,CY',
-                            maxresults: 100,
-                            epoch: '97',
-                            lastupdate: '2022-11-17',
-                            output_srs: 'EPSG:27700'
-                        }
-                    });
-                });
-
-                postcodeLookup.init();
-                expect.assertions(1);
-                await expect(postcodeLookup.addressSearch()).rejects.toEqual(
-                    'TBC No matching results found.'
+            describe('no results found', () => {
+                it.todo(
+                    'displays no results found error summary and error field heading for postcode input'
                 );
+            });
+            describe('empty postcode input field', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    fetch.mockResponse(async () => {
+                        return JSON.stringify(addressSearchOneAddressFoundResponse);
+                    });
+
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        noResultsFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
+            });
+            describe('entering a valid postcode when the page contains error messages', () => {
+                it('returns results and removes error summary and error field heading for postcode input', async () => {
+                    fetch.mockResponse(async () => {
+                        return JSON.stringify(addressSearchOneAddressFoundResponse);
+                    });
+
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        noResultsFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+
+                    window.document.getElementById('address-search-input').value = 'FO123BA';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.querySelectorAll('.govuk-error-summary').length).toEqual(
+                        0
+                    );
+
+                    expect(window.document.querySelectorAll('.govuk-error-message').length).toEqual(
+                        0
+                    );
+
+                    expect(window.document.querySelectorAll('.govuk-input--error').length).toEqual(
+                        0
+                    );
+
+                    expect(
+                        window.document.querySelectorAll('.govuk-form-group--error').length
+                    ).toEqual(0);
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[0].text
+                    ).toEqual('1 address found');
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[1].text
+                    ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
+                });
             });
         });
         describe('4XX', () => {
-            it('promise rejected when the os-api returns a 400 status code', async () => {
-                fetch.mockResponseOnce('{}', {
-                    status: 400,
-                    headers: {'content-type': 'application/json'}
-                });
-
-                postcodeLookup.init();
-                expect.assertions(1);
-                await expect(postcodeLookup.addressSearch()).rejects.toEqual(
-                    'TBC API Error Status error handling.'
-                );
-            });
+            it.todo('promise rejected when the os-api returns a 400 status code');
         });
     });
     describe('pressing a key on postcode lookup find input field', () => {
@@ -156,6 +189,7 @@ describe('postcode lookup progressive enhancement', () => {
                 });
 
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
 
                 // eslint-disable-next-line
                 const event = new KeyboardEvent('keypress', {
@@ -203,6 +237,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -246,6 +281,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -288,6 +324,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -330,6 +367,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -373,6 +411,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -411,6 +450,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -449,6 +489,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -492,6 +533,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -534,6 +576,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
@@ -578,6 +621,7 @@ describe('postcode lookup progressive enhancement', () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
                 postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
