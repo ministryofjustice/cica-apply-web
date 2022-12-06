@@ -19,7 +19,6 @@ const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
-const authorisation = require('./authorisation');
 
 const DURATION_LIMIT = 3600000;
 
@@ -130,44 +129,65 @@ app.use(
     })
 );
 
-let client;
+async function authenticationSetUp() {
+    app.use(passport.initialize());
+    app.use(passport.session());
 
-passport.use(
-    'oidc',
-    new Strategy({Issuer}, (tokenSet, userinfo, done) => {
-        return done(null, tokenSet.claims());
-    })
-);
+    // passport.serializeUser((user, done) => {
+    //     console.log('-----------------------------');
+    //     console.log('serialize user');
+    //     console.log(user);
+    //     console.log('-----------------------------');
+    //     done(null, user);
+    // });
 
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
+    // passport.deserializeUser((user, done) => {
+    //     console.log('-----------------------------');
+    //     console.log('deserialize user');
+    //     console.log(user);
+    //     console.log('-----------------------------');
+    //     done(null, user);
+    // });
 
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
+    const issuer = await Issuer.discover(process.env.CW_GOVUK_ISSUER_URL);
 
-const issuer = awit Issuer.discover(process.env.CW_GOVUK_ISSUER_URL);
+    const client = new issuer.Client({
+        client_id: process.env.CW_GOVUK_CLIENT_ID,
+        client_secret: process.env.CW_GOVUK_PRIVATE_KEY,
+        redirect_uris: [`${process.env.CW_URL}/account/signed-in`],
+        post_logout_redirect_uris: [`${process.env.CW_URL}/account/signed-out`],
+        response_types: ['code']
+    });
 
-client = new issuer.Client({
-    client_id: 'oidcCLIENT',
-    client_secret: 'client_super_secret',
-    redirect_uris: ['http://localhost:8080/login/callback'],
-    response_types: ['code']
-});
+    // passport.use(
+    //     'oidc',
+    //     new Strategy({client, passReqToCallback: true}, (req, tokenSet, userinfo, done) => {
+    //         console.log('tokenSet', tokenSet);
+    //         console.log('userinfo', userinfo);
+    //         // do whatever you want with tokenset and userinfo
+    //         req.session.tokenSet = tokenSet;
+    //         req.session.userinfo = userinfo;
 
-passport.use(
-    'oidc',
-    new Strategy({client, passReqToCallback: true}, (req, tokenSet, userinfo, done) => {
-        console.log('tokenSet', tokenSet);
-        console.log('userinfo', userinfo);
-        // do whatever you want with tokenset and userinfo
-        req.session.tokenSet = tokenSet;
-        req.session.userinfo = userinfo;
+    //         return done(null, tokenSet.claims());
+    //     })
+    // );
 
-        return done(null, tokenSet.claims());
-    })
-);
+    passport.use(
+        'oidc',
+        new Strategy({client}, (tokenSet, userinfo, done) => {
+            return done(null, tokenSet.claims());
+        })
+    );
+
+    passport.serializeUser((user, done) => {
+        done(null, user);
+    });
+    passport.deserializeUser((user, done) => {
+        done(null, user);
+    });
+}
+
+authenticationSetUp();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
