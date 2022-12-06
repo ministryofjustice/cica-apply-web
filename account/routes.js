@@ -72,7 +72,9 @@ router.get('/signed-in', async (req, res, next) => {
         // Send the user to the landing page
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
-        const html = render('landing-page.njk', {nextPageUrl: stateObject.referrer});
+        const html = render('authenticated-user-landing-page.njk', {
+            nextPageUrl: stateObject.referrer
+        });
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
