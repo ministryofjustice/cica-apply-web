@@ -149,8 +149,106 @@ function createPostcodeLookup(window) {
         selectElementResults.focus();
     }
 
+    let addressSearchDiv;
+
+    function displayFieldErrors() {
+        const errorInnerSpan = window.document.createElement('span');
+        errorInnerSpan.setAttribute('class', 'govuk-visually-hidden');
+        const errorInnerSpanText = window.document.createTextNode('Error:');
+        errorInnerSpan.appendChild(errorInnerSpanText);
+
+        const errorOuterSpan = window.document.createElement('span');
+        errorOuterSpan.setAttribute('id', 'address-search-input-error');
+        errorOuterSpan.setAttribute('class', 'govuk-error-message');
+        const errorOuterSpanText = window.document.createTextNode('Enter a valid postcode');
+        errorOuterSpan.appendChild(errorOuterSpanText);
+        errorOuterSpan.appendChild(errorInnerSpan);
+
+        const addressSearchInput = window.document.getElementById('address-search-input');
+        addressSearchInput.setAttribute('class', 'govuk-input govuk-input--error');
+        addressSearchInput.setAttribute('aria-describedby', 'address-search-input-error');
+
+        addressSearchInput.insertAdjacentElement('beforebegin', errorOuterSpan);
+
+        addressSearchDiv.setAttribute('class', 'govuk-form-group govuk-form-group--error');
+        addressSearchDiv.className = 'govuk-form-group govuk-form-group--error';
+    }
+
+    function displayErrorSummary() {
+        const errorAnchor = window.document.createElement('a');
+        const link = window.document.createTextNode('Enter a valid postcode');
+        errorAnchor.appendChild(link);
+        errorAnchor.href = '#address-search-input';
+
+        const error = window.document.createElement('li');
+        error.appendChild(errorAnchor);
+
+        const errorList = window.document.createElement('ul');
+        errorList.setAttribute('class', 'govuk-list govuk-error-summary__list');
+        errorList.appendChild(error);
+
+        const errorSummaryBody = window.document.createElement('div');
+        errorSummaryBody.appendChild(errorList);
+
+        const errorHeading = window.document.createElement('h2');
+        errorHeading.setAttribute('class', 'govuk-error-summary__title');
+        errorHeading.setAttribute('id', 'error-summary-title');
+        const errorHeadingText = window.document.createTextNode('There is a problem');
+        errorHeading.appendChild(errorHeadingText);
+
+        const errorSummary = window.document.createElement('div');
+        errorSummary.setAttribute('class', 'govuk-error-summary');
+        errorSummary.setAttribute('aria-labelledby', 'error-summary-title');
+        errorSummary.setAttribute('role', 'alert');
+        errorSummary.setAttribute('tabindex', '-1');
+        errorSummary.setAttribute('data-module', 'govuk-error-summary');
+
+        errorSummary.appendChild(errorHeading);
+        errorSummary.appendChild(errorSummaryBody);
+
+        const form = window.document.querySelector('form');
+        form.insertAdjacentElement('afterbegin', errorSummary);
+    }
+
+    function removeErrorMessages() {
+        const errorSummary = window.document.querySelector('.govuk-error-summary');
+        if (errorSummary) {
+            errorSummary.remove();
+        } else {
+            return;
+        }
+
+        const errorSpans = window.document.querySelectorAll('.govuk-error-message');
+        errorSpans.forEach(errorSpan => {
+            errorSpan.remove();
+        });
+
+        const errorInputs = window.document.querySelectorAll('.govuk-input--error');
+        errorInputs.forEach(errorInput => {
+            errorInput.setAttribute('class', 'govuk-input');
+            errorInput.removeAttribute('aria-describedby');
+        });
+
+        const errorDivs = window.document.querySelectorAll('.govuk-form-group--error');
+        errorDivs.forEach(errorDiv => {
+            errorDiv.setAttribute('class', 'govuk-form-group');
+        });
+    }
+
+    function displayErrors() {
+        displayErrorSummary();
+        displayFieldErrors();
+    }
+
     async function addressSearch() {
+        removeErrorMessages(window);
         const addressSearchInput = window.document.getElementById('address-search-input').value;
+
+        // test for a valid postcode
+        if (addressSearchInput === '') {
+            displayErrors();
+            return;
+        }
 
         const response = await fetch(`/address-finder/postcode?postcode=${addressSearchInput}`);
         if (!response.ok) {
@@ -207,7 +305,7 @@ function createPostcodeLookup(window) {
             }
         });
 
-        const addressSearchDiv = window.document.createElement('div');
+        addressSearchDiv = window.document.createElement('div');
         addressSearchDiv.setAttribute('id', 'address-search');
         addressSearchDiv.setAttribute('class', 'govuk-form-group');
         addressSearchDiv.appendChild(addressSearchLabel);
@@ -276,7 +374,6 @@ function createPostcodeLookup(window) {
     }
 
     return Object.freeze({
-        addressSearch, // TODO remove on next iteration
         init
     });
 }
