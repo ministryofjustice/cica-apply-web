@@ -1,0 +1,12 @@
+{% extends "page.njk" %}
+{% from "components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}Progress saved - {{ super() }}{% endblock %}
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">Application progress saved</h1>
+    {{ govukButton({
+        text: "Continue",
+        href: nextPageUrl
+    }) }}
+{% endblock %}
