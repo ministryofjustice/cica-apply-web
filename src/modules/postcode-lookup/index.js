@@ -165,7 +165,10 @@ function createPostcodeLookup(window) {
         errorOuterSpan.appendChild(errorInnerSpan);
 
         const addressSearchInput = window.document.getElementById('address-search-input');
-        addressSearchInput.setAttribute('class', 'govuk-input govuk-input--error');
+        addressSearchInput.setAttribute(
+            'class',
+            'govuk-input govuk-input--error govuk-input--width-10'
+        );
         addressSearchInput.setAttribute('aria-describedby', 'address-search-input-error');
 
         addressSearchInput.insertAdjacentElement('beforebegin', errorOuterSpan);
@@ -225,7 +228,8 @@ function createPostcodeLookup(window) {
 
         const errorInputs = window.document.querySelectorAll('.govuk-input--error');
         errorInputs.forEach(errorInput => {
-            errorInput.setAttribute('class', 'govuk-input');
+            const inputClass = errorInput.getAttribute('class');
+            errorInput.setAttribute('class', inputClass.replace('govuk-input--error', ''));
             errorInput.removeAttribute('aria-describedby');
         });
 
@@ -362,6 +366,16 @@ function createPostcodeLookup(window) {
         selectElementResults = window.document.getElementById('address-search-results-dropdown');
     }
 
+    function addRemovePostcodeInputTextOnSubmitHandler() {
+        const form = window.document.getElementsByTagName('form')[0];
+        form.addEventListener('submit', () => {
+            window.document.getElementById('address-search-input').removeAttribute('name');
+            window.document
+                .getElementById('address-search-results-dropdown')
+                .removeAttribute('name');
+        });
+    }
+
     function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
         if (window.document.querySelector('[id *= "q-applicant-building-and-street"]') == null) {
@@ -371,6 +385,7 @@ function createPostcodeLookup(window) {
         createPostcodeSearchElements();
         createFindAddressButton();
         createSearchResultsElements();
+        addRemovePostcodeInputTextOnSubmitHandler();
     }
 
     return Object.freeze({
