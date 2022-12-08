@@ -26,7 +26,7 @@
         "babel": "babel src/js/scripts.js -o src/js/scripts.babel.generated.js"
     },
     "dependencies": {
-        "@ministryofjustice/frontend": "0.0.17-alpha",
+        "@ministryofjustice/frontend": "^1.6.3",
         "client-sessions": "github:CriminalInjuriesCompensationAuthority/node-client-sessions#v0.9.0",
         "cookie-parser": "~1.4.3",
         "csurf": "^1.10.0",
@@ -36,6 +36,7 @@
         "got": "^11.8.5",
         "govuk-frontend": "^3.10.2",
         "helmet": "^3.15.0",
+        "jquery": "^3.6.1",
         "js-cookie": "^2.2.1",
         "jsonwebtoken": "^8.5.1",
         "jwks-rsa": "^3.0.0",

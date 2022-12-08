@@ -364,6 +364,10 @@ var axios = _interopRequireWildcard(require("axios"));
 
 var jsCookies = _interopRequireWildcard(require("js-cookie"));
 
+var _jquery = _interopRequireDefault(require("jquery"));
+
+var _frontend = require("@ministryofjustice/frontend");
+
 var _ga = _interopRequireDefault(require("../modules/ga"));
 
 var _autocomplete = _interopRequireDefault(require("../modules/autocomplete/autocomplete"));
@@ -605,4 +609,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
   (0, _newWindowAnchors.default)(window.document.querySelectorAll('[open-new-window]'));
   (0, _liveChat.default)(window.document.querySelector('#chat-iframe'));
+  window.$ = _jquery.default;
+  (0, _frontend.initAll)();
 })();

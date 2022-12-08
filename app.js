@@ -107,6 +107,10 @@ app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
+app.use(
+    '/moj-frontend/all.js',
+    express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
+);
 
 app.use(async (req, res, next) => {
     try {
