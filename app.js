@@ -132,32 +132,42 @@ app.use(
 async function authenticationSetUp() {
     app.use(passport.initialize());
     app.use(passport.session());
-
-    // passport.serializeUser((user, done) => {
-    //     console.log('-----------------------------');
-    //     console.log('serialize user');
-    //     console.log(user);
-    //     console.log('-----------------------------');
-    //     done(null, user);
-    // });
-
-    // passport.deserializeUser((user, done) => {
-    //     console.log('-----------------------------');
-    //     console.log('deserialize user');
-    //     console.log(user);
-    //     console.log('-----------------------------');
-    //     done(null, user);
-    // });
-
     const issuer = await Issuer.discover(process.env.CW_GOVUK_ISSUER_URL);
 
-    const client = new issuer.Client({
-        client_id: process.env.CW_GOVUK_CLIENT_ID,
-        client_secret: process.env.CW_GOVUK_PRIVATE_KEY,
-        redirect_uris: [`${process.env.CW_URL}/account/signed-in`],
-        post_logout_redirect_uris: [`${process.env.CW_URL}/account/signed-out`],
-        response_types: ['code']
-    });
+    const client = new issuer.Client(
+        {
+            client_id: process.env.CW_GOVUK_CLIENT_ID,
+            client_secret: process.env.CW_GOVUK_PRIVATE_KEY,
+            redirect_uris: [`${process.env.CW_URL}/account/signed-in`],
+            post_logout_redirect_uris: [`${process.env.CW_URL}/account/signed-out`],
+            response_types: ['code'],
+            token_endpoint_auth_method: issuer.token_endpoint_auth_methods_supported[0],
+            jwks_uri: issuer.jwks_uri,
+            token_endpoint: issuer.token_endpoint
+        },
+        {
+            keys: [
+                {
+                    kty: 'EC',
+                    use: 'sig',
+                    crv: 'P-256',
+                    kid: '644af598b780f54106ca0f3c017341bc230c4f8373f35f32e18e3e40cc7acff6',
+                    x: '5URVCgH4HQgkg37kiipfOGjyVft0R5CdjFJahRoJjEw',
+                    y: 'QzrvsnDy3oY1yuz55voaAq9B1M5tfhgW3FBjh_n_F0U',
+                    alg: 'ES256'
+                },
+                {
+                    kty: 'EC',
+                    use: 'sig',
+                    crv: 'P-256',
+                    kid: 'e1f5699d068448882e7866b49d24431b2f21bf1a8f3c2b2dde8f4066f0506f1b',
+                    x: 'BJnIZvnzJ9D_YRu5YL8a3CXjBaa5AxlX1xSeWDLAn9k',
+                    y: 'x4FU3lRtkeDukSWVJmDuw2nHVFVIZ8_69n4bJ6ik4bQ',
+                    alg: 'ES256'
+                }
+            ]
+        }
+    );
 
     // passport.use(
     //     'oidc',
@@ -175,6 +185,7 @@ async function authenticationSetUp() {
     passport.use(
         'oidc',
         new Strategy({client}, (tokenSet, userinfo, done) => {
+            console.log({tokenSet});
             return done(null, tokenSet.claims());
         })
     );
