@@ -18,6 +18,14 @@ function createPostcodeLookup(window) {
         return false;
     }
 
+    function clearAddressForm() {
+        const elements = window.document.querySelectorAll("form input[type='text']");
+        elements.forEach(el => {
+            const addressInput = el;
+            addressInput.value = '';
+        });
+    }
+
     function mapSelectionToAddressFormInputs() {
         const selectedValue = this.options[this.selectedIndex].value;
         if (!isSelectedValueInteger(selectedValue)) {
@@ -26,12 +34,7 @@ function createPostcodeLookup(window) {
         const dataset = 'DPA';
         const result = tmpAddressSearchResultsJson[selectedValue][dataset];
 
-        // Clear the form.
-        const elements = window.document.querySelectorAll("form input[type='text']");
-        elements.forEach(el => {
-            const addressInput = el;
-            addressInput.value = '';
-        });
+        clearAddressForm();
 
         // The following is based on the rules for generating multi-line addresses which are
         // documented in Chapter 9 of the AddressBase Premium Getting Started Guide:
@@ -120,10 +123,13 @@ function createPostcodeLookup(window) {
     }
 
     let selectElementResults;
+    let addressSearchResultsOptions;
 
     function clearAddressResultsDropdown() {
-        const options = window.document.querySelectorAll('#address-search-results-dropdown option');
-        options.forEach(option => option.remove());
+        addressSearchResultsOptions = window.document.querySelectorAll(
+            '#address-search-results-dropdown option'
+        );
+        addressSearchResultsOptions.forEach(option => option.remove());
     }
 
     function addSearchResultsToSelectElement(data) {
@@ -255,7 +261,8 @@ function createPostcodeLookup(window) {
     }
 
     async function addressSearch() {
-        removeErrorMessages(window);
+        removeErrorMessages();
+        clearAddressForm();
         const addressSearchInput = window.document.getElementById('address-search-input').value;
 
         // test for a valid postcode
