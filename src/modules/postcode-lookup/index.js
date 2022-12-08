@@ -6,6 +6,8 @@ function createPostcodeLookup(window) {
     // Define an empty JSON object to temporarily store matched address results.
     // eslint-disable-next-line no-unused-vars
     let tmpAddressSearchResultsJson = {};
+    const noAddressesFoundErrorMessage =
+        'We could not find any addresses for that postcode. Enter your address manually.';
 
     function isSelectedValueInteger(str) {
         const num = Number(str);
@@ -119,9 +121,13 @@ function createPostcodeLookup(window) {
 
     let selectElementResults;
 
-    function addSearchResultsToSelectElement(data) {
+    function clearAddressResultsDropdown() {
         const options = window.document.querySelectorAll('#address-search-results-dropdown option');
         options.forEach(option => option.remove());
+    }
+
+    function addSearchResultsToSelectElement(data) {
+        clearAddressResultsDropdown();
 
         // Update the JSON object with the data results.
         tmpAddressSearchResultsJson = data.results;
@@ -177,11 +183,15 @@ function createPostcodeLookup(window) {
         addressSearchDiv.className = 'govuk-form-group govuk-form-group--error';
     }
 
-    function displayErrorSummary() {
+    function displayErrorSummary(message) {
         const errorAnchor = window.document.createElement('a');
-        const link = window.document.createTextNode('Enter a valid postcode');
+        const link = window.document.createTextNode(message);
         errorAnchor.appendChild(link);
-        errorAnchor.href = '#address-search-input';
+        if (message.includes(noAddressesFoundErrorMessage)) {
+            errorAnchor.href = `#${window.document.querySelector('[id *= "street"]').id}`;
+        } else {
+            errorAnchor.href = '#address-search-input';
+        }
 
         const error = window.document.createElement('li');
         error.appendChild(errorAnchor);
@@ -239,8 +249,8 @@ function createPostcodeLookup(window) {
         });
     }
 
-    function displayErrors() {
-        displayErrorSummary();
+    function displayErrors(message) {
+        displayErrorSummary(message);
         displayFieldErrors();
     }
 
@@ -250,7 +260,7 @@ function createPostcodeLookup(window) {
 
         // test for a valid postcode
         if (addressSearchInput === '') {
-            displayErrors();
+            displayErrors('Enter a valid postcode');
             return;
         }
 
@@ -266,8 +276,13 @@ function createPostcodeLookup(window) {
 
         // TODO add proper error handling for no results found
         if (data.header.totalresults === 0 || !data.results) {
-            const msg = 'TBC No matching results found.';
-            throw msg;
+            const addressSearchResultsDiv = window.document.getElementById(
+                'address-search-results'
+            );
+            addressSearchResultsDiv.style.display = 'none';
+            clearAddressResultsDropdown();
+            displayErrorSummary(noAddressesFoundErrorMessage);
+            return;
         }
 
         addSearchResultsToSelectElement(data);
@@ -302,7 +317,7 @@ function createPostcodeLookup(window) {
         addressSearchInput.setAttribute('type', 'search');
         addressSearchInput.setAttribute('autocomplete', 'postal-code');
 
-        addressSearchInput.addEventListener('keypress', function(event) {
+        addressSearchInput.addEventListener('keypress', event => {
             if (event.code === 'Enter') {
                 event.preventDefault();
                 window.document.getElementById('search-button').click();
