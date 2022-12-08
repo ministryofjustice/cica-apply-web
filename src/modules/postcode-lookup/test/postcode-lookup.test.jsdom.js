@@ -3,7 +3,8 @@ import createPostcodeLookup from '../index';
 import {
     victimAddressHtml,
     postcodeLookupHtmlEnhanced,
-    noResultsFoundErrorEnhancedHtml
+    emptyAddressSearchInputErrorEnhancedHtml,
+    noAddressesFoundErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -32,8 +33,11 @@ describe('postcode lookup progressive enhancement', () => {
         describe('on page load', () => {
             it('Should add the postcode lookup html when the page contains victim building and street question', async () => {
                 postcodeLookup.init();
-                expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                    postcodeLookupHtmlEnhanced.replace(/[\n\r]/g, '')
+
+                // TODO rename this to something more meaningful
+                const regex = /[\n\r]/g;
+                expect(window.document.body.innerHTML.replace(regex, '')).toBe(
+                    postcodeLookupHtmlEnhanced.replace(regex, '')
                 );
                 expect(
                     window.document.getElementById('fill-out-the-fields-manually-hint')
@@ -113,12 +117,98 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('address-search-results-dropdown')[1].text
                 ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
             });
-            describe('no results found', () => {
-                it.todo(
-                    'displays no results found error summary and error field heading for postcode input'
-                );
+            describe('no results returned from an address search', () => {
+                describe('for an inital postcode search', () => {
+                    it('displays no results found error summary and does not display field level errors', async () => {
+                        fetch.mockResponse(async () => {
+                            return JSON.stringify({
+                                header: {
+                                    uri:
+                                        'https://api.os.uk/search/places/v1/postcode?postcode=A123AB',
+                                    query: 'postcode=A123AB',
+                                    offset: 0,
+                                    totalresults: 0,
+                                    format: 'JSON',
+                                    dataset: 'DPA',
+                                    lr: 'EN,CY',
+                                    maxresults: 100,
+                                    epoch: '97',
+                                    lastupdate: '2022-11-17',
+                                    output_srs: 'EPSG:27700'
+                                }
+                            });
+                        });
+                        postcodeLookup.init();
+                        window.document.getElementById('address-search-input').value = 'FO123BA';
+                        window.document.getElementById('search-button').click();
+                        await setTimeout(0);
+                        const searchResultsDiv = window.document.getElementById(
+                            'address-search-results'
+                        );
+                        expect(searchResultsDiv.style.display).toBe('none');
+                        const searchResultsDropDown = window.document.getElementById(
+                            'address-search-results-dropdown'
+                        );
+                        expect(searchResultsDropDown[0]).not.toBeDefined();
+
+                        expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                            noAddressesFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                        );
+                    });
+                });
+                describe('after a successful postcode search was previously made and results dropdown present', () => {
+                    it('displays no results found error summary, does not display field level errors and hides the previous search results dropdown', async () => {
+                        fetch
+                            .mockResponseOnce(async () => {
+                                return JSON.stringify(addressSearchCollectionResponse);
+                            })
+                            .mockResponseOnce(async () => {
+                                return JSON.stringify({
+                                    header: {
+                                        uri:
+                                            'https://api.os.uk/search/places/v1/postcode?postcode=A123AB',
+                                        query: 'postcode=A123AB',
+                                        offset: 0,
+                                        totalresults: 0,
+                                        format: 'JSON',
+                                        dataset: 'DPA',
+                                        lr: 'EN,CY',
+                                        maxresults: 100,
+                                        epoch: '97',
+                                        lastupdate: '2022-11-17',
+                                        output_srs: 'EPSG:27700'
+                                    }
+                                });
+                            });
+                        postcodeLookup.init();
+                        window.document.getElementById('address-search-input').value = 'FO123BA';
+                        window.document.getElementById('search-button').click();
+                        await setTimeout(0);
+
+                        const searchResultsDropDown = window.document.getElementById(
+                            'address-search-results-dropdown'
+                        );
+                        expect(searchResultsDropDown[0].text).toContain('addresses found');
+                        expect(window.document.activeElement.id).toEqual(
+                            'address-search-results-dropdown'
+                        );
+
+                        window.document.getElementById('address-search-input').value = 'FO123BC';
+                        window.document.getElementById('search-button').click();
+                        await setTimeout(0);
+                        const searchResultsDiv = window.document.getElementById(
+                            'address-search-results'
+                        );
+                        expect(searchResultsDiv.style.display).toBe('none');
+                        expect(searchResultsDropDown[0]).not.toBeDefined();
+
+                        expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                            noAddressesFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                        );
+                    });
+                });
             });
-            describe('empty postcode input field', () => {
+            describe('clicking find address with an empty postcode input field', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
                     fetch.mockResponse(async () => {
                         return JSON.stringify(addressSearchOneAddressFoundResponse);
@@ -129,7 +219,7 @@ describe('postcode lookup progressive enhancement', () => {
                     await setTimeout(0);
 
                     expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        noResultsFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                        emptyAddressSearchInputErrorEnhancedHtml.replace(/[\n\r]/g, '')
                     );
                 });
             });
@@ -144,7 +234,7 @@ describe('postcode lookup progressive enhancement', () => {
                     await setTimeout(0);
 
                     expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        noResultsFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                        emptyAddressSearchInputErrorEnhancedHtml.replace(/[\n\r]/g, '')
                     );
 
                     window.document.getElementById('address-search-input').value = 'FO123BA';
