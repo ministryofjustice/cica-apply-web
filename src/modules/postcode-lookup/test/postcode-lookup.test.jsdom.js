@@ -320,6 +320,56 @@ describe('postcode lookup progressive enhancement', () => {
             });
         });
     });
+    describe('Pressing submit after an address search and address dropdown selection', () => {
+        it('it removes the address search element name attributes to prevent sending that data with the form submission', async () => {
+            fetch.mockResponse(async () => {
+                return JSON.stringify(addressSearchCollectionResponse);
+            });
+            postcodeLookup.init();
+            window.document.getElementById('address-search-input').value = 'FO123BA';
+            window.document.getElementById('search-button').click();
+            await setTimeout(0);
+
+            const searchResultsDropDown = window.document.getElementById(
+                'address-search-results-dropdown'
+            );
+            expect(searchResultsDropDown[0].text).toContain('addresses found');
+
+            const selectionIndex = addressSelectionIndexFinder(
+                'FLAT B, 41A, FOOBAR DRIVE, FOOTOWN, B41 2FO'
+            );
+            searchResultsDropDown.selectedIndex = selectionIndex;
+            searchResultsDropDown.selectedIndex = searchResultsDropDown.dispatchEvent(
+                new Event('change')
+            );
+            expect(searchResultsDropDown[selectionIndex].text).toEqual(
+                'FLAT B, 41A, FOOBAR DRIVE, FOOTOWN, B41 2FO'
+            );
+
+            expect(window.document.getElementById('address-search-input').name).toEqual(
+                'address-search-input'
+            );
+            expect(window.document.getElementById('address-search-results-dropdown').name).toEqual(
+                'address-search-results-dropdown'
+            );
+
+            expect(
+                window.document.getElementById('address-search-results-dropdown').name
+            ).toBeDefined();
+
+            const form = window.document.getElementsByTagName('form')[0];
+            form.submit = jest.fn();
+            form.dispatchEvent(new Event('submit'));
+            await setTimeout(0);
+
+            expect(window.document.getElementById('address-search-input').value).toEqual('FO123BA');
+            expect(searchResultsDropDown[0].text).toContain('addresses found');
+            expect(window.document.getElementById('address-search-input').name).toEqual('');
+            expect(window.document.getElementById('address-search-results-dropdown').name).toEqual(
+                ''
+            );
+        });
+    });
     describe('selecting an option from the search results drop down', () => {
         describe('selection contains sub building name', () => {
             it('maps to correct fields when building name contains number and letter suffix', async () => {
