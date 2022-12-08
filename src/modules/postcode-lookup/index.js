@@ -277,7 +277,7 @@ function createPostcodeLookup(window) {
         const descriptionDiv = window.document.createElement('div');
         descriptionDiv.appendChild(
             window.document.createTextNode(
-                'Enter a UK postcode to search for your address, or fill out the fields manually.'
+                'Enter a UK postcode to search for and select an address. Or, you can enter the address manually.'
             )
         );
         descriptionDiv.setAttribute('id', 'fill-out-the-fields-manually-hint');
