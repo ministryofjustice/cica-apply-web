@@ -260,13 +260,23 @@ function createPostcodeLookup(window) {
         displayFieldErrors();
     }
 
+    // A simple postcode regular expression, or postcode regex, checks the general shape of the postcode is correct. i.e.
+
+    // Is the string between 5 to 7 characters?
+    // Is the inward code first character numeric?
+    // Are the last 2 characters non-numeric?
+    function isValidPostcode(postcode) {
+        const regex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i;
+        return regex.test(postcode);
+    }
+
     async function addressSearch() {
         removeErrorMessages();
         clearAddressForm();
         const addressSearchInput = window.document.getElementById('address-search-input').value;
 
         // test for a valid postcode
-        if (addressSearchInput === '') {
+        if (!isValidPostcode(addressSearchInput)) {
             displayErrors('Enter a valid postcode');
             return;
         }
