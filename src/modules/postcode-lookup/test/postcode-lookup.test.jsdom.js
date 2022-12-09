@@ -26,6 +26,7 @@ describe('postcode lookup progressive enhancement', () => {
     let postcodeLookup;
 
     beforeEach(() => {
+        fetch.resetMocks();
         window.document.body.innerHTML = victimAddressHtml;
         postcodeLookup = createPostcodeLookup(window);
     });
@@ -94,6 +95,8 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
+                expect(fetch.mock.calls.length).toEqual(1);
+
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
@@ -109,6 +112,8 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+
+                expect(fetch.mock.calls.length).toEqual(1);
                 expect(
                     window.document.getElementById('address-search-results-dropdown')[0].text
                 ).toEqual('1 address found');
@@ -227,6 +232,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
+                    expect(fetch.mock.calls.length).toEqual(1);
+
                     expect(window.document.querySelectorAll('.govuk-error-summary').length).toEqual(
                         0
                     );
@@ -275,6 +282,8 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').dispatchEvent(event);
                 await setTimeout(0);
 
+                expect(fetch.mock.calls.length).toEqual(1);
+
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
@@ -283,10 +292,6 @@ describe('postcode lookup progressive enhancement', () => {
         });
         describe('Pressing any other key for valid postcode', () => {
             it('Should do nothing', async () => {
-                fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchCollectionResponse);
-                });
-
                 postcodeLookup.init();
 
                 // eslint-disable-next-line
@@ -315,6 +320,8 @@ describe('postcode lookup progressive enhancement', () => {
             window.document.getElementById('address-search-input').value = 'FO123BA';
             window.document.getElementById('search-button').click();
             await setTimeout(0);
+
+            expect(fetch.mock.calls.length).toEqual(1);
 
             const searchResultsDropDown = window.document.getElementById(
                 'address-search-results-dropdown'
@@ -366,6 +373,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -410,6 +418,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -453,6 +462,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -496,6 +506,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -540,6 +551,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -580,6 +592,8 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
+                expect(fetch.mock.calls.length).toEqual(1);
+
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
                 );
@@ -618,6 +632,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -662,6 +677,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -705,6 +721,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -750,6 +767,7 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('address-search-input').value = 'FO123BA';
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
 
                 const searchResultsDropDown = window.document.getElementById(
                     'address-search-results-dropdown'
@@ -788,6 +806,7 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('address-search-input').value = 'AB1C 2DE';
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
+                    expect(fetch.mock.calls.length).toEqual(1);
 
                     expect(
                         window.document.getElementById('address-search-results-dropdown')[0].text
@@ -808,6 +827,7 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('address-search-input').value = 'A12BC';
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
+                    expect(fetch.mock.calls.length).toEqual(1);
 
                     expect(
                         window.document.getElementById('address-search-results-dropdown')[0].text
