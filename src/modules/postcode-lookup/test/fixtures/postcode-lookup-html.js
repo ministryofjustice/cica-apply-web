@@ -113,7 +113,7 @@ Postcode (optional)
 
 </fieldset></form>`;
 
-const emptyAddressSearchInputErrorEnhancedHtml = `<form method="post" autocomplete="off">
+const invalidPostcodeErrorEnhancedHtml = `<form method="post" autocomplete="off">
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem
@@ -244,6 +244,6 @@ Postcode (optional)
 module.exports = {
     victimAddressHtml,
     postcodeLookupHtmlEnhanced,
-    emptyAddressSearchInputErrorEnhancedHtml,
+    invalidPostcodeErrorEnhancedHtml,
     noAddressesFoundErrorEnhancedHtml
 };
