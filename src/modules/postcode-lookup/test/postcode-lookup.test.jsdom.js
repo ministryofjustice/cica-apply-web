@@ -3,7 +3,7 @@ import createPostcodeLookup from '../index';
 import {
     victimAddressHtml,
     postcodeLookupHtmlEnhanced,
-    emptyAddressSearchInputErrorEnhancedHtml,
+    invalidPostcodeErrorEnhancedHtml,
     noAddressesFoundErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
@@ -208,21 +208,7 @@ describe('postcode lookup progressive enhancement', () => {
                     });
                 });
             });
-            describe('clicking find address with an empty postcode input field', () => {
-                it('displays error summary and error field heading for postcode input', async () => {
-                    fetch.mockResponse(async () => {
-                        return JSON.stringify(addressSearchOneAddressFoundResponse);
-                    });
 
-                    postcodeLookup.init();
-                    window.document.getElementById('search-button').click();
-                    await setTimeout(0);
-
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        emptyAddressSearchInputErrorEnhancedHtml.replace(/[\n\r]/g, '')
-                    );
-                });
-            });
             describe('entering a valid postcode when the page contains error messages', () => {
                 it('returns results and removes error summary and error field heading for postcode input', async () => {
                     fetch.mockResponse(async () => {
@@ -234,7 +220,7 @@ describe('postcode lookup progressive enhancement', () => {
                     await setTimeout(0);
 
                     expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        emptyAddressSearchInputErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
                     );
 
                     window.document.getElementById('address-search-input').value = 'FO123BA';
@@ -787,6 +773,123 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe('');
                 expect(window.document.getElementById('q-applicant-county').value).toBe('');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe('');
+            });
+        });
+    });
+    describe('postcode validation', () => {
+        describe('searching with an valid postcode', () => {
+            describe('postcode contains 8 characters including a space', () => {
+                it('finds results and displays them', async () => {
+                    fetch.mockResponse(async () => {
+                        return JSON.stringify(addressSearchOneAddressFoundResponse);
+                    });
+
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = 'AB1C 2DE';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[0].text
+                    ).toEqual('1 address found');
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[1].text
+                    ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
+                });
+            });
+            describe('postcode contains 5 characters', () => {
+                it('finds results and displays them', async () => {
+                    fetch.mockResponse(async () => {
+                        return JSON.stringify(addressSearchOneAddressFoundResponse);
+                    });
+
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = 'A12BC';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[0].text
+                    ).toEqual('1 address found');
+
+                    expect(
+                        window.document.getElementById('address-search-results-dropdown')[1].text
+                    ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
+                });
+            });
+        });
+        describe('searching with an invalid postcode', () => {
+            describe('clicking find address with an empty postcode input field', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
+            });
+            describe('the inward code first character is numeric', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = '1234PT';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
+            });
+            describe('it only contains 4 characters', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = 'A123';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
+            });
+            describe('it contains 8 characters', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = 'A12345PT';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
+            });
+            describe('the last two characters are non-numeric', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = 'A12 456';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
+            });
+            describe('the last character is non-numeric', () => {
+                it('displays error summary and error field heading for postcode input', async () => {
+                    postcodeLookup.init();
+                    window.document.getElementById('address-search-input').value = 'A12 4B6';
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    );
+                });
             });
         });
     });
