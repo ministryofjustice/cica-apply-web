@@ -1,7 +1,4 @@
-#! m0-start
 coverage
 stuff
-#! m0-end
-
 /public/dist/js
 /src/js/scripts.babel.generated.js

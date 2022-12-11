@@ -94,18 +94,6 @@ app.use(
     '/assets',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets'))
 );
-app.use(
-    '/govuk-frontend/all.css',
-    express.static(path.join(__dirname, '/public/stylesheets/all.css'))
-);
-app.use(
-    '/govuk-frontend/all-ie8.css',
-    express.static(path.join(__dirname, '/public/stylesheets/all-ie8.css'))
-);
-app.use(
-    '/govuk-frontend/all.js',
-    express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
-);
 
 app.use(async (req, res, next) => {
     try {

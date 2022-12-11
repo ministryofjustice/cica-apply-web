@@ -1,4 +1,4 @@
-import createAutocomplete from './autocomplete';
+import createAutocomplete from '.';
 
 describe('autoComplete.js', () => {
     describe('autoComplete helper funtions', () => {

@@ -1,5 +1,7 @@
 @import "node_modules/govuk-frontend/govuk/all-ie8";
 @import "src/modules/cookie-banner/cookie-banner";
+@import "src/modules/autocomplete/accessible-autocomplete.scss";
+@import "src/modules/autocomplete/accessible-autocomplete-wrapper.scss";
 @import "components/cica/modal/modal";
-@import "src/modules/live-chat/live-chat";
+// @import "src/modules/live-chat/live-chat";
 @import "node_modules/@ministryofjustice/frontend/moj/components/banner/_banner";

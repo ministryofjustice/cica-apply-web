@@ -21,13 +21,13 @@ const html = `<!DOCTYPE html>
 
 
     <!--[if !IE 8]><!-->
-    <link href="/govuk-frontend/all.css" rel="stylesheet" />
+    <link href="/dist/css/all.css" rel="stylesheet" />
     <!--<![endif]-->
 
 
 
     <!--[if IE 8]>
-    <link href="/govuk-frontend/all-ie8.css" rel="stylesheet" />
+    <link href="/dist/css/all-ie8.css" rel="stylesheet" />
     <![endif]-->
 
 
@@ -197,7 +197,7 @@ const html = `<!DOCTYPE html>
 
 
 
-<script src="/govuk-frontend/all.js"></script>
+<script src="/dist/js/bundle.js"></script>
 <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
 
 </body>

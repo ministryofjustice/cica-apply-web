@@ -7,16 +7,20 @@ import * as axios from 'axios';
 import * as jsCookies from 'js-cookie';
 
 import createCicaGa from '../modules/ga';
-import createAutocomplete from '../modules/autocomplete/autocomplete';
+import createAutocomplete from '../modules/autocomplete';
 import createCookieBanner from '../modules/cookie-banner';
 import createCookiePreference from '../modules/cookie-preference';
 import createTimeoutModal from '../modules/modal-timeout';
 import createNewWindowAnchors from '../modules/new-window-anchors';
-import createLiveChat from '../modules/live-chat';
+// removed 08/12/2022
+// import createLiveChat from '../modules/live-chat';
 
 import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAndSeconds';
 
 (() => {
+    if (window.GOVUKFrontend) {
+        window.GOVUKFrontend.initAll();
+    }
     const cookiePreference = createCookiePreference('_prefs', ['essential', 'analytics']);
     if (cookiePreference.get('analytics').value === '1') {
         const cicaGa = createCicaGa(window);
@@ -243,5 +247,6 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
     /* ****************************************** */
 
     createNewWindowAnchors(window.document.querySelectorAll('[open-new-window]'));
-    createLiveChat(window.document.querySelector('#chat-iframe'));
+    // removed 08/12/2022
+    // createLiveChat(window.document.querySelector('#chat-iframe'));
 })();

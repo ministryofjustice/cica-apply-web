@@ -1,5 +1,5 @@
 import * as jsCookies from 'js-cookie';
-import guaTrackLinks from './vendor/gua-anchor';
+import guaTrackLinks from './gua-anchor';
 
 function createCicaGa(window) {
     // eslint-disable-next-line no-undef

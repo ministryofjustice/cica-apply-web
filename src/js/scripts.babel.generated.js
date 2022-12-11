@@ -366,7 +366,7 @@ var jsCookies = _interopRequireWildcard(require("js-cookie"));
 
 var _ga = _interopRequireDefault(require("../modules/ga"));
 
-var _autocomplete = _interopRequireDefault(require("../modules/autocomplete/autocomplete"));
+var _autocomplete = _interopRequireDefault(require("../modules/autocomplete"));
 
 var _cookieBanner = _interopRequireDefault(require("../modules/cookie-banner"));
 
@@ -375,8 +375,6 @@ var _cookiePreference = _interopRequireDefault(require("../modules/cookie-prefer
 var _modalTimeout = _interopRequireDefault(require("../modules/modal-timeout"));
 
 var _newWindowAnchors = _interopRequireDefault(require("../modules/new-window-anchors"));
-
-var _liveChat = _interopRequireDefault(require("../modules/live-chat"));
 
 var _msToMinutesAndSeconds = _interopRequireDefault(require("../modules/modal-timeout/utils/msToMinutesAndSeconds"));
 
@@ -391,6 +389,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 (() => {
+  if (window.GOVUKFrontend) {
+    window.GOVUKFrontend.initAll();
+  }
+
   var cookiePreference = (0, _cookiePreference.default)('_prefs', ['essential', 'analytics']);
 
   if (cookiePreference.get('analytics').value === '1') {
@@ -603,6 +605,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
   /* ****************************************** */
 
-  (0, _newWindowAnchors.default)(window.document.querySelectorAll('[open-new-window]'));
-  (0, _liveChat.default)(window.document.querySelector('#chat-iframe'));
+  (0, _newWindowAnchors.default)(window.document.querySelectorAll('[open-new-window]')); // removed 08/12/2022
+  // createLiveChat(window.document.querySelector('#chat-iframe'));
 })();

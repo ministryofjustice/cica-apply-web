@@ -1,0 +1,1 @@
+files with a `.js` extension within this directory will be consumed by Webpack and incorporated in to the resultant `/public/dist/js/bundle.js`.
