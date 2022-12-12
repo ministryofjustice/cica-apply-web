@@ -7,11 +7,10 @@ function createPostcodeLookup(window) {
     // eslint-disable-next-line no-unused-vars
     let tmpAddressSearchResultsJson = {};
 
+    let apiNoAddressesFoundErrorMessage;
+    let apiResponseNotOkErrorMessage;
     const INVALID_POSTCODE_ERROR = 'Enter a valid postcode';
-    const API_NO_ADDRESSES_FOUND_ERROR =
-        'We could not find any addresses for that postcode. Enter your address manually.';
-    const API_RESPONSE_NOT_OK_ERROR =
-        'The system is experiencing an issue. Enter your address manually.';
+    let emptySearchInputErrorMessage;
 
     function isSelectedValueInteger(str) {
         const num = Number(str);
@@ -167,7 +166,7 @@ function createPostcodeLookup(window) {
 
     let addressSearchDiv;
 
-    function displayFieldErrors() {
+    function displayFieldErrors(message) {
         const errorInnerSpan = window.document.createElement('span');
         errorInnerSpan.setAttribute('class', 'govuk-visually-hidden');
         const errorInnerSpanText = window.document.createTextNode('Error:');
@@ -176,7 +175,7 @@ function createPostcodeLookup(window) {
         const errorOuterSpan = window.document.createElement('span');
         errorOuterSpan.setAttribute('id', 'address-search-input-error');
         errorOuterSpan.setAttribute('class', 'govuk-error-message');
-        const errorOuterSpanText = window.document.createTextNode('Enter a valid postcode');
+        const errorOuterSpanText = window.document.createTextNode(message);
         errorOuterSpan.appendChild(errorOuterSpanText);
         errorOuterSpan.appendChild(errorInnerSpan);
 
@@ -194,17 +193,13 @@ function createPostcodeLookup(window) {
     }
 
     function handleErrorSummaryListElement(message) {
-        if (message === API_RESPONSE_NOT_OK_ERROR) {
+        if (message === apiResponseNotOkErrorMessage) {
             return window.document.createTextNode(message);
         }
         const errorAnchor = window.document.createElement('a');
         const link = window.document.createTextNode(message);
         errorAnchor.appendChild(link);
-        if (message.includes(API_NO_ADDRESSES_FOUND_ERROR)) {
-            errorAnchor.href = `#${window.document.querySelector('[id *= "street"]').id}`;
-        } else {
-            errorAnchor.href = '#address-search-input';
-        }
+        errorAnchor.href = '#address-search-input';
         return errorAnchor;
     }
 
@@ -277,7 +272,7 @@ function createPostcodeLookup(window) {
 
     function displayErrors(message) {
         displayErrorSummary(message);
-        displayFieldErrors();
+        displayFieldErrors(message);
     }
 
     // A simple postcode regular expression, or postcode regex, checks the general shape of the postcode is correct. i.e.
@@ -294,6 +289,11 @@ function createPostcodeLookup(window) {
         clearAddressForm();
         const addressSearchInput = window.document.getElementById('address-search-input').value;
 
+        if (addressSearchInput === '') {
+            displayErrors(emptySearchInputErrorMessage);
+            return;
+        }
+
         // test for a valid postcode
         if (!isValidPostcode(addressSearchInput)) {
             displayErrors(INVALID_POSTCODE_ERROR);
@@ -306,7 +306,7 @@ function createPostcodeLookup(window) {
                 displayErrors(INVALID_POSTCODE_ERROR);
                 return;
             }
-            displayErrors(API_RESPONSE_NOT_OK_ERROR);
+            displayErrors(apiResponseNotOkErrorMessage);
             removeAddressSearchElements();
             return;
         }
@@ -319,7 +319,7 @@ function createPostcodeLookup(window) {
             );
             addressSearchResultsDiv.style.display = 'none';
             clearAddressResultsDropdown();
-            displayErrorSummary(API_NO_ADDRESSES_FOUND_ERROR);
+            displayErrorSummary(apiNoAddressesFoundErrorMessage);
             return;
         }
 
@@ -429,6 +429,15 @@ function createPostcodeLookup(window) {
         });
     }
 
+    function setContextualisationMessages() {
+        const context = window.document.querySelector('h1').textContent.includes('your')
+            ? 'your'
+            : 'their';
+        apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${context} address manually.`;
+        apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${context} address manually.`;
+        emptySearchInputErrorMessage = `Enter ${context} postcode`;
+    }
+
     function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
         if (window.document.querySelector('[id *= "q-applicant-building-and-street"]') == null) {
@@ -439,6 +448,7 @@ function createPostcodeLookup(window) {
         createFindAddressButton();
         createSearchResultsElements();
         addRemovePostcodeInputTextOnSubmitHandler();
+        setContextualisationMessages();
     }
 
     return Object.freeze({
