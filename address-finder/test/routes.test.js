@@ -53,7 +53,7 @@ describe('Address finder route proxy endpoint address-finder/postcode', () => {
             );
         });
     });
-    describe('404', () => {
+    describe('Error thrown when calling the external api', () => {
         it('Should fail gracefully if there is an unexpected error', async () => {
             addressServiceMethodsMock.lookupPostcode.mockImplementation(() => {
                 throw new Error();
@@ -70,7 +70,7 @@ describe('Address finder route proxy endpoint address-finder/postcode', () => {
                         'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA'
                     )
                     .then(response => {
-                        expect(response.statusCode).toBe(404);
+                        expect(response.statusCode).toBe(500);
                     })
             );
         });

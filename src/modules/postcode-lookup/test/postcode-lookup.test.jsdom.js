@@ -4,7 +4,8 @@ import {
     victimAddressHtml,
     postcodeLookupHtmlEnhanced,
     invalidPostcodeErrorEnhancedHtml,
-    noAddressesFoundErrorEnhancedHtml
+    noAddressesFoundErrorEnhancedHtml,
+    fetchApiReponseNotOkayErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -259,9 +260,6 @@ describe('postcode lookup progressive enhancement', () => {
                     ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
                 });
             });
-        });
-        describe('4XX', () => {
-            it.todo('promise rejected when the os-api returns a 400 status code');
         });
     });
     describe('pressing a key on postcode lookup find input field', () => {
@@ -910,6 +908,39 @@ describe('postcode lookup progressive enhancement', () => {
                         invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
                     );
                 });
+            });
+        });
+        describe('an unexpected error occurs', () => {
+            it('displays error summary and hides the address search components', async () => {
+                fetch.mockResponseOnce('{}', {
+                    status: 500,
+                    headers: {'content-type': 'application/json'}
+                });
+                postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'A123BC';
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+
+                expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                    fetchApiReponseNotOkayErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                );
+            });
+        });
+        describe('4XX error', () => {
+            it('displays error summary and error field heading for postcode input', async () => {
+                fetch.mockResponseOnce('{}', {
+                    status: 400,
+                    message:
+                        'Requested postcode must contain a minimum of the sector plus 1 digit of the district e.g. SO1. Requested postcode was AB1C2DE'
+                });
+                postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'AB1C2DE';
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+
+                expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
+                    invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                );
             });
         });
     });

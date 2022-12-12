@@ -16,34 +16,5 @@ describe('find Address by Postcode lookup', () => {
             const response = await addressFinderService.lookupPostcode('FO123BA');
             expect(response).toEqual(getAddressCollectionResponse);
         });
-
-        it.todo(
-            'Should respond with status code 200 and return the correct header response when no addresses found'
-        );
-    });
-
-    describe('400', () => {
-        it.todo(
-            'Should respond with status code 400 and return an error response when no postcode parameter provided'
-        );
-
-        it.todo(
-            'Should respond with status code 400 and return an error response when an invalid postcode parameter provided'
-        );
-
-        it.todo(
-            'Should respond with status code 400 and return an error response when postcode parameter does not contain minimum of sector plus 1 digit'
-        );
-    });
-
-    describe('401', () => {
-        it.todo(
-            'Should respond with status code 401 and return an error response for invalid api key'
-        );
-    });
-    describe('500', () => {
-        it.todo(
-            'Should respond with status code 500 and return an error response for internal service error'
-        );
     });
 });
