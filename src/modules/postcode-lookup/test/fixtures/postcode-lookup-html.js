@@ -241,9 +241,62 @@ Postcode (optional)
 </fieldset>
 </form>`;
 
+const fetchApiReponseNotOkayErrorEnhancedHtml = `<form method="post" autocomplete="off">
+<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+<h2 class="govuk-error-summary__title" id="error-summary-title">
+There is a problem
+</h2>
+<div><ul class="govuk-list govuk-error-summary__list"><li>The system is experiencing an issue. Enter your address manually.</li></ul></div>
+</div>
+<fieldset class="govuk-fieldset">
+<legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+<h1 class="govuk-fieldset__heading">
+What is your address?
+</h1>
+</legend>
+<div class="govuk-form-group">
+<label class="govuk-label" for="q-applicant-building-and-street">
+Building and street
+</label>
+<input class="govuk-input" id="q-applicant-building-and-street" name="q-applicant-building-and-street" type="text" autocomplete="address-line1">
+</div>
+<div class="govuk-form-group">
+<label class="govuk-label govuk-visually-hidden" for="q-applicant-building-and-street-2">
+Building and street line 2
+</label>
+<input class="govuk-input" id="q-applicant-building-and-street-2" name="q-applicant-building-and-street-2" type="text" autocomplete="address-line2">
+</div>
+<div class="govuk-form-group">
+<label class="govuk-label govuk-visually-hidden" for="q-applicant-building-and-street-3">
+Building and street line 3
+</label>
+<input class="govuk-input" id="q-applicant-building-and-street-3" name="q-applicant-building-and-street-3" type="text" autocomplete="address-line3">
+</div>
+<div class="govuk-form-group">
+<label class="govuk-label" for="q-applicant-town-or-city">
+Town or city
+</label>
+<input class="govuk-input govuk-input--width-20" id="q-applicant-town-or-city" name="q-applicant-town-or-city" type="text" autocomplete="address-level2">
+</div>
+<div class="govuk-form-group">
+<label class="govuk-label" for="q-applicant-county">
+County (optional)
+</label>
+<input class="govuk-input govuk-input--width-20" id="q-applicant-county" name="q-applicant-county" type="text" autocomplete="address-level1">
+</div>
+<div class="govuk-form-group">
+<label class="govuk-label" for="q-applicant-postcode">
+Postcode (optional)
+</label>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+</div>
+</fieldset>
+</form>`;
+
 module.exports = {
     victimAddressHtml,
     postcodeLookupHtmlEnhanced,
     invalidPostcodeErrorEnhancedHtml,
-    noAddressesFoundErrorEnhancedHtml
+    noAddressesFoundErrorEnhancedHtml,
+    fetchApiReponseNotOkayErrorEnhancedHtml
 };

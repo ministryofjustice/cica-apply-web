@@ -6,8 +6,12 @@ function createPostcodeLookup(window) {
     // Define an empty JSON object to temporarily store matched address results.
     // eslint-disable-next-line no-unused-vars
     let tmpAddressSearchResultsJson = {};
-    const noAddressesFoundErrorMessage =
+
+    const INVALID_POSTCODE_ERROR = 'Enter a valid postcode';
+    const API_NO_ADDRESSES_FOUND_ERROR =
         'We could not find any addresses for that postcode. Enter your address manually.';
+    const API_RESPONSE_NOT_OK_ERROR =
+        'The system is experiencing an issue. Enter your address manually.';
 
     function isSelectedValueInteger(str) {
         const num = Number(str);
@@ -189,18 +193,24 @@ function createPostcodeLookup(window) {
         addressSearchDiv.className = 'govuk-form-group govuk-form-group--error';
     }
 
-    function displayErrorSummary(message) {
+    function handleErrorSummaryListElement(message) {
+        if (message === API_RESPONSE_NOT_OK_ERROR) {
+            return window.document.createTextNode(message);
+        }
         const errorAnchor = window.document.createElement('a');
         const link = window.document.createTextNode(message);
         errorAnchor.appendChild(link);
-        if (message.includes(noAddressesFoundErrorMessage)) {
+        if (message.includes(API_NO_ADDRESSES_FOUND_ERROR)) {
             errorAnchor.href = `#${window.document.querySelector('[id *= "street"]').id}`;
         } else {
             errorAnchor.href = '#address-search-input';
         }
+        return errorAnchor;
+    }
 
+    function displayErrorSummary(message) {
         const error = window.document.createElement('li');
-        error.appendChild(errorAnchor);
+        error.appendChild(handleErrorSummaryListElement(message));
 
         const errorList = window.document.createElement('ul');
         errorList.setAttribute('class', 'govuk-list govuk-error-summary__list');
@@ -255,13 +265,22 @@ function createPostcodeLookup(window) {
         });
     }
 
+    function removeAddressSearchElements() {
+        addressSearchDiv.remove();
+        const hintTextDiv = window.document.getElementById('fill-out-the-fields-manually-hint');
+        hintTextDiv.remove();
+        const addressSearchButton = window.document.getElementById('search-button');
+        addressSearchButton.remove();
+        const addressSearchResults = window.document.getElementById('address-search-results');
+        addressSearchResults.remove();
+    }
+
     function displayErrors(message) {
         displayErrorSummary(message);
         displayFieldErrors();
     }
 
     // A simple postcode regular expression, or postcode regex, checks the general shape of the postcode is correct. i.e.
-
     // Is the string between 5 to 7 characters?
     // Is the inward code first character numeric?
     // Are the last 2 characters non-numeric?
@@ -277,28 +296,30 @@ function createPostcodeLookup(window) {
 
         // test for a valid postcode
         if (!isValidPostcode(addressSearchInput)) {
-            displayErrors('Enter a valid postcode');
+            displayErrors(INVALID_POSTCODE_ERROR);
             return;
         }
 
         const response = await fetch(`/address-finder/postcode?postcode=${addressSearchInput}`);
         if (!response.ok) {
-            // throw new Error(`HTTP error! status: ${response.status}`);
-            // TODO proper error handling
-            const msg = 'TBC API Error Status error handling.';
-            throw msg;
+            if (response.status === 400) {
+                displayErrors(INVALID_POSTCODE_ERROR);
+                return;
+            }
+            displayErrors(API_RESPONSE_NOT_OK_ERROR);
+            removeAddressSearchElements();
+            return;
         }
 
         const data = await response.json();
 
-        // TODO add proper error handling for no results found
         if (data.header.totalresults === 0 || !data.results) {
             const addressSearchResultsDiv = window.document.getElementById(
                 'address-search-results'
             );
             addressSearchResultsDiv.style.display = 'none';
             clearAddressResultsDropdown();
-            displayErrorSummary(noAddressesFoundErrorMessage);
+            displayErrorSummary(API_NO_ADDRESSES_FOUND_ERROR);
             return;
         }
 
