@@ -15,6 +15,8 @@ import {
 /* eslint-disable import/no-extraneous-dependencies */
 require('jest-fetch-mock').enableMocks();
 
+const MATCH_NEWLINE_REGEX = /[\n\r]/g;
+
 function addressSelectionIndexFinder(selectionText) {
     const elementToSelect = Array.from(
         window.document.querySelectorAll('#address-search-results-dropdown option')
@@ -36,10 +38,8 @@ describe('postcode lookup progressive enhancement', () => {
             it('Should add the postcode lookup html when the page contains victim building and street question', async () => {
                 postcodeLookup.init();
 
-                // TODO rename this to something more meaningful
-                const regex = /[\n\r]/g;
-                expect(window.document.body.innerHTML.replace(regex, '')).toBe(
-                    postcodeLookupHtmlEnhanced.replace(regex, '')
+                expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                    postcodeLookupHtmlEnhanced.replace(MATCH_NEWLINE_REGEX, '')
                 );
                 expect(
                     window.document.getElementById('fill-out-the-fields-manually-hint')
@@ -157,9 +157,9 @@ describe('postcode lookup progressive enhancement', () => {
                         );
                         expect(searchResultsDropDown[0]).not.toBeDefined();
 
-                        expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                            noAddressesFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
-                        );
+                        expect(
+                            window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')
+                        ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
                     });
                 });
                 describe('after a successful postcode search was previously made and results dropdown present', () => {
@@ -208,9 +208,9 @@ describe('postcode lookup progressive enhancement', () => {
                         expect(searchResultsDiv.style.display).toBe('none');
                         expect(searchResultsDropDown[0]).not.toBeDefined();
 
-                        expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                            noAddressesFoundErrorEnhancedHtml.replace(/[\n\r]/g, '')
-                        );
+                        expect(
+                            window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')
+                        ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
                     });
                 });
             });
@@ -225,8 +225,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
 
                     window.document.getElementById('address-search-input').value = 'FO123BA';
@@ -844,8 +844,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
                 });
             });
@@ -856,8 +856,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
                 });
             });
@@ -868,8 +868,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
                 });
             });
@@ -880,8 +880,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
                 });
             });
@@ -892,8 +892,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
                 });
             });
@@ -904,8 +904,8 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
-                    expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
                 });
             });
@@ -921,8 +921,8 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
-                expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                    fetchApiReponseNotOkayErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                    fetchApiReponseNotOkayErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                 );
             });
         });
@@ -938,8 +938,8 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.getElementById('search-button').click();
                 await setTimeout(0);
 
-                expect(window.document.body.innerHTML.replace(/[\n\r]/g, '')).toBe(
-                    invalidPostcodeErrorEnhancedHtml.replace(/[\n\r]/g, '')
+                expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                    invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                 );
             });
         });
