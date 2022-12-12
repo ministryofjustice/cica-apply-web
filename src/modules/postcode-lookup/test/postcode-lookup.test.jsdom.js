@@ -5,7 +5,10 @@ import {
     postcodeLookupHtmlEnhanced,
     invalidPostcodeErrorEnhancedHtml,
     noAddressesFoundErrorEnhancedHtml,
-    fetchApiReponseNotOkayErrorEnhancedHtml
+    fetchApiReponseNotOkayErrorEnhancedHtml,
+    victimAddressSomeoneElseHtml,
+    emptyPostcodeInputErrorEnhancedHtml,
+    emptyPostcodeInputForSomeoneElseErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -226,7 +229,7 @@ describe('postcode lookup progressive enhancement', () => {
                     await setTimeout(0);
 
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
+                        emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
 
                     window.document.getElementById('address-search-input').value = 'FO123BA';
@@ -845,7 +848,23 @@ describe('postcode lookup progressive enhancement', () => {
                     await setTimeout(0);
 
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
-                        invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
+                        emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
+                    );
+                });
+            });
+            describe('clicking find address with an empty postcode input field when victim is someone else', () => {
+                it('displays contextualised error summary and error field heading for postcode input', async () => {
+                    window.document.body.innerHTML = victimAddressSomeoneElseHtml;
+                    postcodeLookup = createPostcodeLookup(window);
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        emptyPostcodeInputForSomeoneElseErrorEnhancedHtml.replace(
+                            MATCH_NEWLINE_REGEX,
+                            ''
+                        )
                     );
                 });
             });
