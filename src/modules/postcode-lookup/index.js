@@ -440,7 +440,7 @@ function createPostcodeLookup(window) {
 
     function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
-        if (window.document.querySelector('[id *= "q-applicant-building-and-street"]') == null) {
+        if (window.document.querySelector('[id *= "applicant-building-and-street"]') == null) {
             return;
         }
         createContentElements();

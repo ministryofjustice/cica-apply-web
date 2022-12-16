@@ -8,7 +8,9 @@ import {
     fetchApiReponseNotOkayErrorEnhancedHtml,
     victimAddressSomeoneElseHtml,
     emptyPostcodeInputErrorEnhancedHtml,
-    emptyPostcodeInputForSomeoneElseErrorEnhancedHtml
+    emptyPostcodeInputForSomeoneElseErrorEnhancedHtml,
+    mainApplicantAddressHtml,
+    mainApplicantPostcodeLookupHtmlEnhanced
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -63,19 +65,31 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('fill-out-the-fields-manually-hint')
                 ).toBeNull();
             });
+            it('Should add the postcode lookup when the page contains mainapplicant address fields', async () => {
+                window.document.body.innerHTML = mainApplicantAddressHtml;
+                postcodeLookup = createPostcodeLookup(window);
+                postcodeLookup.init();
+                expect(
+                    window.document.getElementById('fill-out-the-fields-manually-hint')
+                ).toBeDefined();
+
+                expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                    mainApplicantPostcodeLookupHtmlEnhanced.replace(MATCH_NEWLINE_REGEX, '')
+                );
+            });
             it('Should not add the postcode lookup when the page does not conatin the correct address fields', async () => {
                 window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading">
-                Your address
+                What is the GP's address?
                 </h1>
                 </legend>
 
                 <div class="govuk-form-group">
-                <label class="govuk-label" for=q-mainapplicant-building-and-street">
+                <label class="govuk-label" for=q-gp-building-and-street">
                 Building and street
                 </label>
-                <input class="govuk-input" id="q-mainapplicant-building-and-street" name="q-mainapplicant-building-and-street"
+                <input class="govuk-input" id="q-gp-building-and-street" name="q-gp-building-and-street"
                 type="text" autocomplete="address-line1">
                 </div>
                 </fieldset>`;
