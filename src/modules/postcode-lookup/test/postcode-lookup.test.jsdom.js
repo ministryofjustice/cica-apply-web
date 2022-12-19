@@ -10,7 +10,9 @@ import {
     emptyPostcodeInputErrorEnhancedHtml,
     emptyPostcodeInputForSomeoneElseErrorEnhancedHtml,
     mainApplicantAddressHtml,
-    mainApplicantPostcodeLookupHtmlEnhanced
+    mainApplicantPostcodeLookupHtmlEnhanced,
+    gpAddressHtml,
+    emptyPostcodeInputForGpAddressErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -81,15 +83,15 @@ describe('postcode lookup progressive enhancement', () => {
                 window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading">
-                What is the GP's address?
+                Enter your address
                 </h1>
                 </legend>
 
                 <div class="govuk-form-group">
-                <label class="govuk-label" for=q-gp-building-and-street">
+                <label class="govuk-label" for="q-rep-building-and-street">
                 Building and street
                 </label>
-                <input class="govuk-input" id="q-gp-building-and-street" name="q-gp-building-and-street"
+                <input class="govuk-input" id="q-rep-building-and-street" name="q-rep-building-and-street"
                 type="text" autocomplete="address-line1">
                 </div>
                 </fieldset>`;
@@ -727,7 +729,7 @@ describe('postcode lookup progressive enhancement', () => {
                 );
             });
         });
-        describe('selection contains organisation name', () => {
+        describe('selection contains organisation name for a standard address page', () => {
             it('maps to the correct address fields', async () => {
                 fetch.mockResponse(async () => {
                     return JSON.stringify(addressSearchCollectionResponse);
@@ -773,6 +775,51 @@ describe('postcode lookup progressive enhancement', () => {
                 );
             });
         });
+        describe('selection contains organisation name for a gp address page', () => {
+            it('maps to the correct address fields which includes Practice Name', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchCollectionResponse);
+                });
+                window.document.body.innerHTML = gpAddressHtml;
+                postcodeLookup = createPostcodeLookup(window);
+                postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'FO123BA';
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
+
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
+
+                const selectionIndex = addressSelectionIndexFinder(
+                    'GREENFOO MEDICAL PRACTICE, UNIT 3, 3, FOOLAW PLACE, FOWTON BEARNS, FOOTOWN, A12 2BC'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
+                searchResultsDropDown.dispatchEvent(new Event('change'));
+
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
+                    'GREENFOO MEDICAL PRACTICE, UNIT 3, 3, FOOLAW PLACE, FOWTON BEARNS, FOOTOWN, A12 2BC'
+                );
+
+                expect(window.document.getElementById('q-gp-organisation-name').value).toBe(
+                    'GREENFOO MEDICAL PRACTICE'
+                );
+                expect(window.document.getElementById('q-gp-building-and-street').value).toBe(
+                    'UNIT 3'
+                );
+                expect(window.document.getElementById('q-gp-building-and-street-2').value).toBe(
+                    '3 FOOLAW PLACE'
+                );
+                expect(window.document.getElementById('q-gp-building-and-street-3').value).toBe(
+                    'FOWTON BEARNS'
+                );
+                expect(window.document.getElementById('q-gp-town-or-city').value).toBe('FOOTOWN');
+                expect(window.document.getElementById('q-gp-county').value).toBe('EAST FOOSHIRE');
+                expect(window.document.getElementById('q-gp-postcode').value).toBe('A12 2BC');
+            });
+        });
         describe('selection contains address header', () => {
             it('does nothing, no state is changed, no errors are thrown', async () => {
                 fetch.mockResponse(async () => {
@@ -810,7 +857,7 @@ describe('postcode lookup progressive enhancement', () => {
         });
     });
     describe('postcode validation', () => {
-        describe('searching with an valid postcode', () => {
+        describe('searching with a valid postcode', () => {
             describe('postcode contains 8 characters including a space', () => {
                 it('finds results and displays them', async () => {
                     fetch.mockResponse(async () => {
@@ -876,6 +923,22 @@ describe('postcode lookup progressive enhancement', () => {
 
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         emptyPostcodeInputForSomeoneElseErrorEnhancedHtml.replace(
+                            MATCH_NEWLINE_REGEX,
+                            ''
+                        )
+                    );
+                });
+            });
+            describe('clicking find address as a victim with an empty postcode input field for gp address', () => {
+                it('displays contextualised error summary and error field heading for postcode input', async () => {
+                    window.document.body.innerHTML = gpAddressHtml;
+                    postcodeLookup = createPostcodeLookup(window);
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        emptyPostcodeInputForGpAddressErrorEnhancedHtml.replace(
                             MATCH_NEWLINE_REGEX,
                             ''
                         )

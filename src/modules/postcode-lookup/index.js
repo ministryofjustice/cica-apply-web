@@ -44,7 +44,7 @@ function createPostcodeLookup(window) {
         // https://www.ordnancesurvey.co.uk/documents/product-support/getting-started/addressbase-premium-getting-started-guide.pdf
 
         // Define constants for DPA address components (blank if NULL).
-        const dpaOrganisationName = result.ORGANISATION_NAME || '';
+        let dpaOrganisationName = result.ORGANISATION_NAME || '';
         const dpaSubBuildingName = result.SUB_BUILDING_NAME || '';
         const dpaBuildingName = result.BUILDING_NAME || '';
         const dpaBuildingNumber = result.BUILDING_NUMBER || '';
@@ -91,6 +91,13 @@ function createPostcodeLookup(window) {
         }
 
         let addressLines = [];
+
+        // Does the page contain an organisation name?
+        const organisationName = window.document.querySelector('[id *= "organisation-name"]');
+        if (organisationName) {
+            organisationName.value = dpaOrganisationName;
+            dpaOrganisationName = '';
+        }
 
         // Push the Organisation Name and PO Box Number to the address array.
         addressLines.push(dpaPOBoxNumber, dpaOrganisationName);
@@ -430,17 +437,27 @@ function createPostcodeLookup(window) {
     }
 
     function setContextualisationMessages() {
-        const context = window.document.querySelector('h1').textContent.includes('your')
+        const applicantContext = window.document.querySelector('h1').textContent.includes('your')
             ? 'your'
             : 'their';
-        apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${context} address manually.`;
-        apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${context} address manually.`;
-        emptySearchInputErrorMessage = `Enter ${context} postcode`;
+
+        const pageContext = window.document.querySelector('h1').textContent.includes('GP')
+            ? `the GP's`
+            : applicantContext;
+
+        apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${pageContext} address manually.`;
+        apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${pageContext} address manually.`;
+        emptySearchInputErrorMessage = `Enter ${pageContext} postcode`;
     }
 
     function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
-        if (window.document.querySelector('[id *= "applicant-building-and-street"]') == null) {
+        // TODO this will eventually be simplified to one conditional
+        //  if (window.document.querySelector('[id *= "building-and-street"]') == null)
+        if (
+            window.document.querySelector('[id *= "applicant-building-and-street"]') == null &&
+            window.document.querySelector('[id *= "q-gp-organisation-name"]') == null
+        ) {
             return;
         }
         createContentElements();

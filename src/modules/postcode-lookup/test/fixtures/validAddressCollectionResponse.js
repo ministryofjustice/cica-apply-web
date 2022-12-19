@@ -375,6 +375,44 @@ const addressSearchCollectionResponse = {
                 MATCH_DESCRIPTION: 'EXACT',
                 DELIVERY_POINT_SUFFIX: '2W'
             }
+        },
+        {
+            DPA: {
+                UPRN: '131044410',
+                UDPRN: '51882736',
+                ADDRESS:
+                    'GREENFOO MEDICAL PRACTICE, UNIT 3, 3, FOOLAW PLACE, FOWTON BEARNS, FOOTOWN, A12 2BC',
+                ORGANISATION_NAME: 'GREENFOO MEDICAL PRACTICE',
+                SUB_BUILDING_NAME: 'UNIT 3',
+                BUILDING_NUMBER: '3',
+                THOROUGHFARE_NAME: 'FOOLAW PLACE',
+                DEPENDENT_LOCALITY: 'FOWTON BEARNS',
+                POST_TOWN: 'FOOTOWN',
+                POSTCODE: 'A12 2BC',
+                RPC: '1',
+                X_COORDINATE: 252896.0,
+                Y_COORDINATE: 656896.0,
+                STATUS: 'APPROVED',
+                LOGICAL_STATUS_CODE: '1',
+                CLASSIFICATION_CODE: 'CM02HC',
+                CLASSIFICATION_CODE_DESCRIPTION: 'Health Centre',
+                LOCAL_CUSTODIAN_CODE: 9063,
+                LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'EAST FOOSHIRE',
+                COUNTRY_CODE: 'S',
+                COUNTRY_CODE_DESCRIPTION: 'This record is within Scotland',
+                POSTAL_ADDRESS_CODE: 'D',
+                POSTAL_ADDRESS_CODE_DESCRIPTION: 'A record which is linked to PAF',
+                BLPU_STATE_CODE: '2',
+                BLPU_STATE_CODE_DESCRIPTION: 'In use',
+                TOPOGRAPHY_LAYER_TOID: 'osgb1000002038663709',
+                LAST_UPDATE_DATE: '10/02/2016',
+                ENTRY_DATE: '12/01/2010',
+                BLPU_STATE_DATE: '15/02/2011',
+                LANGUAGE: 'EN',
+                MATCH: 1.0,
+                MATCH_DESCRIPTION: 'EXACT',
+                DELIVERY_POINT_SUFFIX: '1D'
+            }
         }
     ]
 };
