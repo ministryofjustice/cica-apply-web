@@ -392,33 +392,6 @@ module.exports = {
             }
         }
     },
-    'p-gp-enter-your-address': {
-        options: {
-            properties: {
-                'q-gp-building-and-street': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-gp-building-and-street2': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                }
-            },
-            outputOrder: [
-                'q-gp-building-and-street',
-                'q-gp-building-and-street2',
-                'q-gp-town-or-city',
-                'q-gp-county',
-                'q-gp-postcode'
-            ]
-        }
-    },
     'p--whats-the-crime-reference-number': {
         options: {
             outputOrder: ['q--whats-the-crime-reference-number', 'i-dont-know-the-crime-reference']
