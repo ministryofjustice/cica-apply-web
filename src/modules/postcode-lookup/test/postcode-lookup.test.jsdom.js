@@ -12,7 +12,9 @@ import {
     mainApplicantAddressHtml,
     mainApplicantPostcodeLookupHtmlEnhanced,
     gpAddressHtml,
-    emptyPostcodeInputForGpAddressErrorEnhancedHtml
+    emptyPostcodeInputForGpAddressErrorEnhancedHtml,
+    dentistAddressHtml,
+    emptyPostcodeInputForDentistAddressErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -939,6 +941,23 @@ describe('postcode lookup progressive enhancement', () => {
 
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         emptyPostcodeInputForGpAddressErrorEnhancedHtml.replace(
+                            MATCH_NEWLINE_REGEX,
+                            ''
+                        )
+                    );
+                });
+            });
+
+            describe('clicking find address as a victim with an empty postcode input field for dentist address', () => {
+                it('displays contextualised error summary and error field heading for postcode input', async () => {
+                    window.document.body.innerHTML = dentistAddressHtml;
+                    postcodeLookup = createPostcodeLookup(window);
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        emptyPostcodeInputForDentistAddressErrorEnhancedHtml.replace(
                             MATCH_NEWLINE_REGEX,
                             ''
                         )
