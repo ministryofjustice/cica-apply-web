@@ -437,13 +437,17 @@ function createPostcodeLookup(window) {
     }
 
     function setContextualisationMessages() {
-        const applicantContext = window.document.querySelector('h1').textContent.includes('your')
-            ? 'your'
-            : 'their';
+        let pageContext = window.document.querySelector('h1').textContent.includes('their')
+            ? 'their'
+            : 'your';
 
-        const pageContext = window.document.querySelector('h1').textContent.includes('GP')
+        pageContext = window.document.querySelector('h1').textContent.includes('GP')
             ? `the GP's`
-            : applicantContext;
+            : pageContext;
+
+        pageContext = window.document.querySelector('h1').textContent.includes('dentist')
+            ? "the dentist's"
+            : pageContext;
 
         apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${pageContext} address manually.`;
         apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${pageContext} address manually.`;
@@ -453,10 +457,11 @@ function createPostcodeLookup(window) {
     function init() {
         // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
         // TODO this will eventually be simplified to one conditional
-        //  if (window.document.querySelector('[id *= "building-and-street"]') == null)
+        //  if (window.document.querySelector('[id *= "building-and-street"]') !== null)
         if (
             window.document.querySelector('[id *= "applicant-building-and-street"]') == null &&
-            window.document.querySelector('[id *= "q-gp-organisation-name"]') == null
+            window.document.querySelector('[id *= "q-gp-organisation-name"]') == null &&
+            window.document.querySelector('[id *= "q-applicant-dentist-organisation-name"]') == null
         ) {
             return;
         }
