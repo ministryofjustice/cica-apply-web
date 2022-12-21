@@ -14,7 +14,9 @@ import {
     gpAddressHtml,
     emptyPostcodeInputForGpAddressErrorEnhancedHtml,
     dentistAddressHtml,
-    emptyPostcodeInputForDentistAddressErrorEnhancedHtml
+    emptyPostcodeInputForDentistAddressErrorEnhancedHtml,
+    treatmentAddressHtml,
+    emptyPostcodeInputForTreatmentAddressErrorEnhancedHtml
 } from './fixtures/postcode-lookup-html';
 import {
     addressSearchCollectionResponse,
@@ -947,7 +949,6 @@ describe('postcode lookup progressive enhancement', () => {
                     );
                 });
             });
-
             describe('clicking find address as a victim with an empty postcode input field for dentist address', () => {
                 it('displays contextualised error summary and error field heading for postcode input', async () => {
                     window.document.body.innerHTML = dentistAddressHtml;
@@ -958,6 +959,22 @@ describe('postcode lookup progressive enhancement', () => {
 
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         emptyPostcodeInputForDentistAddressErrorEnhancedHtml.replace(
+                            MATCH_NEWLINE_REGEX,
+                            ''
+                        )
+                    );
+                });
+            });
+            describe('clicking find address as a victim with an empty postcode input field for treatment address', () => {
+                it('displays contextualised error summary and error field heading for postcode input', async () => {
+                    window.document.body.innerHTML = treatmentAddressHtml;
+                    postcodeLookup = createPostcodeLookup(window);
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        emptyPostcodeInputForTreatmentAddressErrorEnhancedHtml.replace(
                             MATCH_NEWLINE_REGEX,
                             ''
                         )
