@@ -12,6 +12,9 @@ function createPostcodeLookup(window) {
     const INVALID_POSTCODE_ERROR = 'Enter a valid postcode';
     let emptySearchInputErrorMessage;
 
+    let selectElementResults;
+    let addressSearchResultsOptions;
+
     function isSelectedValueInteger(str) {
         const num = Number(str);
         if (Number.isInteger(num)) {
@@ -131,9 +134,6 @@ function createPostcodeLookup(window) {
         const addressPostcode = window.document.querySelector('[id *= "postcode"]');
         addressPostcode.value = dpaPostcode;
     }
-
-    let selectElementResults;
-    let addressSearchResultsOptions;
 
     function clearAddressResultsDropdown() {
         addressSearchResultsOptions = window.document.querySelectorAll(
@@ -437,31 +437,31 @@ function createPostcodeLookup(window) {
     }
 
     function setContextualisationMessages() {
-        let pageContext = window.document.querySelector('h1').textContent.includes('their')
-            ? 'their'
-            : 'your';
-
-        pageContext = window.document.querySelector('h1').textContent.includes('GP')
-            ? `the GP's`
-            : pageContext;
-
-        pageContext = window.document.querySelector('h1').textContent.includes('dentist')
-            ? "the dentist's"
-            : pageContext;
+        const h1TextContent = window.document.querySelector('h1').textContent;
+        let pageContext = h1TextContent.includes('their') ? 'their' : 'your';
+        pageContext = h1TextContent.includes('GP') ? `the GP's` : pageContext;
+        pageContext = h1TextContent.includes('dentist') ? "the dentist's" : pageContext;
+        pageContext = h1TextContent.includes('treatment') ? 'the treatment' : pageContext;
 
         apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${pageContext} address manually.`;
         apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${pageContext} address manually.`;
+
+        if (pageContext === 'the treatment') {
+            pageContext = 'the treatment address';
+        }
         emptySearchInputErrorMessage = `Enter ${pageContext} postcode`;
     }
 
     function init() {
-        // CHECK FOR EXISTENCE OF REQUIRED ADDRESS FIELDS
         // TODO this will eventually be simplified to one conditional
         //  if (window.document.querySelector('[id *= "building-and-street"]') !== null)
         if (
-            window.document.querySelector('[id *= "applicant-building-and-street"]') == null &&
-            window.document.querySelector('[id *= "q-gp-organisation-name"]') == null &&
-            window.document.querySelector('[id *= "q-applicant-dentist-organisation-name"]') == null
+            window.document.querySelector('[id *= "applicant-building-and-street"]') === null &&
+            window.document.querySelector('[id *= "q-gp-organisation-name"]') === null &&
+            window.document.querySelector('[id *= "q-applicant-dentist-organisation-name"]') ===
+                null &&
+            window.document.querySelector('[id *= "q-applicant-treatment-organisation-name"]') ===
+                null
         ) {
             return;
         }
