@@ -453,16 +453,7 @@ function createPostcodeLookup(window) {
     }
 
     function init() {
-        // TODO this will eventually be simplified to one conditional
-        //  if (window.document.querySelector('[id *= "building-and-street"]') !== null)
-        if (
-            window.document.querySelector('[id *= "applicant-building-and-street"]') === null &&
-            window.document.querySelector('[id *= "q-gp-organisation-name"]') === null &&
-            window.document.querySelector('[id *= "q-applicant-dentist-organisation-name"]') ===
-                null &&
-            window.document.querySelector('[id *= "q-applicant-treatment-organisation-name"]') ===
-                null
-        ) {
+        if (window.document.querySelector('[id *= "building-and-street"]') === null) {
             return;
         }
         createContentElements();
