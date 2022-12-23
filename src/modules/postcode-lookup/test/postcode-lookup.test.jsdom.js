@@ -83,28 +83,6 @@ describe('postcode lookup progressive enhancement', () => {
                     mainApplicantPostcodeLookupHtmlEnhanced.replace(MATCH_NEWLINE_REGEX, '')
                 );
             });
-            it('Should not add the postcode lookup when the page does not conatin the correct address fields', async () => {
-                window.document.body.innerHTML = `<fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                <h1 class="govuk-fieldset__heading">
-                Enter your address
-                </h1>
-                </legend>
-
-                <div class="govuk-form-group">
-                <label class="govuk-label" for="q-rep-building-and-street">
-                Building and street
-                </label>
-                <input class="govuk-input" id="q-rep-building-and-street" name="q-rep-building-and-street"
-                type="text" autocomplete="address-line1">
-                </div>
-                </fieldset>`;
-                postcodeLookup = createPostcodeLookup(window);
-                postcodeLookup.init();
-                expect(
-                    window.document.getElementById('fill-out-the-fields-manually-hint')
-                ).toBeNull();
-            });
         });
     });
     describe('clicking postcode lookup find address button', () => {
