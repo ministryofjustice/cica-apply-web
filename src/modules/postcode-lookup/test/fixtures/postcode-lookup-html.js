@@ -653,7 +653,7 @@ const emptyPostcodeInputForGpAddressErrorEnhancedHtml = `<form method="post" aut
 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
 <div>
 <ul class="govuk-list govuk-error-summary__list">
-<li><a href="#address-search-input">Enter the GP's postcode</a></li>
+<li><a href="#address-search-input">Enter the postcode</a></li>
 </ul>
 </div>
 </div>
@@ -669,7 +669,7 @@ Enter a UK postcode to search for and select an address. Or, you can enter the a
 Postcode
 </label>
 <span id="address-search-input-error" class="govuk-error-message">
-Enter the GP's postcode<span class="govuk-visually-hidden">Error:</span>
+Enter the postcode<span class="govuk-visually-hidden">Error:</span>
 </span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
@@ -789,7 +789,7 @@ const emptyPostcodeInputForDentistAddressErrorEnhancedHtml = `<form method="post
 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
 <div>
 <ul class="govuk-list govuk-error-summary__list">
-<li><a href="#address-search-input">Enter the dentist's postcode</a></li>
+<li><a href="#address-search-input">Enter the postcode</a></li>
 </ul>
 </div>
 </div>
@@ -805,7 +805,7 @@ Enter a UK postcode to search for and select an address. Or, you can enter the a
 Postcode
 </label>
 <span id="address-search-input-error" class="govuk-error-message">
-Enter the dentist's postcode<span class="govuk-visually-hidden">Error:</span>
+Enter the postcode<span class="govuk-visually-hidden">Error:</span>
 </span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
@@ -925,7 +925,7 @@ const emptyPostcodeInputForTreatmentAddressErrorEnhancedHtml = `<form method="po
 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
 <div>
 <ul class="govuk-list govuk-error-summary__list">
-<li><a href="#address-search-input">Enter the treatment address postcode</a></li>
+<li><a href="#address-search-input">Enter the postcode</a></li>
 </ul>
 </div>
 </div>
@@ -941,7 +941,7 @@ Enter a UK postcode to search for and select an address. Or, you can enter the a
 Postcode
 </label>
 <span id="address-search-input-error" class="govuk-error-message">
-Enter the treatment address postcode<span class="govuk-visually-hidden">Error:</span>
+Enter the postcode<span class="govuk-visually-hidden">Error:</span>
 </span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>

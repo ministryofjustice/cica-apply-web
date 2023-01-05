@@ -438,17 +438,15 @@ function createPostcodeLookup(window) {
 
     function setContextualisationMessages() {
         const h1TextContent = window.document.querySelector('h1').textContent;
-        let pageContext = h1TextContent.includes('their') ? 'their' : 'your';
-        pageContext = h1TextContent.includes('GP') ? `the GP's` : pageContext;
-        pageContext = h1TextContent.includes('dentist') ? "the dentist's" : pageContext;
-        pageContext = h1TextContent.includes('treatment') ? 'the treatment' : pageContext;
+
+        let pageContext = 'the';
+        if (h1TextContent.includes('their') || h1TextContent.includes('your')) {
+            pageContext = h1TextContent.includes('their') ? 'their' : 'your';
+        }
 
         apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${pageContext} address manually.`;
         apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${pageContext} address manually.`;
 
-        if (pageContext === 'the treatment') {
-            pageContext = 'the treatment address';
-        }
         emptySearchInputErrorMessage = `Enter ${pageContext} postcode`;
     }
 
