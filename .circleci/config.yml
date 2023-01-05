@@ -100,7 +100,7 @@ jobs:
           name: Authenticate and push image to ecr
           command: |
             echo "run aws"
-            $(aws ecr get-login --region eu-west-2 --no-include-email)
+            aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 754256621582.dkr.ecr.eu-west-2.amazonaws.com
             docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
             docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
             if [ "${CIRCLE_BRANCH}" ==  "cw-deploy" ]; then
