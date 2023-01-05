@@ -57,7 +57,10 @@ function createPostcodeLookup(window) {
         const dpaDependentLocality = result.DEPENDENT_LOCALITY || '';
         const dpaPostTown = result.POST_TOWN;
         const dpaPostcode = result.POSTCODE;
-        const dpaCounty = result.LOCAL_CUSTODIAN_CODE_DESCRIPTION;
+        const dpaCounty =
+            result.LOCAL_CUSTODIAN_CODE_DESCRIPTION === 'ORDNANCE SURVEY'
+                ? ''
+                : result.LOCAL_CUSTODIAN_CODE_DESCRIPTION;
 
         // Add a "PO BOX " prefix to the PO Box Number integer.
         if (dpaPOBoxNumber !== '') {

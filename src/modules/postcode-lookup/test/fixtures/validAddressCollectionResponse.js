@@ -413,6 +413,43 @@ const addressSearchCollectionResponse = {
                 MATCH_DESCRIPTION: 'EXACT',
                 DELIVERY_POINT_SUFFIX: '1D'
             }
+        },
+        {
+            DPA: {
+                UPRN: '10091793893',
+                UDPRN: '52347175',
+                ADDRESS: 'FOO CLEANERS, 3, FOOLAW PLACE, FOWTON BEARNS, FOOTOWN, A12 2BC',
+                ORGANISATION_NAME: 'FOO CLEANERS',
+                BUILDING_NUMBER: '3',
+                THOROUGHFARE_NAME: 'FOOLAW PLACE',
+                DEPENDENT_LOCALITY: 'FOWTON BEARNS',
+                POST_TOWN: 'FOOTOWN',
+                POSTCODE: 'A12 2BC',
+                RPC: '1',
+                X_COORDINATE: 252896.0,
+                Y_COORDINATE: 656896.0,
+                STATUS: 'APPROVED',
+                LOGICAL_STATUS_CODE: '1',
+                CLASSIFICATION_CODE: 'OR04',
+                CLASSIFICATION_CODE_DESCRIPTION: 'Additional Mail / Packet Addressee',
+                LOCAL_CUSTODIAN_CODE: 7655,
+                LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'ORDNANCE SURVEY',
+                COUNTRY_CODE: 'S',
+                COUNTRY_CODE_DESCRIPTION: 'This record is within Scotland',
+                POSTAL_ADDRESS_CODE: 'D',
+                POSTAL_ADDRESS_CODE_DESCRIPTION: 'A record which is linked to PAF',
+                BLPU_STATE_CODE: '2',
+                BLPU_STATE_CODE_DESCRIPTION: 'In use',
+                TOPOGRAPHY_LAYER_TOID: 'osgb1000002038663709',
+                PARENT_UPRN: '131044410',
+                LAST_UPDATE_DATE: '10/03/2022',
+                ENTRY_DATE: '19/03/2012',
+                BLPU_STATE_DATE: '19/03/2012',
+                LANGUAGE: 'EN',
+                MATCH: 1.0,
+                MATCH_DESCRIPTION: 'EXACT',
+                DELIVERY_POINT_SUFFIX: '1X'
+            }
         }
     ]
 };
