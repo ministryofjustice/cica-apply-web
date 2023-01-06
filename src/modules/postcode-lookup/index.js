@@ -11,7 +11,6 @@ function createPostcodeLookup(window) {
     let apiResponseNotOkErrorMessage;
     const INVALID_POSTCODE_ERROR = 'Enter a valid postcode';
     let emptySearchInputErrorMessage;
-
     let selectElementResults;
     let addressSearchResultsOptions;
 
