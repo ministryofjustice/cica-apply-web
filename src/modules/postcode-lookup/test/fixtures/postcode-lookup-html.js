@@ -67,7 +67,7 @@ Enter a UK postcode to search for and select an address. Or, you can enter the a
 <label class="govuk-label" for="address-search-input">
 Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find Address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
+<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-building-and-street">
@@ -132,7 +132,7 @@ What is your address?
 <span id="address-search-input-error" class="govuk-error-message">Enter a valid postcode<span class="govuk-visually-hidden">Error:</span></span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
-<button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find Address</button>
+<button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find address</button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">Select an address</label>
 <select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select>
@@ -195,7 +195,7 @@ What is your address?
 <span id="address-search-input-error" class="govuk-error-message">Enter your postcode<span class="govuk-visually-hidden">Error:</span></span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
-<button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find Address</button>
+<button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find address</button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">Select an address</label>
 <select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select>
@@ -258,7 +258,7 @@ What is their address?
 <span id="address-search-input-error" class="govuk-error-message">Enter their postcode<span class="govuk-visually-hidden">Error:</span></span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
-<button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find Address</button>
+<button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find address</button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">Select an address</label>
 <select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select>
@@ -322,7 +322,7 @@ Enter a UK postcode to search for and select an address. Or, you can enter the a
 <input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code">
 </div>
 <button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">
-Find Address
+Find address
 </button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">Select an address</label>
@@ -544,7 +544,7 @@ Enter a UK postcode to search for and select an address. Or, you can enter the a
 <label class="govuk-label" for="address-search-input">
 Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find Address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
+<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-mainapplicant-building-and-street">
@@ -674,7 +674,7 @@ Enter the postcode<span class="govuk-visually-hidden">Error:</span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
 <button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">
-Find Address
+Find address
 </button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">
@@ -810,7 +810,7 @@ Enter the postcode<span class="govuk-visually-hidden">Error:</span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
 <button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">
-Find Address
+Find address
 </button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">
@@ -946,7 +946,7 @@ Enter the postcode<span class="govuk-visually-hidden">Error:</span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
 <button id="search-button" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="button">
-Find Address
+Find address
 </button>
 <div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;">
 <label class="govuk-label" for="address-search-results-dropdown">
