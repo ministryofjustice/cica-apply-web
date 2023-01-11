@@ -538,13 +538,13 @@ describe('form-helper functions', () => {
         });
     });
 
-    describe('Remove "carriage returns" answer string', () => {
-        it('Should return a valid sectionId given a section name exists in the questionnaire', () => {
+    describe('Remove "carriage returns" from answer string', () => {
+        it('Should return an answer with carriage returns removed', () => {
             let body = {
-                Q1: 'foo\r\nbar'
+                Q1: 'foo\r\nbar\r\nfoo\r\nbar\r\nfoo\r\nbar foo bar.'
             };
             const expected = {
-                Q1: 'foo\nbar'
+                Q1: 'foo\nbar\nfoo\nbar\nfoo\nbar foo bar.'
             };
 
             Object.keys(body).forEach(property => {
