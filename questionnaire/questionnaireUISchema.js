@@ -395,6 +395,13 @@ module.exports = {
     'p-gp-enter-your-address': {
         options: {
             properties: {
+                'q-gp-organisation-name': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
                 'q-gp-building-and-street': {
                     options: {
                         macroOptions: {
@@ -402,17 +409,31 @@ module.exports = {
                         }
                     }
                 },
-                'q-gp-building-and-street2': {
+                'q-gp-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: ''
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-gp-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
                         }
                     }
                 }
             },
             outputOrder: [
                 'q-gp-building-and-street',
-                'q-gp-building-and-street2',
+                'q-gp-building-and-street-2',
+                'q-gp-building-and-street-3',
                 'q-gp-town-or-city',
                 'q-gp-county',
                 'q-gp-postcode'
@@ -427,6 +448,13 @@ module.exports = {
     'p-applicant-treatment-address': {
         options: {
             properties: {
+                'q-applicant-treatment-organisation-name': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
                 'q-applicant-treatment-building-and-street': {
                     options: {
                         macroOptions: {
@@ -434,17 +462,32 @@ module.exports = {
                         }
                     }
                 },
-                'q-applicant-treatment-building-and-street2': {
+                'q-applicant-treatment-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: ''
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-applicant-treatment-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
                         }
                     }
                 }
             },
             outputOrder: [
+                'q-applicant-treatment-organisation-name',
                 'q-applicant-treatment-building-and-street',
-                'q-applicant-treatment-building-and-street2',
+                'q-applicant-treatment-building-and-street-2',
+                'q-applicant-treatment-building-and-street-3',
                 'q-applicant-treatment-town-or-city',
                 'q-applicant-treatment-county',
                 'q-applicant-treatment-postcode'
@@ -1205,6 +1248,13 @@ module.exports = {
     'p-applicant-dentist-address': {
         options: {
             properties: {
+                'q-applicant-dentist-organisation-name': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
                 'q-applicant-dentist-address-building-and-street': {
                     options: {
                         macroOptions: {
@@ -1212,17 +1262,32 @@ module.exports = {
                         }
                     }
                 },
-                'q-applicant-dentist-address-building-and-street2': {
+                'q-applicant-dentist-address-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: ''
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-applicant-dentist-address-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
                         }
                     }
                 }
             },
             outputOrder: [
+                'q-applicant-dentist-organisation-name',
                 'q-applicant-dentist-address-building-and-street',
-                'q-applicant-dentist-address-building-and-street2',
+                'q-applicant-dentist-address-building-and-street-2',
+                'q-applicant-dentist-address-building-and-street-3',
                 'q-applicant-dentist-address-town-or-city',
                 'q-applicant-dentist-address-county',
                 'q-applicant-dentist-address-postcode'
@@ -1606,6 +1671,96 @@ module.exports = {
     'p--represents-legal-authority': {
         options: {
             outputOrder: ['q--represents-legal-authority']
+        }
+    },
+    'p-rep-address': {
+        options: {
+            properties: {
+                'q-rep-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-rep-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-rep-building-and-street',
+                'q-rep-building-and-street-2',
+                'q-rep-building-and-street-3',
+                'q-rep-town-or-city',
+                'q-rep-county',
+                'q-rep-postcode'
+            ]
+        }
+    },
+    'p-rep-organisation-address': {
+        options: {
+            properties: {
+                'q-rep-organisation-name': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-rep-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-rep-organisation-name',
+                'q-rep-building-and-street',
+                'q-rep-building-and-street-2',
+                'q-rep-building-and-street-3',
+                'q-rep-town-or-city',
+                'q-rep-county',
+                'q-rep-postcode'
+            ]
         }
     }
 };
