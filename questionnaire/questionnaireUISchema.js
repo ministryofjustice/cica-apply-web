@@ -392,9 +392,63 @@ module.exports = {
             }
         }
     },
+    'p-gp-enter-your-address': {
+        options: {
+            properties: {
+                'q-gp-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-gp-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-gp-building-and-street',
+                'q-gp-building-and-street2',
+                'q-gp-town-or-city',
+                'q-gp-county',
+                'q-gp-postcode'
+            ]
+        }
+    },
     'p--whats-the-crime-reference-number': {
         options: {
             outputOrder: ['q--whats-the-crime-reference-number', 'i-dont-know-the-crime-reference']
+        }
+    },
+    'p-applicant-treatment-address': {
+        options: {
+            properties: {
+                'q-applicant-treatment-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-applicant-treatment-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-applicant-treatment-building-and-street',
+                'q-applicant-treatment-building-and-street2',
+                'q-applicant-treatment-town-or-city',
+                'q-applicant-treatment-county',
+                'q-applicant-treatment-postcode'
+            ]
         }
     },
     'p-applicant-work-details-option': {
@@ -1148,6 +1202,33 @@ module.exports = {
             }
         }
     },
+    'p-applicant-dentist-address': {
+        options: {
+            properties: {
+                'q-applicant-dentist-address-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-applicant-dentist-address-building-and-street2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
+            outputOrder: [
+                'q-applicant-dentist-address-building-and-street',
+                'q-applicant-dentist-address-building-and-street2',
+                'q-applicant-dentist-address-town-or-city',
+                'q-applicant-dentist-address-county',
+                'q-applicant-dentist-address-postcode'
+            ]
+        }
+    },
     'p-applicant-you-cannot-get-compensation-violent-crime': {
         options: {
             buttonText: 'Continue anyway'
@@ -1284,6 +1365,17 @@ module.exports = {
                         }
                     }
                 },
+                'q-mainapplicant-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line2',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
                 'q-mainapplicant-town-or-city': {
                     options: {
                         macroOptions: {
@@ -1309,6 +1401,7 @@ module.exports = {
             outputOrder: [
                 'q-mainapplicant-building-and-street',
                 'q-mainapplicant-building-and-street-2',
+                'q-mainapplicant-building-and-street-3',
                 'q-mainapplicant-town-or-city',
                 'q-mainapplicant-county',
                 'q-mainapplicant-postcode'
