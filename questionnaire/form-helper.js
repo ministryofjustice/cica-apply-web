@@ -162,6 +162,17 @@ function addPrefix(section) {
     return sectionList[section];
 }
 
+function removeCarriageReturns(body, property) {
+    const answers = body;
+    const value = answers[property];
+
+    // Remove carriage returns as these increase the character count causing validation error and are added by the http tranmission. They are not part of the original answer from frontend
+    if (typeof value === 'string') {
+        answers[property] = answers[property].replace(/\r\n/g, '\n');
+    }
+    return answers;
+}
+
 function processRequest(rawBody, section) {
     // Handle conditionally revealing routes
     let body = rawBody;
@@ -173,6 +184,7 @@ function processRequest(rawBody, section) {
         Object.keys(body).forEach(question => {
             body = removeEmptyAnswers(body, question);
             body = correctPartialDates(body, question);
+            body = removeCarriageReturns(body, question);
         });
         return body;
     }
@@ -282,5 +294,6 @@ module.exports = {
     getSectionHtmlWithErrors,
     addPrefix,
     escapeSchemaContent,
-    getSectionContext
+    getSectionContext,
+    removeCarriageReturns
 };

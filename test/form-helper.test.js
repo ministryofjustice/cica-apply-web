@@ -537,4 +537,21 @@ describe('form-helper functions', () => {
             expect(formHelper.escapeSchemaContent(schema)).toEqual(expected);
         });
     });
+
+    describe('Remove "carriage returns" answer string', () => {
+        it('Should return a valid sectionId given a section name exists in the questionnaire', () => {
+            let body = {
+                Q1: 'foo\r\nbar'
+            };
+            const expected = {
+                Q1: 'foo\nbar'
+            };
+
+            Object.keys(body).forEach(property => {
+                body = formHelper.removeCarriageReturns(body, property);
+            });
+
+            expect(body).toMatchObject(expected);
+        });
+    });
 });
