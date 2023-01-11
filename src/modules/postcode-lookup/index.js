@@ -388,7 +388,7 @@ function createPostcodeLookup(window) {
         searchButton.setAttribute('class', 'govuk-button govuk-button--secondary');
         searchButton.setAttribute('data-module', 'govuk-button');
         searchButton.setAttribute('type', 'button');
-        searchButton.appendChild(window.document.createTextNode('Find Address'));
+        searchButton.appendChild(window.document.createTextNode('Find address'));
         window.document
             .getElementById('address-search')
             .insertAdjacentElement('afterend', searchButton);
