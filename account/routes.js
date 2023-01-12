@@ -94,4 +94,56 @@ router.get('/sign-out', async (req, res, next) => {
     }
 });
 
+router.get('/dashboard', async (req, res, next) => {
+    try {
+        // Remove session cookie
+        req.session.questionnaireId = undefined;
+
+        // Get data
+        const dataObject = [
+            [
+                {
+                    text: 'Tony Stark',
+                    classes: 'govuk-table__cell__overflow'
+                },
+                {
+                    text: '8 December 2022',
+                    attributes: {
+                        'data-sort-value': '123456789002'
+                    }
+                },
+                {
+                    html:
+                        "<a href='www.gov.uk'>Continue<span class='govuk-visually-hidden'> Continue application for Tony Stark</span></a>"
+                }
+            ],
+            [
+                {
+                    text: 'Bruce Banner',
+                    classes: 'govuk-table__cell__overflow'
+                },
+                {
+                    text: '7 December 2022',
+                    attributes: {
+                        'data-sort-value': '123456789001'
+                    }
+                },
+                {
+                    html:
+                        "<a href='www.gov.uk'>Continue<span class='govuk-visually-hidden'> Continue application for Bruce Banner</span></a>"
+                }
+            ]
+        ];
+
+        // Go to dashboard
+        const templateEngineService = createTemplateEngineService();
+        const {render} = templateEngineService;
+        const html = render('dashboard.njk', {nonce: res.locals.nonce, userData: dataObject});
+        return res.send(html);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
 module.exports = router;

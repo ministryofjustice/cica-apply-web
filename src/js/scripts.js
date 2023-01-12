@@ -5,6 +5,7 @@ import 'regenerator-runtime/runtime';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as axios from 'axios';
 import * as jsCookies from 'js-cookie';
+import {initAll} from '@ministryofjustice/frontend';
 
 import createCicaGa from '../modules/ga';
 import createAutocomplete from '../modules/autocomplete/autocomplete';
@@ -247,4 +248,5 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
 
     createNewWindowAnchors(window.document.querySelectorAll('[open-new-window]'));
     createLiveChat(window.document.querySelector('#chat-iframe'));
+    initAll();
 })();
