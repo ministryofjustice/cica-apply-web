@@ -202,7 +202,10 @@ function createPostcodeLookup(window) {
     }
 
     function handleErrorSummaryListElement(message) {
-        if (message === apiResponseNotOkErrorMessage) {
+        if (
+            message === apiResponseNotOkErrorMessage ||
+            message === apiNoAddressesFoundErrorMessage
+        ) {
             return window.document.createTextNode(message);
         }
         const errorAnchor = window.document.createElement('a');
@@ -446,9 +449,8 @@ function createPostcodeLookup(window) {
             pageContext = h1TextContent.includes('their') ? 'their' : 'your';
         }
 
-        apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Enter ${pageContext} address manually.`;
+        apiNoAddressesFoundErrorMessage = `We could not find any addresses for that postcode. Check ${pageContext} postcode is correct, or enter ${pageContext} address manually.`;
         apiResponseNotOkErrorMessage = `The system is experiencing an issue. Enter ${pageContext} address manually.`;
-
         emptySearchInputErrorMessage = `Enter ${pageContext} postcode`;
     }
 

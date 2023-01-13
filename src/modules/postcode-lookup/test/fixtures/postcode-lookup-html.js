@@ -307,7 +307,7 @@ const noAddressesFoundErrorEnhancedHtml = `<form method="post" autocomplete="off
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem</h2>
 <div><ul class="govuk-list govuk-error-summary__list">
-<li><a href="#address-search-input">We could not find any addresses for that postcode. Enter your address manually.</a></li></ul></div></div>
+<li>We could not find any addresses for that postcode. Check your postcode is correct, or enter your address manually.</li></ul></div></div>
 <fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
 <h1 class="govuk-fieldset__heading">
