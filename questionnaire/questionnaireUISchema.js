@@ -431,6 +431,7 @@ module.exports = {
                 }
             },
             outputOrder: [
+                'q-gp-organisation-name',
                 'q-gp-building-and-street',
                 'q-gp-building-and-street-2',
                 'q-gp-building-and-street-3',
