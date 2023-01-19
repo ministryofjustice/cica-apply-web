@@ -9,8 +9,9 @@ const nunjucks = require('nunjucks');
 const clientSessions = require('client-sessions');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
-const passport = require('passport');
-const {Issuer, Strategy} = require('openid-client');
+// const passport = require('passport');
+// const OpenIDConnectStrategy = require('passport-openidconnect');
+// const {Issuer, Strategy, generators} = require('openid-client');
 const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
@@ -129,76 +130,146 @@ app.use(
     })
 );
 
-async function authenticationSetUp() {
-    app.use(passport.initialize());
-    app.use(passport.session());
-    const issuer = await Issuer.discover(process.env.CW_GOVUK_ISSUER_URL);
+app.use((req, res, next) => {
+    res.locals.nonce = nanoid();
+    // https://stackoverflow.com/a/22339262/2952356
+    // `process.env.npm_package_version` only works if you use npm start to run the app.
+    res.set('Application-Version', process.env.npm_package_version);
+    next();
+});
 
-    const client = new issuer.Client(
-        {
-            client_id: process.env.CW_GOVUK_CLIENT_ID,
-            client_secret: process.env.CW_GOVUK_PRIVATE_KEY,
-            redirect_uris: [`${process.env.CW_URL}/account/signed-in`],
-            post_logout_redirect_uris: [`${process.env.CW_URL}/account/signed-out`],
-            response_types: ['code'],
-            token_endpoint_auth_method: issuer.token_endpoint_auth_methods_supported[0],
-            jwks_uri: issuer.jwks_uri,
-            token_endpoint: issuer.token_endpoint
-        },
-        {
-            keys: [
-                {
-                    kty: 'EC',
-                    use: 'sig',
-                    crv: 'P-256',
-                    kid: '644af598b780f54106ca0f3c017341bc230c4f8373f35f32e18e3e40cc7acff6',
-                    x: '5URVCgH4HQgkg37kiipfOGjyVft0R5CdjFJahRoJjEw',
-                    y: 'QzrvsnDy3oY1yuz55voaAq9B1M5tfhgW3FBjh_n_F0U',
-                    alg: 'ES256'
-                },
-                {
-                    kty: 'EC',
-                    use: 'sig',
-                    crv: 'P-256',
-                    kid: 'e1f5699d068448882e7866b49d24431b2f21bf1a8f3c2b2dde8f4066f0506f1b',
-                    x: 'BJnIZvnzJ9D_YRu5YL8a3CXjBaa5AxlX1xSeWDLAn9k',
-                    y: 'x4FU3lRtkeDukSWVJmDuw2nHVFVIZ8_69n4bJ6ik4bQ',
-                    alg: 'ES256'
-                }
-            ]
-        }
-    );
+app.use((req, res, next) => {
+    res.locals.nonce = nanoid();
+    // https://stackoverflow.com/a/22339262/2952356
+    // `process.env.npm_package_version` only works if you use npm start to run the app.
+    res.set('Application-Version', process.env.npm_package_version);
+    next();
+});
 
-    // passport.use(
-    //     'oidc',
-    //     new Strategy({client, passReqToCallback: true}, (req, tokenSet, userinfo, done) => {
-    //         console.log('tokenSet', tokenSet);
-    //         console.log('userinfo', userinfo);
-    //         // do whatever you want with tokenset and userinfo
-    //         req.session.tokenSet = tokenSet;
-    //         req.session.userinfo = userinfo;
+// passport.use(
+//     new OpenIDConnectStrategy(
+//         {
+//             issuer: `${process.env.CW_GOVUK_ISSUER_URL}/`,
+//             authorizationURL: `${process.env.CW_GOVUK_ISSUER_URL}/authorize`,
+//             tokenURL: `${process.env.CW_GOVUK_ISSUER_URL}/token`,
+//             userInfoURL: `${process.env.CW_GOVUK_ISSUER_URL}/userinfo`,
+//             clientID: process.env.CW_GOVUK_CLIENT_ID,
+//             clientSecret: process.env.CW_GOVUK_PRIVATE_KEY,
+//             callbackURL: `${process.env.CW_URL}/account/signed-in`,
+//             // scope: ['profile'],
+//             nonce: 'test',
+//             passReqToCallback: true
+//         },
+//         function verify(issuer, profile, cb, a, b, c, d) {
+//             console.log({
+//                 issuer,
+//                 profile,
+//                 cb,
+//                 a,
+//                 b,
+//                 c,
+//                 d
+//             });
+//             return cb(null, profile);
+//         }
+//     )
+// );
 
-    //         return done(null, tokenSet.claims());
-    //     })
-    // );
+// async function authenticationSetUp() {
+//     app.use(passport.initialize());
+//     app.use(passport.session());
+//     const issuer = await Issuer.discover(process.env.CW_GOVUK_ISSUER_URL);
 
-    passport.use(
-        'oidc',
-        new Strategy({client}, (tokenSet, userinfo, done) => {
-            console.log({tokenSet});
-            return done(null, tokenSet.claims());
-        })
-    );
+//     const client = new issuer.Client(
+//         {
+//             client_id: process.env.CW_GOVUK_CLIENT_ID,
+//             client_secret: process.env.CW_GOVUK_PRIVATE_KEY,
+//             redirect_uris: [`${process.env.CW_URL}/account/signed-in`],
+//             post_logout_redirect_uris: [`${process.env.CW_URL}/account/signed-out`],
+//             response_types: ['code'],
+//             token_endpoint_auth_method: issuer.token_endpoint_auth_methods_supported[0],
+//             // jwks_uri: issuer.jwks_uri,
+//             token_endpoint: issuer.token_endpoint
+//         } // ,
+//         // {
+//         //     keys: [
+//         //         // {
+//         //         //     kty: 'EC',
+//         //         //     use: 'sig',
+//         //         //     crv: 'P-256',
+//         //         //     kid: 'ALdE4OMHn0Yz5kFVgm47q4iQv_KhKJhotSJJgXymAeU',
+//         //         //     x: 'udx5m5olYgy8_rIMIw3iTzjD1U8gcs0oq9cy-3xO4As',
+//         //         //     y: '-ch5DuOsvM65-yzLYBBeyhHtBlEmmk0WKRUI6FH6hh0',
+//         //         //     alg: 'ES256'
+//         //         // }
+//         //         {
+//         //             kty: 'RSA',
+//         //             n: '4MwJMUaiiuLZXZZwFWfjdvtpFeUVdBUgRKRlBW5UqVcmR7ee9FZJjmYM2TNVx-5cHp0ilcTo0mv96aLnGLeT8l6T1oNbeNYg2Ot7Z_6oyyqNeizt9n58GkKIowsabJrtFIVDdr3OoQ1YTgkhYTNKSxSXSF2X-VOwuh0KnuxrQdWs_l1um7kowxRJPTHFKeSPgaG-0NQ4dRvpnHTWyD6pqzeezEopphXTjSIQQkKfRUiHgX-JPK0-Gp06pRQDTC3be0HGA9GOdnxdPOu4N9Z8bjs8zF5FdCre3TVX5vg6S0EdnOFqkpsWTmCdQ61Q8RLbc1tHF2Z-21pVufhYJHPu3w',
+//         //             e: 'AQAB',
+//         //             d: 'G0Fh0_Gmf4Rlqm01BcNk1uZApYDzCvIMyYXNIc1wwl9oqsVepm1X2cYRxLvuqKED1kpjCRmoyOqDDLLNpjeL3pUNA7NFge8kaGiUu9UqjgeIw8lyyLIpRd3PR0VvXL-kAxrtRRZaWTiO_lcpDunzFgtXFFUUugwln0sqIH61unN9qvfMzsCzswYlAFyLKT3rIVjlUPyVSgJMEvMNxbPj3lQZRNEf0eM7VSIl55J0JKaIV5hPqnmIVuzCbvRMtZTbf5ige_pYtBcZu2d93ruVpVWAwHDakOjupZVa9ZmcL6kgVeYyHodRVHAJJWKxt7LQuvHcs-T0I-Ohjf9GYOc58Q',
+//         //             p: '8snU8nzioAShB5Y7DgptPfQ9taDmnQNBUI2T7PgsURtYHZqaWHvv9bNXAfp5w1xpk50jzG_PID5vviT9DlsvrOVtuE8pbo8R-dJxHbCl9hT50ofACU95mIunguNSpfMF5rGrQ53-BE6elW3YJRR6W1dGA3IDm7S9uL3Qv-IrPSs',
+//         //             q: '7QeTH7P0zdO4AflkAym9q2X0q8KmVVIJT39o-gaor7xFES06ZWWWZScAwtYLn28hrOFwDu3y1qUM5yY-Zt29pdb3z_UhHIoOQIpVtK5yr_Gr7F0uNu6E1DAMPGbLN2N3Ex_WdzfWW4b2fnqIlkuqE81jkGVZWY4aBYKrB6lDgx0',
+//         //             dp: 'SVnhFEHW1jGP1RL2VI-h4Y3g9vbdtaI-IXAkuPthqD9yp78F0qXfIYRFTTu3feZ1nztijWlaUouKhw_1xFiYVswaEg0Yn2ZqL-f8dNPh0C8WKx0IT8fLHONUgJ7dYXXC2qfi7lLVY8e88bh2DP3a2a3MYU4Y-PnqN95hKxfRqHE',
+//         //             dq: 'iSoZ_H2iC74aPKI6Ow5boSUWCpNQuA0KMEP11sIludSET2VR5r1747tHWHiPL0sbPLUUqL8QCSBoMBdUgyiMh7y3mVMsPxyxFK443J8a5TBAIj7l8Inkufm4CvgdX0ci8CE7dbANTtfyKszz362XlXAEztmndAikjE3KdVuBIw0',
+//         //             qi: '10FTacKKO3JFm0bBImJGYn-1RrbarCSxBLMJz4e91nxfQ43pycePOqHrqh5lxXsanZhSQxhnxIyB8LaJzhb8BulDL6rJL3jtHmKUPKpjPAeva-ilPIPhCHIMtQ6x4pu990kqI_DlSvYFxpwslVnIFt6SqfdXD01dRoottfvupmQ'
+//         //           }
+//         //     ]
+//         // }
+//     );
 
-    passport.serializeUser((user, done) => {
-        done(null, user);
-    });
-    passport.deserializeUser((user, done) => {
-        done(null, user);
-    });
-}
+//     // passport.use(
+//     //     'oidc',
+//     //     new Strategy({client, passReqToCallback: true}, (req, tokenSet, userinfo, done) => {
+//     //         console.log('tokenSet', tokenSet);
+//     //         console.log('userinfo', userinfo);
+//     //         // do whatever you want with tokenset and userinfo
+//     //         req.session.tokenSet = tokenSet;
+//     //         req.session.userinfo = userinfo;
 
-authenticationSetUp();
+//     //         return done(null, tokenSet.claims());
+//     //     })
+//     // );
+
+//     const codeVerifier = generators.codeVerifier();
+//     // store the code_verifier in your framework's session mechanism, if it is a cookie based solution
+//     // it should be httpOnly (not readable by javascript) and encrypted.
+
+//     const codeChallenge = generators.codeChallenge(codeVerifier);
+
+//     client.authorizationUrl({
+//         scope: 'openid email profile',
+//         resource: 'https://my.api.example.com/resource/32178',
+//         code_challenge: codeChallenge,
+//         code_challenge_method: 'S256'
+//     });
+
+//     app.use(async (req, res, next) => {
+//         const params = client.callbackParams(req);
+//         const tokenSet = await client.callback('https://client.example.com/callback', params, {
+//             codeVerifier
+//         });
+//         console.log('received and validated tokens %j', tokenSet);
+//         console.log('validated ID Token claims %j', tokenSet.claims());
+//         next();
+//     });
+
+//     // passport.use(
+//     //     'oidc',
+//     //     new Strategy({client}, (tokenSet, userinfo, done) => {
+//     //         console.log({tokenSet});
+//     //         return done(null, tokenSet.claims());
+//     //     })
+//     // );
+
+//     // passport.serializeUser((user, done) => {
+//     //     done(null, user);
+//     // });
+//     // passport.deserializeUser((user, done) => {
+//     //     done(null, user);
+//     // });
+// }
+
+// // authenticationSetUp();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
