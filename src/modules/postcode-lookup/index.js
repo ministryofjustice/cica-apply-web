@@ -291,9 +291,10 @@ function createPostcodeLookup(window) {
     // Is the string between 5 to 7 characters?
     // Is the inward code first character numeric?
     // Are the last 2 characters non-numeric?
+    // removes all whitespace, before, after, within as the OS-places api will handle that
     function isValidPostcode(postcode) {
         const regex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i;
-        return regex.test(postcode);
+        return regex.test(postcode.replace(/\s/g, ''));
     }
 
     async function addressSearch() {

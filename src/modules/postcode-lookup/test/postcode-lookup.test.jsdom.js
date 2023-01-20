@@ -885,14 +885,14 @@ describe('postcode lookup progressive enhancement', () => {
     });
     describe('postcode validation', () => {
         describe('searching with a valid postcode', () => {
-            describe('postcode contains 8 characters including a space', () => {
+            describe('postcode contains 7 alphanumeric characters including spaces before, after and within', () => {
                 it('finds results and displays them', async () => {
                     fetch.mockResponse(async () => {
                         return JSON.stringify(addressSearchOneAddressFoundResponse);
                     });
 
                     postcodeLookup.init();
-                    window.document.getElementById('address-search-input').value = 'AB1C 2DE';
+                    window.document.getElementById('address-search-input').value = '  AB 1 C 2DE  ';
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
                     expect(fetch.mock.calls.length).toEqual(1);
