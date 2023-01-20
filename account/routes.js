@@ -5,6 +5,7 @@ const {v4: uuidv4} = require('uuid');
 const createSignInService = require('../govuk/sign-in/index');
 const createTemplateEngineService = require('../templateEngine');
 const qService = require('../questionnaire/questionnaire-service')();
+const createDashboardService = require('../dashboard/dashboard-service');
 
 const {getSignedInURI} = require('./utils/getActionURIs');
 
@@ -12,7 +13,9 @@ const router = express.Router();
 
 router.get('/sign-in', async (req, res, next) => {
     try {
-        // check if `req.session.userId` exits, and if so, redirect the user to the appropriate page.
+        if (req.session.userId) {
+            return res.redirect('/account/dashboard');
+        }
 
         const signInService = createSignInService();
         const redirectUri = getSignedInURI();
@@ -39,7 +42,9 @@ router.get('/sign-in', async (req, res, next) => {
 
 router.get('/signed-in', async (req, res, next) => {
     try {
-        // check if signed in already and do appropriate action.
+        if (req.session.userId) {
+            return res.redirect('/account/dashboard');
+        }
 
         // Get query strings
         const queryParams = req.query;
@@ -100,49 +105,15 @@ router.get('/sign-out', async (req, res, next) => {
 
 router.get('/dashboard', async (req, res, next) => {
     try {
-        // Remove session cookie
-        req.session.questionnaireId = undefined;
-
-        // Get data
-        const dataObject = [
-            [
-                {
-                    text: 'Tony Stark',
-                    classes: 'govuk-table__cell__overflow'
-                },
-                {
-                    text: '8 December 2022',
-                    attributes: {
-                        'data-sort-value': '123456789002'
-                    }
-                },
-                {
-                    html:
-                        "<a href='www.gov.uk'>Continue<span class='govuk-visually-hidden'> Continue application for Tony Stark</span></a>"
-                }
-            ],
-            [
-                {
-                    text: 'Bruce Banner',
-                    classes: 'govuk-table__cell__overflow'
-                },
-                {
-                    text: '7 December 2022',
-                    attributes: {
-                        'data-sort-value': '123456789001'
-                    }
-                },
-                {
-                    html:
-                        "<a href='www.gov.uk'>Continue<span class='govuk-visually-hidden'> Continue application for Bruce Banner</span></a>"
-                }
-            ]
-        ];
-
-        // Go to dashboard
+        if (!req.session.userId) {
+            return res.redirect('/account/sign-in');
+        }
+        const dashboardService = createDashboardService();
+        // TODO: get user id from session. stubbed at the moment.
+        const templateData = await dashboardService.getTemplateData(req.session.userId);
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
-        const html = render('dashboard.njk', {nonce: res.locals.nonce, userData: dataObject});
+        const html = render('dashboard.njk', {nonce: res.locals.nonce, userData: templateData});
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
