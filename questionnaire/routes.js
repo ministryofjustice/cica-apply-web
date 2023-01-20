@@ -19,6 +19,31 @@ router.route('/').get(async (req, res) => {
     }
 });
 
+router.route('/resume/:questionnaireId').get(async (req, res) => {
+    try {
+        const defaultRedirect = '/apply';
+        let redirectUrl = defaultRedirect;
+
+        const resumableQuestionnaireId = req.params.questionnaireId;
+        const resumableQuestionnaireResponse = await qService.getCurrentSection(
+            resumableQuestionnaireId
+        );
+        const resumableQuestionnaireCurrentSectionId =
+            resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
+
+        // switch session info and redirect if valid.
+        if (resumableQuestionnaireCurrentSectionId) {
+            req.session.questionnaireId = resumableQuestionnaireId;
+            redirectUrl = `${redirectUrl}/${formHelper.removeSectionIdPrefix(
+                resumableQuestionnaireCurrentSectionId
+            )}`;
+        }
+        return res.redirect(redirectUrl);
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
 router.route('/previous/:section').get(async (req, res) => {
     try {
         const sectionId = formHelper.addPrefix(req.params.section);
