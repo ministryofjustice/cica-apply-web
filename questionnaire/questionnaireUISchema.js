@@ -1763,5 +1763,38 @@ module.exports = {
                 'q-rep-postcode'
             ]
         }
+    },
+    'p-applicant-relationship-to-deceased': {
+        options: {
+            transformOrder: [
+                'q-applicant-enter-your-relationship-details',
+                'q-applicant-relationship-to-deceased'
+            ],
+            outputOrder: ['q-applicant-relationship-to-deceased'],
+            properties: {
+                'q-applicant-relationship-to-deceased': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'other',
+                                componentIds: ['q-applicant-enter-your-relationship-details']
+                            }
+                        ]
+                    }
+                },
+                'q-applicant-enter-your-relationship-details': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-applicant-funeral-costs-who-contributed': {
+        options: {
+            outputOrder: ['q-applicant-funeral-costs-who-contributed', 'funeral-costs-info']
+        }
     }
 };
