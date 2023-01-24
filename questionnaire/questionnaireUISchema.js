@@ -411,7 +411,25 @@ module.exports = {
             pageContext: 'submission'
         }
     },
+    'p-applicant-declaration-deceased': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
     'p-mainapplicant-declaration-under-12': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-mainapplicant-declaration-under-12-deceased': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-mainapplicant-declaration-12-and-over-deceased': {
         options: {
             buttonText: 'Agree and submit',
             pageContext: 'submission'
@@ -430,6 +448,18 @@ module.exports = {
         }
     },
     'p-rep-declaration-12-and-over': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-rep-declaration-12-and-over-deceased': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
+    'p-rep-declaration-under-12-deceased': {
         options: {
             buttonText: 'Agree and submit',
             pageContext: 'submission'
@@ -1867,9 +1897,72 @@ module.exports = {
             }
         }
     },
+    'p-applicant-relationship-to-deceased': {
+        options: {
+            transformOrder: [
+                'q-applicant-relationship-other',
+                'q-applicant-relationship-to-deceased'
+            ],
+            outputOrder: ['q-applicant-relationship-to-deceased'],
+            properties: {
+                'q-applicant-relationship-to-deceased': {
+                    options: {
+                        conditionalComponentMap: [
+                            {
+                                itemValue: 'other',
+                                componentIds: ['q-applicant-relationship-other']
+                            }
+                        ]
+                    }
+                },
+                'q-applicant-relationship-other': {
+                    options: {
+                        macroOptions: {
+                            classes: 'govuk-input--width-20'
+                        }
+                    }
+                }
+            }
+        }
+    },
     'p-applicant-armed-forces-relative': {
         options: {
             outputOrder: ['q-applicant-armed-forces-relative', 'armed-forces-relative-info']
+        }
+    },
+    'p-applicant-funeral-costs-who-contributed': {
+        options: {
+            outputOrder: ['q-applicant-funeral-costs-who-contributed', 'funeral-costs-info']
+        }
+    },
+    'p-applicant-claim-type': {
+        options: {
+            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info']
+        }
+    },
+    'p-applicant-physical-help': {
+        options: {
+            outputOrder: ['q-applicant-physical-help', 'physical-help-info']
+        }
+    },
+    'p-other-claimants': {
+        options: {
+            outputOrder: ['q-other-claimants', 'other-claimants-info']
+        }
+    },
+    'p-applicant-immediate-aftermath': {
+        options: {
+            outputOrder: ['q-applicant-immediate-aftermath', 'immediate-aftermath-info']
+        }
+    },
+    'p-applicant-disabling-mental-injury': {
+        options: {
+            outputOrder: ['q-applicant-disabling-mental-injury', 'disabling-mental-injury-info']
+        }
+    },
+    'p-applicant-financial-help': {
+        options: {
+            outputOrder: ['q-applicant-financial-help', 'financial-help-info']
         }
     }
 };
