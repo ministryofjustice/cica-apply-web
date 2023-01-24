@@ -184,5 +184,6 @@
     "mainapplicant-authority": "p-mainapplicant-authority",
     "download-your-answers": "p--download-your-answers",
     "has-legal-authority": "p--has-legal-authority",
-    "represents-legal-authority": "p--represents-legal-authority"
+    "represents-legal-authority": "p--represents-legal-authority",
+    "context-deceased-details": "p--context-deceased-details"
 }
