@@ -18,6 +18,11 @@ import createPostcodeLookup from '../modules/postcode-lookup';
 import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAndSeconds';
 
 (() => {
+    const autocomplete = createAutocomplete(window);
+    autocomplete.init('.govuk-select');
+    const postcodeLookup = createPostcodeLookup(window);
+    postcodeLookup.init();
+
     const cookiePreference = createCookiePreference('_prefs', ['essential', 'analytics']);
     if (cookiePreference.get('analytics').value === '1') {
         const cicaGa = createCicaGa(window);
@@ -25,11 +30,6 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
     } else {
         window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
     }
-
-    const autocomplete = createAutocomplete(window);
-    autocomplete.init('.govuk-select');
-    const postcodeLookup = createPostcodeLookup(window);
-    postcodeLookup.init();
 
     const cookieBanner = createCookieBanner(window, cookiePreference, {
         cookieBannerElement: '#cookie-banner',
