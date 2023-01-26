@@ -186,5 +186,6 @@
     "has-legal-authority": "p--has-legal-authority",
     "represents-legal-authority": "p--represents-legal-authority",
     "context-deceased-details": "p--context-deceased-details",
-    "deceased-name": "p-deceased-name"
+    "deceased-name": "p-deceased-name",
+    "deceased-date-of-birth": "p-deceased-date-of-birth"
 }
