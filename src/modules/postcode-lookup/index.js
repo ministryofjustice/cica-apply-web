@@ -403,9 +403,14 @@ function createPostcodeLookup(window) {
     function createFindAddressButton() {
         const searchButton = window.document.createElement('button');
         searchButton.setAttribute('id', 'search-button');
-        searchButton.setAttribute('class', 'govuk-button govuk-button--secondary');
+        searchButton.setAttribute(
+            'class',
+            'govuk-button govuk-button--secondary ga-event ga-event--click'
+        );
         searchButton.setAttribute('data-module', 'govuk-button');
         searchButton.setAttribute('type', 'button');
+        searchButton.setAttribute('data-tracking-label', 'Find address');
+        searchButton.setAttribute('data-tracking-category', 'button');
         searchButton.appendChild(window.document.createTextNode('Find address'));
         window.document
             .getElementById('address-search')
