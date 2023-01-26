@@ -13,6 +13,7 @@ function createPostcodeLookup(window) {
     let emptySearchInputErrorMessage;
     let selectElementResults;
     let addressSearchResultsOptions;
+    let addressSearchInput;
 
     function isSelectedValueInteger(str) {
         const num = Number(str);
@@ -188,7 +189,7 @@ function createPostcodeLookup(window) {
         errorOuterSpan.appendChild(errorOuterSpanText);
         errorOuterSpan.appendChild(errorInnerSpan);
 
-        const addressSearchInput = window.document.getElementById('address-search-input');
+        // const addressSearchInput = window.document.getElementById('address-search-input');
         addressSearchInput.setAttribute(
             'class',
             'govuk-input govuk-input--error govuk-input--width-10'
@@ -209,9 +210,18 @@ function createPostcodeLookup(window) {
             return window.document.createTextNode(message);
         }
         const errorAnchor = window.document.createElement('a');
+
         const link = window.document.createTextNode(message);
         errorAnchor.appendChild(link);
         errorAnchor.href = '#address-search-input';
+        errorAnchor.onclick = function() {
+            const assocLabel = window.document.querySelector(
+                `label[for='${addressSearchInput.id}']`
+            );
+            assocLabel.scrollIntoView();
+            addressSearchInput.focus({preventScroll: true});
+            return false;
+        };
         return errorAnchor;
     }
 
@@ -224,6 +234,7 @@ function createPostcodeLookup(window) {
         errorList.appendChild(error);
 
         const errorSummaryBody = window.document.createElement('div');
+        errorSummaryBody.setAttribute('class', 'govuk-error-summary__body');
         errorSummaryBody.appendChild(errorList);
 
         const errorHeading = window.document.createElement('h2');
@@ -244,6 +255,7 @@ function createPostcodeLookup(window) {
 
         const form = window.document.querySelector('form');
         form.insertAdjacentElement('afterbegin', errorSummary);
+        errorSummary.focus();
     }
 
     function removeErrorMessages() {
@@ -300,20 +312,22 @@ function createPostcodeLookup(window) {
     async function addressSearch() {
         removeErrorMessages();
         clearAddressForm();
-        const addressSearchInput = window.document.getElementById('address-search-input').value;
+        const addressSearchInputValue = addressSearchInput.value;
 
-        if (addressSearchInput === '') {
+        if (addressSearchInputValue === '') {
             displayErrors(emptySearchInputErrorMessage);
             return;
         }
 
         // test for a valid postcode
-        if (!isValidPostcode(addressSearchInput)) {
+        if (!isValidPostcode(addressSearchInputValue)) {
             displayErrors(INVALID_POSTCODE_ERROR);
             return;
         }
 
-        const response = await fetch(`/address-finder/postcode?postcode=${addressSearchInput}`);
+        const response = await fetch(
+            `/address-finder/postcode?postcode=${addressSearchInputValue}`
+        );
         if (!response.ok) {
             if (response.status === 400) {
                 displayErrors(INVALID_POSTCODE_ERROR);
@@ -361,7 +375,7 @@ function createPostcodeLookup(window) {
         addressSearchLabel.setAttribute('class', 'govuk-label');
         addressSearchLabel.setAttribute('for', 'address-search-input');
 
-        const addressSearchInput = window.document.createElement('input');
+        addressSearchInput = window.document.createElement('input');
         addressSearchInput.setAttribute('class', 'govuk-input govuk-input--width-10');
         addressSearchInput.setAttribute('id', 'address-search-input');
         addressSearchInput.setAttribute('name', 'address-search-input');
@@ -435,7 +449,7 @@ function createPostcodeLookup(window) {
     function addRemovePostcodeInputTextOnSubmitHandler() {
         const form = window.document.getElementsByTagName('form')[0];
         form.addEventListener('submit', () => {
-            window.document.getElementById('address-search-input').removeAttribute('name');
+            addressSearchInput.removeAttribute('name');
             window.document
                 .getElementById('address-search-results-dropdown')
                 .removeAttribute('name');

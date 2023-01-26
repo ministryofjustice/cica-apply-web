@@ -261,6 +261,38 @@ describe('postcode lookup progressive enhancement', () => {
                     ).toEqual('2, FOOR ROAD, LARBAR, FOOARTH, FO12 3BA');
                 });
             });
+            describe('clicking the error summary link when page contains the enter your postcode message', () => {
+                it('sets focus to the postcode search input', async () => {
+                    fetch.mockResponse(async () => {
+                        return JSON.stringify(addressSearchOneAddressFoundResponse);
+                    });
+
+                    postcodeLookup.init();
+                    window.document.getElementById('search-button').click();
+                    await setTimeout(0);
+
+                    expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
+                        emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
+                    );
+
+                    // adding this as https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                    // is not supported in JSDOM
+                    /* eslint-disable func-names */
+                    window.HTMLElement.prototype.scrollIntoView = function() {};
+                    window.document.querySelector('a').click();
+                    await setTimeout(0);
+
+                    expect(window.document.activeElement.id).toEqual('address-search-input');
+                    expect(window.document.activeElement.name).toEqual('address-search-input');
+                    expect(window.document.activeElement.type).toEqual('search');
+                    expect(window.document.activeElement.getAttribute('aria-describedby')).toEqual(
+                        'address-search-input-error'
+                    );
+                    expect(window.document.activeElement.className).toEqual(
+                        'govuk-input govuk-input--error govuk-input--width-10'
+                    );
+                });
+            });
         });
     });
     describe('pressing a key on postcode lookup find input field', () => {

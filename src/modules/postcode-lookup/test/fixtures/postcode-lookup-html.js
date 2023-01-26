@@ -118,7 +118,7 @@ const invalidPostcodeErrorEnhancedHtml = `<form method="post" autocomplete="off"
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem
 </h2>
-<div><ul class="govuk-list govuk-error-summary__list"><li><a href="#address-search-input">Enter a valid postcode</a></li></ul></div>
+<div class="govuk-error-summary__body"><ul class="govuk-list govuk-error-summary__list"><li><a href="#address-search-input">Enter a valid postcode</a></li></ul></div>
 </div>
 <fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -181,7 +181,7 @@ const emptyPostcodeInputErrorEnhancedHtml = `<form method="post" autocomplete="o
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem
 </h2>
-<div><ul class="govuk-list govuk-error-summary__list"><li><a href="#address-search-input">Enter your postcode</a></li></ul></div>
+<div class="govuk-error-summary__body"><ul class="govuk-list govuk-error-summary__list"><li><a href="#address-search-input">Enter your postcode</a></li></ul></div>
 </div>
 <fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -244,7 +244,7 @@ const emptyPostcodeInputForSomeoneElseErrorEnhancedHtml = `<form method="post" a
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem
 </h2>
-<div><ul class="govuk-list govuk-error-summary__list"><li><a href="#address-search-input">Enter their postcode</a></li></ul></div>
+<div class="govuk-error-summary__body"><ul class="govuk-list govuk-error-summary__list"><li><a href="#address-search-input">Enter their postcode</a></li></ul></div>
 </div>
 <fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -306,7 +306,7 @@ const noAddressesFoundErrorEnhancedHtml = `<form method="post" autocomplete="off
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem</h2>
-<div><ul class="govuk-list govuk-error-summary__list">
+<div class="govuk-error-summary__body"><ul class="govuk-list govuk-error-summary__list">
 <li>We could not find any addresses for that postcode. Check your postcode is correct, or enter your address manually.</li></ul></div></div>
 <fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -372,7 +372,7 @@ const fetchApiReponseNotOkayErrorEnhancedHtml = `<form method="post" autocomplet
 <h2 class="govuk-error-summary__title" id="error-summary-title">
 There is a problem
 </h2>
-<div><ul class="govuk-list govuk-error-summary__list"><li>The system is experiencing an issue. Enter your address manually.</li></ul></div>
+<div class="govuk-error-summary__body"><ul class="govuk-list govuk-error-summary__list"><li>The system is experiencing an issue. Enter your address manually.</li></ul></div>
 </div>
 <fieldset class="govuk-fieldset">
 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -651,7 +651,7 @@ Postcode (optional)
 const emptyPostcodeInputForGpAddressErrorEnhancedHtml = `<form method="post" autocomplete="off">
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-<div>
+<div class="govuk-error-summary__body">
 <ul class="govuk-list govuk-error-summary__list">
 <li><a href="#address-search-input">Enter the postcode</a></li>
 </ul>
@@ -787,7 +787,7 @@ Postcode (optional)
 const emptyPostcodeInputForDentistAddressErrorEnhancedHtml = `<form method="post" autocomplete="off">
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-<div>
+<div class="govuk-error-summary__body">
 <ul class="govuk-list govuk-error-summary__list">
 <li><a href="#address-search-input">Enter the postcode</a></li>
 </ul>
@@ -923,7 +923,7 @@ Postcode (optional)
 const emptyPostcodeInputForTreatmentAddressErrorEnhancedHtml = `<form method="post" autocomplete="off">
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-<div>
+<div class="govuk-error-summary__body">
 <ul class="govuk-list govuk-error-summary__list">
 <li><a href="#address-search-input">Enter the postcode</a></li>
 </ul>
