@@ -213,6 +213,57 @@ describe('postcode lookup progressive enhancement', () => {
                             window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')
                         ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
                     });
+                    it('displays enter a postcode error summary and field level errors and hides the previous search results dropdown', async () => {
+                        fetch
+                            .mockResponseOnce(async () => {
+                                return JSON.stringify(addressSearchCollectionResponse);
+                            })
+                            .mockResponseOnce(async () => {
+                                return JSON.stringify({
+                                    header: {
+                                        uri:
+                                            'https://api.os.uk/search/places/v1/postcode?postcode=A123AB',
+                                        query: 'postcode=A123AB',
+                                        offset: 0,
+                                        totalresults: 0,
+                                        format: 'JSON',
+                                        dataset: 'DPA',
+                                        lr: 'EN,CY',
+                                        maxresults: 100,
+                                        epoch: '97',
+                                        lastupdate: '2022-11-17',
+                                        output_srs: 'EPSG:27700'
+                                    }
+                                });
+                            });
+                        postcodeLookup.init();
+                        window.document.getElementById('address-search-input').value = 'FO123BA';
+                        window.document.getElementById('search-button').click();
+                        await setTimeout(0);
+
+                        const searchResultsDropDown = window.document.getElementById(
+                            'address-search-results-dropdown'
+                        );
+                        expect(searchResultsDropDown[0].text).toContain('addresses found');
+                        expect(window.document.activeElement.id).toEqual(
+                            'address-search-results-dropdown'
+                        );
+
+                        window.document.getElementById('address-search-input').value = '';
+                        window.document.getElementById('search-button').click();
+                        await setTimeout(0);
+                        const searchResultsDiv = window.document.getElementById(
+                            'address-search-results'
+                        );
+                        expect(searchResultsDiv.style.display).toBe('none');
+                        expect(searchResultsDropDown[0]).not.toBeDefined();
+
+                        expect(
+                            window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')
+                        ).toBe(
+                            emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
+                        );
+                    });
                 });
             });
 
