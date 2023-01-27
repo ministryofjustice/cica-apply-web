@@ -11,6 +11,7 @@ function createPostcodeLookup(window) {
     let apiResponseNotOkErrorMessage;
     const INVALID_POSTCODE_ERROR = 'Enter a valid postcode';
     let emptySearchInputErrorMessage;
+    let searchResultsDiv;
     let selectElementResults;
     let addressSearchResultsOptions;
     let addressSearchInput;
@@ -169,7 +170,6 @@ function createPostcodeLookup(window) {
         });
 
         // Display the hidden search results div
-        const searchResultsDiv = window.document.getElementById('address-search-results');
         searchResultsDiv.style.display = 'block';
         selectElementResults.focus();
     }
@@ -214,6 +214,7 @@ function createPostcodeLookup(window) {
         const link = window.document.createTextNode(message);
         errorAnchor.appendChild(link);
         errorAnchor.href = '#address-search-input';
+        /* eslint-disable func-names */
         errorAnchor.onclick = function() {
             const assocLabel = window.document.querySelector(
                 `label[for='${addressSearchInput.id}']`
@@ -297,6 +298,8 @@ function createPostcodeLookup(window) {
     function displayErrors(message) {
         displayErrorSummary(message);
         displayFieldErrors(message);
+        searchResultsDiv.style.display = 'none';
+        clearAddressResultsDropdown();
     }
 
     // A simple postcode regular expression, or postcode regex, checks the general shape of the postcode is correct. i.e.
@@ -341,10 +344,7 @@ function createPostcodeLookup(window) {
         const data = await response.json();
 
         if (data.header.totalresults === 0 || !data.results) {
-            const addressSearchResultsDiv = window.document.getElementById(
-                'address-search-results'
-            );
-            addressSearchResultsDiv.style.display = 'none';
+            searchResultsDiv.style.display = 'none';
             clearAddressResultsDropdown();
             displayErrorSummary(apiNoAddressesFoundErrorMessage);
             return;
@@ -432,7 +432,7 @@ function createPostcodeLookup(window) {
         searchResults.setAttribute('name', 'address-search-results-dropdown');
         searchResults.appendChild(addressSearchResultsLabel);
 
-        const searchResultsDiv = window.document.createElement('div');
+        searchResultsDiv = window.document.createElement('div');
         searchResultsDiv.setAttribute('class', 'govuk-form-group');
         searchResultsDiv.setAttribute('id', 'address-search-results');
         searchResultsDiv.setAttribute('name', 'address-search-results');
