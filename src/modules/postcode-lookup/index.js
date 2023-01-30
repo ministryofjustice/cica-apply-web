@@ -298,6 +298,24 @@ function createPostcodeLookup(window) {
         addressSearchResults.remove();
     }
 
+    function sendAnalyticsEvent(message) {
+        const action = message === apiResponseNotOkErrorMessage ? 'systemError' : 'validationError';
+        const gtagOptions = {
+            type: 'event',
+            action,
+            category: 'address-search-input',
+            label: message,
+            nonInteraction: true
+        };
+        window.gtag(gtagOptions.type, gtagOptions.action, {
+            event_category: gtagOptions.category,
+            event_label: gtagOptions.label,
+            value: gtagOptions.value,
+            event_callback: gtagOptions.callback, // ?
+            non_interaction: gtagOptions.nonInteraction
+        });
+    }
+
     function displayErrors(message) {
         displayErrorSummary(message);
         if (message !== apiNoAddressesFoundErrorMessage) {
@@ -308,6 +326,7 @@ function createPostcodeLookup(window) {
         const pageErrorTitle = `Error: ${window.document.title}`;
         // eslint-disable-next-line no-param-reassign
         window.document.title = pageErrorTitle;
+        sendAnalyticsEvent(message);
     }
 
     // A simple postcode regular expression, or postcode regex, checks the general shape of the postcode is correct. i.e.
