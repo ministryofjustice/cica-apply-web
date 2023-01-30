@@ -393,6 +393,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 (() => {
+  var autocomplete = (0, _autocomplete.default)(window);
+  autocomplete.init('.govuk-select');
+  var postcodeLookup = (0, _postcodeLookup.default)(window);
+  postcodeLookup.init();
   var cookiePreference = (0, _cookiePreference.default)('_prefs', ['essential', 'analytics']);
 
   if (cookiePreference.get('analytics').value === '1') {
@@ -402,10 +406,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     window["ga-disable-".concat(window.CICA.ANALYTICS_TRACKING_ID)] = true;
   }
 
-  var autocomplete = (0, _autocomplete.default)(window);
-  autocomplete.init('.govuk-select');
-  var postcodeLookup = (0, _postcodeLookup.default)(window);
-  postcodeLookup.init();
   var cookieBanner = (0, _cookieBanner.default)(window, cookiePreference, {
     cookieBannerElement: '#cookie-banner',
     cookieBannerVisibleClass: 'cookie-banner--visible',
