@@ -145,6 +145,7 @@ describe('postcode lookup progressive enhancement', () => {
                                 }
                             });
                         });
+                        window.gtag = jest.fn();
                         postcodeLookup.init();
                         window.document.title = 'Postcode lookup test title';
                         window.document.getElementById('address-search-input').value = 'FO123BA';
@@ -164,6 +165,14 @@ describe('postcode lookup progressive enhancement', () => {
                         ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
 
                         expect(window.document.title).toBe('Error: Postcode lookup test title');
+                        expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                            event_callback: undefined,
+                            event_category: 'address-search-input',
+                            event_label:
+                                'We could not find any addresses for that postcode. Check your postcode is correct, or enter your address manually.',
+                            non_interaction: true,
+                            value: undefined
+                        });
                     });
                 });
                 describe('after a successful postcode search was previously made and results dropdown present', () => {
@@ -190,6 +199,7 @@ describe('postcode lookup progressive enhancement', () => {
                                     }
                                 });
                             });
+                        window.gtag = jest.fn();
                         postcodeLookup.init();
                         window.document.title = 'Postcode lookup test title';
                         window.document.getElementById('address-search-input').value = 'FO123BA';
@@ -218,6 +228,14 @@ describe('postcode lookup progressive enhancement', () => {
                         ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
 
                         expect(window.document.title).toBe('Error: Postcode lookup test title');
+                        expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                            event_callback: undefined,
+                            event_category: 'address-search-input',
+                            event_label:
+                                'We could not find any addresses for that postcode. Check your postcode is correct, or enter your address manually.',
+                            non_interaction: true,
+                            value: undefined
+                        });
                     });
                     it('displays enter a postcode error summary and field level errors and hides the previous search results dropdown', async () => {
                         fetch
@@ -242,6 +260,7 @@ describe('postcode lookup progressive enhancement', () => {
                                     }
                                 });
                             });
+                        window.gtag = jest.fn();
                         postcodeLookup.init();
                         window.document.title = 'Postcode lookup test title';
                         window.document.getElementById('address-search-input').value = 'FO123BA';
@@ -272,6 +291,13 @@ describe('postcode lookup progressive enhancement', () => {
                         );
 
                         expect(window.document.title).toBe('Error: Postcode lookup test title');
+                        expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                            event_callback: undefined,
+                            event_category: 'address-search-input',
+                            event_label: 'Enter your postcode',
+                            non_interaction: true,
+                            value: undefined
+                        });
                     });
                 });
             });
@@ -1027,6 +1053,7 @@ describe('postcode lookup progressive enhancement', () => {
         describe('searching with an invalid postcode', () => {
             describe('clicking find address with an empty postcode input field', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
+                    window.gtag = jest.fn();
                     postcodeLookup.init();
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
@@ -1034,11 +1061,19 @@ describe('postcode lookup progressive enhancement', () => {
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter your postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('clicking find address with an empty postcode input field when victim is someone else', () => {
                 it('displays contextualised error summary and error field heading for postcode input', async () => {
                     window.document.body.innerHTML = victimAddressSomeoneElseHtml;
+                    window.gtag = jest.fn();
                     postcodeLookup = createPostcodeLookup(window);
                     postcodeLookup.init();
                     window.document.getElementById('search-button').click();
@@ -1050,11 +1085,19 @@ describe('postcode lookup progressive enhancement', () => {
                             ''
                         )
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter their postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('clicking find address as a victim with an empty postcode input field for gp address', () => {
                 it('displays contextualised error summary and error field heading for postcode input', async () => {
                     window.document.body.innerHTML = gpAddressHtml;
+                    window.gtag = jest.fn();
                     postcodeLookup = createPostcodeLookup(window);
                     postcodeLookup.init();
                     window.document.getElementById('search-button').click();
@@ -1066,11 +1109,19 @@ describe('postcode lookup progressive enhancement', () => {
                             ''
                         )
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter the postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('clicking find address as a victim with an empty postcode input field for dentist address', () => {
                 it('displays contextualised error summary and error field heading for postcode input', async () => {
                     window.document.body.innerHTML = dentistAddressHtml;
+                    window.gtag = jest.fn();
                     postcodeLookup = createPostcodeLookup(window);
                     postcodeLookup.init();
                     window.document.getElementById('search-button').click();
@@ -1082,11 +1133,19 @@ describe('postcode lookup progressive enhancement', () => {
                             ''
                         )
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter the postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('clicking find address as a victim with an empty postcode input field for treatment address', () => {
                 it('displays contextualised error summary and error field heading for postcode input', async () => {
                     window.document.body.innerHTML = treatmentAddressHtml;
+                    window.gtag = jest.fn();
                     postcodeLookup = createPostcodeLookup(window);
                     postcodeLookup.init();
                     window.document.getElementById('search-button').click();
@@ -1098,10 +1157,18 @@ describe('postcode lookup progressive enhancement', () => {
                             ''
                         )
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter the postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('the inward code first character is numeric', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
+                    window.gtag = jest.fn();
                     postcodeLookup.init();
                     window.document.getElementById('address-search-input').value = '1234PT';
                     window.document.getElementById('search-button').click();
@@ -1110,10 +1177,18 @@ describe('postcode lookup progressive enhancement', () => {
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter a valid postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('it only contains 4 characters', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
+                    window.gtag = jest.fn();
                     postcodeLookup.init();
                     window.document.getElementById('address-search-input').value = 'A123';
                     window.document.getElementById('search-button').click();
@@ -1122,10 +1197,18 @@ describe('postcode lookup progressive enhancement', () => {
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter a valid postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('it contains 8 characters', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
+                    window.gtag = jest.fn();
                     postcodeLookup.init();
                     window.document.getElementById('address-search-input').value = 'A12345PT';
                     window.document.getElementById('search-button').click();
@@ -1134,10 +1217,18 @@ describe('postcode lookup progressive enhancement', () => {
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter a valid postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('the last two characters are non-numeric', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
+                    window.gtag = jest.fn();
                     postcodeLookup.init();
                     window.document.getElementById('address-search-input').value = 'A12 456';
                     window.document.getElementById('search-button').click();
@@ -1146,10 +1237,18 @@ describe('postcode lookup progressive enhancement', () => {
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter a valid postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
             describe('the last character is non-numeric', () => {
                 it('displays error summary and error field heading for postcode input', async () => {
+                    window.gtag = jest.fn();
                     postcodeLookup.init();
                     window.document.getElementById('address-search-input').value = 'A12 4B6';
                     window.document.getElementById('search-button').click();
@@ -1158,6 +1257,13 @@ describe('postcode lookup progressive enhancement', () => {
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                        event_callback: undefined,
+                        event_category: 'address-search-input',
+                        event_label: 'Enter a valid postcode',
+                        non_interaction: true,
+                        value: undefined
+                    });
                 });
             });
         });
@@ -1167,6 +1273,7 @@ describe('postcode lookup progressive enhancement', () => {
                     status: 500,
                     headers: {'content-type': 'application/json'}
                 });
+                window.gtag = jest.fn();
                 postcodeLookup.init();
                 window.document.getElementById('address-search-input').value = 'A123BC';
                 window.document.getElementById('search-button').click();
@@ -1175,6 +1282,14 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                     fetchApiReponseNotOkayErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                 );
+                expect(window.gtag).toHaveBeenCalledWith('event', 'systemError', {
+                    event_callback: undefined,
+                    event_category: 'address-search-input',
+                    event_label:
+                        'The system is experiencing an issue. Enter your address manually.',
+                    non_interaction: true,
+                    value: undefined
+                });
             });
         });
         describe('4XX error', () => {
@@ -1184,6 +1299,7 @@ describe('postcode lookup progressive enhancement', () => {
                     message:
                         'Requested postcode must contain a minimum of the sector plus 1 digit of the district e.g. SO1. Requested postcode was AB1C2DE'
                 });
+                window.gtag = jest.fn();
                 postcodeLookup.init();
                 window.document.getElementById('address-search-input').value = 'AB1C2DE';
                 window.document.getElementById('search-button').click();
@@ -1192,6 +1308,13 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                     invalidPostcodeErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                 );
+                expect(window.gtag).toHaveBeenCalledWith('event', 'validationError', {
+                    event_callback: undefined,
+                    event_category: 'address-search-input',
+                    event_label: 'Enter a valid postcode',
+                    non_interaction: true,
+                    value: undefined
+                });
             });
         });
     });
