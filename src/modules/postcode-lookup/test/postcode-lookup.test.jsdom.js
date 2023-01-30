@@ -146,6 +146,7 @@ describe('postcode lookup progressive enhancement', () => {
                             });
                         });
                         postcodeLookup.init();
+                        window.document.title = 'Postcode lookup test title';
                         window.document.getElementById('address-search-input').value = 'FO123BA';
                         window.document.getElementById('search-button').click();
                         await setTimeout(0);
@@ -161,6 +162,8 @@ describe('postcode lookup progressive enhancement', () => {
                         expect(
                             window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')
                         ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
+
+                        expect(window.document.title).toBe('Error: Postcode lookup test title');
                     });
                 });
                 describe('after a successful postcode search was previously made and results dropdown present', () => {
@@ -188,6 +191,7 @@ describe('postcode lookup progressive enhancement', () => {
                                 });
                             });
                         postcodeLookup.init();
+                        window.document.title = 'Postcode lookup test title';
                         window.document.getElementById('address-search-input').value = 'FO123BA';
                         window.document.getElementById('search-button').click();
                         await setTimeout(0);
@@ -212,6 +216,8 @@ describe('postcode lookup progressive enhancement', () => {
                         expect(
                             window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')
                         ).toBe(noAddressesFoundErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, ''));
+
+                        expect(window.document.title).toBe('Error: Postcode lookup test title');
                     });
                     it('displays enter a postcode error summary and field level errors and hides the previous search results dropdown', async () => {
                         fetch
@@ -237,6 +243,7 @@ describe('postcode lookup progressive enhancement', () => {
                                 });
                             });
                         postcodeLookup.init();
+                        window.document.title = 'Postcode lookup test title';
                         window.document.getElementById('address-search-input').value = 'FO123BA';
                         window.document.getElementById('search-button').click();
                         await setTimeout(0);
@@ -263,6 +270,8 @@ describe('postcode lookup progressive enhancement', () => {
                         ).toBe(
                             emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                         );
+
+                        expect(window.document.title).toBe('Error: Postcode lookup test title');
                     });
                 });
             });
@@ -274,18 +283,22 @@ describe('postcode lookup progressive enhancement', () => {
                     });
 
                     postcodeLookup.init();
+                    window.document.title = 'Postcode lookup test title';
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
                     expect(window.document.body.innerHTML.replace(MATCH_NEWLINE_REGEX, '')).toBe(
                         emptyPostcodeInputErrorEnhancedHtml.replace(MATCH_NEWLINE_REGEX, '')
                     );
+                    expect(window.document.title).toBe('Error: Postcode lookup test title');
 
                     window.document.getElementById('address-search-input').value = 'FO123BA';
                     window.document.getElementById('search-button').click();
                     await setTimeout(0);
 
                     expect(fetch.mock.calls.length).toEqual(1);
+
+                    expect(window.document.title).toBe('Postcode lookup test title');
 
                     expect(window.document.querySelectorAll('.govuk-error-summary').length).toEqual(
                         0

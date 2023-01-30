@@ -260,6 +260,9 @@ function createPostcodeLookup(window) {
     }
 
     function removeErrorMessages() {
+        const pageTitle = window.document.title.replace('Error: ', '');
+        // eslint-disable-next-line no-param-reassign
+        window.document.title = pageTitle;
         const errorSummary = window.document.querySelector('.govuk-error-summary');
         if (errorSummary) {
             errorSummary.remove();
@@ -297,9 +300,14 @@ function createPostcodeLookup(window) {
 
     function displayErrors(message) {
         displayErrorSummary(message);
-        displayFieldErrors(message);
+        if (message !== apiNoAddressesFoundErrorMessage) {
+            displayFieldErrors(message);
+        }
         searchResultsDiv.style.display = 'none';
         clearAddressResultsDropdown();
+        const pageErrorTitle = `Error: ${window.document.title}`;
+        // eslint-disable-next-line no-param-reassign
+        window.document.title = pageErrorTitle;
     }
 
     // A simple postcode regular expression, or postcode regex, checks the general shape of the postcode is correct. i.e.
@@ -344,9 +352,7 @@ function createPostcodeLookup(window) {
         const data = await response.json();
 
         if (data.header.totalresults === 0 || !data.results) {
-            searchResultsDiv.style.display = 'none';
-            clearAddressResultsDropdown();
-            displayErrorSummary(apiNoAddressesFoundErrorMessage);
+            displayErrors(apiNoAddressesFoundErrorMessage);
             return;
         }
 
