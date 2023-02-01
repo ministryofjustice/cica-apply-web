@@ -4,6 +4,7 @@ const express = require('express');
 const {v4: uuidv4} = require('uuid');
 const createSignInService = require('../govuk/sign-in/index');
 const createTemplateEngineService = require('../templateEngine');
+const qService = require('../questionnaire/questionnaire-service')();
 
 const {getSignedInURI} = require('./utils/getActionURIs');
 
@@ -67,8 +68,11 @@ router.get('/signed-in', async (req, res, next) => {
         // delete the nonce
         req.session.nonce = undefined;
         // Save unique userId as system answer
-        req.session.userId = userIdToken;
+        req.session.userId = userIdToken.sub;
 
+        // Save the userId to the questionnaire
+        const data = {'user-id': userIdToken.sub};
+        await qService.postSection(req.session.questionnaireId, 'user', data);
         // Send the user to the landing page
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;

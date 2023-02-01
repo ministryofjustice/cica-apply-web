@@ -3,7 +3,7 @@
 const service = require('./request-service')();
 
 function questionnaireService() {
-    function createQuestionnaire() {
+    async function createQuestionnaire(userId = undefined) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
             headers: {
@@ -18,7 +18,15 @@ function questionnaireService() {
                 }
             }
         };
-        return service.post(opts);
+        const response = service.post(opts);
+
+        if (userId) {
+            const data = {'user-id': userId};
+            // eslint-disable-next-line no-use-before-define
+            await postSection(response.body.data.attributes.id, 'user', data);
+        }
+
+        return response;
     }
 
     function getSection(questionnaireId, section) {
