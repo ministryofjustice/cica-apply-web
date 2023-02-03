@@ -3,32 +3,6 @@
 const service = require('./request-service')();
 
 function questionnaireService() {
-    async function createQuestionnaire(userId = undefined) {
-        const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
-            headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
-            },
-            json: {
-                data: {
-                    type: 'questionnaires',
-                    attributes: {
-                        templateName: 'sexual-assault'
-                    }
-                }
-            }
-        };
-        const response = service.post(opts);
-
-        if (userId) {
-            const data = {'user-id': userId};
-            // eslint-disable-next-line no-use-before-define
-            await postSection(response.body.data.attributes.id, 'user', data);
-        }
-
-        return response;
-    }
-
     function getSection(questionnaireId, section) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
@@ -53,6 +27,31 @@ function questionnaireService() {
             }
         };
         return service.post(opts);
+    }
+
+    async function createQuestionnaire(init) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+            },
+            json: {
+                data: {
+                    type: 'questionnaires',
+                    attributes: {
+                        templateName: 'sexual-assault'
+                    }
+                }
+            }
+        };
+        const response = service.post(opts);
+
+        if (init?.userId) {
+            const data = {'user-id': init.userId};
+            await postSection(response.body.data.attributes.id, 'user', data);
+        }
+
+        return response;
     }
 
     function getPrevious(questionnaireId, sectionId) {
