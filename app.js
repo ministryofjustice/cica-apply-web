@@ -150,7 +150,7 @@ app.use(['/apply', '/download'], async (req, res, next) => {
     if (!req.session.questionnaireId) {
         // no: set it and redirect.
         try {
-            const response = await qService.createQuestionnaire();
+            const response = await qService.createQuestionnaire({userId: req.session.userId});
             req.session.questionnaireId = response.body.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial
