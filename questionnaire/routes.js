@@ -19,6 +19,15 @@ router.route('/').get(async (req, res) => {
     }
 });
 
+router.route('/new').get(async (req, res) => {
+    try {
+        req.session.questionnaireId = undefined;
+        res.redirect('/apply');
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
 router.route('/resume/:questionnaireId').get(async (req, res) => {
     try {
         const defaultRedirect = '/apply';
