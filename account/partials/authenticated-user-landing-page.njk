@@ -1,10 +1,36 @@
 {% extends "page.njk" %}
 {% from "components/button/macro.njk" import govukButton %}
+{% from "components/table/macro.njk" import govukTable %}
 
 {% block pageTitle %}Progress saved - {{ super() }}{% endblock %}
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Application progress saved</h1>
+
+    {{ govukTable({
+      firstCellIsHeader: true,
+      rows: [
+        [
+          {
+            text: "Application held for"
+          },
+          {
+            text: "30 Days"
+          }
+        ],
+        [
+          {
+            text: "Expiry date"
+          },
+          {
+            text: expiryDate
+          }
+        ]
+      ]
+    }) }}
+
+    <p class="govuk-body">If you do not submit the application by its expiry date, it will be deleted and you'll need to start a new application.</p>
+
     {{ govukButton({
         text: "Continue",
         href: nextPageUrl
