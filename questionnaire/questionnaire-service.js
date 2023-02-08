@@ -29,7 +29,7 @@ function questionnaireService() {
         return service.post(opts);
     }
 
-    async function createQuestionnaire(init) {
+    async function createQuestionnaire(options) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
             headers: {
@@ -44,10 +44,10 @@ function questionnaireService() {
                 }
             }
         };
-        const response = service.post(opts);
+        const response = await service.post(opts);
 
-        if (init?.userId) {
-            const data = {'user-id': init.userId};
+        if (options?.userId) {
+            const data = {'user-id': options.userId};
             await postSection(response.body.data.attributes.id, 'user', data);
         }
 

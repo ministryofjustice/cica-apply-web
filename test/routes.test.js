@@ -876,6 +876,15 @@ describe('/apply', () => {
             );
         });
     });
+
+    describe('/new', () => {
+        it('Should redirect to `/apply`', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/apply/new');
+            expect(response.text).toBe('Found. Redirecting to /apply');
+        });
+    });
 });
 
 describe('/session', () => {
