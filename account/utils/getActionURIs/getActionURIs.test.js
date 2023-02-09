@@ -1,6 +1,6 @@
 'use strict';
 
-const {getSignedInURI, getSignedOutURI} = require('.');
+const {getSignedInURI, getSignedOutURI, getDashboardURI} = require('.');
 
 describe('getActionURIs', () => {
     describe('getSignedInURI', () => {
@@ -18,6 +18,15 @@ describe('getActionURIs', () => {
         });
         it('Should return URI including path only', () => {
             expect(getSignedOutURI(true)).toBe('/account/signed-out');
+        });
+    });
+
+    describe('getDashboardURI', () => {
+        it('Should return full URI including host and pathname', () => {
+            expect(getDashboardURI()).toBe('http://www.cw.com/account/dashboard');
+        });
+        it('Should return URI including path only', () => {
+            expect(getDashboardURI(true)).toBe('/account/dashboard');
         });
     });
 });
