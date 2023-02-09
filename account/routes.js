@@ -119,7 +119,11 @@ router.get('/dashboard', async (req, res, next) => {
         const templateData = await dashboardService.getTemplateData(req.session.userId);
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
-        const html = render('dashboard.njk', {nonce: res.locals.nonce, userData: templateData});
+        const html = render('dashboard.njk', {
+            nonce: res.locals.nonce,
+            userData: templateData,
+            isAuthenticated: !!req.session.userId
+        });
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
