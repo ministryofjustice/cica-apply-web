@@ -102,7 +102,7 @@ router.get('/sign-out', async (req, res, next) => {
     try {
         const signInService = createSignInService();
         const url = await signInService.getLogoutUrl();
-        req.session.userId = undefined;
+        delete req.session.userId;
         return res.redirect(302, url);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -119,7 +119,11 @@ router.get('/dashboard', async (req, res, next) => {
         const templateData = await dashboardService.getTemplateData(req.session.userId);
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
-        const html = render('dashboard.njk', {nonce: res.locals.nonce, userData: templateData});
+        const html = render('dashboard.njk', {
+            nonce: res.locals.nonce,
+            userData: templateData,
+            isAuthenticated: 'userId' in req.session
+        });
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
