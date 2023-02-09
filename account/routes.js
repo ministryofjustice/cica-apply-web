@@ -78,11 +78,18 @@ router.get('/signed-in', async (req, res, next) => {
         // Save the userId to the questionnaire
         const data = {'user-id': userIdToken.sub};
         await qService.postSection(req.session.questionnaireId, 'user', data);
+
+        // Calculate the expiry date
+        const dateOpts = {year: 'numeric', month: 'long', day: 'numeric'};
+        const expiryDate = new Date(
+            new Date().setDate(new Date().getDate() + 30)
+        ).toLocaleDateString('en-GB', dateOpts);
         // Send the user to the landing page
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
         const html = render('authenticated-user-landing-page.njk', {
-            nextPageUrl: stateObject.referrer
+            nextPageUrl: stateObject.referrer,
+            expiryDate
         });
         return res.send(html);
     } catch (err) {
