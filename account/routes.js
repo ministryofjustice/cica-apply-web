@@ -7,21 +7,22 @@ const createTemplateEngineService = require('../templateEngine');
 const qService = require('../questionnaire/questionnaire-service')();
 const createDashboardService = require('../dashboard/dashboard-service');
 
-const {getSignedInURI} = require('./utils/getActionURIs');
+const {getSignedInURI, getDashboardURI} = require('./utils/getActionURIs');
+const getValidReferrerOrDefault = require('./utils/getValidReferrerOrDefault');
 
 const router = express.Router();
 
 router.get('/sign-in', async (req, res, next) => {
     try {
         if (req.session.userId) {
-            return res.redirect('/account/dashboard');
+            return res.redirect(getDashboardURI());
         }
 
         const signInService = createSignInService();
         const redirectUri = getSignedInURI();
         const stateObject = {
             qid: req.session.questionnaireId,
-            referrer: req.get('Referrer') || '/apply/'
+            referrer: getValidReferrerOrDefault(req.get('referrer'))
         };
         const encodedState = Buffer.from(JSON.stringify(stateObject)).toString('base64');
 
@@ -43,7 +44,7 @@ router.get('/sign-in', async (req, res, next) => {
 router.get('/signed-in', async (req, res, next) => {
     try {
         if (req.session.userId) {
-            return res.redirect('/account/dashboard');
+            return res.redirect(getDashboardURI());
         }
 
         // Get query strings
