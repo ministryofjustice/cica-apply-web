@@ -709,7 +709,7 @@ describe('postcode lookup progressive enhancement', () => {
                 );
             });
 
-            it('maps to the correct address fields when building number and thouroughfare present', async () => {
+            it('maps to the correct address fields when sub building name contains X/Y and building number and thouroughfare present', async () => {
                 fetch.mockResponse(async () => {
                     return JSON.stringify(addressSearchCollectionResponse);
                 });
@@ -747,6 +747,84 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'A12 2BC'
+                );
+            });
+            it('maps to the correct address fields when sub building name contains X/Y and building name present', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchCollectionResponse);
+                });
+                postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'A1 2DT';
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
+
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
+
+                const selectionIndex = addressSelectionIndexFinder(
+                    '1/3, QUEENS HOUSE, 19, ST. FOOBAR PLACE, FOOTOWN, A1 2DT'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
+                searchResultsDropDown.dispatchEvent(new Event('change'));
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
+                    '1/3, QUEENS HOUSE, 19, ST. FOOBAR PLACE, FOOTOWN, A1 2DT'
+                );
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street').value
+                ).toBe('1/3 QUEENS HOUSE');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-2').value
+                ).toBe('19 ST. FOOBAR PLACE');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-3').value
+                ).toBe('');
+                expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
+                    'FOOTOWN'
+                );
+                expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
+                expect(window.document.getElementById('q-applicant-postcode').value).toBe('A1 2DT');
+            });
+            it('maps to the correct address fields when building name contains one letter only and thouroughfare present', async () => {
+                fetch.mockResponse(async () => {
+                    return JSON.stringify(addressSearchCollectionResponse);
+                });
+                postcodeLookup.init();
+                window.document.getElementById('address-search-input').value = 'AB4 1BC';
+                window.document.getElementById('search-button').click();
+                await setTimeout(0);
+                expect(fetch.mock.calls.length).toEqual(1);
+
+                const searchResultsDropDown = window.document.getElementById(
+                    'address-search-results-dropdown'
+                );
+                expect(searchResultsDropDown[0].text).toContain('addresses found');
+
+                const selectionIndex = addressSelectionIndexFinder(
+                    'A, FOOLAND ROAD, BARKING, AB4 1BC'
+                );
+                searchResultsDropDown.selectedIndex = selectionIndex;
+                searchResultsDropDown.dispatchEvent(new Event('change'));
+                expect(searchResultsDropDown[selectionIndex].text).toEqual(
+                    'A, FOOLAND ROAD, BARKING, AB4 1BC'
+                );
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street').value
+                ).toBe('A FOOLAND ROAD');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-2').value
+                ).toBe('');
+                expect(
+                    window.document.getElementById('q-applicant-building-and-street-3').value
+                ).toBe('');
+                expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
+                    'BARKING'
+                );
+                expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
+                expect(window.document.getElementById('q-applicant-postcode').value).toBe(
+                    'AB4 1BC'
                 );
             });
             it('maps to the correct address fields when a PO Box is present', async () => {
