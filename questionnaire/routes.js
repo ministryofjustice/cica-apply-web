@@ -93,7 +93,7 @@ router
                     });
                 }
             }
-            const isAuthenticated = !!req.session.userId;
+            const isAuthenticated = 'userId' in req.session;
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
@@ -169,7 +169,7 @@ router
 
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
-            const isAuthenticated = !!req.session.userId;
+            const isAuthenticated = 'userId' in req.session;
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
