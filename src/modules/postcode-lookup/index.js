@@ -16,6 +16,10 @@ function createPostcodeLookup(window) {
     let addressSearchResultsOptions;
     let addressSearchInput;
 
+    // Matches a single letter (e.g 'A'), number range (e.g. 110-114), delimiter (e.g. 1/2)
+    // Does not match 'Flat A'
+    const flatIdentifierRegex = /((^\d\S+([a-zA-Z]|\d)$|^[a-zA-Z]$))/;
+
     function isSelectedValueInteger(str) {
         const num = Number(str);
         if (Number.isInteger(num)) {
@@ -50,7 +54,7 @@ function createPostcodeLookup(window) {
         // Define constants for DPA address components (blank if NULL).
         let dpaOrganisationName = result.ORGANISATION_NAME || '';
         const dpaSubBuildingName = result.SUB_BUILDING_NAME || '';
-        const dpaBuildingName = result.BUILDING_NAME || '';
+        let dpaBuildingName = result.BUILDING_NAME || '';
         const dpaBuildingNumber = result.BUILDING_NUMBER || '';
         let dpaPOBoxNumber = result.PO_BOX_NUMBER || '';
         const dpaDependentThoroughfareName = result.DEPENDENT_THOROUGHFARE_NAME || '';
@@ -76,15 +80,19 @@ function createPostcodeLookup(window) {
         ].filter(item => item);
 
         const premises = [];
-        if (dpaSubBuildingName !== '') {
+        if (
+            dpaSubBuildingName !== '' &&
+            dpaBuildingName !== '' &&
+            flatIdentifierRegex.test(dpaSubBuildingName)
+        ) {
+            dpaBuildingName = `${dpaSubBuildingName} ${dpaBuildingName}`;
+        } else {
             premises.push(dpaSubBuildingName);
         }
 
         let premisesThoroughfareLocality = '';
-        // Define a regular expression to test for a letter suffix (e.g. '11A') or number
-        // range (e.g. '110-114'). Combine the first values from the premises and thoroughfare
-        const regex = /(^[0-9]+[a-zA-Z]$)|(^[0-9]+-[0-9]+$)/;
-        if (regex.test(dpaBuildingName)) {
+
+        if (flatIdentifierRegex.test(dpaBuildingName)) {
             // add to thouroughfare
             premisesThoroughfareLocality = `${dpaBuildingName} ${thoroughfareLocality[0]}`;
             thoroughfareLocality.shift();
