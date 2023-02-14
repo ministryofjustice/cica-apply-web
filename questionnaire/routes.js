@@ -9,7 +9,7 @@ const router = express.Router();
 router.route('/').get(async (req, res) => {
     try {
         const response = await qService.getFirstSection(req.session.questionnaireId);
-        const responseBody = response.body;
+        const responseBody = response.data;
         const initialSection = formHelper.removeSectionIdPrefix(
             responseBody.data[0].attributes.sectionId
         );
@@ -23,12 +23,12 @@ router.route('/previous/:section').get(async (req, res) => {
     try {
         const sectionId = formHelper.addPrefix(req.params.section);
         const response = await qService.getPrevious(req.session.questionnaireId, sectionId);
-        if (response.body.data[0].attributes && response.body.data[0].attributes.url !== null) {
-            const overwriteId = response.body.data[0].attributes.url;
+        if (response.data.data[0].attributes && response.data.data[0].attributes.url !== null) {
+            const overwriteId = response.data.data[0].attributes.url;
             return res.redirect(overwriteId);
         }
         const previousSectionId = formHelper.removeSectionIdPrefix(
-            response.body.data[0].attributes.sectionId
+            response.data.data[0].attributes.sectionId
         );
         return res.redirect(`${req.baseUrl}/${previousSectionId}`);
     } catch (err) {
@@ -43,12 +43,12 @@ router
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await qService.getSection(req.session.questionnaireId, sectionId);
             if (
-                response.body.data &&
-                response.body.data[0].attributes &&
-                response.body.data[0].attributes.sectionId
+                response.data.data &&
+                response.data.data[0].attributes &&
+                response.data.data[0].attributes.sectionId
             ) {
                 const isSummaryPage =
-                    formHelper.getSectionContext(response.body.data[0].attributes.sectionId) ===
+                    formHelper.getSectionContext(response.data.data[0].attributes.sectionId) ===
                     'summary';
 
                 if (isSummaryPage) {
@@ -60,7 +60,7 @@ router
                 }
             }
             const html = formHelper.getSectionHtml(
-                response.body,
+                response.data,
                 req.csrfToken(),
                 res.locals.nonce
             );
@@ -86,7 +86,7 @@ router
                 sectionId,
                 body
             );
-            if (response.statusCode === 201) {
+            if (response.status === 201) {
                 // if the page is a submission
                 const isApplicationSubmission =
                     formHelper.getSectionContext(sectionId) === 'submission';
@@ -116,9 +116,9 @@ router
                         formHelper.addPrefix(req.query.next)
                     );
 
-                    if (progressEntryResponse.statusCode === 200) {
+                    if (progressEntryResponse.status === 200) {
                         nextSectionId = formHelper.removeSectionIdPrefix(
-                            progressEntryResponse.body.data[0].attributes.sectionId
+                            progressEntryResponse.data.data[0].attributes.sectionId
                         );
                         return res.redirect(`${req.baseUrl}/${nextSectionId}`);
                     }
@@ -128,14 +128,14 @@ router
                     req.session.questionnaireId
                 );
                 nextSectionId = formHelper.removeSectionIdPrefix(
-                    progressEntryResponse.body.data[0].attributes.sectionId
+                    progressEntryResponse.data.data[0].attributes.sectionId
                 );
 
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
 
             const html = formHelper.getSectionHtmlWithErrors(
-                response.body,
+                response.data,
                 sectionId,
                 req.csrfToken(),
                 res.locals.nonce

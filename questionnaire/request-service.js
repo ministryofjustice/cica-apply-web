@@ -1,6 +1,6 @@
 'use strict';
 
-const got = require('got');
+const axios = require('axios');
 const merge = require('lodash.merge');
 
 function requestService() {
@@ -11,11 +11,10 @@ function requestService() {
                 accept: 'application/vnd.api+json',
                 'Content-Type': 'application/vnd.api+json'
             },
-            responseType: 'json',
-            throwHttpErrors: false
+            validateStatus: () => true // never throw errors
         };
         opts = merge(opts, options);
-        return got(opts);
+        return axios(opts);
     }
 
     function get(options) {
@@ -25,11 +24,10 @@ function requestService() {
                 accept: 'application/vnd.api+json',
                 'Content-Type': 'application/vnd.api+json'
             },
-            responseType: 'json',
-            throwHttpErrors: false
+            validateStatus: () => true // never throw errors
         };
         opts = merge(opts, options);
-        return got(opts);
+        return axios(opts);
     }
 
     return Object.freeze({

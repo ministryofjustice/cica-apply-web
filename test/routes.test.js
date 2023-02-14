@@ -768,7 +768,7 @@ describe('/apply', () => {
                         post: options => {
                             const responses = {
                                 [`${api}/sections/p-applicant-enter-your-name/answers`]: {
-                                    statusCode: 201
+                                    status: 201
                                 }
                             };
 
@@ -777,8 +777,8 @@ describe('/apply', () => {
                         get: options => {
                             const responses = {
                                 [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
-                                    statusCode: 200,
-                                    body: {
+                                    status: 200,
+                                    data: {
                                         data: [
                                             {
                                                 attributes: {
@@ -789,7 +789,7 @@ describe('/apply', () => {
                                     }
                                 },
                                 [`${api}/session/keep-alive`]: {
-                                    statusCode: 200,
+                                    status: 200,
                                     ...getKeepAlive
                                 }
                             };
@@ -828,7 +828,7 @@ describe('/apply', () => {
                         post: options => {
                             const responses = {
                                 [`${api}/sections/p-applicant-are-you-18-or-over/answers`]: {
-                                    statusCode: 201
+                                    status: 201
                                 }
                             };
 
@@ -837,11 +837,11 @@ describe('/apply', () => {
                         get: options => {
                             const responses = {
                                 [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
-                                    statusCode: 404
+                                    status: 404
                                 },
                                 [`${api}/progress-entries?filter[position]=current`]: {
-                                    statusCode: 200,
-                                    body: {
+                                    status: 200,
+                                    data: {
                                         data: [
                                             {
                                                 attributes: {
@@ -853,7 +853,7 @@ describe('/apply', () => {
                                     }
                                 },
                                 [`${api}/session/keep-alive`]: {
-                                    statusCode: 200,
+                                    status: 200,
                                     ...getKeepAlive
                                 }
                             };

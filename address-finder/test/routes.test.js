@@ -48,7 +48,7 @@ describe('Address finder route proxy endpoint address-finder/postcode', () => {
                     )
                     .then(response => {
                         expect(response.statusCode).toBe(200);
-                        expect(response.body).toEqual(getAddressCollectionResponse.body);
+                        expect(response.data).toEqual(getAddressCollectionResponse.body);
                     })
             );
         });
@@ -70,7 +70,7 @@ describe('Address finder route proxy endpoint address-finder/postcode', () => {
                         'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA'
                     )
                     .then(response => {
-                        expect(response.statusCode).toBe(500);
+                        expect(response.status).toBe(500);
                     })
             );
         });

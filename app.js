@@ -123,7 +123,7 @@ app.use(async (req, res, next) => {
                 return next();
             }
             const response = await qService.keepAlive(req.session.questionnaireId);
-            const sessionResource = response.body.data[0].attributes;
+            const sessionResource = response.data.data[0].attributes;
             cookieExpiryService.set({
                 alive: sessionResource.alive,
                 created: sessionResource.created,
@@ -145,9 +145,9 @@ app.use(['/apply', '/download'], async (req, res, next) => {
         // no: set it and redirect.
         try {
             const response = await qService.createQuestionnaire();
-            req.session.questionnaireId = response.body.data.attributes.id;
+            req.session.questionnaireId = response.data.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
-                response.body.data.attributes.routes.initial
+                response.data.data.attributes.routes.initial
             );
             const baseUrl = req.baseUrl === '/download' ? '/apply' : req.baseUrl;
             let redirectionUrl = `${baseUrl}/${initialSection}`;

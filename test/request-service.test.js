@@ -41,20 +41,20 @@ describe('requestService', () => {
         };
         const response = await requestService.get(requestOptions);
 
-        expect(response.body).toEqual({get_test: 'success'});
+        expect(response.data).toEqual({get_test: 'success'});
     });
 
     it('should POST JSON', async () => {
         const requestService = createRequestService();
         const requestOptions = {
             url: 'http://127.0.0.1:8125/some-api-with-json-response',
-            json: {
+            data: {
                 is_a: 'success'
             }
         };
         const response = await requestService.post(requestOptions);
 
-        expect(response.body).toEqual({
+        expect(response.data).toEqual({
             post_test: {
                 is_a: 'success'
             }

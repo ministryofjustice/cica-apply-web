@@ -1,6 +1,6 @@
 {
-    "statusCode": 200,
-    "body": {
+    "status": 200,
+    "data": {
         "header": {
             "uri": "https://api.os.uk/search/places/v1/postcode?postcode=FO123BA",
             "query": "postcode=FO123BA",

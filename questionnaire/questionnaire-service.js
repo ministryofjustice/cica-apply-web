@@ -9,7 +9,7 @@ function questionnaireService() {
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
-            json: {
+            data: {
                 data: {
                     type: 'questionnaires',
                     attributes: {
@@ -37,7 +37,7 @@ function questionnaireService() {
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
-            json: {
+            data: {
                 data: {
                     type: 'answers',
                     attributes: body
@@ -83,7 +83,7 @@ function questionnaireService() {
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             },
-            json: {
+            data: {
                 data: {
                     type: 'submissions',
                     attributes: {
@@ -107,26 +107,26 @@ function questionnaireService() {
         // dcs down...
         if (
             !result ||
-            !result.body ||
-            !result.body.data ||
-            !result.body.data.attributes ||
-            (result.body.errors && result.body.errors[0].status === 404)
+            !result.data ||
+            !result.data.data ||
+            !result.data.data.attributes ||
+            (result.data.errors && result.data.errors[0].status === 404)
         ) {
             const err = Error(`The service is currently unavailable`);
             err.name = 'DCSUnavailable';
-            err.statusCode = 500;
+            err.status = 500;
             err.error = '500 Internal Server Error';
             throw err;
         }
 
-        const {submitted} = result.body.data.attributes;
+        const {submitted} = result.data.data.attributes;
         if (submitted) {
-            return result.body.data.attributes;
+            return result.data.data.attributes;
         }
         // return the resource regardless.
         // https://www.hobo-web.co.uk/your-website-design-should-load-in-4-seconds/
         if (Date.now() - startingDate >= 6000) {
-            return result.body.data.attributes;
+            return result.data.data.attributes;
         }
 
         // check again.

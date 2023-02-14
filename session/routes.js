@@ -9,7 +9,7 @@ const router = express.Router();
 router.route('/keep-alive').get(async (req, res) => {
     try {
         const response = await qService.keepAlive(req.session.questionnaireId);
-        const sessionResource = response.body?.data?.[0]?.attributes;
+        const sessionResource = response.data?.data?.[0]?.attributes;
         if (sessionResource) {
             const cookieService = createCookieService({
                 req,
@@ -18,7 +18,7 @@ router.route('/keep-alive').get(async (req, res) => {
             });
             cookieService.set('expires', sessionResource.expires);
         }
-        res.json(response.body);
+        res.json(response.data);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
     }

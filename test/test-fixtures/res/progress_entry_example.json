@@ -1,6 +1,6 @@
 {
-    "statusCode": 201,
-    "body": {
+    "status": 201,
+    "data": {
         "data": [
             {
                 "type": "progress-entries",
