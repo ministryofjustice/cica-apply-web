@@ -13,7 +13,7 @@ executors:
 jobs:
   build-for-test:
     docker:
-      - image: cimg/node:16.15.0
+      - image: cimg/node:18.14.2
     steps:
       - checkout
       - run:
@@ -34,7 +34,7 @@ jobs:
             - ./node_modules
   test:
     docker:
-      - image: cimg/node:16.15.0
+      - image: cimg/node:18.14.2
     steps:
       - attach_workspace:
           at: ./
@@ -45,7 +45,7 @@ jobs:
           command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
   lint:
     docker:
-      - image: cimg/node:16.15.0
+      - image: cimg/node:18.14.2
     steps:
       - attach_workspace:
           at: ./

@@ -9,7 +9,7 @@ module.exports = {
         path: path.resolve(__dirname, 'public/dist/js/'),
         filename: 'bundle.js'
     },
-    devtool: 'none',
+    devtool: false,
     module: {
         rules: [
             {
