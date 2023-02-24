@@ -192,5 +192,6 @@
     "deceased-address": "p-deceased-address",
     "context-funeral-costs": "p-context-funeral-costs",
     "applicant-funeral-costs-paid": "p-applicant-funeral-costs-paid",
-    "applicant-funeral-costs-other-contributor": "p-applicant-funeral-costs-other-contributor"
+    "applicant-funeral-costs-other-contributor": "p-applicant-funeral-costs-other-contributor",
+    "applicant-funeral-costs-who-contributed": "p-applicant-funeral-costs-who-contributed"
 }
