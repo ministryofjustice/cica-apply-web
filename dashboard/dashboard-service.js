@@ -6,7 +6,7 @@ const {get} = require('../questionnaire/request-service')(); // TODO Move this t
 function createDashboardService() {
     async function getQuestionnaireMetadataCollectionByUserId(userId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/meta?filter[user-id]=${userId}`,
+            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/metadata?filter[user-id]=${userId}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`
             }

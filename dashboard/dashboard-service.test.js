@@ -12,7 +12,7 @@ describe('Dashboard service', () => {
                 get: options => {
                     if (
                         options.url ===
-                        `${process.env.CW_DCS_URL}/api/v1/questionnaires/meta?filter[user-id]=my-test-user-id`
+                        `${process.env.CW_DCS_URL}/api/v1/questionnaires/metadata?filter[user-id]=my-test-user-id`
                     ) {
                         return fixtureMetaResponse;
                     }

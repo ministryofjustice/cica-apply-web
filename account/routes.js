@@ -83,7 +83,7 @@ router.get('/signed-in', async (req, res, next) => {
         // Calculate the expiry date
         const dateOpts = {year: 'numeric', month: 'long', day: 'numeric'};
         const expiryDate = new Date(
-            new Date().setDate(new Date().getDate() + 30)
+            new Date().setDate(new Date().getDate() + 31)
         ).toLocaleDateString('en-GB', dateOpts);
         // Send the user to the landing page
         const templateEngineService = createTemplateEngineService();
