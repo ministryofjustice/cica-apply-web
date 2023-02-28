@@ -67,7 +67,7 @@ function createDashboardService() {
                     }
                 },
                 {
-                    html: `<a href="/apply/resume/${questionnaireData.questionnaireId}">Continue<span class='govuk-visually-hidden'> Continue application for ${questionnaireData.answers['q-applicant-first-name']} ${questionnaireData.answers['q-applicant-last-name']}</span></a>`
+                    html: `<a href="/apply/resume/${questionnaireData.questionnaireId}" class="govuk-link">Continue<span class='govuk-visually-hidden'> Continue application for ${questionnaireData.answers['q-applicant-first-name']} ${questionnaireData.answers['q-applicant-last-name']}</span></a>`
                 }
             ]);
             return acc;

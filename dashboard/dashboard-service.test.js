@@ -48,7 +48,7 @@ describe('Dashboard service', () => {
                 },
                 {
                     html:
-                        '<a href="/apply/resume/285cb104-0c15-4a9c-9840-cb1007f098fb">Continue<span class=\'govuk-visually-hidden\'> Continue application for Foo Bar</span></a>'
+                        '<a href="/apply/resume/285cb104-0c15-4a9c-9840-cb1007f098fb" class="govuk-link">Continue<span class=\'govuk-visually-hidden\'> Continue application for Foo Bar</span></a>'
                 }
             ]
         ]);
