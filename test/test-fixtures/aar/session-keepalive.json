@@ -1,0 +1,16 @@
+{
+    "body": {
+        "data": [
+            {
+                "id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
+                "type": "sessions",
+                "attributes": {
+                    "alive": true,
+                    "created": 1662544121060,
+                    "duration": 900000,
+                    "expires": 1662545021060
+                }
+            }
+        ]
+    }
+}

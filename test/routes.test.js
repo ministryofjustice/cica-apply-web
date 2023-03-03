@@ -3,18 +3,11 @@
 const request = require('supertest');
 const csrf = require('csurf');
 
-const formHelper = require('../questionnaire/form-helper');
-
-const createQuestionnaire = require('./test-fixtures/res/get_questionnaire.json');
-const getCurrentSection = require('./test-fixtures/res/get_current_section_valid');
-const getSectionValid = require('./test-fixtures/res/get_schema_valid');
-const getSectionHtmlValid = require('./test-fixtures/transformations/resolved html/p-some-section');
-const getProgressEntries = require('./test-fixtures/res/progress_entry_example');
-const getPreviousValid = require('./test-fixtures/res/get_previous_valid_sectionId');
-const getPreviousValidUrl = require('./test-fixtures/res/get_previous_valid_url');
-const postValidSubmission = require('./test-fixtures/res/post_valid_submission');
-const postValidSubmissionServiceDown = require('./test-fixtures/res/post_valid_submission_service_down');
-const getKeepAlive = require('./test-fixtures/res/get_keep_alive');
+const fixtureTemplate = require('./test-fixtures/aar/template.json');
+const fixtureProgressEntryTemplateSectionInitial = require('./test-fixtures/aar/progress-entry-template-section-initial.json');
+const fixtureProgressEntryTemplateSectionCurrent = require('./test-fixtures/aar/progress-entry-template-section-current.json');
+const fixtureProgressEntryTemplateSectionSecondary = require('./test-fixtures/aar/progress-entry-template-section-secondary.json');
+const fixtureSessionKeepAlive = require('./test-fixtures/aar/session-keepalive.json');
 
 let app;
 
@@ -67,18 +60,19 @@ function setUpCommonMocks(additionalMocks) {
     jest.resetModules();
     jest.restoreAllMocks();
     jest.unmock('../questionnaire/questionnaire-service');
+    jest.unmock('../questionnaire/utils/isQuestionnaireInstantiated');
     jest.unmock('../questionnaire/form-helper');
     jest.unmock('../index/liveChatHelper');
-    jest.unmock('../questionnaire/request-service');
-    jest.unmock('client-sessions');
+
+    // jest.unmock('../questionnaire/request-service');
+    // jest.unmock('client-sessions');
     if (additionalMocks) {
         additionalMocks();
     } else {
         jest.doMock('../questionnaire/questionnaire-service', () =>
             jest.fn(() => ({
-                createQuestionnaire: () => createQuestionnaire,
-                getCurrentSection: () => getCurrentSection,
-                keepAlive: () => getKeepAlive
+                createQuestionnaire: () => fixtureTemplate,
+                getCurrentSection: () => fixtureProgressEntryTemplateSectionCurrent
             }))
         );
     }
@@ -280,609 +274,346 @@ describe('Static routes', () => {
 });
 
 describe('/apply', () => {
-    beforeEach(() => {
-        setUpCommonMocks();
-    });
-
-    it('Should respond with a redirection status', async () => {
-        const currentAgent = request.agent(app);
-        const response = await currentAgent.get('/apply');
-        expect(response.statusCode).toBe(302);
-    });
-
-    it('Should redirect to the first section URL', async () => {
-        const currentAgent = request.agent(app);
-        const response = await currentAgent.get('/apply');
-        expect(response.res.text).toBe('Found. Redirecting to /apply/applicant-declaration');
-    });
-
-    it('Should redirect the user to the inital page if the requested page is selected without a session', async () => {
-        const currentAgent = request.agent(app);
-        const response = await currentAgent.get('/apply/applicant-british-citizen-or-eu-national');
-        expect(response.res.text).toBe('Found. Redirecting to /apply/applicant-declaration');
-    });
-
-    it('Should set a session cookie', async () => {
-        let cookiePresent = false;
-        const currentAgent = request.agent(app);
-        const response = await currentAgent.get('/apply');
-        const cookies = response.header['set-cookie'];
-        cookies.forEach(cookie => {
-            cookiePresent = cookie.startsWith('session=') ? true : cookiePresent;
-        });
-        expect(cookiePresent).toBe(true);
-    });
-
-    describe('createQuestionnaire', () => {
-        it('Should fail gracefully', async () => {
-            function blockSpecificMocks() {
-                jest.doMock('../questionnaire/questionnaire-service', () =>
-                    jest.fn(() => ({
-                        createQuestionnaire: () => {
-                            return Promise.reject(new Error('Something went wrong'));
-                        },
-                        keepAlive: () => getKeepAlive
-                    }))
-                );
-            }
-            setUpCommonMocks(blockSpecificMocks);
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply');
-            expect(response.statusCode).toBe(404);
-        });
-    });
-
-    describe('getFirstSection', () => {
-        it('Should fail gracefully', async () => {
-            function blockSpecificMocks() {
-                jest.doMock('../questionnaire/questionnaire-service', () =>
-                    jest.fn(() => ({
-                        createQuestionnaire: () => createQuestionnaire,
-                        getFirstSection: () => {
-                            return Promise.reject(new Error('Something went wrong'));
-                        },
-                        keepAlive: () => getKeepAlive
-                    }))
-                );
-            }
-            setUpCommonMocks(blockSpecificMocks);
-
-            const currentAgent = request.agent(app);
-            await currentAgent
-                .get('/apply')
-                .set(
-                    'Cookie',
-                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                );
-            const response = await currentAgent.get('/apply');
-            expect(response.statusCode).toBe(404);
-        });
-    });
-
-    describe(':section', () => {
+    describe('Template instantiated', () => {
         beforeEach(() => {
             function blockSpecificMocks() {
-                const prefixedSection = 'p-applicant-enter-your-name';
-                const initial = 'p-applicant-declaration';
                 jest.doMock('../questionnaire/questionnaire-service', () =>
                     jest.fn(() => ({
-                        getSection: () => getSectionValid,
-                        createQuestionnaire: () => createQuestionnaire,
-                        getCurrentSection: () => getCurrentSection,
-                        keepAlive: () => getKeepAlive
+                        createQuestionnaire: () => fixtureTemplate,
+                        getFirstSection: () => fixtureProgressEntryTemplateSectionInitial,
+                        keepAlive: () => fixtureSessionKeepAlive
                     }))
                 );
-                jest.doMock('../questionnaire/form-helper', () => ({
-                    addPrefix: () => prefixedSection,
-                    getSectionHtml: () => getSectionHtmlValid,
-                    removeSectionIdPrefix: () => initial,
-                    getSectionContext: () => undefined
-                }));
+                jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                    jest.fn(() => true)
+                );
             }
             setUpCommonMocks(blockSpecificMocks);
         });
 
-        it('Should respond with a 200 status code', async () => {
+        it('Should redirect', async () => {
             const currentAgent = request.agent(app);
-            await currentAgent.get('/apply');
-            const response = await currentAgent
-                .get('/apply/applicant-enter-your-name')
-                .set(
-                    'Cookie',
-                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                );
-            expect(response.statusCode).toBe(200);
+            const response = await currentAgent.get('/apply');
+            expect(response.statusCode).toBe(302);
         });
 
-        it('Should respond with a valid page', async () => {
+        it('Should redirect to initial section', async () => {
             const currentAgent = request.agent(app);
-            await currentAgent.get('/apply');
-            const response = await currentAgent
-                .get('/apply/applicant-enter-your-name')
-                .set(
-                    'Cookie',
-                    'cicaSession=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                );
-            expect(response.res.text).toContain('<p>This is a valid page</p>');
+            const response = await currentAgent.get('/apply');
+            expect(response.res.text).toBe('Found. Redirecting to /apply/applicant-fatal-claim');
         });
 
-        describe('Post', () => {
-            describe('Redirects', () => {
-                beforeEach(() => {
-                    function blockSpecificMocks() {
-                        const prefixedSection = 'p-applicant-enter-your-name';
-                        const section = 'applicant-enter-your-name';
-                        const processedAnswer = {'q-applicant-title': 'Mr'};
-                        jest.doMock('../questionnaire/questionnaire-service', () =>
-                            jest.fn(() => ({
-                                postSection: () => getProgressEntries,
-                                createQuestionnaire: () => createQuestionnaire,
-                                getCurrentSection: () => getCurrentSection,
-                                keepAlive: () => getKeepAlive
-                            }))
-                        );
-                        jest.doMock('../questionnaire/form-helper', () => ({
-                            addPrefix: () => prefixedSection,
-                            getSectionHtmlWithErrors: () => getSectionHtmlValid,
-                            removeSectionIdPrefix: () => section,
-                            processRequest: () => processedAnswer,
-                            getNextSection: () => section,
-                            getSectionContext: () => false
-                        }));
-                    }
-                    setUpCommonMocks(blockSpecificMocks);
-                });
-
-                it('Should respond with a redirection status code', async () => {
-                    const currentAgent = request.agent(app);
-                    await currentAgent.get('/apply/');
-                    const response = await currentAgent
-                        .post('/apply/applicant-enter-your-name')
-                        .set(
-                            'Cookie',
-                            'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                        );
-                    expect(response.statusCode).toBe(302);
-                });
-
-                it('Should redirect the user if there are no errors', async () => {
-                    const currentAgent = request.agent(app);
-                    await currentAgent.get('/apply/');
-                    const response = await currentAgent
-                        .post('/apply/applicant-enter-your-name')
-                        .set(
-                            'Cookie',
-                            'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                        );
-                    expect(response.statusCode).toBe(302);
-                    expect(response.res.text).toBe(
-                        'Found. Redirecting to /apply/applicant-enter-your-name'
+        describe('Error', () => {
+            beforeEach(() => {
+                function blockSpecificMocks() {
+                    jest.doMock('../questionnaire/questionnaire-service', () =>
+                        jest.fn(() => ({
+                            getFirstSection: () => {
+                                throw new Error();
+                            },
+                            keepAlive: () => fixtureSessionKeepAlive
+                        }))
                     );
-                });
+                    jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                        jest.fn(() => true)
+                    );
+                }
+                setUpCommonMocks(blockSpecificMocks);
+            });
+            it('Should fail gracefully', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply');
+                expect(response.statusCode).toBe(404);
+            });
+        });
+    });
+
+    describe('Template uninstantiated', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        createQuestionnaire: () => fixtureTemplate,
+                        getFirstSection: () => fixtureProgressEntryTemplateSectionInitial
+                    }))
+                );
+                jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                    jest.fn(() => false)
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+        it('Should redirect to initial section when no cookie is set', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get(
+                '/apply/applicant-british-citizen-or-eu-national'
+            );
+            expect(response.res.text).toBe('Found. Redirecting to /apply/');
+        });
+    });
+});
+
+describe('/apply/new', () => {
+    it('Should redict to /apply', async () => {
+        const currentAgent = request.agent(app);
+        const response = await currentAgent.get('/apply/new');
+        expect(response.res.text).toBe('Found. Redirecting to /apply');
+    });
+});
+
+describe('/apply/resume/:questionnaireId', () => {
+    beforeEach(() => {
+        function blockSpecificMocks() {
+            jest.doMock('../questionnaire/questionnaire-service', () =>
+                jest.fn(() => ({
+                    createQuestionnaire: () => fixtureTemplate,
+                    getCurrentSection: questionnaireId => {
+                        if (questionnaireId === 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd') {
+                            return fixtureProgressEntryTemplateSectionCurrent;
+                        }
+                        return {};
+                    }
+                }))
+            );
+        }
+        setUpCommonMocks(blockSpecificMocks);
+    });
+    it('Should redirect to a questionnaires `current` section', async () => {
+        const currentAgent = request.agent(app);
+        const response = await currentAgent.get(
+            '/apply/resume/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd'
+        );
+        expect(response.res.text).toBe('Found. Redirecting to /apply/applicant-fatal-claim');
+    });
+
+    it('Should redirect by default to /apply', async () => {
+        const currentAgent = request.agent(app);
+        const response = await currentAgent.get(
+            '/apply/resume/85ef497c-35ec-4a30-8b2c-e1cf8ab3a93c'
+        );
+        expect(response.res.text).toBe('Found. Redirecting to /apply');
+    });
+
+    describe('Error', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        getCurrentSection: () => {
+                            throw new Error();
+                        }
+                    }))
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+        it('Should fail gracefully', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get(
+                '/apply/resume/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd'
+            );
+            expect(response.statusCode).toBe(404);
+        });
+    });
+});
+
+describe('/apply/previous/:sectionId', () => {
+    beforeEach(() => {
+        function blockSpecificMocks() {
+            jest.doMock('../questionnaire/questionnaire-service', () =>
+                jest.fn(() => ({
+                    createQuestionnaire: () => fixtureTemplate,
+                    getPrevious: (questionnaireId, sectionId) => {
+                        if (sectionId === 'p--was-the-crime-reported-to-police') {
+                            return fixtureProgressEntryTemplateSectionInitial;
+                        }
+                        return {};
+                    }
+                }))
+            );
+        }
+        setUpCommonMocks(blockSpecificMocks);
+    });
+    it('Should redirect to a previous section', async () => {
+        const currentAgent = request.agent(app);
+        const response = await currentAgent.get('/apply/previous/was-the-crime-reported-to-police');
+        expect(response.res.text).toBe('Found. Redirecting to /apply/applicant-fatal-claim');
+    });
+
+    describe('Error', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        getPrevious: () => {
+                            throw new Error();
+                        }
+                    }))
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+        it('Should fail gracefully', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get(
+                '/apply/previous/was-the-crime-reported-to-police'
+            );
+            expect(response.statusCode).toBe(404);
+        });
+    });
+});
+
+describe('/apply/:sectionId', () => {
+    describe('GET', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        createQuestionnaire: () => fixtureTemplate,
+                        getSection: (questionnaireId, sectionId) => {
+                            if (sectionId === 'p--was-the-crime-reported-to-police') {
+                                return fixtureProgressEntryTemplateSectionSecondary;
+                            }
+                            return {};
+                        },
+                        keepAlive: () => fixtureSessionKeepAlive
+                    }))
+                );
+                jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                    jest.fn(() => true)
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+        it('Should render a section', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/was-the-crime-reported-to-police');
+            expect(response.res.text).toContain('id="q--was-the-crime-reported-to-police"');
+        });
+    });
+    describe('POST', () => {
+        beforeEach(() => {
+            function blockSpecificMocks() {
+                jest.doMock('../questionnaire/questionnaire-service', () =>
+                    jest.fn(() => ({
+                        postSection: () => {
+                            return {
+                                statusCode: 201
+                            };
+                        },
+                        getCurrentSection: () => fixtureProgressEntryTemplateSectionCurrent,
+                        keepAlive: () => fixtureSessionKeepAlive
+                    }))
+                );
+                jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                    jest.fn(() => true)
+                );
+            }
+            setUpCommonMocks(blockSpecificMocks);
+        });
+        it('Should redirect to a section', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.post('/apply/was-the-crime-reported-to-police');
+            expect(response.res.text).toBe('Found. Redirecting to /apply/applicant-fatal-claim');
+        });
+
+        describe('Create', () => {
+            beforeEach(() => {
+                function blockSpecificMocks() {
+                    jest.doMock('../questionnaire/questionnaire-service', () =>
+                        jest.fn(() => ({
+                            postSection: () => {
+                                return {
+                                    statusCode: 201
+                                };
+                            },
+                            getSubmissionStatus: () => {
+                                return {status: 'FAILED'};
+                            },
+                            getCurrentSection: () => fixtureProgressEntryTemplateSectionCurrent,
+                            postSubmission: () => undefined,
+                            keepAlive: () => fixtureSessionKeepAlive
+                        }))
+                    );
+                    jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                        jest.fn(() => true)
+                    );
+                    jest.doMock('../questionnaire/form-helper', () => ({
+                        getSectionContext: () => 'submission',
+                        addPrefix: () => 'p-was-the-crime-reported-to-police',
+                        processRequest: () => ({'q-applicant-fatal-claim': true})
+                    }));
+                }
+                setUpCommonMocks(blockSpecificMocks);
+            });
+            it('Should error upon submission', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.post('/apply/was-the-crime-reported-to-police');
+                // rendered 500.MBDown.njk.
+                expect(response.res.text).toContain(
+                    'However, there is a delay with us sending your reference number to you.'
+                );
             });
 
-            describe('Not Found', () => {
+            describe('`next` in query', () => {
                 beforeEach(() => {
                     function blockSpecificMocks() {
-                        const prefixedSection = 'p-applicant-enter-your-name';
-                        const section = 'applicant-enter-your-name';
-                        const processedAnswer = {'q-applicant-title': 'Mr'};
                         jest.doMock('../questionnaire/questionnaire-service', () =>
                             jest.fn(() => ({
                                 postSection: () => {
-                                    throw new Error();
+                                    return {
+                                        statusCode: 201
+                                    };
                                 },
-                                createQuestionnaire: () => createQuestionnaire,
-                                getCurrentSection: () => getCurrentSection,
-                                keepAlive: () => getKeepAlive
+                                getSubmissionStatus: () => {
+                                    return {status: 'COMPLETED'};
+                                },
+                                getSection: (questionnaireId, sectionId) => {
+                                    if (sectionId === 'p-applicant-fatal-claim') {
+                                        return {
+                                            statusCode: 200,
+                                            ...fixtureProgressEntryTemplateSectionCurrent
+                                        };
+                                    }
+                                    return {};
+                                },
+                                keepAlive: () => fixtureSessionKeepAlive
                             }))
                         );
-                        jest.doMock('../questionnaire/form-helper', () => ({
-                            addPrefix: () => prefixedSection,
-                            getSectionHtmlWithErrors: () => getSectionHtmlValid,
-                            removeSectionIdPrefix: () => section,
-                            processRequest: () => processedAnswer,
-                            getNextSection: () => section
-                        }));
+                        jest.doMock('../questionnaire/utils/isQuestionnaireInstantiated', () =>
+                            jest.fn(() => true)
+                        );
                     }
                     setUpCommonMocks(blockSpecificMocks);
                 });
-
-                it('Should fail gracefully', async () => {
+                it('Should redirect to `next`', async () => {
                     const currentAgent = request.agent(app);
-                    formHelper.getSectionHtml = jest.fn(() => {
-                        throw new Error('Something went wrong');
-                    });
-                    await currentAgent.get('/apply/');
-                    const response = await currentAgent
-                        .post('/apply/applicant-enter-your-name')
-                        .set(
-                            'Cookie',
-                            'session=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                        )
-                        .send();
-                    expect(response.statusCode).toBe(404);
+                    const response = await currentAgent.post(
+                        '/apply/was-the-crime-reported-to-police?next=applicant-fatal-claim'
+                    );
+                    expect(response.res.text).toBe(
+                        'Found. Redirecting to /apply/applicant-fatal-claim'
+                    );
                 });
-            });
-
-            describe('Submission', () => {
-                describe('Success', () => {
-                    beforeEach(() => {
-                        function blockSpecificMocks() {
-                            const prefixedSection = 'p-applicant-declaration';
-                            const section = 'the-next-page';
-                            const processedAnswer = {'q-applicant-declaration': [true]};
-                            jest.doMock('../questionnaire/form-helper', () => ({
-                                addPrefix: () => prefixedSection,
-                                removeSectionIdPrefix: () => section,
-                                processRequest: () => processedAnswer,
-                                getSectionContext: () => 'submission'
-                            }));
-                            jest.doMock('../questionnaire/questionnaire-service', () =>
-                                jest.fn(() => ({
-                                    postSubmission: () => {},
-                                    postSection: () => getProgressEntries,
-                                    createQuestionnaire: () => createQuestionnaire,
-                                    getCurrentSection: () => getCurrentSection,
-                                    getSubmissionStatus: () => postValidSubmission,
-                                    keepAlive: () => getKeepAlive
-                                }))
-                            );
-                        }
-                        setUpCommonMocks(blockSpecificMocks);
-                    });
-
-                    it('Should submit the application', async () => {
-                        const currentAgent = request.agent(app);
-                        await currentAgent.get('/apply/');
-                        const response = await currentAgent
-                            .post('/apply/applicant-declaration')
-                            .set(
-                                'Cookie',
-                                'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                            );
-                        expect(response.statusCode).toBe(302);
-                        expect(response.res.text).toBe(
-                            'Found. Redirecting to /apply/the-next-page'
-                        );
-                    });
-                });
-
-                describe('Failure', () => {
-                    beforeEach(() => {
-                        function blockSpecificMocks() {
-                            const prefixedSection = 'p-applicant-declaration';
-                            const section = 'the-next-page';
-                            const processedAnswer = {'q-applicant-declaration': [true]};
-                            jest.doMock('../questionnaire/form-helper', () => ({
-                                addPrefix: () => prefixedSection,
-                                removeSectionIdPrefix: () => section,
-                                processRequest: () => processedAnswer,
-                                getSectionContext: () => 'submission'
-                            }));
-                            jest.doMock('../questionnaire/questionnaire-service', () =>
-                                jest.fn(() => ({
-                                    postSubmission: () => {},
-                                    postSection: () => getProgressEntries,
-                                    createQuestionnaire: () => createQuestionnaire,
-                                    getCurrentSection: () => getCurrentSection,
-                                    getSubmissionStatus: () => postValidSubmissionServiceDown,
-                                    keepAlive: () => getKeepAlive
-                                }))
-                            );
-                        }
-                        setUpCommonMocks(blockSpecificMocks);
-                    });
-
-                    it('Should submit the application', async () => {
-                        const currentAgent = request.agent(app);
-                        await currentAgent.get('/apply/');
-                        const response = await currentAgent
-                            .post('/apply/applicant-declaration')
-                            .set(
-                                'Cookie',
-                                'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                            );
-                        expect(response.statusCode).toBe(500);
-                        expect(response.res.text).toContain(
-                            '<p class="govuk-body">However, there is a delay with us sending your reference number to you.</p>'
-                        );
-                    });
-                });
-            });
-        });
-    });
-
-    describe('/previous/:section', () => {
-        describe('Given a sectionId', () => {
-            beforeEach(() => {
-                function blockSpecificMocks() {
-                    const prefixedSection = 'p-applicant-enter-your-name';
-                    const section = 'applicant-declaration';
-                    const processedAnswer = {'q-applicant-title': 'Mr'};
-                    jest.doMock('../questionnaire/questionnaire-service', () =>
-                        jest.fn(() => ({
-                            getSection: () => getSectionValid,
-                            postSection: () => getProgressEntries,
-                            getPrevious: () => getPreviousValid,
-                            createQuestionnaire: () => createQuestionnaire,
-                            getCurrentSection: () => getCurrentSection,
-                            keepAlive: () => getKeepAlive
-                        }))
-                    );
-                    jest.doMock('../questionnaire/form-helper', () => ({
-                        addPrefix: () => prefixedSection,
-                        removeSectionIdPrefix: () => section,
-                        getSectionHtml: () => getSectionHtmlValid,
-                        processRequest: () => processedAnswer,
-                        getNextSection: () => section,
-                        getSectionContext: () => false
-                    }));
-                }
-                setUpCommonMocks(blockSpecificMocks);
-            });
-
-            it('Should redirect to a section', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent
-                    .get('/apply/previous/applicant-enter-your-name')
-                    .set(
-                        'Cookie',
-                        'session=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                    );
-                expect(response.statusCode).toBe(302);
-            });
-
-            it('Should identify and render an external URL', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent
-                    .get('/apply/previous/applicant-enter-your-name')
-                    .set(
-                        'Cookie',
-                        'cicaSession=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                    );
-                expect(response.res.text).toBe(
-                    'Found. Redirecting to /apply/applicant-declaration'
-                );
-            });
-        });
-
-        describe('Given a URL', () => {
-            beforeEach(() => {
-                function blockSpecificMocks() {
-                    const prefixedSection = 'p-applicant-enter-your-name';
-                    const Section = 'applicant-declaration';
-                    jest.doMock('../questionnaire/questionnaire-service', () =>
-                        jest.fn(() => ({
-                            getPrevious: () => getPreviousValidUrl,
-                            createQuestionnaire: () => createQuestionnaire,
-                            keepAlive: () => getKeepAlive
-                        }))
-                    );
-                    jest.doMock('../questionnaire/form-helper', () => ({
-                        addPrefix: () => prefixedSection,
-                        removeSectionIdPrefix: () => Section
-                    }));
-                }
-                setUpCommonMocks(blockSpecificMocks);
-            });
-
-            it('Should redirect the request', async () => {
-                const currentAgent = request.agent(app);
-                await currentAgent.get('/apply/');
-                const response = await currentAgent
-                    .get('/apply/previous/applicant-enter-your-name')
-                    .set(
-                        'Cookie',
-                        'session=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                    );
-                expect(response.statusCode).toBe(302);
-            });
-
-            it('Should redirect to a page', async () => {
-                const currentAgent = request.agent(app);
-                await currentAgent.get('/apply/');
-                const response = await currentAgent
-                    .get('/apply/previous/applicant-enter-your-name')
-                    .set(
-                        'Cookie',
-                        'session=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                    );
-                expect(response.res.text).toBe('Found. Redirecting to http://www.google.com/');
             });
         });
 
         describe('Error', () => {
+            beforeEach(() => {
+                function blockSpecificMocks() {
+                    jest.doMock('../questionnaire/form-helper', () => ({
+                        addPrefix: () => {
+                            throw new Error();
+                        }
+                    }));
+                }
+                setUpCommonMocks(blockSpecificMocks);
+            });
             it('Should fail gracefully', async () => {
-                function blockSpecificMocks() {
-                    jest.doMock('../questionnaire/questionnaire-service', () =>
-                        jest.fn(() => ({
-                            createQuestionnaire: () => createQuestionnaire,
-                            getPrevious() {
-                                const err = Error(`The page was not found`);
-                                err.name = 'HTTPError';
-                                err.statusCode = 404;
-                                err.error = '404 Not Found';
-                                throw err;
-                            },
-                            keepAlive: () => getKeepAlive
-                        }))
-                    );
-                }
-                setUpCommonMocks(blockSpecificMocks);
                 const currentAgent = request.agent(app);
-                await currentAgent.get('/apply/');
-                formHelper.removeSectionIdPrefix = jest.fn(() => 'applicant-declaration');
-                const response = await currentAgent
-                    .get('/apply/previous/applicant-enter-your-name')
-                    .set(
-                        'Cookie',
-                        'session=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                    );
+                const response = await currentAgent.post('/apply/was-the-crime-reported-to-police');
                 expect(response.statusCode).toBe(404);
             });
-            it('Should default to 404 if no error code is provided', async () => {
-                function blockSpecificMocks() {
-                    jest.doMock('../questionnaire/questionnaire-service', () =>
-                        jest.fn(() => ({
-                            createQuestionnaire: () => createQuestionnaire,
-                            getPrevious: () => {
-                                return Promise.reject(new Error('Something went wrong'));
-                            },
-                            keepAlive: () => getKeepAlive
-                        }))
-                    );
-                }
-                setUpCommonMocks(blockSpecificMocks);
-                const currentAgent = request.agent(app);
-                await currentAgent.get('/apply/');
-                formHelper.removeSectionIdPrefix = jest.fn(() => 'applicant-declaration');
-                const response = await currentAgent
-                    .get('/apply/previous/applicant-enter-your-name')
-                    .set(
-                        'Cookie',
-                        'session=mzBCUTUQGsOT36H6Bvvy5w.D-Om63et1DE6qXBbDvSbsG9A-nw_jL29edAzRc74M7ELpS5am1meqsbNXr5eNhVjQip3H0dRWS9gyIua1h6SVxVPd8X-4BcV4K4RXwnzhEc.1565175346779.900000.4UB0eoITG2We5EDID3nrODqlVqqSzuV72tiJXuzreDg;'
-                    );
-                expect(response.statusCode).toBe(404);
-            });
-        });
-    });
-
-    describe('/apply/:section?next=<some section id>', () => {
-        it('Should redirect to the prescribed next section id if available', async () => {
-            function blockSpecificMocks() {
-                jest.doMock('client-sessions', () => () => (req, res, next) => {
-                    req.session = {
-                        cookie: {},
-                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
-                        destroy: jest.fn()
-                    };
-
-                    next();
-                });
-
-                jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
-
-                    return () => ({
-                        post: options => {
-                            const responses = {
-                                [`${api}/sections/p-applicant-enter-your-name/answers`]: {
-                                    statusCode: 201
-                                }
-                            };
-
-                            return responses[options.url];
-                        },
-                        get: options => {
-                            const responses = {
-                                [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
-                                    statusCode: 200,
-                                    body: {
-                                        data: [
-                                            {
-                                                attributes: {
-                                                    sectionId: 'p--check-your-answers'
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                [`${api}/session/keep-alive`]: {
-                                    statusCode: 200,
-                                    ...getKeepAlive
-                                }
-                            };
-
-                            return responses[options.url];
-                        }
-                    });
-                });
-            }
-            setUpCommonMocks(blockSpecificMocks);
-
-            const response = await request(app).post(
-                '/apply/applicant-enter-your-name?next=check-your-answers'
-            );
-
-            expect(response.statusCode).toBe(302);
-            expect(response.res.text).toBe('Found. Redirecting to /apply/check-your-answers');
-        });
-
-        it('Should redirect to the current section if the prescribed next section id is not available', async () => {
-            function blockSpecificMocks() {
-                jest.doMock('client-sessions', () => () => (req, res, next) => {
-                    req.session = {
-                        cookie: {},
-                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
-                        destroy: jest.fn()
-                    };
-
-                    next();
-                });
-
-                jest.doMock('../questionnaire/request-service', () => {
-                    const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
-
-                    return () => ({
-                        post: options => {
-                            const responses = {
-                                [`${api}/sections/p-applicant-are-you-18-or-over/answers`]: {
-                                    statusCode: 201
-                                }
-                            };
-
-                            return responses[options.url];
-                        },
-                        get: options => {
-                            const responses = {
-                                [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
-                                    statusCode: 404
-                                },
-                                [`${api}/progress-entries?filter[position]=current`]: {
-                                    statusCode: 200,
-                                    body: {
-                                        data: [
-                                            {
-                                                attributes: {
-                                                    sectionId:
-                                                        'p-applicant-redirect-to-our-other-application'
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                [`${api}/session/keep-alive`]: {
-                                    statusCode: 200,
-                                    ...getKeepAlive
-                                }
-                            };
-
-                            return responses[options.url];
-                        }
-                    });
-                });
-            }
-            setUpCommonMocks(blockSpecificMocks);
-
-            const currentAgent = request.agent(app);
-            await currentAgent.get('/apply/');
-            const response = await currentAgent.post(
-                '/apply/applicant-are-you-18-or-over?next=check-your-answers'
-            );
-            expect(response.statusCode).toBe(302);
-            expect(response.res.text).toBe(
-                'Found. Redirecting to /apply/applicant-redirect-to-our-other-application'
-            );
-        });
-    });
-
-    describe('/new', () => {
-        it('Should redirect to `/apply`', async () => {
-            const currentAgent = request.agent(app);
-            await currentAgent.get('/apply');
-            const response = await currentAgent.get('/apply/new');
-            expect(response.text).toBe('Found. Redirecting to /apply');
         });
     });
 });
@@ -893,9 +624,9 @@ describe('/session', () => {
             function blockSpecificMocks() {
                 jest.doMock('../questionnaire/questionnaire-service', () =>
                     jest.fn(() => ({
-                        createQuestionnaire: () => createQuestionnaire,
-                        getCurrentSection: () => getCurrentSection,
-                        keepAlive: () => getKeepAlive
+                        createQuestionnaire: () => fixtureTemplate,
+                        getCurrentSection: () => fixtureProgressEntryTemplateSectionCurrent,
+                        keepAlive: () => fixtureSessionKeepAlive
                     }))
                 );
             }
@@ -929,8 +660,8 @@ describe('/session', () => {
             function blockSpecificMocks() {
                 jest.doMock('../questionnaire/questionnaire-service', () =>
                     jest.fn(() => ({
-                        createQuestionnaire: () => createQuestionnaire,
-                        getCurrentSection: () => getCurrentSection,
+                        createQuestionnaire: () => fixtureTemplate,
+                        getCurrentSection: () => fixtureProgressEntryTemplateSectionCurrent,
                         keepAlive: () => {
                             return Promise.reject(new Error('Something went wrong'));
                         }
