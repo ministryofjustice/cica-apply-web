@@ -2,7 +2,7 @@
 
 function getFormSubmitButtonText(sectionId, uiSchema, isAuthenticated) {
     const defaultText = isAuthenticated ? 'Save and continue' : 'Continue';
-    const customText = uiSchema[sectionId]?.options?.buttonText;
+    const customText = uiSchema?.[sectionId]?.options?.buttonText;
     if (customText) {
         return customText;
     }
