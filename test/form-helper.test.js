@@ -172,7 +172,7 @@ describe('form-helper functions', () => {
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const showSignInLink = shouldShowSignInLink(sectionId, uiSchema);
-            const expected = '<a href="/account/sign-in" class="govuk-link">Create an account to save your progress</a>'.replace(
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>'.replace(
                 /\s+/g,
                 ''
             );
@@ -202,7 +202,7 @@ describe('form-helper functions', () => {
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const showSignInLink = shouldShowSignInLink(sectionId, uiSchema);
-            const expected = '<a href="/account/sign-in" class="govuk-link">Save and complete later</a>'.replace(
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>'.replace(
                 /\s+/g,
                 ''
             );
