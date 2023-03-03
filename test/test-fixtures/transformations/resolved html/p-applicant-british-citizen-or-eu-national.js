@@ -134,13 +134,17 @@ const html = `<!DOCTYPE html>
   </p>
 </div>
 
-    <div class="govuk-width-container">
-
-
+<div class="govuk-width-container">
+        
+        <div class="govuk-grid-column-two-thirds">
+            
+                
                 <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
 
-
-    </div>
+            
+        </div>
+            
+  </div>
 
 
 
