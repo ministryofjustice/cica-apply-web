@@ -5010,3 +5010,9 @@
 
 .govuk-table__cell__overflow {
   word-break: break-word; }
+
+.cica-prominent-link {
+  display: inline-block;
+  position: relative;
+  margin-top: 15px;
+  margin-bottom: 15px; }
