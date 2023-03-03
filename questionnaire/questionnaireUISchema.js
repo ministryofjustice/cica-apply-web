@@ -19,7 +19,8 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            }
+            },
+            showBackButton: false
         }
     },
     'p--was-the-crime-reported-to-police': {

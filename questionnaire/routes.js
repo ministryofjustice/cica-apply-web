@@ -3,19 +3,56 @@
 const express = require('express');
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
+const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
+const isQuestionnaireInstantiated = require('./utils/isQuestionnaireInstantiated');
 
 const router = express.Router();
 
 router.route('/').get(async (req, res) => {
     try {
+        if (!isQuestionnaireInstantiated(req)) {
+            return res.render('start.njk', {
+                csrfToken: req.csrfToken(),
+                submitButtonText: getFormSubmitButtonText('start')
+            });
+        }
+
         const response = await qService.getFirstSection(req.session.questionnaireId);
         const responseBody = response.body;
         const initialSection = formHelper.removeSectionIdPrefix(
             responseBody.data[0].attributes.sectionId
         );
-        res.redirect(`${req.baseUrl}/${initialSection}`);
+        return res.redirect(`${req.baseUrl}/${initialSection}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
+router.route('/').post(async (req, res) => {
+    try {
+        const startType = req.body['start-type'];
+        if (startType === 'existing') {
+            return res.redirect('/account/sign-in');
+        }
+        if (startType === 'new') {
+            const response = await qService.createQuestionnaire({
+                userId: req.session.userId
+            });
+            req.session.questionnaireId = response.body.data.attributes.id;
+            const initialSection = formHelper.removeSectionIdPrefix(
+                response.body.data.attributes.routes.initial
+            );
+            return res.redirect(`/apply/${initialSection}`);
+        }
+        return res.render('start.njk', {
+            csrfToken: req.csrfToken(),
+            submitButtonText: getFormSubmitButtonText('start'),
+            error: {
+                text: 'Select what you would like to do'
+            }
+        });
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
     }
 });
 
@@ -74,6 +111,9 @@ router
     .route('/:section')
     .get(async (req, res, next) => {
         try {
+            if (!isQuestionnaireInstantiated(req)) {
+                return res.redirect('/apply/');
+            }
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await qService.getSection(req.session.questionnaireId, sectionId);
             if (
@@ -103,10 +143,10 @@ router
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 req.session.reset();
             }
-            res.send(html);
+            return res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
-            next(err);
+            return next(err);
         }
     })
     .post(async (req, res, next) => {
