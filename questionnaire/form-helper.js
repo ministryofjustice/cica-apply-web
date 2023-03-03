@@ -39,13 +39,20 @@ function renderSection({
                 {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle} - {{ super() }}
             {% endblock %}
             {% block innerHeader %}
-                {% if ${showBackLink} %}
-                    {% from "back-link/macro.njk" import govukBackLink %}
-                    {{ govukBackLink({
-                        text: "Back",
-                        href: "${backTarget}"
-                    }) }}
-                {% endif %}
+                <div class="govuk-grid-column-two-thirds">
+                    {% if ${showBackLink} %}
+                        {% from "back-link/macro.njk" import govukBackLink %}
+                        {{ govukBackLink({
+                            text: "Back",
+                            href: "${backTarget}"
+                        }) }}
+                    {% endif %}
+                </div>
+                <div class="govuk-grid-column-one-third">
+                    {% if ${showSignInLink} %}
+                        <a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>
+                    {% endif %}
+                </div>
             {% endblock %}
             {% block innerContent %}
                 <form method="post" novalidate autocomplete="off">
@@ -59,9 +66,6 @@ function renderSection({
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
-                {% if ${showSignInLink} %}
-                    <a href="/account/sign-in" class="govuk-link">Create an account to save your progress</a>
-                {% endif %}
             {% endblock %}
         `,
         {nonce: cspNonce, isAuthenticated}
