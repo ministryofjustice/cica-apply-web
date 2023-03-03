@@ -8,7 +8,6 @@ const helmet = require('helmet');
 const clientSessions = require('client-sessions');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
-const formHelper = require('./questionnaire/form-helper');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
@@ -18,6 +17,7 @@ const addressFinderRouter = require('./address-finder/routes');
 const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
+const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnaireInstantiated');
 
 const DURATION_LIMIT = 3600000;
 
@@ -116,7 +116,7 @@ app.use(
 
 app.use(async (req, res, next) => {
     try {
-        if (!req.originalUrl.startsWith('/session') && req.session.questionnaireId) {
+        if (!req.originalUrl.startsWith('/session') && isQuestionnaireInstantiated()) {
             const cookieExpiryService = createCookieService({
                 req,
                 res,
@@ -142,31 +142,6 @@ app.use(async (req, res, next) => {
     }
 
     return next();
-});
-
-// Suppression necessary as 'return' is needed to call res.end() end prevent the redirect throwing an error.
-// eslint-disable-next-line consistent-return
-app.use(['/apply', '/download'], async (req, res, next) => {
-    if (!req.session.questionnaireId) {
-        // no: set it and redirect.
-        try {
-            const response = await qService.createQuestionnaire({userId: req.session.userId});
-            req.session.questionnaireId = response.body.data.attributes.id;
-            const initialSection = formHelper.removeSectionIdPrefix(
-                response.body.data.attributes.routes.initial
-            );
-            const baseUrl = req.baseUrl === '/download' ? '/apply' : req.baseUrl;
-            let redirectionUrl = `${baseUrl}/${initialSection}`;
-            // query param passed from Tempus launch page
-            if (req.query.isCica) {
-                redirectionUrl = `${redirectionUrl}?isCica=true`;
-            }
-            return res.redirect(redirectionUrl);
-        } catch (err) {
-            return res.status(404).render('404.njk');
-        }
-    }
-    next(); // <-- important!
 });
 
 app.use('/address-finder', addressFinderRouter);
