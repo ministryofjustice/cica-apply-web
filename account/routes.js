@@ -80,19 +80,14 @@ router.get('/signed-in', async (req, res, next) => {
         const data = {'user-id': userIdToken.sub};
         await qService.postSection(req.session.questionnaireId, 'user', data);
 
-        // Calculate the expiry date
-        const dateOpts = {year: 'numeric', month: 'long', day: 'numeric'};
-        const expiryDate = new Date(
-            new Date().setDate(new Date().getDate() + 31)
-        ).toLocaleDateString('en-GB', dateOpts);
-        // Send the user to the landing page
-        const templateEngineService = createTemplateEngineService();
-        const {render} = templateEngineService;
-        const html = render('authenticated-user-landing-page.njk', {
-            nextPageUrl: stateObject.referrer,
-            expiryDate
-        });
-        return res.send(html);
+        let redirectPathName;
+        try {
+            redirectPathName = new URL(stateObject.referrer).pathname;
+        } catch {
+            redirectPathName = getDashboardURI(true);
+        }
+
+        return res.redirect(`/account/sign-in/success?redirect=${redirectPathName}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
         return next(err);
@@ -124,6 +119,26 @@ router.get('/dashboard', async (req, res, next) => {
             nonce: res.locals.nonce,
             userData: templateData,
             isAuthenticated: 'userId' in req.session
+        });
+        return res.send(html);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
+router.get('/sign-in/success', async (req, res, next) => {
+    try {
+        const expiryDate = new Date(
+            new Date().setDate(new Date().getDate() + 31)
+        ).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'});
+
+        const templateEngineService = createTemplateEngineService();
+        const {render} = templateEngineService;
+        const html = render('authenticated-user-landing-page.njk', {
+            nextPageUrl: getValidReferrerOrDefault(req?.query?.redirect),
+            expiryDate,
+            isAuthenticated: !!req.session.userId
         });
         return res.send(html);
     } catch (err) {
