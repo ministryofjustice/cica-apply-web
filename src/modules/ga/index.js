@@ -1,8 +1,8 @@
 import * as jsCookies from 'js-cookie';
 import guaTrackLinks from './vendor/gua-anchor';
+import formHasAllBlankAnswers from './utils/formHasAllBlankAnswers';
 
 function createCicaGa(window) {
-    // eslint-disable-next-line no-undef
     guaTrackLinks(window.CICA.SERVICE_URL, window);
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events
     // gtag('event', <action>, {
@@ -61,15 +61,18 @@ function createCicaGa(window) {
         }
     }
 
-    function click(element, options) {
+    function click(element, options, callback) {
         element.addEventListener(
             'click',
             () => {
                 send({
-                    action: 'click',
+                    action: options.action || 'click',
                     category: options.category,
                     label: options.label
                 });
+                if (typeof callback === 'function') {
+                    callback();
+                }
             },
             false
         );
@@ -152,14 +155,28 @@ function createCicaGa(window) {
         // GOVUK modules, and custom events tracking.
         trackableElements.forEach(element => {
             if (element.classList.contains('ga-event--click')) {
-                click(element, {
-                    label:
-                        element.getAttribute('data-tracking-label') ||
-                        element.pathname ||
-                        (element.innerText && element.innerText.trim()) ||
-                        (element.innerHTML && element.innerHTML.trim()),
-                    category: element.getAttribute('data-tracking-category') || element.tagName
-                });
+                click(
+                    element,
+                    {
+                        label:
+                            element.getAttribute('data-tracking-label') ||
+                            element.pathname ||
+                            (element.innerText && element.innerText.trim()) ||
+                            (element.innerHTML && element.innerHTML.trim()),
+                        category: element.getAttribute('data-tracking-category') || element.tagName
+                    },
+                    () => {
+                        if (element.classList.contains('ga-event--sign-in')) {
+                            send({
+                                action: 'answered-before-login-attempt',
+                                category: 'application',
+                                label: (!formHasAllBlankAnswers(
+                                    window.document.querySelector('form')
+                                )).toString()
+                            });
+                        }
+                    }
+                );
                 return;
             }
 

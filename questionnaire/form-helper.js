@@ -50,7 +50,7 @@ function renderSection({
                 </div>
                 {% if ${showSignInLink} %}
                     <div class="govuk-grid-column-one-third">
-                        <a href="/account/sign-in" class="govuk-link cica-prominent-link ga-event ga-event--click" data-tracking-label="sign in" data-tracking-category="link">Create an account to save your progress</a>
+                        <a href="/account/sign-in" class="govuk-link cica-prominent-link ga-event ga-event--click ga-event--sign-in" data-tracking-label="sign in" data-tracking-category="link">Create an account to save your progress</a>
                     </div>
                 {% endif %}
             {% endblock %}
