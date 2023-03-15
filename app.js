@@ -114,6 +114,17 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
+app.use((req,res,next)=>{
+    try {
+        if(!req.session.userId) {
+            req.session.userId = "I AM USER!"
+        }
+    } catch (err) {
+        return res.status(401).render('404.njk');
+    }
+    return next();
+});
+
 app.use(async (req, res, next) => {
     try {
         if (!req.originalUrl.startsWith('/session') && isQuestionnaireInstantiated()) {

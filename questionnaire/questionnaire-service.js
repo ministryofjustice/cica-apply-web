@@ -3,21 +3,23 @@
 const service = require('./request-service')();
 
 function questionnaireService() {
-    function getSection(questionnaireId, section) {
+    function getSection(questionnaireId, section, userId) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             }
         };
         return service.get(opts);
     }
 
-    function postSection(questionnaireId, section, body) {
+    function postSection(questionnaireId, section, body, userId = '') {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             },
             json: {
                 data: {
@@ -29,11 +31,12 @@ function questionnaireService() {
         return service.post(opts);
     }
 
-    async function createQuestionnaire(options) {
+    async function createQuestionnaire({options = {}, userId}) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             },
             json: {
                 data: {
@@ -54,21 +57,23 @@ function questionnaireService() {
         return response;
     }
 
-    function getPrevious(questionnaireId, sectionId) {
+    function getPrevious(questionnaireId, sectionId, userId) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             }
         };
         return service.get(opts);
     }
 
-    function getCurrentSection(currentQuestionnaireId) {
+    function getCurrentSection(currentQuestionnaireId, userId) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             }
         };
         return service.get(opts);
@@ -84,11 +89,12 @@ function questionnaireService() {
         return service.get(opts);
     }
 
-    function postSubmission(questionnaireId) {
+    function postSubmission(questionnaireId, userId) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             },
             json: {
                 data: {
@@ -141,11 +147,12 @@ function questionnaireService() {
         return getSubmissionStatus(questionnaireId, startingDate);
     }
 
-    function getFirstSection(currentQuestionnaireId) {
+    function getFirstSection(currentQuestionnaireId, userId) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             }
         };
         return service.get(opts);

@@ -8,20 +8,23 @@ function createDashboardService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/metadata?filter[user-id]=${userId}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             }
         };
         return get(opts);
     }
 
-    async function getSectionAnswersByQuestionnaireId(
+    async function getSectionAnswersByQuestionnaireId({
         questionnaireId,
-        sectionId = 'p-applicant-enter-your-name'
-    ) {
+        sectionId = 'p-applicant-enter-your-name',
+        userId
+    }) {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${sectionId}/answers`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-behalf-of': userId
             }
         };
         return get(opts);
@@ -41,7 +44,10 @@ function createDashboardService() {
         const dataset = [];
         // eslint-disable-next-line no-restricted-syntax
         for await (const flatMetadata of await getFlatQuestionnaireMetadataByUserId(userId)) {
-            const answers = await getSectionAnswersByQuestionnaireId(flatMetadata.questionnaireId);
+            const answers = await getSectionAnswersByQuestionnaireId({
+                questionnaireId: flatMetadata.questionnaireId,
+                userId
+            });
             dataset.push({
                 ...flatMetadata,
                 answers: {

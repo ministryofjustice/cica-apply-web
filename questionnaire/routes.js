@@ -17,7 +17,7 @@ router.route('/').get(async (req, res) => {
             });
         }
 
-        const response = await qService.getFirstSection(req.session.questionnaireId);
+        const response = await qService.getFirstSection(req.session.questionnaireId, req.session.userId);
         const responseBody = response.body;
         const initialSection = formHelper.removeSectionIdPrefix(
             responseBody.data[0].attributes.sectionId
@@ -72,7 +72,8 @@ router.route('/resume/:questionnaireId').get(async (req, res) => {
 
         const resumableQuestionnaireId = req.params.questionnaireId;
         const resumableQuestionnaireResponse = await qService.getCurrentSection(
-            resumableQuestionnaireId
+            resumableQuestionnaireId,
+            req.session.userId
         );
         const resumableQuestionnaireCurrentSectionId =
             resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
@@ -93,7 +94,7 @@ router.route('/resume/:questionnaireId').get(async (req, res) => {
 router.route('/previous/:section').get(async (req, res) => {
     try {
         const sectionId = formHelper.addPrefix(req.params.section);
-        const response = await qService.getPrevious(req.session.questionnaireId, sectionId);
+        const response = await qService.getPrevious(req.session.questionnaireId, sectionId, req.session.userId);
         if (response.body.data[0].attributes && response.body.data[0].attributes.url !== null) {
             const overwriteId = response.body.data[0].attributes.url;
             return res.redirect(overwriteId);
@@ -115,7 +116,7 @@ router
                 return res.redirect('/apply/');
             }
             const sectionId = formHelper.addPrefix(req.params.section);
-            const response = await qService.getSection(req.session.questionnaireId, sectionId);
+            const response = await qService.getSection(req.session.questionnaireId, sectionId, req.session.userId);
             if (
                 response.body.data &&
                 response.body.data[0].attributes &&
@@ -133,7 +134,7 @@ router
                     });
                 }
             }
-            const isAuthenticated = 'userId' in req.session;
+            const isAuthenticated = 'userId' in req.session && req.session.userId !== "I AM USER!";
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
@@ -160,7 +161,8 @@ router
             const response = await qService.postSection(
                 req.session.questionnaireId,
                 sectionId,
-                body
+                body,
+                req.session.userId
             );
             if (response.statusCode === 201) {
                 // if the page is a submission
@@ -168,7 +170,7 @@ router
                     formHelper.getSectionContext(sectionId) === 'submission';
                 if (isApplicationSubmission) {
                     try {
-                        await qService.postSubmission(req.session.questionnaireId);
+                        await qService.postSubmission(req.session.questionnaireId, req.session.userId);
                         const submissionResponse = await qService.getSubmissionStatus(
                             req.session.questionnaireId,
                             Date.now()
@@ -189,7 +191,8 @@ router
                 if ('next' in req.query) {
                     const progressEntryResponse = await qService.getSection(
                         req.session.questionnaireId,
-                        formHelper.addPrefix(req.query.next)
+                        formHelper.addPrefix(req.query.next),
+                        req.session.userId
                     );
 
                     if (progressEntryResponse.statusCode === 200) {
@@ -201,7 +204,8 @@ router
                 }
 
                 const progressEntryResponse = await qService.getCurrentSection(
-                    req.session.questionnaireId
+                    req.session.questionnaireId,
+                    req.session.userId
                 );
                 nextSectionId = formHelper.removeSectionIdPrefix(
                     progressEntryResponse.body.data[0].attributes.sectionId
@@ -209,7 +213,7 @@ router
 
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
-            const isAuthenticated = 'userId' in req.session;
+            const isAuthenticated = 'userId' in req.session && req.session.userId !== "I AM USER!";
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,

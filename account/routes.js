@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get('/sign-in', async (req, res, next) => {
     try {
-        if (req.session.userId) {
+        if (req.session.userId && req.session.userId !== 'I AM USER!') {
             return res.redirect(getDashboardURI());
         }
 
@@ -43,7 +43,7 @@ router.get('/sign-in', async (req, res, next) => {
 
 router.get('/signed-in', async (req, res, next) => {
     try {
-        if (req.session.userId) {
+        if (req.session.userId && req.session.userId !== 'I AM USER!') {
             return res.redirect(getDashboardURI());
         }
 
@@ -73,12 +73,12 @@ router.get('/signed-in', async (req, res, next) => {
 
         // delete the nonce
         req.session.nonce = undefined;
-        // Save unique userId as system answer
-        req.session.userId = userIdToken.sub;
 
-        // Save the userId to the questionnaire
+        // Save the new userId to the questionnaire - Pass the currently saved userId to the post section.
         const data = {'user-id': userIdToken.sub};
-        await qService.postSection(req.session.questionnaireId, 'user', data);
+        await qService.postSection(req.session.questionnaireId, 'user', data, req.session.userId);
+        // Save new userId as system answer
+        req.session.userId = userIdToken.sub;
 
         let redirectPathName;
         try {
@@ -108,7 +108,7 @@ router.get('/sign-out', async (req, res, next) => {
 
 router.get('/dashboard', async (req, res, next) => {
     try {
-        if (!req.session.userId) {
+        if (!req.session.userId || req.session.userId === 'I AM USER!') {
             return res.redirect('/account/sign-in');
         }
         const dashboardService = createDashboardService();
@@ -118,7 +118,7 @@ router.get('/dashboard', async (req, res, next) => {
         const html = render('dashboard.njk', {
             nonce: res.locals.nonce,
             userData: templateData,
-            isAuthenticated: 'userId' in req.session
+            isAuthenticated: 'userId' in req.session && req.session.userId !== 'I AM USER!'
         });
         return res.send(html);
     } catch (err) {
@@ -138,7 +138,7 @@ router.get('/sign-in/success', async (req, res, next) => {
         const html = render('authenticated-user-landing-page.njk', {
             nextPageUrl: getValidReferrerOrDefault(req?.query?.redirect),
             expiryDate,
-            isAuthenticated: !!req.session.userId
+            isAuthenticated: !!req.session.userId && req.session.userId !== 'I AM USER!'
         });
         return res.send(html);
     } catch (err) {
