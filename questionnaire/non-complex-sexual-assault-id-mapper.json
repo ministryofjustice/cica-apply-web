@@ -194,5 +194,16 @@
     "applicant-funeral-costs-paid": "p-applicant-funeral-costs-paid",
     "applicant-funeral-costs-other-contributor": "p-applicant-funeral-costs-other-contributor",
     "applicant-funeral-costs-who-contributed": "p-applicant-funeral-costs-who-contributed",
-    "applicant-funeral-costs-total": "p-applicant-funeral-costs-total"
+    "applicant-funeral-costs-total": "p-applicant-funeral-costs-total",
+    "context-relationship-to-deceased": "p--context-relationship-to-deceased",
+    "applicant-relationship-to-deceased": "p-applicant-relationship-to-deceased",
+    "applicant-living-together": "p-applicant-living-together",
+    "applicant-living-together-duration": "p-applicant-living-together-duration",
+    "applicant-living-apart": "p-applicant-living-apart",
+    "applicant-contact-with-deceased": "p-applicant-contact-with-deceased",
+    "applicant-contact-more-details": "p-applicant-contact-more-details",
+    "applicant-contact-out-of-touch": "p-applicant-contact-out-of-touch",
+    "applicant-financial-help": "p-applicant-financial-help",
+    "other-claimants": "p-other-claimants",
+    "other-claimants-details": "p-other-claimants-details"
 }
