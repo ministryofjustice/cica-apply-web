@@ -18,7 +18,7 @@ module.exports = {
     'p-applicant-fatal-claim': {
         options: {
             signInLink: {
-                visible: false
+                visible: true
             },
             showBackButton: false
         }

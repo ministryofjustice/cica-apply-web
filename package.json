@@ -7,7 +7,7 @@
     },
     "private": true,
     "scripts": {
-        "start:dev": "npm run build:dev && nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --ignore src/js/scripts.babel.generated.js ./bin/www",
+        "start:dev": "nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --ignore src/js/scripts.babel.generated.js ./bin/www",
         "start": "node ./bin/www",
         "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "npm run test:node && npm run test:dom",
@@ -33,6 +33,7 @@
         "debounce": "^1.2.0",
         "debug": "~2.6.9",
         "express": "^4.18.2",
+        "express-openid-connect": "^2.12.1",
         "got": "^11.8.5",
         "govuk-frontend": "^3.10.2",
         "helmet": "^3.15.0",

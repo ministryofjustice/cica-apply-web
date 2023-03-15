@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const {requiresAuth} = require('express-openid-connect');
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
 const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
@@ -64,8 +65,7 @@ router.route('/new').get(async (req, res) => {
         res.status(err.statusCode || 404).render('404.njk');
     }
 });
-
-router.route('/resume/:questionnaireId').get(async (req, res) => {
+router.get('/resume/:questionnaireId', requiresAuth(), async (req, res) => {
     try {
         const defaultRedirect = '/apply';
         let redirectUrl = defaultRedirect;
@@ -133,7 +133,7 @@ router
                     });
                 }
             }
-            const isAuthenticated = 'userId' in req.session;
+            const isAuthenticated = !!req?.oidc?.user?.sub;
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
@@ -209,7 +209,7 @@ router
 
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
-            const isAuthenticated = 'userId' in req.session;
+            const isAuthenticated = !!req?.oidc?.user?.sub;
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,

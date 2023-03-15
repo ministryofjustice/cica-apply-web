@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const clientSessions = require('client-sessions');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
+const {auth, requiresAuth} = require('express-openid-connect');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
@@ -18,6 +19,7 @@ const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnaireInstantiated');
+const getValidReferrerOrDefault = require('./account/utils/getValidReferrerOrDefault');
 
 const DURATION_LIMIT = 3600000;
 
@@ -142,6 +144,50 @@ app.use(async (req, res, next) => {
     }
 
     return next();
+});
+
+const config = {
+    authRequired: false,
+    auth0Logout: true,
+    baseURL: process.env.CW_URL,
+    clientID: process.env.CW_GOVUK_CLIENT_ID,
+    clientAuthMethod: 'private_key_jwt',
+    clientAssertionSigningKey: process.env.CW_GOVUK_PRIVATE_KEY,
+    idTokenSigningAlg: 'ES256',
+    issuerBaseURL: process.env.CW_GOVUK_ISSUER_URL,
+    secret: process.env.CW_COOKIE_SECRET,
+    authorizationParams: {
+        response_type: 'code',
+        scope: 'openid'
+    },
+    routes: {
+        callback: '/account/signed-in',
+        login: false, // '/account/sign-in'
+        logout: false, // '/account/sign-out',
+        postLogoutRedirect: '/account/signed-out'
+    },
+    idpLogout: true,
+    getLoginState(req) {
+        return {
+            returnTo: `/account/process-auth?redirect=${getValidReferrerOrDefault(
+                req.get('referrer')
+            )}`,
+            qid: req.session.questionnaireId
+        };
+    }
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// // req.isAuthenticated is provided from the auth router
+// app.get('/test-auth', (req, res) => {
+//     res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+// });
+
+// The /profile route will show the user profile as JSON
+app.get('/profile', requiresAuth(), (req, res) => {
+    res.send(JSON.stringify(req.oidc.user, null, 2));
 });
 
 app.use('/address-finder', addressFinderRouter);
