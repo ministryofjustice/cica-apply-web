@@ -208,5 +208,7 @@
     "other-claimants-details": "p-other-claimants-details",
     "context-funeral-costs-proof": "p-context-funeral-costs-proof",
     "applicant-physical-help": "p-applicant-physical-help",
-    "applicant-funeral-costs-only": "p-applicant-funeral-costs-only"
+    "applicant-funeral-costs-only": "p-applicant-funeral-costs-only",
+    "applicant-immediate-aftermath": "p-applicant-immediate-aftermath",
+    "applicant-disabling-mental-injury": "p-applicant-disabling-mental-injury"
 }
