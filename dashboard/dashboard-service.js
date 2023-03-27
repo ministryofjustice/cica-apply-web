@@ -83,7 +83,8 @@ function createDashboardService() {
     }
 
     return Object.freeze({
-        getTemplateData
+        getTemplateData,
+        getQuestionnaireMetadataCollectionByUserId
     });
 }
 

@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get('/sign-in', async (req, res, next) => {
     try {
-        if (req.session.userId && req.session.userId !== 'I AM USER!') {
+        if (req.session.userId && req.session.isAuthorised) {
             return res.redirect(getDashboardURI());
         }
 
@@ -43,7 +43,7 @@ router.get('/sign-in', async (req, res, next) => {
 
 router.get('/signed-in', async (req, res, next) => {
     try {
-        if (req.session.userId && req.session.userId !== 'I AM USER!') {
+        if (req.session.userId && req.session.isAuthorised) {
             return res.redirect(getDashboardURI());
         }
 
@@ -75,10 +75,15 @@ router.get('/signed-in', async (req, res, next) => {
         req.session.nonce = undefined;
 
         // Save the new userId to the questionnaire - Pass the currently saved userId to the post section.
-        const data = {'user-id': userIdToken.sub};
+        const data = {
+            'user-id': userIdToken.sub,
+            isAuthenticated: true
+        };
         await qService.postSection(req.session.questionnaireId, 'user', data, req.session.userId);
         // Save new userId as system answer
         req.session.userId = userIdToken.sub;
+        // Set isAuthenticated cookie to true
+        req.session.isAuthenticated = true;
 
         let redirectPathName;
         try {
@@ -99,6 +104,7 @@ router.get('/sign-out', async (req, res, next) => {
         const signInService = createSignInService();
         const url = await signInService.getLogoutUrl();
         delete req.session.userId;
+        delete req.session.isAuthorised;
         return res.redirect(302, url);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -108,7 +114,7 @@ router.get('/sign-out', async (req, res, next) => {
 
 router.get('/dashboard', async (req, res, next) => {
     try {
-        if (!req.session.userId || req.session.userId === 'I AM USER!') {
+        if (!req.session.userId || !req.session.isAuthorised) {
             return res.redirect('/account/sign-in');
         }
         const dashboardService = createDashboardService();
@@ -118,7 +124,7 @@ router.get('/dashboard', async (req, res, next) => {
         const html = render('dashboard.njk', {
             nonce: res.locals.nonce,
             userData: templateData,
-            isAuthenticated: 'userId' in req.session && req.session.userId !== 'I AM USER!'
+            isAuthenticated: req.session.isAuthenticated
         });
         return res.send(html);
     } catch (err) {
@@ -129,16 +135,30 @@ router.get('/dashboard', async (req, res, next) => {
 
 router.get('/sign-in/success', async (req, res, next) => {
     try {
-        const expiryDate = new Date(
+        /* const expiryDate = new Date(
             new Date().setDate(new Date().getDate() + 31)
-        ).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'});
+        ).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'}); */
+
+        // TODO: Metadata is required by questionnaireID here.
+        const dashboardService = createDashboardService();
+        const metaDataCollection = await dashboardService.getQuestionnaireMetadataCollectionByUserId(
+            req.session.userId
+        );
+        const metaData = metaDataCollection.body.data.filter(
+            data => data.id === req.session.questionnaireId
+        )[0];
+        const expiryDate = new Date(metaData.attributes.expires).toLocaleDateString('en-GB', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
 
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
         const html = render('authenticated-user-landing-page.njk', {
             nextPageUrl: getValidReferrerOrDefault(req?.query?.redirect),
             expiryDate,
-            isAuthenticated: !!req.session.userId && req.session.userId !== 'I AM USER!'
+            isAuthenticated: req.session.isAuthenticated
         });
         return res.send(html);
     } catch (err) {

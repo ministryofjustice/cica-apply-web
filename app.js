@@ -114,10 +114,11 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
     try {
-        if(!req.session.userId) {
-            req.session.userId = "I AM USER!"
+        if (!req.session.userId) {
+            req.session.userId = `urn:fdc:cica:2023:${nanoid(45)}`;
+            req.session.isAuthenticated = false;
         }
     } catch (err) {
         return res.status(401).render('404.njk');

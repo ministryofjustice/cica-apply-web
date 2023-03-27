@@ -17,7 +17,10 @@ router.route('/').get(async (req, res) => {
             });
         }
 
-        const response = await qService.getFirstSection(req.session.questionnaireId, req.session.userId);
+        const response = await qService.getFirstSection(
+            req.session.questionnaireId,
+            req.session.userId
+        );
         const responseBody = response.body;
         const initialSection = formHelper.removeSectionIdPrefix(
             responseBody.data[0].attributes.sectionId
@@ -35,9 +38,10 @@ router.route('/').post(async (req, res) => {
             return res.redirect('/account/sign-in');
         }
         if (startType === 'new') {
-            const response = await qService.createQuestionnaire({
-                userId: req.session.userId
-            });
+            const response = await qService.createQuestionnaire(
+                req.session.userId,
+                req.session.isAuthenticated
+            );
             req.session.questionnaireId = response.body.data.attributes.id;
             const initialSection = formHelper.removeSectionIdPrefix(
                 response.body.data.attributes.routes.initial
@@ -94,7 +98,11 @@ router.route('/resume/:questionnaireId').get(async (req, res) => {
 router.route('/previous/:section').get(async (req, res) => {
     try {
         const sectionId = formHelper.addPrefix(req.params.section);
-        const response = await qService.getPrevious(req.session.questionnaireId, sectionId, req.session.userId);
+        const response = await qService.getPrevious(
+            req.session.questionnaireId,
+            sectionId,
+            req.session.userId
+        );
         if (response.body.data[0].attributes && response.body.data[0].attributes.url !== null) {
             const overwriteId = response.body.data[0].attributes.url;
             return res.redirect(overwriteId);
@@ -116,7 +124,11 @@ router
                 return res.redirect('/apply/');
             }
             const sectionId = formHelper.addPrefix(req.params.section);
-            const response = await qService.getSection(req.session.questionnaireId, sectionId, req.session.userId);
+            const response = await qService.getSection(
+                req.session.questionnaireId,
+                sectionId,
+                req.session.userId
+            );
             if (
                 response.body.data &&
                 response.body.data[0].attributes &&
@@ -134,12 +146,11 @@ router
                     });
                 }
             }
-            const isAuthenticated = 'userId' in req.session && req.session.userId !== "I AM USER!";
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
                 res.locals.nonce,
-                isAuthenticated
+                req.session.isAuthenticated
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 req.session.reset();
@@ -170,7 +181,10 @@ router
                     formHelper.getSectionContext(sectionId) === 'submission';
                 if (isApplicationSubmission) {
                     try {
-                        await qService.postSubmission(req.session.questionnaireId, req.session.userId);
+                        await qService.postSubmission(
+                            req.session.questionnaireId,
+                            req.session.userId
+                        );
                         const submissionResponse = await qService.getSubmissionStatus(
                             req.session.questionnaireId,
                             Date.now()
@@ -213,13 +227,12 @@ router
 
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
-            const isAuthenticated = 'userId' in req.session && req.session.userId !== "I AM USER!";
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
                 req.csrfToken(),
                 res.locals.nonce,
-                isAuthenticated
+                req.session.isAuthenticated
             );
             return res.send(html);
         } catch (err) {
