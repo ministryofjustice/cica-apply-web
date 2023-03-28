@@ -29,7 +29,7 @@ function createDashboardService() {
 
     async function getFlatQuestionnaireMetadataByUserId(userId) {
         const metadataCollection = await getQuestionnaireMetadataCollectionByUserId(userId);
-        return metadataCollection.body.data.map(metadatum => {
+        return (metadataCollection.body.data || []).map(metadatum => {
             return {
                 questionnaireId: metadatum.attributes['questionnaire-id'],
                 expires: metadatum.attributes.expires

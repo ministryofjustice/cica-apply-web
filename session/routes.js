@@ -3,6 +3,7 @@
 const express = require('express');
 const qService = require('../questionnaire/questionnaire-service')();
 const createCookieService = require('../cookie/cookie-service');
+const isAuthenticated = require('../account/utils/isAuthenticated');
 
 const router = express.Router();
 
@@ -20,7 +21,9 @@ router.route('/keep-alive').get(async (req, res) => {
         }
         res.json(response.body);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {
+            isAuthenticated: isAuthenticated(req)
+        });
     }
 });
 

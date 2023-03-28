@@ -60,7 +60,9 @@ router.get('/chat', (req, res) => {
 });
 
 router.get('*', (req, res) => {
-    res.status(404).render('404.njk');
+    res.status(404).render('404.njk', {
+        isAuthenticated: req?.oidc?.isAuthenticated()
+    });
 });
 
 module.exports = router;
