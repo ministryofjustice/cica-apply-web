@@ -1791,5 +1791,10 @@ module.exports = {
                 }
             }
         }
+    },
+    'p-applicant-funeral-costs-who-contributed': {
+        options: {
+            outputOrder: ['q-applicant-funeral-costs-who-contributed', 'funeral-costs-info']
+        }
     }
 };
