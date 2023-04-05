@@ -3,17 +3,61 @@
 const express = require('express');
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
+const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
+const isQuestionnaireInstantiated = require('./utils/isQuestionnaireInstantiated');
 
 const router = express.Router();
 
-router.route('/').get(async (req, res) => {
+router.get('/', (req, res) => {
     try {
-        const response = await qService.getFirstSection(req.session.questionnaireId);
-        const responseBody = response.body;
+        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        if (!questionnaireId) {
+            return res.redirect('/apply/start-or-resume');
+        }
+        return res.redirect(`/apply/resume/${questionnaireId}`);
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
+router.route('/start-or-resume').get((req, res) => {
+    try {
+        res.render('start-or-resume.njk', {
+            submitButtonText: getFormSubmitButtonText('start'),
+            csrfToken: req.csrfToken()
+        });
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
+router.post('/start-or-resume', (req, res) => {
+    try {
+        const startType = req.body['start-or-resume'];
+        if (startType === 'start') {
+            return res.redirect('/apply/start');
+        }
+
+        return res.render('start-or-resume.njk', {
+            submitButtonText: getFormSubmitButtonText('start'),
+            csrfToken: req.csrfToken(),
+            error: {
+                text: 'Select what you would like to do'
+            }
+        });
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
+router.route('/start').get(async (req, res) => {
+    try {
+        const response = await qService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(
-            responseBody.data[0].attributes.sectionId
+            response.body.data.attributes.routes.initial
         );
-        res.redirect(`${req.baseUrl}/${initialSection}`);
+        req.session.questionnaireId = response.body.data.attributes.id;
+        res.redirect(`/apply/${initialSection}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
     }
