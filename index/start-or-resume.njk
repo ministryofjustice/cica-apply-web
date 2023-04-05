@@ -1,0 +1,56 @@
+{% extends "page.njk" %}
+{% from "error-summary/macro.njk" import govukErrorSummary %}
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "button/macro.njk" import govukButton %}
+{% from "radios/macro.njk" import govukRadios %}
+{% from "details/macro.njk" import govukDetails %}
+
+{% block pageTitle %}
+    {%- if error %}Error: {% endif %}What would you like to do? - {{ super() }}
+{% endblock %}
+{% block innerContent %}
+    <form method="post" novalidate autocomplete="off">
+        {% if error %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: [{
+                    href: "#start-type",
+                    text: error.text
+                }]
+            }) }}
+        {% endif %}
+        {{ govukRadios({
+            "idPrefix": "start-or-resume",
+            "name": "start-or-resume",
+            "fieldset": {
+                "legend": {
+                    "text": "What would you like to do?",
+                    "isPageHeading": true,
+                    "classes": "govuk-fieldset__legend--xl"
+                }
+            },
+            "hint": null,
+            "items": [
+                {
+                    "value": "start",
+                    "text": "Start a new application"
+                },
+                {
+                    "value": "resume",
+                    "text": "Continue a saved application"
+                }
+            ],
+            errorMessage: error
+        }) }}
+        {{ govukDetails({
+            summaryText: "Change information you've already sent us",
+            html: "<p class='govuk-body'>If you've already submitted an application and need to make a change, you can <a href='https://contact-the-cica.form.service.justice.gov.uk/' class='govuk-link'>tell us about an update</a>.</p>"
+            })
+        }}
+        {{ govukButton({
+            text: submitButtonText,
+            preventDoubleClick: true
+        }) }}
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    </form>
+{% endblock %}
