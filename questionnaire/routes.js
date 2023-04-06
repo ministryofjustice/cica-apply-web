@@ -23,8 +23,8 @@ router.get('/', (req, res) => {
 router.route('/start-or-resume').get((req, res) => {
     try {
         res.render('start-or-resume.njk', {
-            submitButtonText: getFormSubmitButtonText('start'),
-            csrfToken: req.csrfToken()
+            submitButtonText: getFormSubmitButtonText('start') // ,
+            // csrfToken: req.csrfToken()
         });
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -40,7 +40,7 @@ router.post('/start-or-resume', (req, res) => {
 
         return res.render('start-or-resume.njk', {
             submitButtonText: getFormSubmitButtonText('start'),
-            csrfToken: req.csrfToken(),
+            // csrfToken: req.csrfToken(),
             error: {
                 text: 'Select what you would like to do'
             }
@@ -57,6 +57,7 @@ router.route('/start').get(async (req, res) => {
             response.body.data.attributes.routes.initial
         );
         req.session.questionnaireId = response.body.data.attributes.id;
+
         res.redirect(`/apply/${initialSection}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -105,7 +106,7 @@ router
             }
             const html = formHelper.getSectionHtml(
                 response.body,
-                req.csrfToken(),
+                // req.csrfToken(),
                 res.locals.nonce
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
@@ -181,7 +182,7 @@ router
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
-                req.csrfToken(),
+                // req.csrfToken(),
                 res.locals.nonce
             );
             return res.send(html);
