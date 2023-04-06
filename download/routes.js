@@ -5,15 +5,17 @@ const express = require('express');
 const moment = require('moment-timezone');
 const downloadHelper = require('./download-helper');
 const qService = require('../questionnaire/questionnaire-service')();
+const isQuestionnaireInstantiated = require('../questionnaire/utils/isQuestionnaireInstantiated');
 
 const router = express.Router();
 
 router.route('/application-summary').get(async (req, res, next) => {
     try {
-        const response = await qService.getSection(
-            req.session.questionnaireId,
-            'p--check-your-answers'
-        );
+        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        if (!questionnaireId) {
+            return res.redirect('/apply');
+        }
+        const response = await qService.getSection(questionnaireId, 'p--check-your-answers');
         const timestamp = moment().tz('Europe/London');
         const applicationSummaryHtml = downloadHelper.getSummaryHtml(response.body, timestamp);
         // add timestamp to filename in the correct format
