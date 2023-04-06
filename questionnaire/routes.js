@@ -23,13 +23,9 @@ router.get('/', (req, res) => {
 
 router.route('/start-or-resume').get((req, res) => {
     try {
-        const questionnaireId = isQuestionnaireInstantiated(req.session);
-        if (questionnaireId) {
-            return res.redirect(`/apply/resume/${questionnaireId}`);
-        }
         return res.render('start-or-resume.njk', {
-            submitButtonText: getFormSubmitButtonText('start') // ,
-            // csrfToken: req.csrfToken()
+            submitButtonText: getFormSubmitButtonText('start'),
+            csrfToken: req.csrfToken()
         });
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk');
@@ -45,7 +41,7 @@ router.post('/start-or-resume', (req, res) => {
 
         return res.render('start-or-resume.njk', {
             submitButtonText: getFormSubmitButtonText('start'),
-            // csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken(),
             error: {
                 text: 'Select what you would like to do'
             }
@@ -133,7 +129,7 @@ router
             }
             const html = formHelper.getSectionHtml(
                 response.body,
-                // req.csrfToken(),
+                req.csrfToken(),
                 res.locals.nonce
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
@@ -159,10 +155,11 @@ router
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
             const response = await questionnaireService.postSection(
-                req.session.questionnaireId,
+                isQuestionnaireInstantiated(req.session),
                 sectionId,
                 body
             );
+
             if (response.statusCode === 201) {
                 // if the page is a submission
                 const isApplicationSubmission =
@@ -189,7 +186,7 @@ router
 
                 if ('next' in req.query) {
                     const progressEntryResponse = await questionnaireService.getSection(
-                        req.session.questionnaireId,
+                        isQuestionnaireInstantiated(req.session),
                         formHelper.addPrefix(req.query.next)
                     );
 
@@ -202,7 +199,7 @@ router
                 }
 
                 const progressEntryResponse = await questionnaireService.getCurrentSection(
-                    req.session.questionnaireId
+                    isQuestionnaireInstantiated(req.session)
                 );
                 nextSectionId = formHelper.removeSectionIdPrefix(
                     progressEntryResponse.body.data[0].attributes.sectionId
@@ -214,7 +211,7 @@ router
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
-                // req.csrfToken(),
+                req.csrfToken(),
                 res.locals.nonce
             );
             return res.send(html);

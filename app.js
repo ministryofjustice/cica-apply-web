@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
 const {auth} = require('express-openid-connect');
-const qService = require('./questionnaire/questionnaire-service')();
+const createQuestionnaireService = require('./questionnaire/questionnaire-service');
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
@@ -87,6 +87,7 @@ app.use(
 
 app.use(async (req, res, next) => {
     try {
+        const questionnaireService = createQuestionnaireService();
         const questionnaireId = isQuestionnaireInstantiated(req.session);
         if (!req.originalUrl.startsWith('/session') && questionnaireId) {
             const cookieExpiryService = createCookieService({
@@ -96,11 +97,11 @@ app.use(async (req, res, next) => {
             });
 
             if (cookieExpiryService.isSet('expires') && cookieExpiryService.isExpired()) {
-                req.session.destroy();
+                res.clearCookie('session');
                 cookieExpiryService.set('expires', '');
                 return next();
             }
-            const response = await qService.keepAlive(questionnaireId);
+            const response = await questionnaireService.keepAlive(questionnaireId);
             const sessionResource = response.body.data[0].attributes;
             cookieExpiryService.set({
                 alive: sessionResource.alive,
@@ -151,17 +152,10 @@ const oidcConfig = {
     afterCallback: async (req, res, session) => {
         return {
             ...session,
-            questionnaireId: req.session.questionnaireId // ,
-            // isAuthenticated: true
+            questionnaireId: req.session.questionnaireId
         };
     }
 };
-
-app.use('/address-finder', addressFinderRouter);
-app.use('/download', downloadRouter);
-app.use('/apply', auth(oidcConfig), applicationRouter);
-app.use('/session', sessionRouter);
-app.use('/', indexRouter);
 
 app.use(
     csrf({
@@ -169,6 +163,12 @@ app.use(
         sessionKey: 'session'
     })
 );
+
+app.use('/address-finder', addressFinderRouter);
+app.use('/download', downloadRouter);
+app.use('/apply', auth(oidcConfig), applicationRouter);
+app.use('/session', sessionRouter);
+app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.name === 'CRNNotRetrieved') {
