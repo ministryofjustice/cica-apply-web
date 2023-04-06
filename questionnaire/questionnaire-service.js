@@ -2,7 +2,7 @@
 
 const service = require('./request-service')();
 
-function questionnaireService(options) {
+function questionnaireService(options = {}) {
     function createQuestionnaire() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
