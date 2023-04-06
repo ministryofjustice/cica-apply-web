@@ -87,7 +87,8 @@ app.use(
 
 app.use(async (req, res, next) => {
     try {
-        if (!req.originalUrl.startsWith('/session') && isQuestionnaireInstantiated(req.session)) {
+        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        if (!req.originalUrl.startsWith('/session') && questionnaireId) {
             const cookieExpiryService = createCookieService({
                 req,
                 res,
@@ -99,7 +100,7 @@ app.use(async (req, res, next) => {
                 cookieExpiryService.set('expires', '');
                 return next();
             }
-            const response = await qService.keepAlive(req.session.questionnaireId);
+            const response = await qService.keepAlive(questionnaireId);
             const sessionResource = response.body.data[0].attributes;
             cookieExpiryService.set({
                 alive: sessionResource.alive,
@@ -155,18 +156,18 @@ const oidcConfig = {
     }
 };
 
+app.use('/address-finder', addressFinderRouter);
+app.use('/download', downloadRouter);
+app.use('/apply', auth(oidcConfig), applicationRouter);
+app.use('/session', sessionRouter);
+app.use('/', indexRouter);
+
 app.use(
     csrf({
         cookie: true,
         sessionKey: 'session'
     })
 );
-
-app.use('/address-finder', addressFinderRouter);
-app.use('/download', downloadRouter);
-app.use('/apply', auth(oidcConfig), applicationRouter);
-app.use('/session', sessionRouter);
-app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.name === 'CRNNotRetrieved') {

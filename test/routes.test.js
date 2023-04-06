@@ -1,7 +1,7 @@
 'use strict';
 
 const request = require('supertest');
-const csrf = require('csurf');
+// const csrf = require('csurf');
 
 const formHelper = require('../questionnaire/form-helper');
 
@@ -18,50 +18,54 @@ const getKeepAlive = require('./test-fixtures/res/get_keep_alive');
 
 let app;
 
-function replaceCsrfMiddlwareForTest(expressApp) {
-    // TODO: find a better way to do this
-    // because I cannot alter the contents of the variable that
-    // is passed in to the `app.use()` method within the app.js,
-    // I need to butcher the stack from the outside so that the
-    // csrf stuff is altered after initialisation. If the csrf
-    // stuff was extracted out its own middleware then we could
-    // just that js file instead.
-    // eslint-disable-next-line no-underscore-dangle
-    const middlewareStack = expressApp._router.stack;
-    let csrfMiddlewareStackIndex = -1;
-    let newCsrfMiddlewareStackItem = [];
-    let newCsrfMiddlewareStackIndex = -1;
-    middlewareStack.forEach((layer, index) => {
-        if (layer.name === 'csrf') {
-            csrfMiddlewareStackIndex = index;
-        }
-    });
-    if (csrfMiddlewareStackIndex > -1) {
-        // eslint-disable-next-line no-underscore-dangle
-        expressApp._router.stack.splice(csrfMiddlewareStackIndex, 1);
-    }
+// function getCsrfTokenFromResponse(input) {
+//     return input.match(/<input(?:.*?)name="_csrf"(?:.*)value="([^"]+).*>/)[1];
+// }
 
-    const csrfProtection = csrf({
-        cookie: false,
-        sessionKey: 'session',
-        ignoreMethods: ['GET', 'POST']
-    });
-    expressApp.use(csrfProtection);
+// function replaceCsrfMiddlwareForTest(expressApp) {
+//     // TODO: find a better way to do this
+//     // because I cannot alter the contents of the variable that
+//     // is passed in to the `app.use()` method within the app.js,
+//     // I need to butcher the stack from the outside so that the
+//     // csrf stuff is altered after initialisation. If the csrf
+//     // stuff was extracted out its own middleware then we could
+//     // just that js file instead.
+//     // eslint-disable-next-line no-underscore-dangle
+//     const middlewareStack = expressApp._router.stack;
+//     let csrfMiddlewareStackIndex = -1;
+//     let newCsrfMiddlewareStackItem = [];
+//     let newCsrfMiddlewareStackIndex = -1;
+//     middlewareStack.forEach((layer, index) => {
+//         if (layer.name === 'csrf') {
+//             csrfMiddlewareStackIndex = index;
+//         }
+//     });
+//     if (csrfMiddlewareStackIndex > -1) {
+//         // eslint-disable-next-line no-underscore-dangle
+//         expressApp._router.stack.splice(csrfMiddlewareStackIndex, 1);
+//     }
 
-    // look for the new csrf middleware. it should be the last item.
-    middlewareStack.forEach((layer, index) => {
-        if (layer.name === 'csrf') {
-            // get a copy of the new middleware.
-            newCsrfMiddlewareStackItem = layer;
-            newCsrfMiddlewareStackIndex = index;
-            // remove it from the stack.
-            // eslint-disable-next-line no-underscore-dangle
-            expressApp._router.stack.splice(newCsrfMiddlewareStackIndex, 1);
-        }
-    });
-    // eslint-disable-next-line no-underscore-dangle
-    expressApp._router.stack.splice(csrfMiddlewareStackIndex, 0, newCsrfMiddlewareStackItem);
-}
+//     const csrfProtection = csrf({
+//         cookie: false,
+//         sessionKey: 'session',
+//         ignoreMethods: ['GET', 'POST']
+//     });
+//     expressApp.use(csrfProtection);
+
+//     // look for the new csrf middleware. it should be the last item.
+//     middlewareStack.forEach((layer, index) => {
+//         if (layer.name === 'csrf') {
+//             // get a copy of the new middleware.
+//             newCsrfMiddlewareStackItem = layer;
+//             newCsrfMiddlewareStackIndex = index;
+//             // remove it from the stack.
+//             // eslint-disable-next-line no-underscore-dangle
+//             expressApp._router.stack.splice(newCsrfMiddlewareStackIndex, 1);
+//         }
+//     });
+//     // eslint-disable-next-line no-underscore-dangle
+//     expressApp._router.stack.splice(csrfMiddlewareStackIndex, 0, newCsrfMiddlewareStackItem);
+// }
 
 function setUpCommonMocks(additionalMocks) {
     jest.resetModules();
@@ -70,7 +74,7 @@ function setUpCommonMocks(additionalMocks) {
     jest.unmock('../questionnaire/form-helper');
     jest.unmock('../index/liveChatHelper');
     jest.unmock('../questionnaire/request-service');
-    jest.unmock('client-sessions');
+    // jest.unmock('client-sessions');
     if (additionalMocks) {
         additionalMocks();
     } else {
@@ -84,7 +88,7 @@ function setUpCommonMocks(additionalMocks) {
     }
     // eslint-disable-next-line global-require
     app = require('../app');
-    replaceCsrfMiddlwareForTest(app);
+    // replaceCsrfMiddlwareForTest(app);
 }
 
 describe('Static routes', () => {
@@ -751,15 +755,15 @@ describe('/apply', () => {
     describe('/apply/:section?next=<some section id>', () => {
         it('Should redirect to the prescribed next section id if available', async () => {
             function blockSpecificMocks() {
-                jest.doMock('client-sessions', () => () => (req, res, next) => {
-                    req.session = {
-                        cookie: {},
-                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
-                        destroy: jest.fn()
-                    };
+                // jest.doMock('client-sessions', () => () => (req, res, next) => {
+                //     req.session = {
+                //         cookie: {},
+                //         questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
+                //         destroy: jest.fn()
+                //     };
 
-                    next();
-                });
+                //     next();
+                // });
 
                 jest.doMock('../questionnaire/request-service', () => {
                     const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
@@ -811,15 +815,15 @@ describe('/apply', () => {
 
         it('Should redirect to the current section if the prescribed next section id is not available', async () => {
             function blockSpecificMocks() {
-                jest.doMock('client-sessions', () => () => (req, res, next) => {
-                    req.session = {
-                        cookie: {},
-                        questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
-                        destroy: jest.fn()
-                    };
+                // jest.doMock('client-sessions', () => () => (req, res, next) => {
+                //     req.session = {
+                //         cookie: {},
+                //         questionnaireId: 'c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd',
+                //         destroy: jest.fn()
+                //     };
 
-                    next();
-                });
+                //     next();
+                // });
 
                 jest.doMock('../questionnaire/request-service', () => {
                     const api = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c7f3b592-b7ac-4f2a-ab9c-8af407ade8cd`;
