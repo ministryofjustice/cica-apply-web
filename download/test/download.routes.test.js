@@ -1,119 +1,108 @@
+/* eslint-disable global-require */
+
 'use strict';
 
 const request = require('supertest');
 
-const createQuestionnaire = require('../../test/test-fixtures/res/get_questionnaire.json');
-const getSectionValid = require('../../test/test-fixtures/res/get_schema_valid');
-const getKeepAlive = require('../../test/test-fixtures/res/get_keep_alive');
+const fixtureQuestionnaire = require('../../questionnaire/fixtures/questionnaire.json');
+const fixtureProgressEntryOrdinal1 = require('../../questionnaire/fixtures/fixtureProgressEntryOrdinal1.json');
+const fixtureProgressEntryOrdinal2 = require('../../questionnaire/fixtures/fixtureProgressEntryOrdinal2.json');
+const fixture404 = require('../../questionnaire/fixtures/fixture404.json');
+const getKeepAlive = require('../../test/test-fixtures/res/get_keep_alive.json');
 
 const summaryHtml = '<!DOCTYPE html><html><head><title></title></head><body>Summary</body></html>';
 
 let app;
 
-describe('Download route service endpoint', () => {
-    describe('Cica-web /download/application-summary route', () => {
-        describe('/download/application-summary', () => {
-            describe('GET', () => {
-                describe('200', () => {
-                    beforeAll(() => {
-                        const initial = 'p-applicant-declaration';
-                        jest.resetModules();
-                        jest.doMock('../../questionnaire/questionnaire-service', () =>
-                            jest.fn(() => ({
-                                getSection: () => getSectionValid,
-                                createQuestionnaire: () => createQuestionnaire,
-                                keepAlive: () => getKeepAlive
-                            }))
-                        );
-                        jest.doMock('../../questionnaire/form-helper', () => ({
-                            removeSectionIdPrefix: () => initial
-                        }));
-                        jest.doMock('../download-helper', () => ({
-                            getSummaryHtml: () => summaryHtml
-                        }));
+const mocks = {
+    '../../questionnaire/questionnaire-service': () => {
+        return jest.fn(() => ({
+            createQuestionnaire: () => fixtureQuestionnaire,
+            keepAlive: () => getKeepAlive,
+            getSection: (questionnaireId, sectionId) => {
+                if (sectionId === 'p-applicant-fatal-claim') {
+                    return fixtureProgressEntryOrdinal1;
+                }
+                if (sectionId === 'p--was-the-crime-reported-to-police') {
+                    return fixtureProgressEntryOrdinal2;
+                }
+                return fixture404;
+            },
+            getPrevious: () => fixtureProgressEntryOrdinal1,
+            postSection: () => {
+                return {
+                    statusCode: 201
+                };
+            }
+        }));
+    },
+    '../../questionnaire/utils/isQuestionnaireInstantiated': () =>
+        jest.fn(() => 'c992d660-d1a8-4928-89a0-87d4f9640250'),
+    '../download-helper': () => ({
+        getSummaryHtml: () => summaryHtml
+    })
+};
 
-                        Date.now = jest.fn(() => new Date('2020-05-13T12:33:37.000Z'));
-                        // eslint-disable-next-line global-require
-                        app = require('../../app');
-                    });
+function setUpCommonMocks(additionalMocks = {}) {
+    jest.clearAllMocks();
+    jest.resetModules();
+    jest.restoreAllMocks();
+    const combinedMocks = {...mocks, ...additionalMocks};
+    Object.keys(combinedMocks).forEach(path => {
+        jest.unmock(path);
+        if (combinedMocks[path] !== '__UNMOCK__') {
+            jest.doMock(path, combinedMocks[path]);
+        }
+    });
+    app = require('../../app');
+}
 
-                    it('Should respond with a success status', async () => {
-                        const currentAgent = request.agent(app);
-                        return currentAgent.get('/apply/').then(() =>
-                            currentAgent
-                                .get('/download/application-summary')
-                                .set(
-                                    'Cookie',
-                                    'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA'
-                                )
-                                .then(response => {
-                                    expect(response.statusCode).toBe(200);
-                                    expect(response.res.text).toBe(summaryHtml);
-                                })
-                        );
-                    });
+describe('Download', () => {
+    describe('Application summary', () => {
+        describe('Instantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should render an application summary', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/download/application-summary');
+                expect(response.statusCode).toBe(200);
+                expect(response.res.text).toBe(summaryHtml);
+            });
+        });
+
+        describe('Unistantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false)
                 });
-                describe('404', () => {
-                    it('Should fail gracefully if the download helper throws an error', async () => {
-                        const initial = 'p-applicant-declaration';
-                        jest.resetModules();
-                        jest.doMock('../../questionnaire/questionnaire-service', () =>
-                            jest.fn(() => ({
-                                createQuestionnaire: () => createQuestionnaire,
-                                getSection: () => getSectionValid,
-                                keepAlive: () => getKeepAlive
-                            }))
-                        );
-                        jest.doMock('../../questionnaire/form-helper', () => ({
-                            removeSectionIdPrefix: () => initial
-                        }));
-                        jest.doMock('../download-helper', () => ({
-                            getSummaryHtml: () => {
-                                throw new Error();
-                            }
-                        }));
+            });
 
-                        // eslint-disable-next-line global-require
-                        app = require('../../app');
+            it('Should render an application summary', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/download/application-summary');
+                expect(response.statusCode).toBe(302);
+                expect(response.res.text).toBe('Found. Redirecting to /apply');
+            });
+        });
 
-                        const currentAgent = request.agent(app);
-                        await currentAgent.get('/apply/');
-                        const response = await currentAgent
-                            .get('/download/application-summary')
-                            .set(
-                                'Cookie',
-                                'session=te3AFsfQozY49T4FIL8lEA.K2YvZ_eUm0YcCg2IA_qtCorcS2T17Td11LC0WmYuTaWc5PQuHcoCTHPuOPQoWVy_R5tUX4vzV4_pENOBxk1xPg0obdlP4suxaGK2YdqxjAE.1565864591496.900000.NwyQHlNP62CAiD-sk2GuuJvLzAQEZjX364hfnLp06yA;'
-                            );
-                        expect(response.statusCode).toBe(404);
-                    });
+        describe('Error', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../download-helper': () => ({
+                        getSummaryHtml: () => {
+                            throw new Error();
+                        }
+                    })
                 });
+            });
 
-                describe('Session Cookie not present', () => {
-                    beforeAll(() => {
-                        const initial = 'applicant-declaration';
-                        jest.resetModules();
-                        jest.doMock('../../questionnaire/questionnaire-service', () =>
-                            jest.fn(() => ({
-                                createQuestionnaire: () => createQuestionnaire
-                            }))
-                        );
-                        jest.doMock('../../questionnaire/form-helper', () => ({
-                            removeSectionIdPrefix: () => initial
-                        }));
-                        // eslint-disable-next-line global-require
-                        app = require('../../app');
-                    });
-
-                    it('Should redirect the user to the inital page if the application-summary page is selected without a session', () =>
-                        request
-                            .agent(app)
-                            .get('/download/application-summary')
-                            .then(response => {
-                                expect(response.res.text).toBe(
-                                    'Found. Redirecting to /apply/applicant-declaration'
-                                );
-                            }));
-                });
+            it('Should fail gracefully', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/download/application-summary');
+                expect(response.statusCode).toBe(404);
             });
         });
     });
