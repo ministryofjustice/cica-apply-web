@@ -2,7 +2,7 @@
 
 const service = require('./request-service')();
 
-function questionnaireService() {
+function questionnaireService(options) {
     function createQuestionnaire() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
@@ -13,7 +13,11 @@ function questionnaireService() {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName: 'sexual-assault'
+                        templateName: 'sexual-assault',
+                        owner: {
+                            id: options.ownerId,
+                            isAuthenticated: options.isAuthenticated
+                        }
                     }
                 }
             }
@@ -25,7 +29,8 @@ function questionnaireService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'on-behalf-of': options.ownerId
             }
         };
         return service.get(opts);
@@ -35,7 +40,8 @@ function questionnaireService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'on-behalf-of': options.ownerId
             },
             json: {
                 data: {
@@ -51,7 +57,8 @@ function questionnaireService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'on-behalf-of': options.ownerId
             }
         };
         return service.get(opts);
@@ -61,7 +68,8 @@ function questionnaireService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'on-behalf-of': options.ownerId
             }
         };
         return service.get(opts);
@@ -138,7 +146,8 @@ function questionnaireService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'on-behalf-of': options.ownerId
             }
         };
         return service.get(opts);
@@ -148,7 +157,8 @@ function questionnaireService() {
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/session/keep-alive`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'on-behalf-of': options.ownerId
             }
         };
         return service.get(opts);
