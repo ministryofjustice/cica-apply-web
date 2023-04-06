@@ -12,10 +12,10 @@ const router = express.Router();
 router.get('/', (req, res) => {
     try {
         const questionnaireId = isQuestionnaireInstantiated(req.session);
-        if (!questionnaireId) {
-            return res.redirect('/apply/start-or-resume');
+        if (questionnaireId) {
+            return res.redirect(`/apply/resume/${questionnaireId}`);
         }
-        return res.redirect(`/apply/resume/${questionnaireId}`);
+        return res.redirect('/apply/start-or-resume');
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk');
     }
@@ -23,12 +23,16 @@ router.get('/', (req, res) => {
 
 router.route('/start-or-resume').get((req, res) => {
     try {
-        res.render('start-or-resume.njk', {
+        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        if (questionnaireId) {
+            return res.redirect(`/apply/resume/${questionnaireId}`);
+        }
+        return res.render('start-or-resume.njk', {
             submitButtonText: getFormSubmitButtonText('start') // ,
             // csrfToken: req.csrfToken()
         });
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk');
     }
 });
 
@@ -53,17 +57,17 @@ router.post('/start-or-resume', (req, res) => {
 
 router.route('/start').get(async (req, res) => {
     try {
-        const questionnaireService = createQuestionnaireService({
-            ownerId: req?.session?.ownerId,
-            isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
-        });
         const accountService = createAccountService(req.session);
+        accountService.generateOwnerId();
+        const questionnaireService = createQuestionnaireService({
+            ownerId: accountService.getOwnerId(),
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
         const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(
             response.body.data.attributes.routes.initial
         );
         req.session.questionnaireId = response.body.data.attributes.id;
-        accountService.generateOwnerId();
 
         res.redirect(`/apply/${initialSection}`);
     } catch (err) {
@@ -73,9 +77,10 @@ router.route('/start').get(async (req, res) => {
 
 router.route('/previous/:section').get(async (req, res) => {
     try {
+        const accountService = createAccountService(req.session);
         const questionnaireService = createQuestionnaireService({
-            ownerId: req?.session?.ownerId,
-            isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+            ownerId: accountService.getOwnerId(),
+            isAuthenticated: accountService.isAuthenticated(req)
         });
         const sectionId = formHelper.addPrefix(req.params.section);
         const response = await questionnaireService.getPrevious(
@@ -99,9 +104,10 @@ router
     .route('/:section')
     .get(async (req, res, next) => {
         try {
+            const accountService = createAccountService(req.session);
             const questionnaireService = createQuestionnaireService({
-                ownerId: req?.session?.ownerId,
-                isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+                ownerId: accountService.getOwnerId(),
+                isAuthenticated: accountService.isAuthenticated(req)
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await questionnaireService.getSection(
@@ -141,9 +147,10 @@ router
     })
     .post(async (req, res, next) => {
         try {
+            const accountService = createAccountService(req.session);
             const questionnaireService = createQuestionnaireService({
-                ownerId: req?.session?.ownerId,
-                isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+                ownerId: accountService.getOwnerId(),
+                isAuthenticated: accountService.isAuthenticated(req)
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
