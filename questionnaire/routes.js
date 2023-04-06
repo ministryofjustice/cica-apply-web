@@ -2,9 +2,10 @@
 
 const express = require('express');
 const formHelper = require('./form-helper');
-const qService = require('./questionnaire-service')();
+const createQuestionnaireService = require('./questionnaire-service');
 const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 const isQuestionnaireInstantiated = require('./utils/isQuestionnaireInstantiated');
+const createAccountService = require('../account/account-service');
 
 const router = express.Router();
 
@@ -52,11 +53,17 @@ router.post('/start-or-resume', (req, res) => {
 
 router.route('/start').get(async (req, res) => {
     try {
-        const response = await qService.createQuestionnaire();
+        const questionnaireService = createQuestionnaireService({
+            ownerId: req?.session?.ownerId,
+            isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+        });
+        const accountService = createAccountService(req.session);
+        const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(
             response.body.data.attributes.routes.initial
         );
         req.session.questionnaireId = response.body.data.attributes.id;
+        accountService.generateOwnerId();
 
         res.redirect(`/apply/${initialSection}`);
     } catch (err) {
@@ -66,8 +73,15 @@ router.route('/start').get(async (req, res) => {
 
 router.route('/previous/:section').get(async (req, res) => {
     try {
+        const questionnaireService = createQuestionnaireService({
+            ownerId: req?.session?.ownerId,
+            isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+        });
         const sectionId = formHelper.addPrefix(req.params.section);
-        const response = await qService.getPrevious(req.session.questionnaireId, sectionId);
+        const response = await questionnaireService.getPrevious(
+            req.session.questionnaireId,
+            sectionId
+        );
         if (response.body.data[0].attributes && response.body.data[0].attributes.url !== null) {
             const overwriteId = response.body.data[0].attributes.url;
             return res.redirect(overwriteId);
@@ -85,8 +99,15 @@ router
     .route('/:section')
     .get(async (req, res, next) => {
         try {
+            const questionnaireService = createQuestionnaireService({
+                ownerId: req?.session?.ownerId,
+                isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+            });
             const sectionId = formHelper.addPrefix(req.params.section);
-            const response = await qService.getSection(req.session.questionnaireId, sectionId);
+            const response = await questionnaireService.getSection(
+                req.session.questionnaireId,
+                sectionId
+            );
             if (
                 response.body.data &&
                 response.body.data[0].attributes &&
@@ -120,13 +141,17 @@ router
     })
     .post(async (req, res, next) => {
         try {
+            const questionnaireService = createQuestionnaireService({
+                ownerId: req?.session?.ownerId,
+                isAuthenticated: !!(req?.oidc.isAuthenticated() || req?.isAuthenticated)
+            });
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
             let nextSectionId;
             // delete the token from the body to allow AJV to validate the request.
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
-            const response = await qService.postSection(
+            const response = await questionnaireService.postSection(
                 req.session.questionnaireId,
                 sectionId,
                 body
@@ -137,8 +162,8 @@ router
                     formHelper.getSectionContext(sectionId) === 'submission';
                 if (isApplicationSubmission) {
                     try {
-                        await qService.postSubmission(req.session.questionnaireId);
-                        const submissionResponse = await qService.getSubmissionStatus(
+                        await questionnaireService.postSubmission(req.session.questionnaireId);
+                        const submissionResponse = await questionnaireService.getSubmissionStatus(
                             req.session.questionnaireId,
                             Date.now()
                         );
@@ -156,7 +181,7 @@ router
                 }
 
                 if ('next' in req.query) {
-                    const progressEntryResponse = await qService.getSection(
+                    const progressEntryResponse = await questionnaireService.getSection(
                         req.session.questionnaireId,
                         formHelper.addPrefix(req.query.next)
                     );
@@ -169,7 +194,7 @@ router
                     }
                 }
 
-                const progressEntryResponse = await qService.getCurrentSection(
+                const progressEntryResponse = await questionnaireService.getCurrentSection(
                     req.session.questionnaireId
                 );
                 nextSectionId = formHelper.removeSectionIdPrefix(
