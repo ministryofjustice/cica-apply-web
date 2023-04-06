@@ -5,10 +5,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
-const clientSessions = require('client-sessions');
 const csrf = require('csurf');
 const {nanoid} = require('nanoid');
-// const formHelper = require('./questionnaire/form-helper');
+const {auth} = require('express-openid-connect');
 const qService = require('./questionnaire/questionnaire-service')();
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
@@ -23,8 +22,6 @@ const app = express();
 
 const templateEngineService = createTemplateEngineService(app);
 templateEngineService.init();
-
-const sessionDuration = Number.parseInt(process.env.CW_SESSION_DURATION, 10);
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
@@ -66,29 +63,6 @@ app.use(express.urlencoded({extended: true}));
 app.use(
     cookieParser(null, {
         httpOnly: true
-    })
-);
-
-app.use(
-    clientSessions({
-        cookieName: 'session', // cookie name dictates the key name added to the request object
-        secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
-        duration: sessionDuration, // how long the session will stay valid in ms
-        activeDuration: sessionDuration, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
-        cookie: {
-            ephemeral: true, // when true, cookie expires when the browser closes
-            httpOnly: true, // when true, cookie is not accessible from javascript
-            // TODO: create a proper environment variable for this situation.
-            // TODO: replace all instances of process.env.NODE_ENV conditions with their own env vars.
-            secureProxy: process.env.NODE_ENV === 'production' // when true, cookie will only be sent over SSL. use key 'proxySecure' instead if you handle SSL not in your node process
-        }
-    })
-);
-
-app.use(
-    csrf({
-        cookie: false,
-        sessionKey: 'session'
     })
 );
 
@@ -141,9 +115,56 @@ app.use(async (req, res, next) => {
     return next();
 });
 
+const oidcConfig = {
+    authRequired: false,
+    auth0Logout: false,
+    idpLogout: true,
+    baseURL: `${process.env.CW_URL}/account`,
+    clientID: process.env.CW_GOVUK_CLIENT_ID,
+    clientAuthMethod: 'private_key_jwt',
+    clientAssertionSigningKey: process.env.CW_GOVUK_PRIVATE_KEY,
+    idTokenSigningAlg: 'ES256',
+    issuerBaseURL: process.env.CW_GOVUK_ISSUER_URL,
+    secret: process.env.CW_COOKIE_SECRET,
+    session: {
+        absoluteDuration: process.env.CW_SESSION_DURATION,
+        name: 'session',
+        cookie: {
+            transient: true,
+            httpOnly: true // ,
+            // secure: true
+        },
+        rolling: true,
+        rollingDuration: process.env.CW_SESSION_DURATION // Is this correct?
+    },
+    authorizationParams: {
+        response_type: 'code',
+        scope: 'openid'
+    },
+    routes: {
+        callback: '/signed-in',
+        login: '/sign-in',
+        logout: '/sign-out',
+        postLogoutRedirect: '/signed-out'
+    },
+    afterCallback: async (req, res, session) => {
+        return {
+            ...session,
+            questionnaireId: req.session.questionnaireId
+        };
+    }
+};
+
+app.use(
+    csrf({
+        cookie: true,
+        sessionKey: 'session'
+    })
+);
+
 app.use('/address-finder', addressFinderRouter);
 app.use('/download', downloadRouter);
-app.use('/apply', applicationRouter);
+app.use('/apply', auth(oidcConfig), applicationRouter);
 app.use('/session', sessionRouter);
 app.use('/', indexRouter);
 
