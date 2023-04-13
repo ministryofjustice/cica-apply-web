@@ -36,7 +36,8 @@ const mocks = {
             }
         }));
     },
-    '../../questionnaire/utils/isQuestionnaireInstantiated': () =>
+    '../../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => true),
+    '../../questionnaire/utils/getQuestionnaireIdInSession': () =>
         jest.fn(() => 'c992d660-d1a8-4928-89a0-87d4f9640250'),
     '../download-helper': () => ({
         getSummaryHtml: () => summaryHtml
@@ -76,7 +77,9 @@ describe('Download', () => {
             beforeEach(() => {
                 setUpCommonMocks({
                     '../../questionnaire/utils/isQuestionnaireInstantiated': () =>
-                        jest.fn(() => false)
+                        jest.fn(() => false),
+                    '../../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
                 });
             });
 

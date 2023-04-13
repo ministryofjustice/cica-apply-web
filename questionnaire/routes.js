@@ -4,7 +4,7 @@ const express = require('express');
 const formHelper = require('./form-helper');
 const createQuestionnaireService = require('./questionnaire-service');
 const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
-const isQuestionnaireInstantiated = require('./utils/isQuestionnaireInstantiated');
+const getQuestionnaireIdInSession = require('./utils/getQuestionnaireIdInSession');
 const createAccountService = require('../account/account-service');
 const getRedirectionUrl = require('./utils/getRedirectionUrl');
 
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     try {
-        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        const questionnaireId = getQuestionnaireIdInSession(req.session);
         if (questionnaireId) {
             return res.redirect(`/apply/resume/${questionnaireId}`);
         }
@@ -158,7 +158,7 @@ router
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
             const response = await questionnaireService.postSection(
-                isQuestionnaireInstantiated(req.session),
+                getQuestionnaireIdInSession(req.session),
                 sectionId,
                 body
             );
@@ -189,7 +189,7 @@ router
 
                 if ('next' in req.query) {
                     const progressEntryResponse = await questionnaireService.getSection(
-                        isQuestionnaireInstantiated(req.session),
+                        getQuestionnaireIdInSession(req.session),
                         formHelper.addPrefix(req.query.next)
                     );
 
@@ -202,7 +202,7 @@ router
                 }
 
                 const progressEntryResponse = await questionnaireService.getCurrentSection(
-                    isQuestionnaireInstantiated(req.session)
+                    getQuestionnaireIdInSession(req.session)
                 );
                 nextSectionId = formHelper.removeSectionIdPrefix(
                     progressEntryResponse.body.data[0].attributes.sectionId
