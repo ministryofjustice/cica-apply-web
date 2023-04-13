@@ -24,6 +24,7 @@
 !cookie
 !templateEngine
 !address-finder
+!account
 
 !package.json
 !package-lock.json
