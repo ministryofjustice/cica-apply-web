@@ -3,13 +3,13 @@
 const express = require('express');
 const qService = require('../questionnaire/questionnaire-service')();
 const createCookieService = require('../cookie/cookie-service');
-const isQuestionnaireInstantiated = require('../questionnaire/utils/isQuestionnaireInstantiated');
+const getQuestionnaireIdInSession = require('../questionnaire/utils/getQuestionnaireIdInSession');
 
 const router = express.Router();
 
 router.route('/keep-alive').get(async (req, res) => {
     try {
-        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        const questionnaireId = getQuestionnaireIdInSession(req.session);
         const response = await qService.keepAlive(questionnaireId);
         const sessionResource = response.body?.data?.[0]?.attributes;
         if (sessionResource) {
