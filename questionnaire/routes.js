@@ -6,6 +6,7 @@ const createQuestionnaireService = require('./questionnaire-service');
 const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 const isQuestionnaireInstantiated = require('./utils/isQuestionnaireInstantiated');
 const createAccountService = require('../account/account-service');
+const getRedirectionUrl = require('./utils/getRedirectionUrl');
 
 const router = express.Router();
 
@@ -35,8 +36,10 @@ router.route('/start-or-resume').get((req, res) => {
 router.post('/start-or-resume', (req, res) => {
     try {
         const startType = req.body['start-or-resume'];
-        if (startType === 'start') {
-            return res.redirect('/apply/start');
+        const redirectionUrl = getRedirectionUrl(startType);
+
+        if (redirectionUrl) {
+            return res.redirect(redirectionUrl);
         }
 
         return res.render('start-or-resume.njk', {
