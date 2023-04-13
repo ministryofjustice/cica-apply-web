@@ -39,7 +39,8 @@ const defaultMocks = {
             getSubmissionStatus: () => ({status: 'FAILED'})
         }));
     },
-    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+    '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => true),
+    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
         jest.fn(() => 'c992d660-d1a8-4928-89a0-87d4f9640250')
 };
 let currentMocks = {};
@@ -68,7 +69,8 @@ describe('/apply routes', () => {
     describe('Uninstantiated questionnaire', () => {
         beforeEach(() => {
             setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false)
+                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
+                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
             });
         });
 
@@ -82,7 +84,10 @@ describe('/apply routes', () => {
         describe('invalid page id', () => {
             beforeEach(() => {
                 setUpCommonMocks({
-                    '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false)
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
                 });
             });
 
@@ -126,7 +131,8 @@ describe('Hitting /apply', () => {
     describe('Uninstantiated questionnaire', () => {
         beforeEach(() => {
             setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false)
+                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
+                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
             });
         });
 
@@ -158,7 +164,8 @@ describe('Hitting /apply/start-or-resume', () => {
     describe('Uninstantiated questionnaire', () => {
         beforeEach(() => {
             setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false)
+                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
+                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
             });
         });
 
@@ -225,7 +232,8 @@ describe('Hitting /apply/start', () => {
     describe('Uninstantiated questionnaire', () => {
         beforeEach(() => {
             setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false)
+                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
+                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
             });
         });
 

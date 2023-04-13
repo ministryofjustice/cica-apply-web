@@ -5,13 +5,13 @@ const express = require('express');
 const moment = require('moment-timezone');
 const downloadHelper = require('./download-helper');
 const qService = require('../questionnaire/questionnaire-service')();
-const isQuestionnaireInstantiated = require('../questionnaire/utils/isQuestionnaireInstantiated');
+const getQuestionnaireIdInSession = require('../questionnaire/utils/getQuestionnaireIdInSession');
 
 const router = express.Router();
 
 router.route('/application-summary').get(async (req, res, next) => {
     try {
-        const questionnaireId = isQuestionnaireInstantiated(req.session);
+        const questionnaireId = getQuestionnaireIdInSession(req.session);
         if (!questionnaireId) {
             return res.redirect('/apply');
         }
