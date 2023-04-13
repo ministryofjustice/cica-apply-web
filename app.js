@@ -17,6 +17,7 @@ const addressFinderRouter = require('./address-finder/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnaireInstantiated');
+const getQuestionnaireIdInSession = require('./questionnaire/utils/getQuestionnaireIdInSession');
 
 const app = express();
 
@@ -87,8 +88,8 @@ app.use(
 app.use(async (req, res, next) => {
     try {
         const questionnaireService = createQuestionnaireService();
-        const questionnaireId = isQuestionnaireInstantiated(req.session);
-        if (!req.originalUrl.startsWith('/session') && questionnaireId) {
+        if (!req.originalUrl.startsWith('/session') && isQuestionnaireInstantiated(req.session)) {
+            const questionnaireId = getQuestionnaireIdInSession(req.session);
             const cookieExpiryService = createCookieService({
                 req,
                 res,
