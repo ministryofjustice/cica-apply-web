@@ -2,7 +2,7 @@
 
 function isQuestionnaireInstantiated(sessionData) {
     const questionnaireId = sessionData?.questionnaireId;
-    return questionnaireId || false;
+    return !!questionnaireId;
 }
 
 module.exports = isQuestionnaireInstantiated;
