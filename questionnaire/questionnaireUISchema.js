@@ -1796,5 +1796,35 @@ module.exports = {
         options: {
             outputOrder: ['q-applicant-funeral-costs-who-contributed', 'funeral-costs-info']
         }
+    },
+    'p-applicant-funeral-costs-only': {
+        options: {
+            outputOrder: ['q-applicant-funeral-costs-only', 'funeral-costs-only-info']
+        }
+    },
+    'p-applicant-physical-help': {
+        options: {
+            outputOrder: ['q-applicant-physical-help', 'physical-help-info']
+        }
+    },
+    'p-other-claimants': {
+        options: {
+            outputOrder: ['q-other-claimants', 'other-claimants-info']
+        }
+    },
+    'p-applicant-immediate-aftermath': {
+        options: {
+            outputOrder: ['q-applicant-immediate-aftermath', 'immediate-aftermath-info']
+        }
+    },
+    'p-applicant-disabling-mental-injury': {
+        options: {
+            outputOrder: ['q-applicant-disabling-mental-injury', 'disabling-mental-injury-info']
+        }
+    },
+    'p-applicant-financial-help': {
+        options: {
+            outputOrder: ['q-applicant-financial-help', 'financial-help-info']
+        }
     }
 };
