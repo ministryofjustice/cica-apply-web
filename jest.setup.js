@@ -18,4 +18,4 @@ process.env.CW_URL = 'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk';
 process.env.CW_GOVUK_CLIENT_ID = 'thisistheclientid';
 process.env.CW_GOVUK_PRIVATE_KEY = 'thisisthegovukprivatekey';
 process.env.CW_GOVUK_ISSUER_URL = 'http://www.issuer.com';
-process.env.CW_SESSION_DURATION = 600000;
+process.env.CW_SESSION_DURATION = 1800000;

@@ -85,7 +85,7 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
 );
 
-app.use(async (req, res, next) => {
+async function keepAlive(req, res, next) {
     try {
         const questionnaireService = createQuestionnaireService();
         if (!req.originalUrl.startsWith('/session') && isQuestionnaireInstantiated(req.session)) {
@@ -115,7 +115,7 @@ app.use(async (req, res, next) => {
     }
 
     return next();
-});
+}
 
 const oidcConfig = {
     authRequired: false,
@@ -129,15 +129,15 @@ const oidcConfig = {
     issuerBaseURL: process.env.CW_GOVUK_ISSUER_URL,
     secret: process.env.CW_COOKIE_SECRET,
     session: {
-        absoluteDuration: process.env.CW_SESSION_DURATION,
         name: 'session',
-        cookie: {
-            transient: true,
-            httpOnly: true // ,
-            // secure: true
-        },
         rolling: true,
-        rollingDuration: process.env.CW_SESSION_DURATION // Is this correct?
+        // `CW_SESSION_DURATION` is represented in ms for consistency.
+        rollingDuration: process.env.CW_SESSION_DURATION / 1000,
+        cookie: {
+            transient: false,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production'
+        }
     },
     authorizationParams: {
         response_type: 'code',
@@ -165,9 +165,9 @@ app.use(
 );
 
 app.use('/address-finder', addressFinderRouter);
-app.use('/download', downloadRouter);
-app.use('/apply', auth(oidcConfig), applicationRouter);
-app.use('/session', sessionRouter);
+app.use('/download', auth(oidcConfig), downloadRouter);
+app.use('/apply', auth(oidcConfig), keepAlive, applicationRouter);
+app.use('/session', auth(oidcConfig), sessionRouter);
 app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
