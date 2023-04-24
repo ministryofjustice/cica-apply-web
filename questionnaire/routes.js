@@ -36,7 +36,10 @@ router.route('/start-or-resume').get((req, res) => {
 router.post('/start-or-resume', (req, res) => {
     try {
         const startType = req.body['start-or-resume'];
-        const redirectionUrl = getRedirectionUrl(startType);
+        const redirectionUrl = getRedirectionUrl(
+            startType,
+            getQuestionnaireIdInSession(req.session)
+        );
 
         if (redirectionUrl) {
             return res.redirect(redirectionUrl);
@@ -71,6 +74,42 @@ router.route('/start').get(async (req, res) => {
         res.redirect(`/apply/${initialSection}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
+router.get('/resume/:questionnaireId', async (req, res) => {
+    try {
+        const accountService = createAccountService(req.session);
+        const questionnaireService = createQuestionnaireService({
+            ownerId: accountService.getOwnerId(),
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
+
+        const defaultRedirect = '/apply';
+        let redirectUrl = defaultRedirect;
+
+        const resumableQuestionnaireId = req.params.questionnaireId;
+
+        const questionnaireIdInSession = getQuestionnaireIdInSession(req.session);
+        if (resumableQuestionnaireId !== questionnaireIdInSession) {
+            throw new Error('questionnaire id mismatch');
+        }
+        const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
+            resumableQuestionnaireId
+        );
+        const resumableQuestionnaireCurrentSectionId =
+            resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
+
+        // switch session info and redirect if valid.
+        if (resumableQuestionnaireCurrentSectionId) {
+            req.session.questionnaireId = resumableQuestionnaireId;
+            redirectUrl = `${redirectUrl}/${formHelper.removeSectionIdPrefix(
+                resumableQuestionnaireCurrentSectionId
+            )}`;
+        }
+        return res.redirect(redirectUrl);
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
     }
 });
 
