@@ -17,4 +17,4 @@ process.env.CW_LIVECHAT_END_TIMES =
 process.env.CW_GOVUK_CLIENT_ID = 'thisistheclientid';
 process.env.CW_GOVUK_PRIVATE_KEY = 'thisisthegovukprivatekey';
 process.env.CW_GOVUK_ISSUER_URL = 'http://www.issuer.com';
-process.env.CW_SESSION_DURATION = 600000;
+process.env.CW_SESSION_DURATION = 1800000;
