@@ -10,7 +10,7 @@ function createAccountService(session) {
     }
 
     function getOwnerId() {
-        return session?.ownerId;
+        return currentSession?.ownerId;
     }
 
     function generateOwnerId() {
