@@ -29,6 +29,7 @@ const defaultMocks = {
                 }
                 return fixture404;
             },
+            getCurrentSection: () => fixtureProgressEntryOrdinal2,
             getPrevious: () => fixtureProgressEntryOrdinal1,
             postSection: () => {
                 return {
@@ -65,7 +66,7 @@ function setUpCommonMocks(additionalMocks = {}) {
     app = require('../app');
 }
 
-describe('/apply routes', () => {
+describe('Hitting /apply/this-page-does-not-exist', () => {
     describe('Uninstantiated questionnaire', () => {
         beforeEach(() => {
             setUpCommonMocks({
@@ -74,28 +75,10 @@ describe('/apply routes', () => {
             });
         });
 
-        it('Should redirect to `/apply/start-or-resume` page', async () => {
+        it('Should respond with error', async () => {
             const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply');
-            expect(response.statusCode).toBe(302);
-            expect(response.res.text).toBe('Found. Redirecting to /apply/start-or-resume');
-        });
-
-        describe('invalid page id', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
-                        jest.fn(() => false),
-                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
-                        jest.fn(() => undefined)
-                });
-            });
-
-            it('Should respond with error', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent.get('/apply/this-page-does-not-exist');
-                expect(response.statusCode).toBe(404);
-            });
+            const response = await currentAgent.get('/apply/this-page-does-not-exist');
+            expect(response.statusCode).toBe(404);
         });
     });
     describe('Instantiated questionnaire', () => {
@@ -103,26 +86,10 @@ describe('/apply routes', () => {
             setUpCommonMocks();
         });
 
-        // eslint-disable-next-line jest/no-commented-out-tests
-        // it('Should redirect to `/apply/resume/:questionnaireId` page', async () => {
-        //     const currentAgent = request.agent(app);
-        //     const response = await currentAgent.get('/apply');
-        //     expect(response.statusCode).toBe(302);
-        //     expect(response.res.text).toBe(
-        //         'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-        //     );
-        // });
-
-        describe('invalid page id', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-
-            it('Should respond with error', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent.get('/apply/this-page-does-not-exist');
-                expect(response.statusCode).toBe(404);
-            });
+        it('Should respond with error', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/this-page-does-not-exist');
+            expect(response.statusCode).toBe(404);
         });
     });
 });
@@ -148,15 +115,14 @@ describe('Hitting /apply', () => {
             setUpCommonMocks();
         });
 
-        // eslint-disable-next-line jest/no-commented-out-tests
-        // it('Should redirect to `/apply/resume/:questionnaireId` page', async () => {
-        //     const currentAgent = request.agent(app);
-        //     const response = await currentAgent.get('/apply');
-        //     expect(response.statusCode).toBe(302);
-        //     expect(response.res.text).toBe(
-        //         'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-        //     );
-        // });
+        it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply');
+            expect(response.statusCode).toBe(302);
+            expect(response.res.text).toBe(
+                'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+            );
+        });
     });
 });
 
@@ -180,49 +146,96 @@ describe('Hitting /apply/start-or-resume', () => {
             setUpCommonMocks();
         });
 
-        // eslint-disable-next-line jest/no-commented-out-tests
-        // it('Should redirect to `/apply/resume/:questionnaireId` page', async () => {
-        //     const currentAgent = request.agent(app);
-        //     const response = await currentAgent.get('/apply/start-or-resume');
-        //     expect(response.statusCode).toBe(302);
-        //     expect(response.res.text).toBe(
-        //         'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-        //     );
-        // });
+        it('Should render the `/apply/start-or-resume` page', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/start-or-resume');
+            expect(response.res.text).toContain('What would you like to do?');
+        });
     });
     describe('Postback', () => {
-        describe('start new questionnaire', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
+        describe('Uninstantiated questionnaire', () => {
+            describe('start new questionnaire', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                            jest.fn(() => false),
+                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                            jest.fn(() => undefined)
+                    });
+                });
+
+                it('Should redirect to `/apply/start`', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'start',
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.statusCode).toBe(302);
+                    expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+                });
             });
 
-            it('Should redirect to `/apply/start`', async () => {
-                const currentAgent = request.agent(app);
-                const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const response = await currentAgent.post('/apply/start-or-resume').send({
-                    'start-or-resume': 'start',
-                    _csrf: initialCsrfToken
+            describe('continue existing application', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                            jest.fn(() => false),
+                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                            jest.fn(() => undefined)
+                    });
                 });
-                expect(response.statusCode).toBe(302);
-                expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+
+                it('Should redirect to `/account/dashboard`', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'resume',
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.res.text).toContain('Found. Redirecting to /account/dashboard');
+                });
             });
         });
 
-        describe('continue existing application', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
+        describe('Instantiated questionnaire', () => {
+            describe('start new questionnaire', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+
+                it('Should redirect to `/apply/start`', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'start',
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.statusCode).toBe(302);
+                    expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+                });
             });
 
-            it('Should render the `/apply/start-or-resume` page with errors', async () => {
-                const currentAgent = request.agent(app);
-                const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const response = await currentAgent.post('/apply/start-or-resume').send({
-                    'start-or-resume': 'resume',
-                    _csrf: initialCsrfToken
+            describe('continue existing application', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
                 });
-                expect(response.res.text).toContain('Select what you would like to do');
+
+                it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'resume',
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.res.text).toContain(
+                        'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    );
+                });
             });
         });
     });
@@ -256,6 +269,121 @@ describe('Hitting /apply/start', () => {
             expect(response.res.text).toContain(
                 'Found. Redirecting to /apply/applicant-fatal-claim'
             );
+        });
+    });
+});
+
+describe('Hitting /apply/resume/:questionnaireId', () => {
+    describe('Uninstantiated questionnaire', () => {
+        describe('No questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
+                });
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/resume/');
+                expect(response.statusCode).toBe(404);
+            });
+        });
+
+        describe('Malformed questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
+                });
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get(
+                    '/apply/resume/thisisnotavalidquestionnaireid'
+                );
+                expect(response.statusCode).toBe(404);
+            });
+        });
+
+        describe('Invalid questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
+                });
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get(
+                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                );
+                expect(response.statusCode).toBe(404);
+            });
+        });
+    });
+    describe('Instantiated questionnaire', () => {
+        describe('No questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/resume/');
+                expect(response.statusCode).toBe(404);
+            });
+        });
+
+        describe('Malformed questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get(
+                    '/apply/resume/thisisnotavalidquestionnaireid'
+                );
+                expect(response.statusCode).toBe(404);
+            });
+        });
+
+        describe('Invalid questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get(
+                    '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
+                );
+                expect(response.statusCode).toBe(404);
+            });
+        });
+        describe('Valid questionnaire id', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should response with error', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get(
+                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                );
+                expect(response.res.text).toContain(
+                    'Found. Redirecting to /apply/was-the-crime-reported-to-police'
+                );
+            });
         });
     });
 });
