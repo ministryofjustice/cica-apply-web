@@ -47,7 +47,6 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
         let sessionEndedModal;
         let errorModal;
         let sessionTimingOutModal;
-        // const SESSION_DURATION_BUFFER = 30000;
         let sessionData;
         const eventHandlers = {};
         let documentVisible = true;
@@ -67,6 +66,7 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
 
         function checkShouldOpenModal() {
             if (
+                !sessionTimingOutModal.isOpen &&
                 documentVisible &&
                 // session hasn't already ended. Avoids the modal opening
                 // when a user blurs and focuses a tab after the session
@@ -206,6 +206,7 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
                         },
                         onEnd: () => {
                             sessionTimingOutModal.close();
+                            jsCookies.remove('sessionExpiry');
                             sessionEndedModal.open();
                         }
                     }
