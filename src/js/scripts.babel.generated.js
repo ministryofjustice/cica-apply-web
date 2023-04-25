@@ -223,7 +223,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var sessionEndedModal;
       var errorModal;
       var sessionTimingOutModal;
-      // const SESSION_DURATION_BUFFER = 30000;
       var sessionData;
       var eventHandlers = {};
       var documentVisible = true;
@@ -245,7 +244,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
       }
       function checkShouldOpenModal() {
-        if (documentVisible &&
+        if (!sessionTimingOutModal.isOpen && documentVisible &&
         // session hasn't already ended. Avoids the modal opening
         // when a user blurs and focuses a tab after the session
         // has ended.
@@ -361,6 +360,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               },
               onEnd: () => {
                 sessionTimingOutModal.close();
+                jsCookies.remove('sessionExpiry');
                 sessionEndedModal.open();
               }
             }
