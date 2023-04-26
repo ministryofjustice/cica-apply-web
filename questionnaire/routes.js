@@ -136,7 +136,7 @@ router
                 res.locals.nonce
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
-                req.session.reset();
+                res.clearCookie('session');
             }
             res.send(html);
         } catch (err) {
