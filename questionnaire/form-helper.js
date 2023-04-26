@@ -108,11 +108,15 @@ function removeUnwantedHiddenAnswers(body, sectionId) {
 
 function removeEmptyAnswers(body, property) {
     const answers = body;
-    const value = answers[property];
+    let value = answers[property];
 
     // Remove attributes from obj that have empty strings so that schema "requires" work
-    if (typeof value === 'string' && value === '') {
-        delete answers[property];
+    if (typeof value === 'string') {
+        value = value.trim();
+
+        if (value === '') {
+            delete answers[property];
+        }
     }
     return answers;
 }
