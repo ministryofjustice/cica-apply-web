@@ -33,14 +33,47 @@ describe('form-helper functions', () => {
         });
     });
 
-    describe('Remove "empty" answers from an answer object', () => {
-        it('Should return a valid sectionId given a section name exists in the questionnaire', () => {
+    describe('Remove or trim invalid answers from an answer object', () => {
+        it('Should remove empty answer from the questionnaire', () => {
             let body = {
                 Q1: 'true',
                 Q2: ''
             };
             const expected = {
                 Q1: 'true'
+            };
+
+            Object.keys(body).forEach(property => {
+                body = formHelper.removeEmptyAnswers(body, property);
+            });
+
+            expect(body).toEqual(expected);
+        });
+
+        it('Should remove answer with spaces only from the questionnaire', () => {
+            let body = {
+                Q1: 'true',
+                Q2: '       '
+            };
+            const expected = {
+                Q1: 'true'
+            };
+
+            Object.keys(body).forEach(property => {
+                body = formHelper.removeEmptyAnswers(body, property);
+            });
+
+            expect(body).toEqual(expected);
+        });
+
+        it('Should trim answer with spaces in the questionnaire', () => {
+            let body = {
+                Q1: 'true',
+                Q2: '   false    '
+            };
+            const expected = {
+                Q1: 'true',
+                Q2: 'false'
             };
 
             Object.keys(body).forEach(property => {

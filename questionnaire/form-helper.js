@@ -110,12 +110,14 @@ function removeEmptyAnswers(body, property) {
     const answers = body;
     let value = answers[property];
 
-    // Remove attributes from obj that have empty strings so that schema "requires" work
+    // Remove attributes from obj that have empty strings,
     if (typeof value === 'string') {
         value = value.trim();
 
         if (value === '') {
             delete answers[property];
+        } else {
+            answers[property] = value;
         }
     }
     return answers;
