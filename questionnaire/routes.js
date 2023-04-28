@@ -89,14 +89,17 @@ router.get('/resume/:questionnaireId', async (req, res) => {
         let redirectUrl = defaultRedirect;
 
         const resumableQuestionnaireId = req.params.questionnaireId;
-
-        const questionnaireIdInSession = getQuestionnaireIdInSession(req.session);
-        if (resumableQuestionnaireId !== questionnaireIdInSession) {
-            throw new Error('questionnaire id mismatch');
-        }
         const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
             resumableQuestionnaireId
         );
+
+        if (resumableQuestionnaireResponse.body?.errors) {
+            const errorResponse = resumableQuestionnaireResponse.body?.errors[0];
+            if (errorResponse.status === 404) {
+                return res.redirect(redirectUrl);
+            }
+        }
+
         const resumableQuestionnaireCurrentSectionId =
             resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
 
