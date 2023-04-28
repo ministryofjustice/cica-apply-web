@@ -1,0 +1,22 @@
+{
+    "statusCode": 200,
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p-applicant-fatal-claim",
+                "attributes": {
+                    "sectionId": "p-applicant-fatal-claim",
+                    "url": "http://www.google.com"
+                }
+            }
+        ],
+        "links": {
+            "prev": "null"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}
