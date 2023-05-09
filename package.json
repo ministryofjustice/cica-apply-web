@@ -9,7 +9,7 @@
     "scripts": {
         "start:dev": "npm run build:dev && nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --ignore src/js/scripts.babel.generated.js ./bin/www",
         "start": "node ./bin/www",
-        "sass": "node-sass src/sass/all.scss public/stylesheets/all.css && node-sass src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
+        "sass": "sass --style=compressed --no-source-map src/sass/all.scss public/stylesheets/all.css && sass --style=compressed --no-source-map src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
         "test:node": "jest --config=jest.config.js",
