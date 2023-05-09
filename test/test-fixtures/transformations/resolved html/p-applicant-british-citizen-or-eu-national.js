@@ -136,13 +136,14 @@ const html = `<!DOCTYPE html>
   </p>
 </div>
 
-    <div class="govuk-width-container">
-
-
-                <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
-
-
+<div class="govuk-width-container">
+    <div class="govuk-grid-column-two-thirds">
+        <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
     </div>
+    <div class="govuk-grid-column-one-third">
+        <a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>
+    </div>
+</div>
 
 
 
