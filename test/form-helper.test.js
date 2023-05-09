@@ -8,6 +8,8 @@ const createTemplateEngineService = require('../templateEngine');
 const templateEngineService = createTemplateEngineService();
 templateEngineService.init();
 
+const shouldShowSignInLink = require('../questionnaire/utils/shouldShowSignInLink');
+
 describe('form-helper functions', () => {
     describe('Remove sectionId prefix', () => {
         it('Should remove p- or p-- from the beginning of a valid sectionId', () => {
@@ -191,6 +193,82 @@ describe('form-helper functions', () => {
                 .replace(/\s+/g, '');
 
             expect(actual).toMatch(expected);
+        });
+
+        it('Should show sign-in link when explicitly specified', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-when-did-the-crime-stop';
+            const sectionId = 'p-applicant-when-did-the-crime-stop';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const showSignInLink = shouldShowSignInLink(sectionId, {
+                'p-applicant-when-did-the-crime-stop': {
+                    options: {
+                        signInLink: {
+                            visible: true
+                        }
+                    }
+                }
+            });
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInLink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.stringContaining(expected));
+        });
+
+        it('Should not show sign-in link when explicitly specified', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
+            const sectionId = 'p-applicant-who-are-you-applying-for';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const showSignInLink = shouldShowSignInLink(sectionId, {
+                'p-applicant-who-are-you-applying-for': {
+                    options: {
+                        signInLink: {
+                            visible: false
+                        }
+                    }
+                }
+            });
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInLink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.not.stringContaining(expected));
         });
     });
 
