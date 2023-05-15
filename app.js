@@ -14,6 +14,7 @@ const applicationRouter = require('./questionnaire/routes');
 const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const addressFinderRouter = require('./address-finder/routes');
+const accountRouter = require('./account/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnaireInstantiated');
@@ -145,8 +146,12 @@ const oidcConfig = {
         scope: 'openid'
     },
     routes: {
+        // alternative is described here:
+        // https://github.com/auth0/express-openid-connect/blob/master/EXAMPLES.md#3-route-customization
+        // seems somewhat convoluted for what we need the callback for.
+        // https://github.com/auth0/express-openid-connect/blob/master/examples/custom-routes.js
         callback: '/signed-in',
-        login: '/sign-in',
+        login: false,
         logout: '/sign-out',
         postLogoutRedirect: '/signed-out'
     },
@@ -169,6 +174,7 @@ app.use('/address-finder', addressFinderRouter);
 app.use('/download', auth(oidcConfig), downloadRouter);
 app.use('/apply', auth(oidcConfig), keepAlive, applicationRouter);
 app.use('/session', auth(oidcConfig), sessionRouter);
+app.use('/account', auth(oidcConfig), accountRouter);
 app.use('/', indexRouter);
 
 app.use((err, req, res, next) => {
