@@ -155,6 +155,9 @@ router
                 req.session.questionnaireId,
                 sectionId
             );
+
+            req.session.referrer = req.originalUrl;
+
             if (
                 response.body.data &&
                 response.body.data[0].attributes &&
