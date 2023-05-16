@@ -103,7 +103,7 @@ jobs:
             aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 754256621582.dkr.ecr.eu-west-2.amazonaws.com
             docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
             docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-            if [ "${CIRCLE_BRANCH}" ==  "cw-deploy" ]; then
+            if [["${CIRCLE_BRANCH}" ==  "cw-deploy" || "${CIRCLE_BRANCH}" ==  "cw-deploy-to-uat"]]; then
                docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
                docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
             fi
@@ -184,7 +184,7 @@ jobs:
                 -f kube_deploy/Prod/ingress.yml
 workflows:
   version: 2
-  build-test-push-deploydev-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
+  build-test-push-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
     jobs:
       - build-for-test
       - test:
@@ -205,31 +205,39 @@ workflows:
             - publish_latest
           filters:
             branches:
-              only: cw-deploy
-      - deploy_to_dev:
-          requires:
-            - push_image
-          filters:
-            branches:
-              only: cw-deploy
+              only: 
+                - cw-deploy
+                - cw-deploy-to-uat
       - deploy_to_uat_approval:
           type: approval
           requires:
             - push_image
-            - deploy_to_dev
+          filters:
+            branches:
+              only: cw-deploy-to-uat
       - deploy_to_uat:
-          #          type: approval
           requires:
-            - push_image
             - deploy_to_uat_approval
+          filters:
+            branches:
+              only: cw-deploy-to-uat
+      - deploy_to_dev_approval:
+            type: approval
+            requires:
+             - push_image
+            filters:
+              branches:
+               only: cw-deploy
+      - deploy_to_dev:
+          requires:
+            - deploy_to_dev_approval
           filters:
             branches:
               only: cw-deploy
       - deploy_to_prod_approval:
           type: approval
           requires:
-            - push_image
-            - deploy_to_uat
+            - deploy_to_dev
           filters:
             branches:
               only: cw-deploy
