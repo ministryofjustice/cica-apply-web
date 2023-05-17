@@ -135,7 +135,7 @@ const oidcConfig = {
         // `CW_SESSION_DURATION` is represented in ms for consistency.
         rollingDuration: process.env.CW_SESSION_DURATION / 1000,
         cookie: {
-            transient: false,
+            transient: true,
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production'
         }
