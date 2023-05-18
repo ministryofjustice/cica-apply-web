@@ -1,5 +1,6 @@
 {
     "applicant-declaration": "p-applicant-declaration",
+    "applicant-declaration-deceased": "p-applicant-declaration-deceased",
     "applicant-british-citizen-or-eu-national": "p-applicant-british-citizen-or-eu-national",
     "applicant-are-you-18-or-over": "p-applicant-are-you-18-or-over",
     "applicant-who-are-you-applying-for": "p-applicant-who-are-you-applying-for",
@@ -208,7 +209,7 @@
     "other-claimants-details": "p-other-claimants-details",
     "context-funeral-costs-proof": "p-context-funeral-costs-proof",
     "applicant-physical-help": "p-applicant-physical-help",
-    "applicant-funeral-costs-only": "p-applicant-funeral-costs-only",
+    "applicant-claim-type": "p-applicant-claim-type",
     "applicant-immediate-aftermath": "p-applicant-immediate-aftermath",
     "applicant-disabling-mental-injury": "p-applicant-disabling-mental-injury"
 }
