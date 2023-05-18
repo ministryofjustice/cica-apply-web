@@ -346,6 +346,12 @@ module.exports = {
             pageContext: 'submission'
         }
     },
+    'p-applicant-declaration-deceased': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
     'p-mainapplicant-declaration-under-12': {
         options: {
             buttonText: 'Agree and submit',
@@ -1767,7 +1773,7 @@ module.exports = {
     'p-applicant-relationship-to-deceased': {
         options: {
             transformOrder: [
-                'q-applicant-enter-your-relationship-details',
+                'q-applicant-relationship-other',
                 'q-applicant-relationship-to-deceased'
             ],
             outputOrder: ['q-applicant-relationship-to-deceased'],
@@ -1777,12 +1783,12 @@ module.exports = {
                         conditionalComponentMap: [
                             {
                                 itemValue: 'other',
-                                componentIds: ['q-applicant-enter-your-relationship-details']
+                                componentIds: ['q-applicant-relationship-other']
                             }
                         ]
                     }
                 },
-                'q-applicant-enter-your-relationship-details': {
+                'q-applicant-relationship-other': {
                     options: {
                         macroOptions: {
                             classes: 'govuk-input--width-20'
@@ -1797,9 +1803,9 @@ module.exports = {
             outputOrder: ['q-applicant-funeral-costs-who-contributed', 'funeral-costs-info']
         }
     },
-    'p-applicant-funeral-costs-only': {
+    'p-applicant-claim-type': {
         options: {
-            outputOrder: ['q-applicant-funeral-costs-only', 'funeral-costs-only-info']
+            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info']
         }
     },
     'p-applicant-physical-help': {
