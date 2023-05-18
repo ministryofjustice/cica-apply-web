@@ -79,6 +79,11 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_os_places_api_key
+            - name: CW_SESSION_DURATION
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_session_duration
   selector:
     matchLabels:
       app: webapp-dev
