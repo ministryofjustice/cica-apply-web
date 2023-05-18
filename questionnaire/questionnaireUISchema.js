@@ -1797,9 +1797,9 @@ module.exports = {
             outputOrder: ['q-applicant-funeral-costs-who-contributed', 'funeral-costs-info']
         }
     },
-    'p-applicant-funeral-costs-only': {
+    'p-applicant-claim-type': {
         options: {
-            outputOrder: ['q-applicant-funeral-costs-only', 'funeral-costs-only-info']
+            outputOrder: ['q-applicant-claim-type', 'funeral-costs-only-info']
         }
     },
     'p-applicant-physical-help': {
