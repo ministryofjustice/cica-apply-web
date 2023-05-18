@@ -18,12 +18,12 @@ const addressFinderRouter = require('./address-finder/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 
-const DURATION_LIMIT = 3600000;
-
 const app = express();
 
 const templateEngineService = createTemplateEngineService(app);
 templateEngineService.init();
+
+const sessionDuration = Number.parseInt(process.env.CW_SESSION_DURATION, 10);
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
@@ -71,7 +71,8 @@ app.use(
     clientSessions({
         cookieName: 'session', // cookie name dictates the key name added to the request object
         secret: process.env.CW_COOKIE_SECRET, // should be a large unguessable string
-        duration: DURATION_LIMIT, // how long the session will stay valid in ms
+        duration: sessionDuration, // how long the session will stay valid in ms
+        activeDuration: sessionDuration, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
         cookie: {
             ephemeral: true, // when true, cookie expires when the browser closes
             httpOnly: true, // when true, cookie is not accessible from javascript
