@@ -1767,7 +1767,7 @@ module.exports = {
     'p-applicant-relationship-to-deceased': {
         options: {
             transformOrder: [
-                'q-applicant-enter-your-relationship-details',
+                'q-applicant-relationship-other',
                 'q-applicant-relationship-to-deceased'
             ],
             outputOrder: ['q-applicant-relationship-to-deceased'],
@@ -1777,12 +1777,12 @@ module.exports = {
                         conditionalComponentMap: [
                             {
                                 itemValue: 'other',
-                                componentIds: ['q-applicant-enter-your-relationship-details']
+                                componentIds: ['q-applicant-relationship-other']
                             }
                         ]
                     }
                 },
-                'q-applicant-enter-your-relationship-details': {
+                'q-applicant-relationship-other': {
                     options: {
                         macroOptions: {
                             classes: 'govuk-input--width-20'
