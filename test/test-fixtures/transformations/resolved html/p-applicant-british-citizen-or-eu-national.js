@@ -542,7 +542,7 @@ const html = `<!DOCTYPE html>
 
 <script nonce="somenonce">
 window.CICA = {
-  SERVICE_URL: '',
+  SERVICE_URL: 'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk',
   ANALYTICS_TRACKING_ID: ''
 };
 </script>

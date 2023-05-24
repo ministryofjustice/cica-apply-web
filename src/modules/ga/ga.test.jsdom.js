@@ -2,7 +2,7 @@
 import createCicaGa from './index';
 
 window.CICA = {
-    SERVICE_URL: 'http://mysite.com/'
+    SERVICE_URL: 'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk'
 };
 jest.mock('js-cookie');
 const jsCookie = require('js-cookie');
@@ -127,7 +127,7 @@ describe('GA', () => {
     describe('Internal link', () => {
         it('should not send an event to GA', () => {
             document.body.innerHTML = `
-                <a href="http://mysite.com/some-page-url" id="internal-test-1">Click here</a>
+                <a href="http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk/some-page-url" id="internal-test-1">Click here</a>
             `;
             const cicaGa = createCicaGa(window);
             cicaGa.init();
@@ -140,7 +140,7 @@ describe('GA', () => {
     describe('Download link', () => {
         it('should send an event to GA', () => {
             document.body.innerHTML = `
-                <a href="http://mysite.com/stuff/stuff.zip" id="download-test-1">Click here</a>
+                <a href="http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk/stuff/stuff.zip" id="download-test-1">Click here</a>
             `;
             const cicaGa = createCicaGa(window);
             cicaGa.init();
@@ -148,7 +148,8 @@ describe('GA', () => {
             document.querySelector('#download-test-1').click();
             expect(window.gtag).toHaveBeenCalledWith('event', 'click', {
                 event_category: 'download-link',
-                event_label: 'http://mysite.com/stuff/stuff.zip',
+                event_label:
+                    'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk/stuff/stuff.zip',
                 event_callback: expect.any(Function)
             });
         });
