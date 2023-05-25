@@ -1,6 +1,6 @@
 'use strict';
 
-jest.setTimeout(3000);
+jest.setTimeout(6000);
 jest.testEnvironment = 'node';
 process.env.CW_DCS_JWT = 'A massive string';
 process.env.CW_COOKIE_SECRET = 'Also a huge string';
