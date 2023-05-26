@@ -69,3 +69,6 @@ typings/
 .vscode
 
 .config
+
+
+.cache
