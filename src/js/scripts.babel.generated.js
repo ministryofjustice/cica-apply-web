@@ -223,9 +223,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var sessionEndedModal;
       var errorModal;
       var sessionTimingOutModal;
-      var sessionData;
       var eventHandlers = {};
       var documentVisible = true;
+      var sessionData;
+      function getSessionData() {
+        return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
+      }
       function refreshSessionAndModalTimeout() {
         return _refreshSessionAndModalTimeout.apply(this, arguments);
       }
@@ -240,9 +243,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         });
         return _refreshSessionAndModalTimeout.apply(this, arguments);
       }
-      function getSessionData() {
-        return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
-      }
       function checkShouldOpenModal() {
         if (!sessionTimingOutModal.isOpen && documentVisible &&
         // session hasn't already ended. Avoids the modal opening
@@ -255,6 +255,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }
       if (modalElements.length) {
+        sessionData = getSessionData();
+        var sessionAlive = sessionData && sessionData.alive;
+
+        // haven't hit `/apply` yet, or the application is completed
+        // there is no session expiry cookie
+        if (!sessionAlive) {
+          return;
+        }
         window.document.addEventListener('visibilitychange', () => {
           documentVisible = window.document.visibilityState === 'visible';
           if (documentVisible) {
@@ -262,124 +270,116 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             checkShouldOpenModal();
           }
         });
-        sessionData = getSessionData();
-
-        // haven't hit `/apply` yet.
-        if (!sessionData) {
-          return;
-        }
-        if (modalElements.length) {
-          var TimeoutModal = (0, _modalTimeout.default)(window);
-          sessionEndedModal = new TimeoutModal({
-            element: '#govuk-modal-session-ended',
-            closeElement: '.govuk-modal__close',
-            onOpen: () => {
-              window.gtag('event', 'open', {
-                event_category: 'govuk-modal-session-ended',
-                non_interaction: true
+        var TimeoutModal = (0, _modalTimeout.default)(window);
+        sessionEndedModal = new TimeoutModal({
+          element: '#govuk-modal-session-ended',
+          closeElement: '.govuk-modal__close',
+          onOpen: () => {
+            window.gtag('event', 'open', {
+              event_category: 'govuk-modal-session-ended',
+              non_interaction: true
+            });
+          }
+        });
+        errorModal = new TimeoutModal({
+          element: '#govuk-modal-session-resume-error',
+          closeElement: '.govuk-modal__close',
+          onOpen: () => {
+            window.gtag('event', 'open', {
+              event_category: '#govuk-modal-session-resume-error',
+              non_interaction: true
+            });
+          }
+        });
+        sessionTimingOutModal = new TimeoutModal({
+          element: '#govuk-modal-session-timing-out',
+          resumeElement: '.govuk-modal__continue',
+          // openIn: Math.floor((sessionData.duration * (1 / 4)) / 1000) * 1000,
+          onBeforeOpen: () => {
+            // if a user opens a new tab with another instance of `/apply` the
+            // session will have been refreshed. Because of this the timeout modal
+            // will open prematurely due to it working from a previously-set session
+            // update date. check if the timers end time is less than the actual
+            // session end time and calibrate the timeout to open the modal
+            // accordingly.
+            sessionData = getSessionData();
+            var expectedEndTime = sessionTimingOutModal.timer.endTime;
+            var actualEndTime = sessionData.expires;
+            if (expectedEndTime < actualEndTime) {
+              var now = Date.now();
+              sessionTimingOutModal.close();
+              sessionTimingOutModal.refresh({
+                startTime: now,
+                duration: sessionData.expires - now
               });
+              return false;
             }
-          });
-          errorModal = new TimeoutModal({
-            element: '#govuk-modal-session-resume-error',
-            closeElement: '.govuk-modal__close',
-            onOpen: () => {
-              window.gtag('event', 'open', {
-                event_category: '#govuk-modal-session-resume-error',
-                non_interaction: true
-              });
-            }
-          });
-          sessionTimingOutModal = new TimeoutModal({
-            element: '#govuk-modal-session-timing-out',
-            resumeElement: '.govuk-modal__continue',
-            // openIn: Math.floor((sessionData.duration * (1 / 4)) / 1000) * 1000,
-            onBeforeOpen: () => {
-              // if a user opens a new tab with another instance of `/apply` the
-              // session will have been refreshed. Because of this the timeout modal
-              // will open prematurely due to it working from a previously-set session
-              // update date. check if the timers end time is less than the actual
-              // session end time and calibrate the timeout to open the modal
-              // accordingly.
-              sessionData = getSessionData();
-              var expectedEndTime = sessionTimingOutModal.timer.endTime;
-              var actualEndTime = sessionData.expires;
-              if (expectedEndTime < actualEndTime) {
-                var now = Date.now();
-                sessionTimingOutModal.close();
-                sessionTimingOutModal.refresh({
-                  startTime: now,
-                  duration: sessionData.expires - now
-                });
-                return false;
-              }
-              return true;
-            },
-            onOpen: () => {
-              window.gtag('event', 'open', {
-                event_category: 'govuk-modal-session-timing-out',
-                non_interaction: true
-              });
-              if (!eventHandlers.onOpenResumeElement) {
-                var resumeElement = sessionTimingOutModal.config.element.querySelector('.govuk-modal__continue');
-                eventHandlers.onOpenResumeElement = {
-                  element: resumeElement,
-                  handler: e => {
-                    e.preventDefault();
-                    refreshSessionAndModalTimeout().catch(() => {
-                      errorModal.open();
-                    });
-                  }
-                };
-              }
-              eventHandlers.onOpenResumeElement.element.addEventListener('click', eventHandlers.onOpenResumeElement.handler);
-            },
-            onClose: () => {
-              eventHandlers.onOpenResumeElement.element.removeEventListener('click', eventHandlers.onOpenResumeElement.handler);
-            },
-            timer: {
-              duration: sessionData.duration,
-              startTime: new Date(sessionData.created) * 1,
-              interval: 700,
-              onTick: timeRemaining => {
-                if (!documentVisible) {
-                  return;
-                }
-                // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions
-                // aria-live="assertive" is an attribute of the span that contains the time remaining.
-                // Only update the DOM when the modal is actually visible. This will prevent screen
-                // readers from announcing every single DOM update that happens in the "background".
-                if (sessionTimingOutModal.isOpen) {
-                  sessionTimingOutModal.content(title => {
-                    var titleElement = title;
-                    var timeRemainingElement = titleElement.querySelector('.govuk-modal__time-remaining');
-                    timeRemainingElement.innerHTML = (0, _msToMinutesAndSeconds.default)(timeRemaining);
+            return true;
+          },
+          onOpen: () => {
+            window.gtag('event', 'open', {
+              event_category: 'govuk-modal-session-timing-out',
+              non_interaction: true
+            });
+            if (!eventHandlers.onOpenResumeElement) {
+              var resumeElement = sessionTimingOutModal.config.element.querySelector('.govuk-modal__continue');
+              eventHandlers.onOpenResumeElement = {
+                element: resumeElement,
+                handler: e => {
+                  e.preventDefault();
+                  refreshSessionAndModalTimeout().catch(() => {
+                    errorModal.open();
                   });
                 }
-                checkShouldOpenModal();
-              },
-              onEnd: () => {
-                sessionTimingOutModal.close();
-                jsCookies.remove('sessionExpiry');
-                sessionEndedModal.open();
-              }
+              };
             }
-          });
-          var textAreaElements = window.document.querySelectorAll('.govuk-textarea');
-          textAreaElements.forEach(element => {
-            element.addEventListener('paste', () => {
-              refreshSessionAndModalTimeout();
-            }, false);
-            element.addEventListener('input', () => {
-              var now = new Date() * 1;
-              // if there is less than half the session length left when a user
-              // updates a textarea, then refresh the session.
-              if (now > new Date(sessionData.expires) * 1 - sessionData.duration / 2) {
-                refreshSessionAndModalTimeout();
+            eventHandlers.onOpenResumeElement.element.addEventListener('click', eventHandlers.onOpenResumeElement.handler);
+          },
+          onClose: () => {
+            eventHandlers.onOpenResumeElement.element.removeEventListener('click', eventHandlers.onOpenResumeElement.handler);
+          },
+          timer: {
+            duration: sessionData.duration,
+            startTime: new Date(sessionData.created) * 1,
+            interval: 700,
+            onTick: timeRemaining => {
+              if (!documentVisible) {
+                return;
               }
-            }, false);
-          });
-        }
+              // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions
+              // aria-live="assertive" is an attribute of the span that contains the time remaining.
+              // Only update the DOM when the modal is actually visible. This will prevent screen
+              // readers from announcing every single DOM update that happens in the "background".
+              if (sessionTimingOutModal.isOpen) {
+                sessionTimingOutModal.content(title => {
+                  var titleElement = title;
+                  var timeRemainingElement = titleElement.querySelector('.govuk-modal__time-remaining');
+                  timeRemainingElement.innerHTML = (0, _msToMinutesAndSeconds.default)(timeRemaining);
+                });
+              }
+              checkShouldOpenModal();
+            },
+            onEnd: () => {
+              sessionTimingOutModal.close();
+              jsCookies.remove('sessionExpiry');
+              sessionEndedModal.open();
+            }
+          }
+        });
+        var textAreaElements = window.document.querySelectorAll('.govuk-textarea');
+        textAreaElements.forEach(element => {
+          element.addEventListener('paste', () => {
+            refreshSessionAndModalTimeout();
+          }, false);
+          element.addEventListener('input', () => {
+            var now = new Date() * 1;
+            // if there is less than half the session length left when a user
+            // updates a textarea, then refresh the session.
+            if (now > new Date(sessionData.expires) * 1 - sessionData.duration / 2) {
+              refreshSessionAndModalTimeout();
+            }
+          }, false);
+        });
       }
     });
     return _modalTimout.apply(this, arguments);
