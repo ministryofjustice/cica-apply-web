@@ -60,6 +60,13 @@ describe('Live Chat Helper', () => {
             it('should have a list of future bank holidays', () => {
                 // eslint-disable-next-line global-require
                 const bankHolidays = require('../index/bank-holidays.json');
+                // when this test fails update the bank-holidays list for Scotland
+                // and rerun the test
+                // https://www.gov.uk/bank-holidays.json
+                // this test ensures that upcoming bank holidays are present in the bank-holidays.json
+                // and if the live chat functionality is active it will be deactivated for
+                // those Scottish bank holidays present within the bank-holidays.json
+                // this test acts as a reminder to update the bank-holidays.json
                 const today = new Date();
                 const futureBankHolidays = bankHolidays.events.filter(x =>
                     moment(x.date).isAfter(today, 'day')
