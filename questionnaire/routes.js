@@ -146,9 +146,10 @@ router
     .get(async (req, res, next) => {
         try {
             const accountService = createAccountService(req.session);
+            const isAuthenticated = accountService.isAuthenticated(req);
             const questionnaireService = createQuestionnaireService({
                 ownerId: accountService.getOwnerId(),
-                isAuthenticated: accountService.isAuthenticated(req)
+                isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await questionnaireService.getSection(
@@ -178,7 +179,8 @@ router
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
-                res.locals.nonce
+                res.locals.nonce,
+                isAuthenticated
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 res.clearCookie('session');
@@ -192,9 +194,10 @@ router
     .post(async (req, res, next) => {
         try {
             const accountService = createAccountService(req.session);
+            const isAuthenticated = accountService.isAuthenticated(req);
             const questionnaireService = createQuestionnaireService({
                 ownerId: accountService.getOwnerId(),
-                isAuthenticated: accountService.isAuthenticated(req)
+                isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
@@ -260,7 +263,8 @@ router
                 response.body,
                 sectionId,
                 req.csrfToken(),
-                res.locals.nonce
+                res.locals.nonce,
+                isAuthenticated
             );
             return res.send(html);
         } catch (err) {
