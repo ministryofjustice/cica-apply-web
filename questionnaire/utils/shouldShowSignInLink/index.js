@@ -1,7 +1,7 @@
 'use strict';
 
-function shouldShowSignInLink(sectionId, uiSchema) {
-    const defaultVisibility = true;
+function shouldShowSignInLink(sectionId, uiSchema, isAuthenticated) {
+    const defaultVisibility = !isAuthenticated;
     const isVisible = uiSchema[sectionId]?.options?.signInLink?.visible;
     if (isVisible !== undefined) {
         return isVisible;
