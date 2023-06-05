@@ -174,7 +174,7 @@ app.use('/download', auth(oidcConfig), downloadRouter);
 app.use('/apply', auth(oidcConfig), keepAlive, applicationRouter);
 app.use('/session', auth(oidcConfig), sessionRouter);
 app.use('/account', auth(oidcConfig), accountRouter);
-app.use('/', indexRouter);
+app.use('/', auth(oidcConfig), indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.name === 'CRNNotRetrieved') {

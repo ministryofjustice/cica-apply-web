@@ -75,7 +75,7 @@ function renderSection({
                 </form>
             {% endblock %}
         `,
-        {nonce: cspNonce}
+        {nonce: cspNonce, isAuthenticated}
     );
 }
 
