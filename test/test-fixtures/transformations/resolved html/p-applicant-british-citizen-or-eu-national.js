@@ -117,8 +117,6 @@ const html = `<!DOCTYPE html>
       Claim criminal injuries compensation
     </a>
 
-
-
     </div>
 
   </div>
