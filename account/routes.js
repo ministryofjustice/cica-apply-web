@@ -46,6 +46,15 @@ router.get('/signed-in', requiresAuth(), (req, res, next) => {
     }
 });
 
+router.get('/signed-out', (req, res, next) => {
+    try {
+        return res.redirect('https://www.gov.uk/claim-compensation-criminal-injury/make-claim');
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
 router.get('/dashboard', requiresAuth(), async (req, res, next) => {
     try {
         const templateEngineService = createTemplateEngineService();
