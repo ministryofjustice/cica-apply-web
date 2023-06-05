@@ -183,7 +183,7 @@ router
                 isAuthenticated
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
-                res.clearCookie('session');
+                delete req.session.questionnaireId;
             }
             res.send(html);
         } catch (err) {
