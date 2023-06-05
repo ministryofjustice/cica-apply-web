@@ -7,6 +7,7 @@ const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 const getQuestionnaireIdInSession = require('./utils/getQuestionnaireIdInSession');
 const createAccountService = require('../account/account-service');
 const getRedirectionUrl = require('./utils/getRedirectionUrl');
+const createTemplateEngineService = require('../templateEngine');
 
 const router = express.Router();
 
@@ -24,10 +25,15 @@ router.get('/', (req, res) => {
 
 router.route('/start-or-resume').get((req, res) => {
     try {
-        return res.render('start-or-resume.njk', {
+        const templateEngineService = createTemplateEngineService();
+        const accountService = createAccountService(req.session);
+        const {render} = templateEngineService;
+        const html = render('start-or-resume.njk', {
             submitButtonText: getFormSubmitButtonText('start'),
-            csrfToken: req.csrfToken()
+            csrfToken: req.csrfToken(),
+            isAuthenticated: accountService.isAuthenticated(req)
         });
+        return res.send(html);
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk');
     }
@@ -35,6 +41,9 @@ router.route('/start-or-resume').get((req, res) => {
 
 router.post('/start-or-resume', (req, res) => {
     try {
+        const templateEngineService = createTemplateEngineService();
+        const accountService = createAccountService(req.session);
+        const {render} = templateEngineService;
         const startType = req.body['start-or-resume'];
         const redirectionUrl = getRedirectionUrl(
             startType,
@@ -45,13 +54,15 @@ router.post('/start-or-resume', (req, res) => {
             return res.redirect(redirectionUrl);
         }
 
-        return res.render('start-or-resume.njk', {
+        const html = render('start-or-resume.njk', {
             submitButtonText: getFormSubmitButtonText('start'),
             csrfToken: req.csrfToken(),
             error: {
                 text: 'Select what you would like to do'
-            }
+            },
+            isAuthenticated: accountService.isAuthenticated(req)
         });
+        return res.send(html);
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk');
     }

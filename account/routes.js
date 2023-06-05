@@ -5,6 +5,7 @@ const {requiresAuth} = require('express-openid-connect');
 const createTemplateEngineService = require('../templateEngine');
 const getValidReferrerOrDefault = require('./utils/getValidReferrerOrDefault');
 const {getDashboardURI} = require('./utils/getActionURIs');
+const createAccountService = require('./account-service');
 
 const router = express.Router();
 
@@ -15,10 +16,12 @@ router.get('/sign-in/success', requiresAuth(), (req, res, next) => {
         ).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'});
 
         const templateEngineService = createTemplateEngineService();
+        const accountService = createAccountService(req.session);
         const {render} = templateEngineService;
         const html = render('authentication-success.njk', {
             nextPageUrl: getValidReferrerOrDefault(req?.session?.referrer),
-            expiryDate
+            expiryDate,
+            isAuthenticated: accountService.isAuthenticated(req)
         });
 
         return res.send(html);
@@ -58,8 +61,11 @@ router.get('/signed-out', (req, res, next) => {
 router.get('/dashboard', requiresAuth(), async (req, res, next) => {
     try {
         const templateEngineService = createTemplateEngineService();
+        const accountService = createAccountService(req.session);
         const {render} = templateEngineService;
-        const html = render('dashboard.njk');
+        const html = render('dashboard.njk', {
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
