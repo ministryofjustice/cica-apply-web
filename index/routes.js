@@ -2,6 +2,7 @@
 
 const express = require('express');
 const createLiveChatHelper = require('./liveChatHelper');
+const createAccountService = require('../account/account-service');
 
 const router = express.Router();
 
@@ -10,24 +11,39 @@ router.get('/', (req, res) => {
 });
 
 router.get('/cookies', (req, res) => {
-    res.render('cookies.njk');
+    const accountService = createAccountService(req.session);
+    res.render('cookies.njk', {
+        isAuthenticated: accountService.isAuthenticated(req)
+    });
 });
 
 router.get('/contact-us', (req, res) => {
-    res.render('contact-us.njk');
+    const accountService = createAccountService(req.session);
+    res.render('contact-us.njk', {
+        isAuthenticated: accountService.isAuthenticated(req)
+    });
 });
 
 router.get('/police-forces', (req, res) => {
-    res.render('police-forces.njk');
+    const accountService = createAccountService(req.session);
+    res.render('police-forces.njk', {
+        isAuthenticated: accountService.isAuthenticated(req)
+    });
 });
 
 router.get('/accessibility-statement', (req, res) => {
-    res.render('accessibility-statement.njk');
+    const accountService = createAccountService(req.session);
+    res.render('accessibility-statement.njk', {
+        isAuthenticated: accountService.isAuthenticated(req)
+    });
 });
 
 router.get('/start-chat', (req, res) => {
+    const accountService = createAccountService(req.session);
     if (process.env.CW_LIVECHAT_ALIVE !== 'true') {
-        return res.render('chat-withdrawn.njk');
+        return res.render('chat-withdrawn.njk', {
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
     }
     const liveChatHelper = createLiveChatHelper();
     if (
@@ -37,9 +53,13 @@ router.get('/start-chat', (req, res) => {
             process.env.CW_LIVECHAT_END_TIMES
         )
     ) {
-        return res.render('start-chat.njk');
+        return res.render('start-chat.njk', {
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
     }
-    return res.render('chat-disabled.njk');
+    return res.render('chat-disabled.njk', {
+        isAuthenticated: accountService.isAuthenticated(req)
+    });
 });
 
 router.get('/chat', (req, res) => {
@@ -60,7 +80,10 @@ router.get('/chat', (req, res) => {
 });
 
 router.get('*', (req, res) => {
-    res.status(404).render('404.njk');
+    const accountService = createAccountService(req.session);
+    res.status(404).render('404.njk', {
+        isAuthenticated: accountService.isAuthenticated(req)
+    });
 });
 
 module.exports = router;
