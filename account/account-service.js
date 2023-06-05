@@ -23,7 +23,7 @@ function createAccountService(session) {
     }
 
     function isAuthenticated(req) {
-        return !!(req?.oidc.isAuthenticated() || req?.isAuthenticated);
+        return !!(req?.oidc?.isAuthenticated() || req?.isAuthenticated);
     }
 
     return Object.freeze({
