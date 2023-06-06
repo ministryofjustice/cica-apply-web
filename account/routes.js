@@ -52,6 +52,7 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
             isAuthenticated: accountService.isAuthenticated(req)
         });
         accountService.setOwnerId(req.oidc.user.sub);
+
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
