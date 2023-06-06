@@ -31,7 +31,8 @@ function questionnaireService(options = {}) {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
-                'On-Behalf-Of': options.ownerId
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -42,7 +43,8 @@ function questionnaireService(options = {}) {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
-                'On-Behalf-Of': options.ownerId
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             },
             json: {
                 data: {
@@ -59,7 +61,8 @@ function questionnaireService(options = {}) {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
-                'On-Behalf-Of': options.ownerId
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -70,7 +73,8 @@ function questionnaireService(options = {}) {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
-                'On-Behalf-Of': options.ownerId
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -148,7 +152,8 @@ function questionnaireService(options = {}) {
             url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
-                'On-Behalf-Of': options.ownerId
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
