@@ -9,17 +9,21 @@ function createAccountService(session) {
         return `urn:uuid:${crypto.randomUUID()}`;
     }
 
-    function getOwnerId() {
-        return currentSession?.ownerId;
-    }
-
     function generateOwnerId() {
-        if (getOwnerId()) {
-            return getOwnerId();
-        }
         const ownerId = URN_UUID();
         currentSession.ownerId = ownerId;
         return ownerId;
+    }
+
+    function getOwnerId() {
+        if (!currentSession?.ownerId) {
+            return generateOwnerId();
+        }
+        return currentSession?.ownerId;
+    }
+
+    function setOwnerId(id) {
+        currentSession.ownerId = id;
     }
 
     function isAuthenticated(req) {
@@ -28,7 +32,7 @@ function createAccountService(session) {
 
     return Object.freeze({
         getOwnerId,
-        generateOwnerId,
+        setOwnerId,
         isAuthenticated
     });
 }

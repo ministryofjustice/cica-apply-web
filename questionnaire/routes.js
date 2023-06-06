@@ -60,7 +60,6 @@ router.post('/start-or-resume', (req, res) => {
 router.route('/start').get(async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
-        accountService.generateOwnerId();
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated: accountService.isAuthenticated(req)
