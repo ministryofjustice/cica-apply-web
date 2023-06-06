@@ -157,7 +157,8 @@ const oidcConfig = {
     afterCallback: async (req, res, session) => {
         return {
             ...session,
-            questionnaireId: req.session.questionnaireId
+            questionnaireId: req.session.questionnaireId,
+            ownerId: req.session.ownerId
         };
     }
 };
