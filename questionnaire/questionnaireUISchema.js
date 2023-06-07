@@ -1799,7 +1799,7 @@ module.exports = {
     },
     'p-applicant-claim-type': {
         options: {
-            outputOrder: ['q-applicant-claim-type', 'funeral-costs-only-info']
+            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info']
         }
     },
     'p-applicant-physical-help': {
