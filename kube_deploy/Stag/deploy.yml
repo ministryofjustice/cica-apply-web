@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-stag
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: webapp-stag
+    spec:
+      containers:
+        - name: webapp
+          image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cica/cica-repo-stag:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: CW_DCS_URL
+              value: http://dcs-service-stag
+            - name: CW_DCS_JWT
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_dcs_jwt
+            - name: CW_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_cookie_secret
+            - name: CW_GA_TRACKING_ID
+              value: UA-136710388-3
+            - name: CW_URL
+              value: https://stag.claim-criminal-injuries-compensation.service.justice.gov.uk
+            - name: CW_LIVECHAT_CHAT_ID
+              value: ff753a08-883d-453c-bf64-811301587100
+            - name: CW_LIVECHAT_ALIVE
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_livechat_alive
+            - name: CW_LIVECHAT_START_TIMES
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_livechat_start_times
+            - name: CW_LIVECHAT_END_TIMES
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_livechat_end_times
+            - name: CW_LIVECHAT_DISABLED
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_livechat_disabled
+            - name: CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_livechat_maintenance_message_enabled
+            - name: CW_LIVECHAT_MAINTENANCE_MESSAGE
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_livechat_maintenance_message
+            - name: CW_MAINTENANCE_MESSAGE
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_maintenance_message
+            - name: CW_MAINTENANCE_MESSAGE_ENABLED
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_maintenance_message_enabled
+            - name: CW_OS_PLACES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_os_places_api_key
+            - name: CW_SESSION_DURATION
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_session_duration
+  selector:
+    matchLabels:
+      app: webapp-stag
