@@ -42,12 +42,13 @@ app.use(
                     "'self'",
                     (req, res) => `'nonce-${res.locals.nonce}'`,
                     "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='", // hash of the inline script in frontend template.njk.
-                    'www.googletagmanager.com'
+                    '*.googletagmanager.com'
                 ],
-                imgSrc: ["'self'", 'data:', 'www.google-analytics.com', 'www.googletagmanager.com'],
+                imgSrc: ["'self'", 'data:', '*.google-analytics.com', 'www.googletagmanager.com'],
                 objectSrc: ["'none'"],
                 frameSrc: ['*.ccng.bt.com'],
-                connectSrc: ["'self'", 'www.google-analytics.com']
+                connectSrc: ["'self'", '*.google-analytics.com']
+                // https://www.therobinlord.com/ga4-is-being-blocked-by-content-security-policy/
             }
         },
         hsts: {

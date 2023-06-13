@@ -29,7 +29,7 @@ spec:
                   name: cica-web-secrets
                   key: cw_cookie_secret
             - name: CW_GA_TRACKING_ID
-              value: UA-136710388-1
+              value: G-R1EK2KSDKC
             - name: CW_URL
               value: https://claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_LIVECHAT_CHAT_ID
