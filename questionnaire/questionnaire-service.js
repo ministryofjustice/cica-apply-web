@@ -170,6 +170,41 @@ function questionnaireService(options = {}) {
         return service.get(opts);
     }
 
+    async function getAllQuestionnairesMetadata() {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/metadata`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+
+    async function getQuestionnaireMetadata(questionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/metadata`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+    async function getSectionAnswers(questionnaireId, sectionId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/sections/${sectionId}/answers`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -181,7 +216,10 @@ function questionnaireService(options = {}) {
         timeout,
         getSubmissionStatus,
         getFirstSection,
-        keepAlive
+        keepAlive,
+        getAllQuestionnairesMetadata,
+        getQuestionnaireMetadata,
+        getSectionAnswers
     });
 }
 
