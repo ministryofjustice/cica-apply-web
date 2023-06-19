@@ -33,6 +33,7 @@
         "debounce": "^1.2.1",
         "debug": "~2.6.9",
         "express": "^4.18.2",
+        "express-openid-connect": "^2.16.0",
         "got": "^11.8.6",
         "govuk-frontend": "^3.14.0",
         "helmet": "^3.23.3",
