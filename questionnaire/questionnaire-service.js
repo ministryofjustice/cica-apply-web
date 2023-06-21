@@ -8,6 +8,7 @@ function questionnaireService(options = {}) {
             url: `${process.env.CW_DCS_URL}/api/questionnaires`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
                 'Dcs-Api-Version': '2023-05-17'
             },
             json: {
