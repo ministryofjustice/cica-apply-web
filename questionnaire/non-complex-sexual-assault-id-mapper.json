@@ -184,5 +184,18 @@
     "mainapplicant-authority": "p-mainapplicant-authority",
     "download-your-answers": "p--download-your-answers",
     "has-legal-authority": "p--has-legal-authority",
-    "represents-legal-authority": "p--represents-legal-authority"
+    "represents-legal-authority": "p--represents-legal-authority",
+    "context-residency-and-nationality": "p--context-residency-and-nationality",
+    "applicant-armed-forces-relative": "p-applicant-armed-forces-relative",
+    "applicant-armed-forces": "p-applicant-armed-forces",
+    "applicant-asylum": "p-applicant-asylum",
+    "applicant-british-citizen-relative": "p-applicant-british-citizen-relative",
+    "applicant-british-citizen": "p-applicant-british-citizen",
+    "applicant-eea-citizen-relative": "p-applicant-eea-citizen-relative",
+    "applicant-eea-citizen": "p-applicant-eea-citizen",
+    "applicant-eu-citizen-relative": "p-applicant-eu-citizen-relative",
+    "applicant-eu-citizen": "p-applicant-eu-citizen",
+    "applicant-ordinarily-resident": "p-applicant-ordinarily-resident",
+    "applicant-other-citizen": "p-applicant-other-citizen",
+    "applicant-victim-human-trafficking": "p-applicant-victim-human-trafficking"
 }
