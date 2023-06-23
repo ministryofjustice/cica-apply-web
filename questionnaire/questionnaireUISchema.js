@@ -1823,5 +1823,35 @@ module.exports = {
                 'q-rep-postcode'
             ]
         }
+    },
+    'p-applicant-british-citizen-relative': {
+        options: {
+            outputOrder: ['q-applicant-british-citizen-relative', 'british-close-relative-info']
+        }
+    },
+    'p-applicant-eu-citizen': {
+        options: {
+            outputOrder: ['q-applicant-eu-citizen', 'eu-citizen-info']
+        }
+    },
+    'p-applicant-eu-citizen-relative': {
+        options: {
+            outputOrder: ['q-applicant-eu-citizen-relative', 'eu-citizen-relative-info']
+        }
+    },
+    'p-applicant-eea-citizen': {
+        options: {
+            outputOrder: ['q-applicant-eea-citizen', 'eea-citizen-info']
+        }
+    },
+    'p-applicant-eea-citizen-relative': {
+        options: {
+            outputOrder: ['q-applicant-eea-citizen-relative', 'eea-citizen-relative-info']
+        }
+    },
+    'p-applicant-other-citizen': {
+        options: {
+            outputOrder: ['other-citizen-info', 'q-applicant-other-citizen']
+        }
     }
 };
