@@ -1853,5 +1853,10 @@ module.exports = {
         options: {
             outputOrder: ['other-citizen-info', 'q-applicant-other-citizen']
         }
+    },
+    'p-applicant-armed-forces-relative': {
+        options: {
+            outputOrder: ['q-applicant-armed-forces-relative', 'armed-forces-relative-info']
+        }
     }
 };
