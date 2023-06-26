@@ -69,6 +69,15 @@ router.get('/sign-in', (req, res) =>
     })
 );
 
+router.get('/sign-out', (req, res) =>
+    res.oidc.logout({
+        returnTo: '/account/signed-out',
+        authorizationParams: {
+            redirect_uri: `${process.env.CW_URL}/account/signed-out`
+        }
+    })
+);
+
 router.get('/signed-in', requiresAuth(), (req, res, next) => {
     try {
         return res.redirect('/account/sign-in/success');

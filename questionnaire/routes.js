@@ -169,23 +169,6 @@ router
 
             req.session.referrer = req.originalUrl;
 
-            if (
-                response.body.data &&
-                response.body.data[0].attributes &&
-                response.body.data[0].attributes.sectionId
-            ) {
-                const isSummaryPage =
-                    formHelper.getSectionContext(response.body.data[0].attributes.sectionId) ===
-                    'summary';
-
-                if (isSummaryPage) {
-                    res.set({
-                        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
-                        Expires: '-1',
-                        Pragma: 'no-cache'
-                    });
-                }
-            }
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
