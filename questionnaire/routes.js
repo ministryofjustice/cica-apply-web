@@ -11,7 +11,7 @@ const createTemplateEngineService = require('../templateEngine');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.route('/').get((req, res) => {
     try {
         const questionnaireId = getQuestionnaireIdInSession(req.session);
         if (questionnaireId) {
@@ -23,50 +23,51 @@ router.get('/', (req, res) => {
     }
 });
 
-router.route('/start-or-resume').get((req, res) => {
-    try {
-        const templateEngineService = createTemplateEngineService();
-        const accountService = createAccountService(req.session);
-        const {render} = templateEngineService;
-        const html = render('start-or-resume.njk', {
-            submitButtonText: getFormSubmitButtonText('start'),
-            csrfToken: req.csrfToken(),
-            isAuthenticated: accountService.isAuthenticated(req)
-        });
-        return res.send(html);
-    } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
-    }
-});
-
-router.post('/start-or-resume', (req, res) => {
-    try {
-        const templateEngineService = createTemplateEngineService();
-        const accountService = createAccountService(req.session);
-        const {render} = templateEngineService;
-        const startType = req.body['start-or-resume'];
-        const redirectionUrl = getRedirectionUrl(
-            startType,
-            getQuestionnaireIdInSession(req.session)
-        );
-
-        if (redirectionUrl) {
-            return res.redirect(redirectionUrl);
+router
+    .route('/start-or-resume')
+    .get((req, res) => {
+        try {
+            const templateEngineService = createTemplateEngineService();
+            const accountService = createAccountService(req.session);
+            const {render} = templateEngineService;
+            const html = render('start-or-resume.njk', {
+                submitButtonText: getFormSubmitButtonText('start'),
+                csrfToken: req.csrfToken(),
+                isAuthenticated: accountService.isAuthenticated(req)
+            });
+            return res.send(html);
+        } catch (err) {
+            return res.status(err.statusCode || 404).render('404.njk');
         }
+    })
+    .post((req, res) => {
+        try {
+            const templateEngineService = createTemplateEngineService();
+            const accountService = createAccountService(req.session);
+            const {render} = templateEngineService;
+            const startType = req.body['start-or-resume'];
+            const redirectionUrl = getRedirectionUrl(
+                startType,
+                getQuestionnaireIdInSession(req.session)
+            );
 
-        const html = render('start-or-resume.njk', {
-            submitButtonText: getFormSubmitButtonText('start'),
-            csrfToken: req.csrfToken(),
-            error: {
-                text: 'Select what you would like to do'
-            },
-            isAuthenticated: accountService.isAuthenticated(req)
-        });
-        return res.send(html);
-    } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
-    }
-});
+            if (redirectionUrl) {
+                return res.redirect(redirectionUrl);
+            }
+
+            const html = render('start-or-resume.njk', {
+                submitButtonText: getFormSubmitButtonText('start'),
+                csrfToken: req.csrfToken(),
+                error: {
+                    text: 'Select what you would like to do'
+                },
+                isAuthenticated: accountService.isAuthenticated(req)
+            });
+            return res.send(html);
+        } catch (err) {
+            return res.status(err.statusCode || 404).render('404.njk');
+        }
+    });
 
 router.route('/start').get(async (req, res) => {
     try {
@@ -87,7 +88,7 @@ router.route('/start').get(async (req, res) => {
     }
 });
 
-router.get('/resume/:questionnaireId', async (req, res) => {
+router.route('/resume/:questionnaireId').get(async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
         const questionnaireService = createQuestionnaireService({
