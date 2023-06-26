@@ -1851,7 +1851,20 @@ module.exports = {
     },
     'p-applicant-other-citizen': {
         options: {
-            outputOrder: ['other-citizen-info', 'q-applicant-other-citizen']
+            outputOrder: ['other-citizen-info', 'q-applicant-other-citizen'],
+            properties: {
+                'q-applicant-other-citizen': {
+                    options: {
+                        macroOptions: {
+                            fieldset: {
+                                legend: {
+                                    classes: 'govuk-fieldset__legend--m'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     'p-applicant-armed-forces-relative': {
