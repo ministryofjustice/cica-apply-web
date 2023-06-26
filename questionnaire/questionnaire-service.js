@@ -162,10 +162,11 @@ function questionnaireService(options = {}) {
 
     function keepAlive(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/session/keep-alive`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/session/keep-alive`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
-                'On-Behalf-Of': options.ownerId
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
