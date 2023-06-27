@@ -1,5 +1,5 @@
 # lets start from an image that already has nodejs installed
-FROM node:18.14.2
+FROM node:18.16.1-slim
 
 RUN groupadd -g 1014 dc_user \
     && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user

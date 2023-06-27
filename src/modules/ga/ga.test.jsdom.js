@@ -172,7 +172,9 @@ describe('GA', () => {
 
     describe('Journey duration', () => {
         it('should store a cookie', () => {
-            global.window = Object.create(window);
+            if (global.window === null || global.window === undefined) {
+                Object.create(window);
+            }
             Object.defineProperty(window, 'location', {
                 value: {
                     pathname: '/apply/confirmation'
