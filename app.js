@@ -89,7 +89,9 @@ app.use(
 
 async function keepAlive(req, res, next) {
     try {
-        const questionnaireService = createQuestionnaireService();
+        const questionnaireService = createQuestionnaireService({
+            ownerId: req.session.ownerId
+        });
         if (!req.originalUrl.startsWith('/session') && isQuestionnaireInstantiated(req.session)) {
             const questionnaireId = getQuestionnaireIdInSession(req.session);
             const cookieExpiryService = createCookieService({
