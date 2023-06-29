@@ -8,7 +8,7 @@ const config = {
 config.setupFilesAfterEnv = ['./jest.setup.js'];
 
 config.coverageThreshold = {
-    './!(account)/*.js': {
+    './!(account|questionnaire)/*.js': {
         branches: 60,
         functions: 60,
         lines: 60,

@@ -204,7 +204,6 @@ router
                 sectionId,
                 body
             );
-
             if (response.statusCode === 201) {
                 // if the page is a submission
                 const isApplicationSubmission =
@@ -234,7 +233,7 @@ router
                         getQuestionnaireIdInSession(req.session),
                         formHelper.addPrefix(req.query.next)
                     );
-
+                    console.log(progressEntryResponse);
                     if (progressEntryResponse.statusCode === 200) {
                         nextSectionId = formHelper.removeSectionIdPrefix(
                             progressEntryResponse.body.data[0].attributes.sectionId
