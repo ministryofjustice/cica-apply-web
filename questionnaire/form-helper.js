@@ -7,7 +7,7 @@ const createTemplateEngineService = require('../templateEngine');
 
 const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
-const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
+const shouldShowLinks = require('./utils/shouldShowLinks');
 
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
@@ -30,15 +30,14 @@ function renderSection({
     isFinal,
     backTarget,
     sectionId,
-    showBackLink = true,
     csrfToken,
     cspNonce,
-    isAuthenticated,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
+    isAuthenticated
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
+    const {showBackLink, showSignInLink} = shouldShowLinks({sectionId, uiSchema, isAuthenticated});
     return render(
         `
             {% extends "page.njk" %}
@@ -236,9 +235,6 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
     );
     const answers = answersObject[sectionId];
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-    const showBackLink = !(
-        uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
-    );
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema: escapeSchemaContent(schema),
@@ -250,7 +246,6 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
         isFinal: display.final,
         backTarget: backLink,
         sectionId,
-        showBackLink,
         csrfToken,
         cspNonce,
         isAuthenticated

@@ -3,74 +3,75 @@
 module.exports = {
     'p-applicant-fatal-claim': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false,
+                showBackLink: false
             }
         }
     },
     'p--transition': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p--was-the-crime-reported-to-police': {
         options: {
             outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported'],
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p-applicant-you-cannot-get-compensation': {
         options: {
             buttonText: 'Continue anyway',
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p-applicant-has-crime-reference-number': {
         options: {
             outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info'],
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p-applicant-who-are-you-applying-for': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p-applicant-are-you-18-or-over': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p-applicant-british-citizen-or-eu-national': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p--context-applicant-details': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             }
         }
     },
     'p-applicant-confirmation-method': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             },
             transformOrder: [
                 'q-applicant-enter-your-email-address',
@@ -121,8 +122,8 @@ module.exports = {
     },
     'p-applicant-enter-your-name': {
         options: {
-            signInLink: {
-                visible: false
+            links: {
+                showSignInLink: false
             },
             outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name'],
             properties: {
@@ -357,7 +358,9 @@ module.exports = {
     'p--confirmation': {
         options: {
             pageContext: 'confirmation',
-            showBackButton: false
+            links: {
+                showBackLink: false
+            }
         }
     },
     'p--which-police-force-is-investigating-the-crime': {
