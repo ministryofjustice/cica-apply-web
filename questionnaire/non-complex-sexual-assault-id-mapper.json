@@ -166,6 +166,8 @@
     "applicant-se-equipment": "p-applicant-se-equipment",
     "mainapplicant-declaration-under-12": "p-mainapplicant-declaration-under-12",
     "mainapplicant-declaration-12-and-over": "p-mainapplicant-declaration-12-and-over",
+    "mainapplicant-declaration-under-12-deceased": "p-mainapplicant-declaration-under-12-deceased",
+    "mainapplicant-declaration-12-and-over-deceased": "p-mainapplicant-declaration-12-and-over-deceased",
     "rep-declaration-under-12": "p-rep-declaration-under-12",
     "rep-declaration-12-and-over": "p-rep-declaration-12-and-over",
     "context-rep-details": "p--context-rep-details",
