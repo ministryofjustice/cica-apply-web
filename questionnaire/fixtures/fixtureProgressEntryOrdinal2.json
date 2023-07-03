@@ -1,0 +1,71 @@
+{
+    "statusCode": 200,
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p--was-the-crime-reported-to-police",
+                "attributes": {
+                    "sectionId": "p--was-the-crime-reported-to-police",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p--was-the-crime-reported-to-police"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p--was-the-crime-reported-to-police",
+                "attributes": {
+                    "required": ["q--was-the-crime-reported-to-police"],
+                    "additionalProperties": false,
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "type": "object",
+                    "properties": {
+                        "q--was-the-crime-reported-to-police": {
+                            "title": "Was the crime reported to the police?",
+                            "type": "boolean",
+                            "oneOf": [
+                                {
+                                    "title": "Yes",
+                                    "const": true
+                                },
+                                {
+                                    "title": "No",
+                                    "const": false
+                                }
+                            ],
+                            "meta": {
+                                "classifications": {
+                                    "theme": "about-application"
+                                }
+                            }
+                        },
+                        "dont-know-if-crime-reported": {
+                            "description": "{% from \"components/details/macro.njk\" import govukDetails %}{% set templateHtml %}{% include 'contact.njk' %}{% endset %}{{ govukDetails({summaryText: \"I do not know if the crime was reported to the police\",html: '<p class=\"govuk-body\">You can contact us for help with your application.</p>' + templateHtml})}}"
+                        }
+                    },
+                    "errorMessage": {
+                        "required": {
+                            "q--was-the-crime-reported-to-police": "Select yes if the crime was reported to the police"
+                        }
+                    }
+                }
+            }
+        ],
+        "links": {
+            "prev": "undefined/api/v1/questionnaires/b826e4e1-b6a0-4a1f-8c8d-7600433beaa0/progress-entries?filter[sectionId]=p--was-the-crime-reported-to-police"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}

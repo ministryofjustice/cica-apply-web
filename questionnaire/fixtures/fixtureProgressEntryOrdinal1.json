@@ -1,0 +1,71 @@
+{
+    "statusCode": 200,
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p-applicant-fatal-claim",
+                "attributes": {
+                    "sectionId": "p-applicant-fatal-claim",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p-applicant-fatal-claim"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p-applicant-fatal-claim",
+                "attributes": {
+                    "required": ["q-applicant-fatal-claim"],
+                    "errorMessage": {
+                        "required": {
+                            "q-applicant-fatal-claim": "Select yes if you are applying for someone who died from their injuries"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "type": "object",
+                    "properties": {
+                        "q-applicant-fatal-claim": {
+                            "oneOf": [
+                                {
+                                    "const": true,
+                                    "title": "Yes"
+                                },
+                                {
+                                    "const": false,
+                                    "title": "No"
+                                }
+                            ],
+                            "meta": {
+                                "classifications": {
+                                    "theme": "about-application"
+                                },
+                                "summary": {
+                                    "title": "Are you applying because someone died?"
+                                }
+                            },
+                            "type": "boolean",
+                            "title": "Are you applying because someone died from their injuries?"
+                        }
+                    }
+                }
+            }
+        ],
+        "links": {
+            "prev": "undefined/api/v1/questionnaires/b826e4e1-b6a0-4a1f-8c8d-7600433beaa0/progress-entries?filter[sectionId]=p-applicant-fatal-claim"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}
