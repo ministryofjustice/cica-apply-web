@@ -82,8 +82,8 @@ spec:
             - name: CW_SESSION_DURATION
               valueFrom:
                 secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_session_duration
+                  name: shared-secrets
+                  key: session_duration
             - name: CW_GOVUK_CLIENT_ID
               valueFrom:
                 secretKeyRef:
