@@ -2,18 +2,24 @@
 
 const service = require('./request-service')();
 
-function questionnaireService() {
+function questionnaireService(options = {}) {
     function createQuestionnaire() {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             },
             json: {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName: 'sexual-assault'
+                        templateName: 'sexual-assault',
+                        owner: {
+                            id: options.ownerId,
+                            isAuthenticated: options.isAuthenticated
+                        }
                     }
                 }
             }
@@ -23,9 +29,11 @@ function questionnaireService() {
 
     function getSection(questionnaireId, section) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/progress-entries?filter[sectionId]=${section}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -33,9 +41,11 @@ function questionnaireService() {
 
     function postSection(questionnaireId, section, body) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/sections/${section}/answers`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/sections/${section}/answers`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             },
             json: {
                 data: {
@@ -49,9 +59,11 @@ function questionnaireService() {
 
     function getPrevious(questionnaireId, sectionId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/progress-entries?page[before]=${sectionId}`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -59,9 +71,11 @@ function questionnaireService() {
 
     function getCurrentSection(currentQuestionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=current`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -136,9 +150,11 @@ function questionnaireService() {
 
     function getFirstSection(currentQuestionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${currentQuestionnaireId}/progress-entries?filter[position]=first`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -146,9 +162,46 @@ function questionnaireService() {
 
     function keepAlive(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/session/keep-alive`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/session/keep-alive`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+
+    async function getAllQuestionnairesMetadata() {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/metadata`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+
+    async function getQuestionnaireMetadata(questionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/metadata`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+    async function getSectionAnswers(questionnaireId, sectionId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/sections/${sectionId}/answers`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -165,7 +218,10 @@ function questionnaireService() {
         timeout,
         getSubmissionStatus,
         getFirstSection,
-        keepAlive
+        keepAlive,
+        getAllQuestionnairesMetadata,
+        getQuestionnaireMetadata,
+        getSectionAnswers
     });
 }
 
