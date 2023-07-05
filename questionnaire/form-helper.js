@@ -7,6 +7,7 @@ const createTemplateEngineService = require('../templateEngine');
 
 const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
+const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
 function getButtonText(sectionId) {
     return sectionId in uiSchema &&
@@ -31,7 +32,9 @@ function renderSection({
     sectionId,
     showBackLink = true,
     csrfToken,
-    cspNonce
+    cspNonce,
+    isAuthenticated,
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
@@ -43,12 +46,19 @@ function renderSection({
                 {%- if ${hasErrors} %}Error: {% endif %}${transformation.pageTitle} - {{ super() }}
             {% endblock %}
             {% block innerHeader %}
-                {% if ${showBackLink} %}
-                    {% from "back-link/macro.njk" import govukBackLink %}
-                    {{ govukBackLink({
-                        text: "Back",
-                        href: "${backTarget}"
-                    }) }}
+                <div class="govuk-grid-column-two-thirds">
+                    {% if ${showBackLink} %}
+                        {% from "back-link/macro.njk" import govukBackLink %}
+                        {{ govukBackLink({
+                            text: "Back",
+                            href: "${backTarget}"
+                        }) }}
+                    {% endif %}
+                </div>
+                {% if ${showSignInLink} %}
+                    <div class="govuk-grid-column-one-third">
+                        <a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>
+                    </div>
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
@@ -65,7 +75,7 @@ function renderSection({
                 </form>
             {% endblock %}
         `,
-        {nonce: cspNonce}
+        {nonce: cspNonce, isAuthenticated}
     );
 }
 
@@ -216,7 +226,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -242,7 +252,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce) {
         sectionId,
         showBackLink,
         csrfToken,
-        cspNonce
+        cspNonce,
+        isAuthenticated
     });
 }
 
@@ -264,7 +275,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, isAuthenticated) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -282,7 +293,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
         backTarget: backLink,
         sectionId,
         csrfToken,
-        cspNonce
+        cspNonce,
+        isAuthenticated
     });
 }
 
