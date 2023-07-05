@@ -46,10 +46,27 @@
 {% endblock %}
 
 {% block header %}
-    {{govukHeader({
-        serviceName: "Claim criminal injuries compensation",
-        serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
-    })}}
+    {% if isAuthenticated %}
+        {{govukHeader({
+            serviceName: "Claim criminal injuries compensation",
+            serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
+            navigationLabel: 'Account navigation',
+            menuButtonLabel: 'Account navigation',
+            navigationClasses: 'govuk-header__navigation--right',
+            navigation: [{
+                text: 'Your applications',
+                href: '/account/dashboard'
+            },{
+                text: 'Log out',
+                href: '/account/sign-out'
+            }]
+        })}}
+    {% else %}
+        {{govukHeader({
+            serviceName: "Claim criminal injuries compensation",
+            serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
+        })}}
+    {% endif %}
 
     {% from "phase-banner/macro.njk" import govukPhaseBanner %}
     {{ govukPhaseBanner({
