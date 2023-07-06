@@ -178,6 +178,7 @@ require("core-js/modules/web.url.to-json.js");
 require("core-js/modules/web.url-search-params.js");
 var axios = _interopRequireWildcard(require("axios"));
 var jsCookies = _interopRequireWildcard(require("js-cookie"));
+var _frontend = require("@ministryofjustice/frontend");
 var _ga = _interopRequireDefault(require("../modules/ga"));
 var _autocomplete = _interopRequireDefault(require("../modules/autocomplete/autocomplete"));
 var _cookieBanner = _interopRequireDefault(require("../modules/cookie-banner"));
@@ -392,4 +393,5 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
   (0, _newWindowAnchors.default)(window.document.querySelectorAll('[open-new-window]'));
   (0, _liveChat.default)(window.document.querySelector('#chat-iframe'));
+  (0, _frontend.initAll)();
 })();

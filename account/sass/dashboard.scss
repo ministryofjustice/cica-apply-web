@@ -1,0 +1,4 @@
+.govuk-table__cell__overflow{
+    @extend .govuk-table__cell;
+    word-break: break-word;
+}

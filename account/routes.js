@@ -96,7 +96,8 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
         const {render} = templateEngineService;
         const html = render('dashboard.njk', {
             isAuthenticated: accountService.isAuthenticated(req),
-            ownerData
+            ownerData,
+            nonce: res.locals.nonce
         });
         return res.send(html);
     } catch (err) {
