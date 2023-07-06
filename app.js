@@ -42,7 +42,8 @@ app.use(
                     "'self'",
                     (req, res) => `'nonce-${res.locals.nonce}'`,
                     "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='", // hash of the inline script in frontend template.njk.
-                    '*.googletagmanager.com'
+                    '*.googletagmanager.com',
+                    "'sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU='" // hash of the inline script used for jQuery.
                 ],
                 imgSrc: ["'self'", 'data:', '*.google-analytics.com', 'www.googletagmanager.com'],
                 objectSrc: ["'none'"],
@@ -85,6 +86,10 @@ app.use(
 app.use(
     '/govuk-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/all.js'))
+);
+app.use(
+    '/moj-frontend/all.js',
+    express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
 async function keepAlive(req, res, next) {
