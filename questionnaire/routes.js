@@ -233,7 +233,7 @@ router
                         getQuestionnaireIdInSession(req.session),
                         formHelper.addPrefix(req.query.next)
                     );
-                    console.log(progressEntryResponse);
+
                     if (progressEntryResponse.statusCode === 200) {
                         nextSectionId = formHelper.removeSectionIdPrefix(
                             progressEntryResponse.body.data[0].attributes.sectionId

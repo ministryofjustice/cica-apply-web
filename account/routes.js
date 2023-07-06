@@ -52,7 +52,6 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
             isAuthenticated: accountService.isAuthenticated(req)
         });
         accountService.setOwnerId(req.oidc.user.sub);
-
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -65,15 +64,6 @@ router.get('/sign-in', (req, res) =>
         returnTo: '/account/sign-in/success',
         authorizationParams: {
             redirect_uri: `${process.env.CW_URL}/account/signed-in`
-        }
-    })
-);
-
-router.get('/sign-out', (req, res) =>
-    res.oidc.logout({
-        returnTo: '/account/signed-out',
-        authorizationParams: {
-            redirect_uri: `${process.env.CW_URL}/account/signed-out`
         }
     })
 );
