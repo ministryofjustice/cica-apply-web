@@ -548,6 +548,7 @@ window.CICA = {
 </script>
 <script src="/govuk-frontend/all.js"></script>
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js "integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="crossorigin="anonymous"></script>
   <script src="/dist/js/autocomplete.min.js"></script>
   <script src="/dist/js/bundle.js"></script>
   </body>
