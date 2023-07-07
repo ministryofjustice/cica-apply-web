@@ -453,6 +453,12 @@ module.exports = {
             pageContext: 'submission'
         }
     },
+    'p-rep-declaration-12-and-over-deceased': {
+        options: {
+            buttonText: 'Agree and submit',
+            pageContext: 'submission'
+        }
+    },
     'p-applicant-select-treatments': {
         // transformer: 'form',
         options: {
