@@ -5,7 +5,8 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            }
+            },
+            showBackButton: false
         }
     },
     'p--transition': {
