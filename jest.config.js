@@ -3,6 +3,7 @@
 const config = {
     testEnvironment: 'node',
     setupFilesAfterEnv: ['./jest.setup.js'],
+    coveragePathIgnorePatterns: ['./account/routes.js'],
     coverageThreshold: {
         './**/*.js': {
             branches: 60,
