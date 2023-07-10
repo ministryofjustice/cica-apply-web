@@ -13,7 +13,7 @@ executors:
 jobs:
   build-for-test:
     docker:
-      - image: node:18.16.1-bullseye
+      - image: node:18.16.1-bullseye-slim
     steps:
       - checkout
       - run:
@@ -34,7 +34,7 @@ jobs:
             - ./node_modules
   test:
     docker:
-      - image: node:18.16.1-bullseye
+      - image: node:18.16.1-bullseye-slim
     steps:
       - attach_workspace:
           at: ./
@@ -45,7 +45,7 @@ jobs:
           command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
   lint:
     docker:
-      - image: node:18.16.1-bullseye
+      - image: node:18.16.1-bullseye-slim
     steps:
       - attach_workspace:
           at: ./
@@ -62,7 +62,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker build --no-cache -t cica/cica-repo-dev .
+            docker build --target production --no-cache -t cica/cica-repo-dev .
       - run:
           name: Archive Docker Image
           command: |
