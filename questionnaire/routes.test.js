@@ -153,6 +153,25 @@ describe('Hitting /apply/start-or-resume', () => {
             expect(response.res.text).toContain('What would you like to do?');
         });
     });
+    describe('Error', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../templateEngine/index.js': () => {
+                    return jest.fn(() => ({
+                        init: () => jest.fn(() => undefined),
+                        render: () => {
+                            throw new Error('Something went wrong!');
+                        }
+                    }));
+                }
+            });
+        });
+        it('Should respond with error page', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/start-or-resume');
+            expect(response.statusCode).toBe(404);
+        });
+    });
     describe('Postback', () => {
         describe('Uninstantiated questionnaire', () => {
             describe('start new questionnaire', () => {
@@ -177,7 +196,6 @@ describe('Hitting /apply/start-or-resume', () => {
                     expect(response.res.text).toBe('Found. Redirecting to /apply/start');
                 });
             });
-
             describe('continue existing application', () => {
                 beforeEach(() => {
                     setUpCommonMocks({
@@ -200,7 +218,6 @@ describe('Hitting /apply/start-or-resume', () => {
                 });
             });
         });
-
         describe('Instantiated questionnaire', () => {
             describe('start new questionnaire', () => {
                 beforeEach(() => {
@@ -219,7 +236,6 @@ describe('Hitting /apply/start-or-resume', () => {
                     expect(response.res.text).toBe('Found. Redirecting to /apply/start');
                 });
             });
-
             describe('continue existing application', () => {
                 beforeEach(() => {
                     setUpCommonMocks();
@@ -239,7 +255,6 @@ describe('Hitting /apply/start-or-resume', () => {
                 });
             });
         });
-
         describe('Invalid request body', () => {
             beforeEach(() => {
                 setUpCommonMocks();
@@ -287,6 +302,25 @@ describe('Hitting /apply/start', () => {
             expect(response.res.text).toContain(
                 'Found. Redirecting to /apply/applicant-fatal-claim'
             );
+        });
+    });
+    describe('Error', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/questionnaire-service': () => {
+                    return jest.fn(() => ({
+                        keepAlive: () => getKeepAlive,
+                        createQuestionnaire: () => {
+                            throw new Error('Something went wrong!');
+                        }
+                    }));
+                }
+            });
+        });
+        it('Should respond with error page', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/start');
+            expect(response.statusCode).toBe(404);
         });
     });
 });
@@ -435,6 +469,27 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
             });
         });
     });
+    describe('Error', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/questionnaire-service': () => {
+                    return jest.fn(() => ({
+                        keepAlive: () => getKeepAlive,
+                        getCurrentSection: () => {
+                            throw new Error('Something went wrong!');
+                        }
+                    }));
+                }
+            });
+        });
+        it('Should respond with error page', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get(
+                '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
+            );
+            expect(response.statusCode).toBe(404);
+        });
+    });
 });
 
 describe('Hitting /apply/:section', () => {
@@ -523,6 +578,25 @@ describe('Hitting /apply/previous/:section', () => {
             await currentAgent.get('/apply');
             const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
             expect(response.res.text).toContain('Found. Redirecting to http://www.google.com');
+        });
+    });
+    describe('Error', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/questionnaire-service': () => {
+                    return jest.fn(() => ({
+                        keepAlive: () => getKeepAlive,
+                        getPrevious: () => {
+                            throw new Error('Something went wrong!');
+                        }
+                    }));
+                }
+            });
+        });
+        it('Should respond with error page', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
+            expect(response.statusCode).toBe(404);
         });
     });
 });
