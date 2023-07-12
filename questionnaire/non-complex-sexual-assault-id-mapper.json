@@ -214,5 +214,6 @@
     "applicant-claim-type": "p-applicant-claim-type",
     "applicant-immediate-aftermath": "p-applicant-immediate-aftermath",
     "applicant-disabling-mental-injury": "p-applicant-disabling-mental-injury",
-    "rep-declaration-12-and-over-deceased": "p-rep-declaration-12-and-over-deceased"
+    "rep-declaration-12-and-over-deceased": "p-rep-declaration-12-and-over-deceased",
+    "rep-declaration-under-12-deceased": "p-rep-declaration-under-12-deceased"
 }
