@@ -2,7 +2,6 @@
 
 const qTransformer = require('q-transformer')();
 const uiSchema = require('./questionnaireUISchema');
-const sectionList = require('./non-complex-sexual-assault-id-mapper');
 const createTemplateEngineService = require('../templateEngine');
 
 const templateEngineService = createTemplateEngineService();
@@ -80,7 +79,10 @@ function renderSection({
 }
 
 function removeSectionIdPrefix(sectionId) {
-    return sectionId.replace(/p-{1,2}/, '');
+    if (sectionId.substring(0, 3) === 'p--') {
+        return sectionId.replace('p--', 'cica-');
+    }
+    return sectionId.replace('p-', '');
 }
 
 function removeUnwantedHiddenAnswers(body, sectionId) {
@@ -175,7 +177,13 @@ function correctPartialDates(body, questionId) {
 }
 
 function addPrefix(section) {
-    return sectionList[section];
+    if (section === 'system') {
+        return section;
+    }
+    if (section.substring(0, 4) === 'cica') {
+        return section.replace('cica', 'p-');
+    }
+    return `p-${section}`;
 }
 
 function removeCarriageReturns(body, property) {
