@@ -473,7 +473,7 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                     '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
                 );
                 expect(response.res.text).toContain(
-                    'Found. Redirecting to /apply/was-the-crime-reported-to-police'
+                    'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
                 );
             });
         });
@@ -777,13 +777,13 @@ describe('Hitting /apply/:section?next=:section', () => {
             const initialResponse = await currentAgent.get('/apply/start-or-resume');
             const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
             const response = await currentAgent
-                .post('/apply/applicant-fatal-claim?next=check-your-answers')
+                .post('/apply/applicant-fatal-claim?next=info-check-your-answers')
                 .send({
                     _csrf: initialCsrfToken
                 });
             expect(response.statusCode).toBe(302);
             expect(response.res.text).toBe(
-                'Found. Redirecting to /apply/was-the-crime-reported-to-police'
+                'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
             );
         });
     });

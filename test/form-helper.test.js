@@ -22,7 +22,7 @@ describe('form-helper functions', () => {
             const expected3 = formHelper.removeSectionIdPrefix(sectionId3);
 
             expect(expected1).toEqual('applicant-some-section');
-            expect(expected2).toEqual('cica-some-section');
+            expect(expected2).toEqual('info-some-section');
             expect(expected3).toEqual('problem');
         });
 

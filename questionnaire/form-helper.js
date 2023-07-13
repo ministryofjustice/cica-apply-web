@@ -79,10 +79,10 @@ function renderSection({
 }
 
 function removeSectionIdPrefix(sectionId) {
-    if (sectionId.substring(0, 3) === 'p--') {
-        return sectionId.replace('p--', 'cica-');
+    if (sectionId.startsWith('p--')) {
+        return sectionId.replace(/^p--/, 'info-');
     }
-    return sectionId.replace('p-', '');
+    return sectionId.replace(/^p-/, '');
 }
 
 function removeUnwantedHiddenAnswers(body, sectionId) {
@@ -177,11 +177,8 @@ function correctPartialDates(body, questionId) {
 }
 
 function addPrefix(section) {
-    if (section === 'system') {
-        return section;
-    }
-    if (section.substring(0, 4) === 'cica') {
-        return section.replace('cica', 'p-');
+    if (section.startsWith('info-')) {
+        return section.replace(/^info-/, 'p--');
     }
     return `p-${section}`;
 }
