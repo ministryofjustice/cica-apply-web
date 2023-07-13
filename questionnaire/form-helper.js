@@ -24,15 +24,7 @@ function getSectionContext(sectionId) {
     );
 }
 
-function renderSection({
-    transformation,
-    isFinal,
-    backTarget,
-    sectionId,
-    showBackLink = true,
-    csrfToken,
-    cspNonce
-}) {
+function renderSection({transformation, isFinal, backTarget, sectionId, showBackLink = true}) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
@@ -61,11 +53,10 @@ function renderSection({
                             preventDoubleClick: true
                         }) }}
                     {% endif %}
-                    <input type="hidden" name="_csrf" value="${csrfToken}">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 </form>
             {% endblock %}
-        `,
-        {nonce: cspNonce}
+        `
     );
 }
 
@@ -216,7 +207,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce) {
+function getSectionHtml(sectionData, isAuthenticated) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -241,8 +232,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce) {
         backTarget: backLink,
         sectionId,
         showBackLink,
-        csrfToken,
-        cspNonce
+        isAuthenticated
     });
 }
 
@@ -264,7 +254,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
+function getSectionHtmlWithErrors(sectionData, sectionId, isAuthenticated) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -281,8 +271,7 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
         isFinal: false,
         backTarget: backLink,
         sectionId,
-        csrfToken,
-        cspNonce
+        isAuthenticated
     });
 }
 

@@ -3,6 +3,9 @@
 const express = require('express');
 const formHelper = require('./form-helper');
 const qService = require('./questionnaire-service')();
+const createAccountService = require('../account/account-service');
+
+const {isAuthenticated} = createAccountService;
 
 const router = express.Router();
 
@@ -59,11 +62,7 @@ router
                     });
                 }
             }
-            const html = formHelper.getSectionHtml(
-                response.body,
-                req.csrfToken(),
-                res.locals.nonce
-            );
+            const html = formHelper.getSectionHtml(response.body, isAuthenticated(req));
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 req.session.reset();
             }
@@ -137,8 +136,7 @@ router
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
-                req.csrfToken(),
-                res.locals.nonce
+                isAuthenticated(req)
             );
             return res.send(html);
         } catch (err) {

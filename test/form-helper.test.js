@@ -6,7 +6,10 @@ const validResolvedHtml = require('./test-fixtures/transformations/resolved html
 const createTemplateEngineService = require('../templateEngine');
 
 const templateEngineService = createTemplateEngineService();
-templateEngineService.init();
+templateEngineService.init({
+    nonce: 'somenonce',
+    csrfToken: 'sometoken'
+});
 
 describe('form-helper functions', () => {
     describe('Remove sectionId prefix', () => {
@@ -175,8 +178,6 @@ describe('form-helper functions', () => {
             const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const showBackLink = true;
             const expected = validResolvedHtml.replace(/\s+/g, '');
-            const csrfToken = 'sometoken';
-            const cspNonce = 'somenonce';
 
             const actual = formHelper
                 .renderSection({
@@ -184,9 +185,7 @@ describe('form-helper functions', () => {
                     isFinal,
                     backTarget,
                     sectionId,
-                    showBackLink,
-                    csrfToken,
-                    cspNonce
+                    showBackLink
                 })
                 .replace(/\s+/g, '');
 
