@@ -120,6 +120,8 @@ app.use(async (req, res, next) => {
             });
         }
     } catch (err) {
+        console.log('11111111111111111111111111111111111111111111111111111111111111111111111');
+        console.log({err});
         return res.status(403).render('500.badToken.njk');
     }
 
@@ -188,6 +190,8 @@ app.use((err, req, res, next) => {
         return res.status(500).render('500.DCSDown.njk');
     }
     if (err.code === 'EBADCSRFTOKEN') {
+        console.log('22222222222222222222222222222222222222222222222222222222222222222222222');
+        console.log({err});
         return res.status(403).render('500.badToken.njk');
     }
 
