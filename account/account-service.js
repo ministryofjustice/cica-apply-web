@@ -2,10 +2,6 @@
 
 const crypto = require('crypto');
 
-function isAuthenticated(req) {
-    return !!(req?.oidc?.isAuthenticated() || req?.isAuthenticated);
-}
-
 function createAccountService(session) {
     const currentSession = session;
 
@@ -30,12 +26,15 @@ function createAccountService(session) {
         currentSession.ownerId = id;
     }
 
+    function isAuthenticated(req) {
+        return !!(req?.oidc?.isAuthenticated() || req?.isAuthenticated);
+    }
+
     return Object.freeze({
         getOwnerId,
-        setOwnerId
+        setOwnerId,
+        isAuthenticated
     });
 }
-
-createAccountService.isAuthenticated = isAuthenticated;
 
 module.exports = createAccountService;

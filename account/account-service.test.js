@@ -13,6 +13,8 @@ const SESSION_WITHOUT_OWNER = {};
 const REGEX_OWNER_ID_ANONYMOUS = /^urn:uuid:[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
 const REGEX_OWNER_ID_ASSIGNED = /^(urn:fdc:gov\.uk:2022:[A-Za-z0-9+/=-_]{1,44})$/i;
 
+const REQUEST_WITH_IS_AUTHENTICATED_TRUE = {isAuthenticated: true};
+
 beforeEach(() => {
     jest.clearAllMocks();
     jest.resetModules();
@@ -52,6 +54,15 @@ describe('Account service', () => {
                 const ownerId = accountService.getOwnerId();
                 expect(ownerId).toMatch('mynewownerid');
             });
+        });
+    });
+    describe('isAuthenticated', () => {
+        it('Should return authenticated state', () => {
+            const accountService = createAccountService(SESSION_WITH_OWNER);
+            const isAuthenticated = accountService.isAuthenticated(
+                REQUEST_WITH_IS_AUTHENTICATED_TRUE
+            );
+            expect(isAuthenticated).toBe(true);
         });
     });
 });
