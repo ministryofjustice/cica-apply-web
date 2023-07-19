@@ -2,10 +2,6 @@
 
 const express = require('express');
 const createLiveChatHelper = require('./liveChatHelper');
-const createTemplateEngineService = require('../templateEngine');
-
-const templateEngineService = createTemplateEngineService();
-const {render} = templateEngineService;
 
 const router = express.Router();
 
@@ -14,19 +10,19 @@ router.get('/', (req, res) => {
 });
 
 router.get('/cookies', (req, res) => {
-    return res.send(render('cookies.njk'));
+    res.render('cookies.njk');
 });
 
 router.get('/contact-us', (req, res) => {
-    return res.send(render('contact-us.njk'));
+    res.render('contact-us.njk');
 });
 
 router.get('/police-forces', (req, res) => {
-    return res.send(render('police-forces.njk'));
+    res.render('police-forces.njk');
 });
 
 router.get('/accessibility-statement', (req, res) => {
-    return res.send(render('accessibility-statement.njk'));
+    res.render('accessibility-statement.njk');
 });
 
 router.get('/start-chat', (req, res) => {
@@ -41,9 +37,9 @@ router.get('/start-chat', (req, res) => {
             process.env.CW_LIVECHAT_END_TIMES
         )
     ) {
-        return res.send(render('start-chat.njk'));
+        return res.render('start-chat.njk');
     }
-    return res.send(render('chat-disabled.njk'));
+    return res.render('chat-disabled.njk');
 });
 
 router.get('/chat', (req, res) => {
@@ -58,13 +54,13 @@ router.get('/chat', (req, res) => {
             process.env.CW_LIVECHAT_END_TIMES
         )
     ) {
-        return res.send(render('chat-iframe.njk'));
+        return res.render('chat-iframe.njk');
     }
-    return res.send(render('chat-disabled.njk'));
+    return res.render('chat-disabled.njk');
 });
 
 router.get('*', (req, res) => {
-    res.status(404).send(render('404.njk'));
+    res.status(404).render('404.njk');
 });
 
 module.exports = router;
