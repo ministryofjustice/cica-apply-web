@@ -4,12 +4,9 @@ const nunjucks = require('nunjucks');
 const isFilePath = require('./utils/isFilePath');
 
 let environment;
-let defaultTemplateParams = {};
 
 function createTemplateEngineService(app) {
-    function init(defaultParams = {}) {
-        defaultTemplateParams = defaultParams;
-
+    function init() {
         if (environment) {
             return environment;
         }
@@ -66,15 +63,9 @@ function createTemplateEngineService(app) {
 
     function render(string, params) {
         if (isFilePath(string)) {
-            return nunjucks.render(string, {
-                ...defaultTemplateParams,
-                ...params
-            });
+            return nunjucks.render(string, params);
         }
-        return nunjucks.renderString(string, {
-            ...defaultTemplateParams,
-            ...params
-        });
+        return nunjucks.renderString(string, params);
     }
 
     function getEngine() {

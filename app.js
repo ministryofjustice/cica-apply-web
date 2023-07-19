@@ -20,6 +20,9 @@ const createTemplateEngineService = require('./templateEngine');
 
 const app = express();
 
+const templateEngineService = createTemplateEngineService(app);
+templateEngineService.init();
+
 const sessionDuration = Number.parseInt(process.env.CW_SESSION_DURATION, 10);
 
 app.use((req, res, next) => {
@@ -27,8 +30,6 @@ app.use((req, res, next) => {
     // https://stackoverflow.com/a/22339262/2952356
     // `process.env.npm_package_version` only works if you use npm start to run the app.
     res.set('Application-Version', process.env.npm_package_version);
-    const templateEngineService = createTemplateEngineService(app);
-    templateEngineService.init();
     next();
 });
 
