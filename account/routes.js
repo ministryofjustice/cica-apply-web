@@ -48,7 +48,8 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
 
         const html = render('authentication-success.njk', {
             nextPageUrl: getValidReferrerOrDefault(req?.session?.referrer),
-            expiryDate
+            expiryDate,
+            isAuthenticated: accountService.isAuthenticated(req)
         });
         accountService.setOwnerId(req.oidc.user.sub);
         return res.send(html);
@@ -94,6 +95,7 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
 
         const {render} = templateEngineService;
         const html = render('dashboard.njk', {
+            isAuthenticated: accountService.isAuthenticated(req),
             ownerData
         });
         return res.send(html);

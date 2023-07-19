@@ -24,7 +24,15 @@ function getSectionContext(sectionId) {
     );
 }
 
-function renderSection({transformation, isFinal, backTarget, sectionId, showBackLink = true}) {
+function renderSection({
+    transformation,
+    isFinal,
+    backTarget,
+    sectionId,
+    showBackLink = true,
+    csrfToken,
+    cspNonce
+}) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
@@ -53,10 +61,11 @@ function renderSection({transformation, isFinal, backTarget, sectionId, showBack
                             preventDoubleClick: true
                         }) }}
                     {% endif %}
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
-        `
+        `,
+        {nonce: cspNonce}
     );
 }
 
@@ -207,7 +216,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, isAuthenticated) {
+function getSectionHtml(sectionData, csrfToken, cspNonce) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -232,7 +241,8 @@ function getSectionHtml(sectionData, isAuthenticated) {
         backTarget: backLink,
         sectionId,
         showBackLink,
-        isAuthenticated
+        csrfToken,
+        cspNonce
     });
 }
 
@@ -254,7 +264,7 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, isAuthenticated) {
+function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -271,7 +281,8 @@ function getSectionHtmlWithErrors(sectionData, sectionId, isAuthenticated) {
         isFinal: false,
         backTarget: backLink,
         sectionId,
-        isAuthenticated
+        csrfToken,
+        cspNonce
     });
 }
 
