@@ -357,7 +357,10 @@ module.exports = {
     'p--confirmation': {
         options: {
             pageContext: 'confirmation',
-            showBackButton: false
+            showBackButton: false,
+            signInLink: {
+                visible: false
+            }
         }
     },
     'p--which-police-force-is-investigating-the-crime': {
