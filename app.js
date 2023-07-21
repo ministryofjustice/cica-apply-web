@@ -61,7 +61,7 @@ async function keepAlive(req, res, next) {
     return next();
 }
 
-const oidcConfig = {
+const oidcAuth = auth({
     authRequired: false,
     auth0Logout: false,
     idpLogout: true,
@@ -104,7 +104,7 @@ const oidcConfig = {
             ownerId: req.session.ownerId
         };
     }
-};
+});
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
@@ -191,11 +191,11 @@ app.use((req, res, next) => {
 });
 
 app.use('/address-finder', addressFinderRouter);
-app.use('/download', auth(oidcConfig), downloadRouter);
-app.use('/apply', auth(oidcConfig), keepAlive, applicationRouter);
-app.use('/session', auth(oidcConfig), sessionRouter);
-app.use('/account', auth(oidcConfig), accountRouter);
-app.use('/', auth(oidcConfig), indexRouter);
+app.use('/download', oidcAuth, downloadRouter);
+app.use('/apply', oidcAuth, keepAlive, applicationRouter);
+app.use('/session', oidcAuth, sessionRouter);
+app.use('/account', oidcAuth, accountRouter);
+app.use('/', oidcAuth, indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.name === 'CRNNotRetrieved') {
@@ -206,6 +206,15 @@ app.use((err, req, res, next) => {
     }
     if (err.code === 'EBADCSRFTOKEN') {
         return res.status(403).render('500.badToken.njk');
+    }
+
+    // express-openid-connect error.
+    if (err.name === 'AggregateError') {
+        if (/^Issuer.discover\(\) failed/.test(err.message)) {
+            return res.status(500).render('oidc-provider-unreachable.njk', {
+                backTarget: req?.session?.referrer
+            });
+        }
     }
 
     return next(err);
