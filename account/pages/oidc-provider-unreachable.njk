@@ -1,0 +1,21 @@
+{% extends "page.njk" %}
+{% from "back-link/macro.njk" import govukBackLink %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block pageTitle %}We cannot connect to GOV.UK One Login - {{ super() }}{% endblock %}
+{% block innerHeader %}
+    {% if backTarget %}
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukBackLink({
+                text: "Back",
+                href: backTarget
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">We cannot connect to GOV.UK One Login</h1>
+    <p class="govuk-body">There's a problem connecting to GOV.UK One Login at the moment. You will not be able to sign in or save any progress you've made with your application right now. You'll need to try again later.</p>
+    <p class="govuk-body">If you have an unsaved application in progress, you should press the 'Back' button and carry on with your application. You will lose any progress you've made if you close the application now.</p>
+{% endblock %}
