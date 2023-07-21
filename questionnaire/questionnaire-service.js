@@ -83,9 +83,11 @@ function questionnaireService(options = {}) {
 
     function getSubmission(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/submissions`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
@@ -93,9 +95,11 @@ function questionnaireService(options = {}) {
 
     function postSubmission(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/v1/questionnaires/${questionnaireId}/submissions`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/submissions`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_DCS_JWT}`
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             },
             json: {
                 data: {
