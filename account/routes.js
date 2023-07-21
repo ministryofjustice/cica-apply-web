@@ -90,7 +90,8 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
     try {
         const templateEngineService = createTemplateEngineService();
         const accountService = createAccountService(req.session);
-        const dashboardService = createDashboardService(accountService.getOwnerId());
+        accountService.setOwnerId(req.oidc.user.sub);
+        const dashboardService = createDashboardService(req.oidc.user.sub);
         const ownerData = await dashboardService.getTemplateData();
 
         const {render} = templateEngineService;
