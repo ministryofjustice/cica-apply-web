@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-// eslint-disable-next-line import/no-unresolved
 const {requiresAuth} = require('express-openid-connect');
 const createTemplateEngineService = require('../templateEngine');
 const getValidReferrerOrDefault = require('./utils/getValidReferrerOrDefault');
@@ -10,6 +9,7 @@ const createAccountService = require('./account-service');
 const createQuestionnaireService = require('../questionnaire/questionnaire-service');
 const getQuestionnaireIdInSession = require('../questionnaire/utils/getQuestionnaireIdInSession');
 const createDashboardService = require('../dashboard/dashboard-service');
+const getSignInReturnTo = require('./utils/getSignInReturnToURI');
 
 const router = express.Router();
 
@@ -62,7 +62,7 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
 
 router.get('/sign-in', (req, res) =>
     res.oidc.login({
-        returnTo: '/account/sign-in/success',
+        returnTo: getSignInReturnTo(req.session),
         authorizationParams: {
             redirect_uri: `${process.env.CW_URL}/account/signed-in`
         }
