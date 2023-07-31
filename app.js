@@ -94,7 +94,7 @@ const oidcAuth = auth({
         // https://github.com/auth0/express-openid-connect/blob/master/examples/custom-routes.js
         callback: '/signed-in',
         login: false,
-        logout: '/sign-out',
+        logout: false,
         postLogoutRedirect: '/signed-out'
     },
     afterCallback: async (req, res, session) => {

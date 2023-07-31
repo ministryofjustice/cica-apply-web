@@ -78,6 +78,12 @@ router.get('/signed-in', requiresAuth(), (req, res, next) => {
     }
 });
 
+router.get('/sign-out', (req, res) => {
+    res.clearCookie('session', {path: '/'});
+    res.clearCookie('sessionExpiry', {path: '/'});
+    res.oidc.logout();
+});
+
 router.get('/signed-out', (req, res, next) => {
     try {
         return res.redirect('https://www.gov.uk/claim-compensation-criminal-injury/make-claim');
