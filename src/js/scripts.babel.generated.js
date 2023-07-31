@@ -280,6 +280,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               event_category: 'govuk-modal-session-ended',
               non_interaction: true
             });
+            jsCookies.remove('session');
+            jsCookies.remove('sessionExpiry');
           }
         });
         errorModal = new TimeoutModal({
