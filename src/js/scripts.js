@@ -108,6 +108,8 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
                         event_category: 'govuk-modal-session-ended',
                         non_interaction: true
                     });
+                    jsCookies.remove('session');
+                    jsCookies.remove('sessionExpiry');
                 }
             });
 
