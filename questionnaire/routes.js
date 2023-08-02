@@ -55,6 +55,7 @@ router.post('/start-or-resume', (req, res) => {
         const html = render('start-or-resume.njk', {
             csrfToken: req.csrfToken(),
             submitButtonText: getFormSubmitButtonText('start'),
+            nonce: res.locals.nonce,
             error: {
                 text: 'Select what you would like to do'
             }
