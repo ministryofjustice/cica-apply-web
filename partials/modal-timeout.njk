@@ -1,24 +1,24 @@
 {% from "button/macro.njk" import govukButton %}
 {% from "cica/modal/macro.njk" import govukModal %}
 {% set sessionTimeoutHeading %}
-    <span aria-live="assertive">Your application will time out in <span class="govuk-modal__time-remaining" aria-atomic="true" aria-live="assertive"></span></span>
+    <span aria-live="assertive">Your session will time out in <span class="govuk-modal__time-remaining" aria-atomic="true" aria-live="assertive"></span></span>
 {% endset %}
 {% set sessionTimeoutDescription %}
-    <p class="govuk-body">We'll reset your application if you do not respond. We do this to keep your information secure.</p>
+    <p class="govuk-body">You'll lose your unsaved progress if you don't continue. We do this to keep your information secure.</p>
 {% endset %}
 {% set sessionEndedHeading %}
-    Your application has timed out
+    Your session has timed out
 {% endset %}
 {% set sessionEndedDescription %}
-    <p class="govuk-body">You'll have to start your application again.</p>
+    <p class="govuk-body">Your session has been timed out due to 30 minutes of inactivity. You can sign back in to resume your application if you saved your progress. If not, you'll have to start a new application.</p>
 {% endset %}
 {% set sessionResumeErrorHeading %}
     Something went wrong
 {% endset %}
 {% set sessionResumeErrorDescription %}
-    <p class="govuk-body">We were unable to resume your application. You'll have to start your application again.</p>
+    <p class="govuk-body">We're unable to resume this application. Unless you were signed in and saved your progress, you'll have to start your application again.</p>
 {% endset %}
-            
+
 {% call govukModal({
     id: "session-timing-out",
     role: "alertdialog",
@@ -52,7 +52,7 @@
     }
 }) %}
     {{ govukButton({
-        text: "Start again",
+        text: "Continue",
         href: "/apply",
         classes: "ga-event--click",
         attributes: {
@@ -74,7 +74,7 @@
     }
 }) %}
     {{ govukButton({
-        text: "Start again",
+        text: "Continue",
         href: "/apply",
         classes: "ga-event--click",
         attributes: {

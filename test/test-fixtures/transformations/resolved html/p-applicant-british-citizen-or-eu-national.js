@@ -344,7 +344,7 @@ const html = `<!DOCTYPE html>
                     <span class="govuk-modal__heading govuk-heading-l" id="session-timing-out-title">
                         
                             
-    <span aria-live="assertive">Your application will time out in <span class="govuk-modal__time-remaining" aria-atomic="true" aria-live="assertive"></span></span>
+    <span aria-live="assertive">Your session will time out in <span class="govuk-modal__time-remaining" aria-atomic="true" aria-live="assertive"></span></span>
 
                         
                     </span>
@@ -353,7 +353,7 @@ const html = `<!DOCTYPE html>
                     <div class="govuk-modal__content" id="session-timing-out-content">
                         
                             
-    <p class="govuk-body">We'll reset your application if you do not respond. We do this to keep your information secure.</p>
+    <p class="govuk-body">You'll lose your unsaved progress if you don't continue. We do this to keep your information secure.</p>
 
                         
                     </div>
@@ -419,7 +419,7 @@ const html = `<!DOCTYPE html>
                     <span class="govuk-modal__heading govuk-heading-l" id="session-ended-title">
                         
                             
-    Your application has timed out
+    Your session has timed out
 
                         
                     </span>
@@ -428,7 +428,7 @@ const html = `<!DOCTYPE html>
                     <div class="govuk-modal__content" id="session-ended-content">
                         
                             
-    <p class="govuk-body">You'll have to start your application again.</p>
+    <p class="govuk-body">Your session has been timed out due to 30 minutes of inactivity. You can sign back in to resume your application if you saved your progress. If not, you'll have to start a new application.</p>
 
                         
                     </div>
@@ -440,7 +440,7 @@ const html = `<!DOCTYPE html>
   
     
   
-                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Start again">Start again</a>
+                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Start again">Continue</a>
 
 
                 
@@ -514,7 +514,7 @@ const html = `<!DOCTYPE html>
                     <div class="govuk-modal__content" id="session-resume-error-content">
                         
                             
-    <p class="govuk-body">We were unable to resume your application. You'll have to start your application again.</p>
+    <p class="govuk-body">We're unable to resume this application. Unless you were signed in and saved your progress, you'll have to start your application again.</p>
 
                         
                     </div>
@@ -526,7 +526,7 @@ const html = `<!DOCTYPE html>
   
     
   
-                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Start again">Start again</a>
+                    <a href="/apply" role="button" draggable="false" class="govuk-button ga-event--click" data-module="govuk-button" data-tracking-category="modal-button" data-tracking-label="Start again">Continue</a>
 
 
                 
