@@ -1598,9 +1598,9 @@ module.exports = {
     'p-rep-reference-number': {
         options: {
             transformOrder: [
-                'help-reference-number',
                 'q-rep-reference-number',
-                'q-rep-has-reference-number'
+                'q-rep-has-reference-number',
+                'help-reference-number'
             ],
             outputOrder: ['q-rep-has-reference-number', 'help-reference-number'],
             properties: {
