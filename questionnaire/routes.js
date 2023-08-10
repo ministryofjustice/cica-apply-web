@@ -124,6 +124,14 @@ router.get('/resume/:questionnaireId', async (req, res) => {
     }
 });
 
+router.route('/expired').get(async (req, res) => {
+    try {
+        return res.render('questionnaire-incompatible-with-api.njk');
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
 router.route('/previous/:section').get(async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
@@ -167,6 +175,10 @@ router
 
             req.session.referrer = req.originalUrl;
 
+            if (response?.body?.data[0]?.id === 'incompatible') {
+                return res.render('questionnaire-incompatible-with-api.njk');
+            }
+
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
@@ -176,10 +188,10 @@ router
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
             }
-            res.send(html);
+            return res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
-            next(err);
+            return next(err);
         }
     })
     .post(async (req, res, next) => {

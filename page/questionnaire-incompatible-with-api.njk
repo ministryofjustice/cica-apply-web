@@ -1,0 +1,17 @@
+{% extends "page.njk" %}
+{% from "back-link/macro.njk" import govukBackLink %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block pageTitle %}This application has expired - {{ super() }}{% endblock %}
+{% block innerHeader %}
+    <div class="govuk-grid-column-two-thirds">
+        {{ govukBackLink({
+            text: 'Back',
+            href: '/account/dashboard'
+        }) }}
+    </div>
+{% endblock %}
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">This application has expired</h1>
+    <p class="govuk-body">Our service has been updated. This means any application made before {{ questionnaireTemplateAuthoredDate }} have expired. You'll need to restart your application.</p>
+{% endblock %}
