@@ -108,7 +108,7 @@ function createPostcodeLookup(window) {
         let addressLines = [];
 
         // Does the page contain an organisation name?
-        const organisationName = window.document.querySelector('[id *= "organisation-name"]');
+        const organisationName = window.document.querySelector('input[id *= "organisation-name"]');
         if (organisationName) {
             organisationName.value = dpaOrganisationName;
             dpaOrganisationName = '';
@@ -128,22 +128,22 @@ function createPostcodeLookup(window) {
 
         const [selectionLine1, selectionLine2, selectionLine3] = addressLines;
 
-        const addressLine1 = window.document.querySelector('[id *= "street"]');
+        const addressLine1 = window.document.querySelector('input[id *= "street"]');
         addressLine1.value = selectionLine1;
 
-        const addressLine2 = window.document.querySelector('[id *= "street-2"]');
+        const addressLine2 = window.document.querySelector('input[id *= "street-2"]');
         addressLine2.value = selectionLine2 || '';
 
-        const addressLine3 = window.document.querySelector('[id *= "street-3"]');
+        const addressLine3 = window.document.querySelector('input[id *= "street-3"]');
         addressLine3.value = selectionLine3 || '';
 
-        const addressTown = window.document.querySelector('[id *= "town-or-city"]');
+        const addressTown = window.document.querySelector('input[id *= "town-or-city"]');
         addressTown.value = dpaPostTown;
 
-        const addressCounty = window.document.querySelector('[id *= "county"]');
+        const addressCounty = window.document.querySelector('input[id *= "county"]');
         addressCounty.value = dpaCounty;
 
-        const addressPostcode = window.document.querySelector('[id *= "postcode"]');
+        const addressPostcode = window.document.querySelector('input[id *= "postcode"]');
         addressPostcode.value = dpaPostcode;
     }
 

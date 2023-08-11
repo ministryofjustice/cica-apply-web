@@ -47,10 +47,12 @@ type="text" autocomplete="address-level1">
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode"
-type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset></form>`;
 
@@ -106,9 +108,12 @@ County (optional)
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 
 </fieldset></form>`;
@@ -169,9 +174,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -232,9 +240,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -295,9 +306,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -360,9 +374,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -412,9 +429,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -468,10 +488,12 @@ type="text" autocomplete="address-level1">
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode"
-type="text" autocomplete="postal-code">
+<div id="q-applicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-postcode" name="q-applicant-postcode" type="text" aria-describedby="q-applicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset></form>`;
 
@@ -524,10 +546,12 @@ type="text" autocomplete="address-level1">
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-mainapplicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-mainapplicant-postcode" name="q-mainapplicant-postcode"
-type="text" autocomplete="postal-code">
+<div id="q-mainapplicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-mainapplicant-postcode" name="q-mainapplicant-postcode" type="text" aria-describedby="q-mainapplicant-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset></form>`;
 
@@ -583,9 +607,12 @@ County (optional)
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-mainapplicant-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-mainapplicant-postcode" name="q-mainapplicant-postcode" type="text" autocomplete="postal-code">
+<div id="q-mainapplicant-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-mainapplicant-postcode" name="q-mainapplicant-postcode" type="text" aria-describedby="q-mainapplicant-postcode-hint" autocomplete="postal-code">
 </div>
 
 </fieldset></form>`;
@@ -642,10 +669,14 @@ County (optional)
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-gp-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-gp-postcode" name="q-gp-postcode" type="text">
+<div id="q-gp-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
 </div>
+<input class="govuk-input govuk-input--width-10" id="q-gp-postcode" name="q-gp-postcode" type="text" aria-describedby="q-gp-postcode-hint" autocomplete="postal-code">
+</div>
+
 </fieldset></form>`;
 
 const emptyPostcodeInputForGpAddressErrorEnhancedHtml = `<form method="post" autocomplete="off">
@@ -719,9 +750,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-gp-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-gp-postcode" name="q-gp-postcode" type="text">
+<div id="q-gp-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-gp-postcode" name="q-gp-postcode" type="text" aria-describedby="q-gp-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -778,10 +812,14 @@ County (optional)
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-dentist-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-dentist-postcode" name="q-applicant-dentist-postcode" type="text">
+<div id="q-applicant-dentist-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
 </div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-dentist-postcode" name="q-applicant-dentist-postcode" type="text" aria-describedby="q-applicant-dentist-postcode-hint" autocomplete="postal-code">
+</div>
+
 </fieldset></form>`;
 
 const emptyPostcodeInputForDentistAddressErrorEnhancedHtml = `<form method="post" autocomplete="off">
@@ -855,9 +893,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-dentist-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-dentist-postcode" name="q-applicant-dentist-postcode" type="text">
+<div id="q-applicant-dentist-postcode-hint" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-dentist-postcode" name="q-applicant-dentist-postcode" type="text" aria-describedby="q-applicant-dentist-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
@@ -914,10 +955,14 @@ County (optional)
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-treatment-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-treatment-postcode" name="q-applicant-treatment-postcode" type="text">
+<div id="q-applicant-treatment-postcode" class="govuk-hint">
+This can be an international postal or zip code
 </div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-treatment-postcode" name="q-applicant-treatment-postcode" type="text" aria-describedby="q-applicant-treatment-postcode-hint" autocomplete="postal-code">
+</div>
+
 </fieldset></form>`;
 
 const emptyPostcodeInputForTreatmentAddressErrorEnhancedHtml = `<form method="post" autocomplete="off">
@@ -991,9 +1036,12 @@ County (optional)
 </div>
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-treatment-postcode">
-Postcode (optional)
+Postcode
 </label>
-<input class="govuk-input govuk-input--width-10" id="q-applicant-treatment-postcode" name="q-applicant-treatment-postcode" type="text">
+<div id="q-applicant-treatment-postcode" class="govuk-hint">
+This can be an international postal or zip code
+</div>
+<input class="govuk-input govuk-input--width-10" id="q-applicant-treatment-postcode" name="q-applicant-treatment-postcode" type="text" aria-describedby="q-applicant-treatment-postcode-hint" autocomplete="postal-code">
 </div>
 </fieldset>
 </form>`;
