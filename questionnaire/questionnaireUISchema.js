@@ -194,10 +194,7 @@ module.exports = {
                     }
                 }
             },
-            outputOrder: [
-                'q-applicant-when-did-the-crime-start',
-                'i-dont-know-when-the-crime-started'
-            ]
+            outputOrder: ['q-applicant-when-did-the-crime-start']
         }
     },
     'p-applicant-when-did-the-crime-stop': {
@@ -213,10 +210,7 @@ module.exports = {
                     }
                 }
             },
-            outputOrder: [
-                'q-applicant-when-did-the-crime-stop',
-                'i-dont-know-when-the-crime-stopped'
-            ]
+            outputOrder: ['q-applicant-when-did-the-crime-stop']
         }
     },
     'p--check-your-answers': {
@@ -325,7 +319,7 @@ module.exports = {
     },
     'p-applicant-when-did-the-crime-happen': {
         options: {
-            outputOrder: ['q-applicant-when-did-the-crime-happen', 'when-did-the-crime-happen']
+            outputOrder: ['q-applicant-when-did-the-crime-happen']
         }
     },
     'p-applicant-where-in-england-did-it-happen': {
@@ -1981,6 +1975,63 @@ module.exports = {
                                     classes: 'govuk-fieldset__legend--m'
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'p-deceased-address': {
+        options: {
+            properties: {
+                'q-deceased-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line1'
+                        }
+                    }
+                },
+                'q-deceased-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line2',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-deceased-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: '',
+                            autocomplete: 'address-line3',
+                            label: {
+                                classes: 'govuk-visually-hidden'
+                            }
+                        }
+                    }
+                },
+                'q-deceased-town-or-city': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'address-level2'
+                        }
+                    }
+                },
+                'q-deceased-county': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'address-level1'
+                        }
+                    }
+                },
+                'q-deceased-postcode': {
+                    options: {
+                        macroOptions: {
+                            autocomplete: 'postal-code'
                         }
                     }
                 }
