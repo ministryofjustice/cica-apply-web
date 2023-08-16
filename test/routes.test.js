@@ -585,7 +585,7 @@ describe('/apply', () => {
                             );
                         expect(response.statusCode).toBe(500);
                         expect(response.res.text).toContain(
-                            '<p class="govuk-body">However, there is a delay with us sending your reference number to you.</p>'
+                            '<p class="govuk-body">We’re experiencing a delay getting your reference number at the moment. If you gave us your contact details, we’ll send you your reference number by email or text message. If you do not get an email or text message, or if you did not give us your contact details, call us in 5 working days and we should be able to give you your reference number.</p>'
                         );
                     });
                 });
