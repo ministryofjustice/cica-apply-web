@@ -390,7 +390,7 @@ function createPostcodeLookup(window) {
         const descriptionDiv = window.document.createElement('div');
         descriptionDiv.appendChild(
             window.document.createTextNode(
-                'Enter a UK postcode to search for and select an address. Or, you can enter the address manually.'
+                'Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.'
             )
         );
         descriptionDiv.setAttribute('id', 'fill-out-the-fields-manually-hint');

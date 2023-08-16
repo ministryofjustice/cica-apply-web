@@ -63,7 +63,7 @@ What is your address?
 </h1>
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">
-Enter a UK postcode to search for and select an address. Or, you can enter the address manually.
+Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group">
 <label class="govuk-label" for="address-search-input">
@@ -131,7 +131,7 @@ There is a problem
 What is your address?
 </h1>
 </legend>
-<div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. Or, you can enter the address manually.</div>
+<div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.</div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">Postcode</label>
 <span id="address-search-input-error" class="govuk-error-message">Enter a valid postcode<span class="govuk-visually-hidden">Error:</span></span>
@@ -197,7 +197,7 @@ There is a problem
 What is your address?
 </h1>
 </legend>
-<div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. Or, you can enter the address manually.</div>
+<div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.</div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">Postcode</label>
 <span id="address-search-input-error" class="govuk-error-message">Enter your postcode<span class="govuk-visually-hidden">Error:</span></span>
@@ -263,7 +263,7 @@ There is a problem
 What is their address?
 </h1>
 </legend>
-<div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. Or, you can enter the address manually.</div>
+<div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.</div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">Postcode</label>
 <span id="address-search-input-error" class="govuk-error-message">Enter their postcode<span class="govuk-visually-hidden">Error:</span></span>
@@ -329,7 +329,7 @@ What is your address?
 </h1>
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">
-Enter a UK postcode to search for and select an address. Or, you can enter the address manually.
+Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group">
 <label class="govuk-label" for="address-search-input">Postcode</label>
@@ -562,7 +562,7 @@ What is your address?
 </h1>
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">
-Enter a UK postcode to search for and select an address. Or, you can enter the address manually.
+Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group">
 <label class="govuk-label" for="address-search-input">
@@ -693,7 +693,7 @@ const emptyPostcodeInputForGpAddressErrorEnhancedHtml = `<form method="post" aut
 <h1 class="govuk-fieldset__heading">What is the GP's address?</h1>
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">
-Enter a UK postcode to search for and select an address. Or, you can enter the address manually.
+Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">
@@ -836,7 +836,7 @@ const emptyPostcodeInputForDentistAddressErrorEnhancedHtml = `<form method="post
 <h1 class="govuk-fieldset__heading">What is the dentist's address?</h1>
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">
-Enter a UK postcode to search for and select an address. Or, you can enter the address manually.
+Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">
@@ -979,7 +979,7 @@ const emptyPostcodeInputForTreatmentAddressErrorEnhancedHtml = `<form method="po
 <h1 class="govuk-fieldset__heading">Where did you have treatment?</h1>
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">
-Enter a UK postcode to search for and select an address. Or, you can enter the address manually.
+Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">
