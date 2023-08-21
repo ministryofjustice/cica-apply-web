@@ -17,6 +17,7 @@ metadata:
       SecRuleUpdateActionById 932110 "ctl:ruleEngine=DetectionOnly"
       SecRuleUpdateActionById 921110 "ctl:ruleEngine=DetectionOnly"
       SecRuleUpdateActionById 930120 "ctl:ruleEngine=DetectionOnly"
+      SecRuleUpdateActionById 942230 "ctl:ruleEngine=DetectionOnly"      
       SecAuditEngine RelevantOnly
       SecAuditLog /var/log/nginx/error.log
       SecRuleUpdateTargetById 942100 "!REQUEST_COOKIES"
