@@ -60,14 +60,20 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
     }
 });
 
-router.get('/sign-in', (req, res) =>
-    res.oidc.login({
+router.get('/auth', (req, res) => {
+    return res.oidc.login({
         returnTo: getSignInReturnTo(req.session),
         authorizationParams: {
             redirect_uri: `${process.env.CW_URL}/account/signed-in`
         }
-    })
-);
+    });
+});
+
+router.get('/sign-in', (req, res) => {
+    res.oidc.logout({
+        returnTo: '/auth'
+    });
+});
 
 router.get('/signed-in', requiresAuth(), (req, res, next) => {
     try {
