@@ -12,15 +12,19 @@ metadata:
     nginx.ingress.kubernetes.io/modsecurity-transaction-id: '$request_id'
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecRuleEngine On
-      SecDefaultAction "phase:1,pass,log,tag:github_team=cica"
-      SecRuleUpdateActionById 933210 "ctl:ruleEngine=DetectionOnly"
-      SecRuleUpdateActionById 932110 "ctl:ruleEngine=DetectionOnly"
-      SecRuleUpdateActionById 921110 "ctl:ruleEngine=DetectionOnly"
-      SecRuleUpdateActionById 930120 "ctl:ruleEngine=DetectionOnly"
-      SecRuleUpdateActionById 942230 "ctl:ruleEngine=DetectionOnly"
-      SecAuditEngine RelevantOnly
-      SecAuditLog /var/log/nginx/error.log
+      SecDefaultAction "phase:1,pass,tag:github_team=cica"
       SecRuleUpdateTargetById 942100 "!REQUEST_COOKIES"
+      SecRuleUpdateTargetById 932110 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 933210 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 921110 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 930120 "!REQUEST_COOKIES:/session/"
+      SecRuleUpdateTargetById 942230 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 932100 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 932105 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 932150 "!ARGS:/q-*/"
+      SecAuditEngine RelevantOnly
+      SecAuditLogParts ABEIFKZ
+      SecAuditLog /var/log/nginx/error.log
       SecAuditLogType Serial
         SecMarker BEGIN_VALID_URL_CHECK
           SecRule REQUEST_URI "@beginsWith /apply" "id:700004, phase:1,log,pass,skipAfter:END_VALID_URL_CHECK"
