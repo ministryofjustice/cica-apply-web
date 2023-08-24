@@ -387,6 +387,40 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 expect(response.res.text).toContain('Found. Redirecting to /apply');
             });
         });
+
+        describe('Incompatible template', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/questionnaire-service': () => {
+                        return jest.fn(() => ({
+                            keepAlive: () => getKeepAlive,
+                            getCurrentSection: () => ({
+                                body: {
+                                    data: [
+                                        {
+                                            attributes: {
+                                                url: null,
+                                                sectionId: null
+                                            }
+                                        }
+                                    ]
+                                }
+                            })
+                        }));
+                    }
+                });
+            });
+
+            it('Should render the "Application expired" page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get(
+                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                );
+                expect(response.res.text).toContain(
+                    '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
+                );
+            });
+        });
     });
     describe('Instantiated questionnaire', () => {
         describe('No questionnaire id', () => {
@@ -511,6 +545,39 @@ describe('Hitting /apply/:section', () => {
         );
     });
 
+    describe('Incompatible template', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/questionnaire-service': () => {
+                    return jest.fn(() => ({
+                        keepAlive: () => getKeepAlive,
+                        getSection: () => ({
+                            body: {
+                                data: [
+                                    {
+                                        attributes: {
+                                            url: null,
+                                            sectionId: null
+                                        }
+                                    }
+                                ]
+                            }
+                        })
+                    }));
+                }
+            });
+        });
+
+        it('Should render the "Application expired" page', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/apply/applicant-fatal-claim');
+            expect(response.res.text).toContain(
+                '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
+            );
+        });
+    });
+
     describe('Post', () => {
         describe('Submission', () => {
             beforeEach(() => {
@@ -603,6 +670,38 @@ describe('Hitting /apply/previous/:section', () => {
             const currentAgent = request.agent(app);
             const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
             expect(response.statusCode).toBe(404);
+        });
+    });
+
+    describe('Incompatible template', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/questionnaire-service': () => {
+                    return jest.fn(() => ({
+                        keepAlive: () => getKeepAlive,
+                        getPrevious: () => ({
+                            body: {
+                                data: [
+                                    {
+                                        attributes: {
+                                            url: null,
+                                            sectionId: null
+                                        }
+                                    }
+                                ]
+                            }
+                        })
+                    }));
+                }
+            });
+        });
+
+        it('Should render the "Application expired" page', async () => {
+            const currentAgent = request.agent(app);
+            const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
+            expect(response.res.text).toContain(
+                '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
+            );
         });
     });
 });

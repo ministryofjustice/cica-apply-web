@@ -101,6 +101,18 @@ router.get('/resume/:questionnaireId', async (req, res) => {
             resumableQuestionnaireId
         );
 
+        const resumableQuestionnaireProgressEntry =
+            resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;
+        if (
+            resumableQuestionnaireProgressEntry &&
+            resumableQuestionnaireProgressEntry.sectionId === null &&
+            resumableQuestionnaireProgressEntry.url === null
+        ) {
+            return res.render('incompatible.njk', {
+                isAuthenticated: accountService.isAuthenticated(req)
+            });
+        }
+
         if (resumableQuestionnaireResponse.body?.errors) {
             const errorResponse = resumableQuestionnaireResponse.body?.errors[0];
             if (errorResponse.status === 404) {
@@ -136,13 +148,19 @@ router.route('/previous/:section').get(async (req, res) => {
             req.session.questionnaireId,
             sectionId
         );
-        if (response.body.data[0].attributes && response.body.data[0].attributes.url !== null) {
-            const overwriteId = response.body.data[0].attributes.url;
+
+        const progressEntry = response?.body?.data?.[0]?.attributes;
+
+        if (progressEntry && progressEntry.url !== null) {
+            const overwriteId = progressEntry.url;
             return res.redirect(overwriteId);
         }
-        const previousSectionId = formHelper.removeSectionIdPrefix(
-            response.body.data[0].attributes.sectionId
-        );
+        if (progressEntry && progressEntry.sectionId === null && progressEntry.url === null) {
+            return res.render('incompatible.njk', {
+                isAuthenticated: accountService.isAuthenticated(req)
+            });
+        }
+        const previousSectionId = formHelper.removeSectionIdPrefix(progressEntry.sectionId);
         return res.redirect(`${req.baseUrl}/${previousSectionId}`);
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk');
@@ -165,6 +183,13 @@ router
                 sectionId
             );
 
+            const progressEntry = response?.body?.data?.[0]?.attributes;
+            if (progressEntry && progressEntry.sectionId === null && progressEntry.url === null) {
+                return res.render('incompatible.njk', {
+                    isAuthenticated: accountService.isAuthenticated(req)
+                });
+            }
+
             req.session.referrer = req.originalUrl;
 
             const html = formHelper.getSectionHtml(
@@ -176,10 +201,10 @@ router
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
             }
-            res.send(html);
+            return res.send(html);
         } catch (err) {
             res.status(err.statusCode || 404).render('404.njk');
-            next(err);
+            return next(err);
         }
     })
     .post(async (req, res, next) => {
