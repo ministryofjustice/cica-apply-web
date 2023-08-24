@@ -1968,5 +1968,23 @@ module.exports = {
         options: {
             outputOrder: ['q-applicant-financial-help', 'financial-help-info']
         }
+    },
+    'p-applicant-under-18': {
+        options: {
+            outputOrder: ['applicant-under-18-info', 'q-applicant-under-18'],
+            properties: {
+                'q-applicant-under-18': {
+                    options: {
+                        macroOptions: {
+                            fieldset: {
+                                legend: {
+                                    classes: 'govuk-fieldset__legend--m'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 };
