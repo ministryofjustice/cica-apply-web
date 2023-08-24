@@ -1,0 +1,14 @@
+{% extends "page.njk" %}
+{% from "components/button/macro.njk" import govukButton %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block pageTitle %}Application expired - {{ super() }}{% endblock %}
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">This application is no longer available</h1>
+    <p class="govuk-body">Our application form has been updated. The previous version of our form that you're using for this application no longer collects all the information we need from you. You'll need to start a new application.</p>
+    {{ govukButton({
+        text: "Start a new application",
+        href: "/apply/start"
+    }) }}
+{% endblock %}
