@@ -5,8 +5,7 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            },
-            showBackButton: false
+            }
         }
     },
     'p--transition': {
@@ -44,7 +43,8 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            }
+            },
+            showBackButton: false
         }
     },
     'p-applicant-are-you-18-or-over': {
@@ -1938,7 +1938,10 @@ module.exports = {
     },
     'p-applicant-claim-type': {
         options: {
-            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info']
+            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info'],
+            signInLink: {
+                visible: false
+            }
         }
     },
     'p-applicant-physical-help': {
