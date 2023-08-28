@@ -1,0 +1,8 @@
+{% extends "page.njk" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block pageTitle %}Signed out - {{ super() }}{% endblock %}
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">You have signed out</h1>
+    <p class="govuk-body">You can <a href="https://www.gov.uk/claim-compensation-criminal-injury/make-claim" class="govuk-link">find out more about applying for Criminal Injuries Compensation</a> or <a href="/account/sign-in" class="govuk-link">sign in to your GOV.UK One Login</a> to carry on your application now.</p>
+{% endblock %}
