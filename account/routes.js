@@ -86,7 +86,7 @@ router.get('/sign-out', (req, res) => {
 
 router.get('/signed-out', (req, res, next) => {
     try {
-        return res.redirect('https://www.gov.uk/claim-compensation-criminal-injury/make-claim');
+        return res.render('signed-out.njk');
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
         return next(err);
