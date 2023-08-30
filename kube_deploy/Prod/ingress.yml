@@ -22,6 +22,7 @@ metadata:
       SecRuleUpdateTargetById 932100 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932105 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932150 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 942190 "!ARGS:/q-*/"
       SecAuditEngine RelevantOnly
       SecAuditLogParts ABEIFKZ
       SecAuditLog /var/log/nginx/error.log
