@@ -56,12 +56,17 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
             return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
         }
 
+        function getServerSessionCreatedTimeDisparity(serverTime) {
+            return new Date() * 1 - new Date(serverTime) * 1;
+        }
+
         async function refreshSessionAndModalTimeout() {
             const response = await axios.get('/session/keep-alive');
             sessionData = response.data.data[0].attributes;
             sessionTimingOutModal.close();
             sessionTimingOutModal.refresh({
-                startTime: sessionData.created
+                startTime:
+                    sessionData.created + getServerSessionCreatedTimeDisparity(sessionData.created)
             });
         }
 
@@ -183,7 +188,9 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
                 },
                 timer: {
                     duration: sessionData.duration,
-                    startTime: new Date(sessionData.created) * 1,
+                    startTime:
+                        new Date(sessionData.created) * 1 +
+                        getServerSessionCreatedTimeDisparity(sessionData.created),
                     interval: 700,
                     onTick: timeRemaining => {
                         if (!documentVisible) {

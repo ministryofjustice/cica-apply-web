@@ -230,6 +230,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       function getSessionData() {
         return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
       }
+      function getServerSessionCreatedTimeDisparity(serverTime) {
+        return new Date() * 1 - new Date(serverTime) * 1;
+      }
       function refreshSessionAndModalTimeout() {
         return _refreshSessionAndModalTimeout.apply(this, arguments);
       }
@@ -239,7 +242,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           sessionData = response.data.data[0].attributes;
           sessionTimingOutModal.close();
           sessionTimingOutModal.refresh({
-            startTime: sessionData.created
+            startTime: sessionData.created + getServerSessionCreatedTimeDisparity(sessionData.created)
           });
         });
         return _refreshSessionAndModalTimeout.apply(this, arguments);
@@ -341,7 +344,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           },
           timer: {
             duration: sessionData.duration,
-            startTime: new Date(sessionData.created) * 1,
+            startTime: new Date(sessionData.created) * 1 + getServerSessionCreatedTimeDisparity(sessionData.created),
             interval: 700,
             onTick: timeRemaining => {
               if (!documentVisible) {
