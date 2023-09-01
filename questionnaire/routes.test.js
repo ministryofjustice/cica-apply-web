@@ -212,7 +212,7 @@ describe('Hitting /apply/start-or-resume', () => {
                     });
                 });
 
-                it('Should redirect to `/account/dashboard`', async () => {
+                it('Should redirect to `/account/sign-in`', async () => {
                     const currentAgent = request.agent(app);
                     const initialResponse = await currentAgent.get('/apply/start-or-resume');
                     const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
@@ -220,7 +220,7 @@ describe('Hitting /apply/start-or-resume', () => {
                         'start-or-resume': 'resume',
                         _csrf: initialCsrfToken
                     });
-                    expect(response.res.text).toContain('Found. Redirecting to /account/dashboard');
+                    expect(response.res.text).toContain('Found. Redirecting to /account/sign-in');
                 });
             });
         });

@@ -5,7 +5,9 @@ function getRedirectionUrl(type, questionnaireId) {
     const urls = {
         notstarted: {
             start: '/apply/start',
-            resume: '/account/dashboard'
+            // `/account/sign-in` will redirect to `/account/dashboard` if
+            // there is no questionnaire ID in the session.
+            resume: '/account/sign-in'
         },
         started: {
             start: '/apply/start',
