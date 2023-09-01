@@ -18,7 +18,7 @@ describe('getRedirectionUrl', () => {
                 const type = 'resume';
                 const questionnaireId = undefined;
                 const result = getRedirectionUrl(type, questionnaireId);
-                expect(result).toBe('/account/dashboard');
+                expect(result).toBe('/account/sign-in');
             });
         });
 
