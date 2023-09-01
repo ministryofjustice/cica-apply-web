@@ -61,7 +61,7 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
 });
 
 router.get('/auth', (req, res) => {
-    return res.oidc.login({
+    res.oidc.login({
         returnTo: getSignInReturnTo(req.session),
         authorizationParams: {
             redirect_uri: `${process.env.CW_URL}/account/signed-in`
