@@ -14,6 +14,7 @@ metadata:
       SecRuleEngine On
       SecDefaultAction "phase:1,pass,tag:github_team=cica"
       SecRuleUpdateTargetById 942100 "!REQUEST_COOKIES"
+      SecRuleUpdateTargetById 942100 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932110 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 933210 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 921110 "!ARGS:/q-*/"
@@ -23,6 +24,8 @@ metadata:
       SecRuleUpdateTargetById 932105 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932150 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 942190 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 921120 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 951120 "!ARGS:/q-*/" 
       SecAuditEngine RelevantOnly
       SecAuditLogParts ABEIFKZ
       SecAuditLog /var/log/nginx/error.log
