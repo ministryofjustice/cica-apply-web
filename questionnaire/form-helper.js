@@ -57,7 +57,7 @@ function renderSection({
                 </div>
                 {% if ${showSignInLink} %}
                     <div class="govuk-grid-column-one-third">
-                        <a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>
+                        <a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>
                     </div>
                 {% endif %}
             {% endblock %}

@@ -212,7 +212,7 @@ describe('form-helper functions', () => {
                     }
                 }
             });
-            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>'.replace(
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
                 /\s+/g,
                 ''
             );
@@ -250,7 +250,7 @@ describe('form-helper functions', () => {
                     }
                 }
             });
-            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create an account to save your progress</a>'.replace(
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
                 /\s+/g,
                 ''
             );
