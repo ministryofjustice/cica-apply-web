@@ -172,10 +172,10 @@ router
     .get(async (req, res, next) => {
         try {
             const accountService = createAccountService(req.session);
-            const isAuthed = accountService.isAuthenticated(req);
+            const isAuthenticated = accountService.isAuthenticated(req);
             const questionnaireService = createQuestionnaireService({
                 ownerId: accountService.getOwnerId(),
-                isAuthed
+                isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const response = await questionnaireService.getSection(
@@ -196,7 +196,7 @@ router
                 response.body,
                 req.csrfToken(),
                 res.locals.nonce,
-                isAuthed
+                isAuthenticated
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
@@ -210,10 +210,10 @@ router
     .post(async (req, res, next) => {
         try {
             const accountService = createAccountService(req.session);
-            const isAuthed = accountService.isAuthenticated(req);
+            const isAuthenticated = accountService.isAuthenticated(req);
             const questionnaireService = createQuestionnaireService({
                 ownerId: accountService.getOwnerId(),
-                isAuthed
+                isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
@@ -280,7 +280,7 @@ router
                 sectionId,
                 req.csrfToken(),
                 res.locals.nonce,
-                isAuthed
+                isAuthenticated
             );
             return res.send(html);
         } catch (err) {
