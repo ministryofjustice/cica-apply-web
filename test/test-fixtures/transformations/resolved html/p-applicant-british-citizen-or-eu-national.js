@@ -124,7 +124,7 @@ const html = `<!DOCTYPE html>
 
 
 
-    <div class="govuk-phase-banner govuk-width-container">
+    <div class="govuk-phase-banner govuk-width-container" role="region" labelledby="service-banner">
   <p class="govuk-phase-banner__content"><strong class="govuk-tag govuk-phase-banner__content__tag ">
   beta
 </strong>
@@ -134,7 +134,7 @@ const html = `<!DOCTYPE html>
   </p>
 </div>
 
-<div class="govuk-width-container">
+<div class="govuk-width-container" role="navigation">
     <div class="govuk-grid-column-two-thirds">
         <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
     </div>

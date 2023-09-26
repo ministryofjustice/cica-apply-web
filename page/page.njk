@@ -4,7 +4,7 @@
 {% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}
 {% block head %}
   <!--[if !IE 8]><!-->
-    <link href="/govuk-frontend/all.css" rel="stylesheet" />
+  <link href="/govuk-frontend/all.css" rel="stylesheet"/>
   <!--<![endif]-->
 
   {# For Internet Explorer 8, you need to compile specific stylesheet #}
@@ -17,37 +17,36 @@
   <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
   <![endif]-->
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css" />
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css" />
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css"/>
 {% endblock %}
 
-
 {% block skipLink %}
-    {{ super() }}
-    {#
+  {{ super() }}
+  {#
       given how the govuk template.njk is defined, this is the only way
       to put the cookie banner before the skip ink whilst still being
       outside the main content
     #}
-    {% include "cookie-banner.njk" %}
+  {% include "cookie-banner.njk" %}
 {% endblock %}
 
 {% block bodyStart %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
-    <script nonce="{{ nonce }}">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', '{{ CW_GA_TRACKING_ID }}');
-    </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
+  <script nonce="{{ nonce }}">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', '{{ CW_GA_TRACKING_ID }}');
+  </script>
 {% endblock %}
 
 {% block header %}
-    {% if isAuthenticated %}
-        {{govukHeader({
+  {% if isAuthenticated %}
+    {{govukHeader({
             serviceName: "Claim criminal injuries compensation",
             serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
             navigationLabel: 'Account navigation',
@@ -61,70 +60,75 @@
                 href: '/account/sign-out'
             }]
         })}}
-    {% else %}
-        {{govukHeader({
+  {% else %}
+    {{govukHeader({
             serviceName: "Claim criminal injuries compensation",
             serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
         })}}
-    {% endif %}
+  {% endif %}
 
-    {% from "phase-banner/macro.njk" import govukPhaseBanner %}
-    {{ govukPhaseBanner({
+  {% from "phase-banner/macro.njk" import govukPhaseBanner %}
+  {{ govukPhaseBanner({
       tag: {
           text: "beta"
       },
       html: 'This is a new service - your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">feedback<span class="govuk-visually-hidden">(opens in new window)</span></a> will help us to improve it.',
-      classes: 'govuk-width-container'
+      classes: 'govuk-width-container',
+      attributes: {
+        'role': 'region',
+        'labelledby': 'service-banner'
+      }
     }) }}
-    <div class="govuk-width-container">
-        {% block innerHeader %}
-        {% endblock %}
-    </div>
+  <div class="govuk-width-container" role="navigation">
+    {% block innerHeader %}{% endblock %}
+  </div>
 {% endblock %}
 
-{% block beforeContent %}
-{% endblock %}
+{% block beforeContent %}{% endblock %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            {% if CW_MAINTENANCE_MESSAGE_ENABLED %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if CW_MAINTENANCE_MESSAGE_ENABLED %}
 
-                {% set bannerHtml %}
-                    <p class="govuk-body">{{ CW_MAINTENANCE_MESSAGE }}</p>
-                {% endset %}
+        {% set bannerHtml %}
+        <p class="govuk-body">{{ CW_MAINTENANCE_MESSAGE }}</p>
+        {% endset %}
 
-                {{ mojBanner({
+        {{ mojBanner({
                     type: 'information',
                     html: bannerHtml
                 }) }}
 
-            {% endif %}
+      {% endif %}
 
-            {% block innerContent %}
-            {% endblock %}
-        </div>
+      {% block innerContent %}{% endblock %}
     </div>
+  </div>
 {% endblock %}
 
 {% block bodyEnd %}
-    {% include "modal-timeout.njk" %}
-    {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-    <script nonce="{{ nonce }}">
-        window.CICA = {
-            SERVICE_URL: '{{ CW_URL }}',
-            ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
-        };
-    </script>
-    <script src="/govuk-frontend/all.js"></script>
-    <script nonce="{{ nonce }}">window.GOVUKFrontend.initAll()</script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="/dist/js/autocomplete.min.js"></script>
-    <script src="/dist/js/bundle.js"></script>
+  {% include "modal-timeout.njk" %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script nonce="{{ nonce }}">
+    window.CICA = {
+      SERVICE_URL: '{{ CW_URL }}',
+      ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
+    };
+  </script>
+  <script src="/govuk-frontend/all.js"></script>
+  <script nonce="{{ nonce }}">
+    window
+      .GOVUKFrontend
+      .initAll()
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="/dist/js/autocomplete.min.js"></script>
+  <script src="/dist/js/bundle.js"></script>
 {% endblock %}
 
 {% block footer %}
-    {{ govukFooter({
+  {{ govukFooter({
       meta: {
         items: [
           {
