@@ -30,6 +30,7 @@ const sectionbData = {
                     'p-check-your-answers': {
                         type: 'object',
                         title: 'Check your answers',
+                        description: 'Check your answers before sending your application',
                         properties: {
                             summaryInfo: {
                                 type: 'object',
