@@ -56,7 +56,8 @@ function createTemplateEngineService(app) {
             .addGlobal(
                 'CW_MAINTENANCE_MESSAGE_ENABLED',
                 process.env.CW_MAINTENANCE_MESSAGE_ENABLED === 'true'
-            );
+            )
+            .addGlobal('CW_APP_VERSION', process.env.npm_package_version);
 
         return environment;
     }

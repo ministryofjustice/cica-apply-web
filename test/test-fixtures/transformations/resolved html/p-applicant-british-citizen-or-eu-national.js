@@ -546,7 +546,7 @@ window.CICA = {
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
   <script nonce="somenonce" src="https://code.jquery.com/jquery-3.6.3.min.js "integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="crossorigin="anonymous"></script>
   <script nonce="somenonce" src="/dist/js/autocomplete.min.js"></script>
-  <script nonce="somenonce" src="/dist/js/bundle.js"></script>
+  <script nonce="somenonce" src="/dist/js/bundle.js?1.2.3"></script>
   </body>
 </html>
 `;

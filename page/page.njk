@@ -122,7 +122,7 @@
     <script nonce="{{ cspNonce }}">window.GOVUKFrontend.initAll()</script>
     <script nonce="{{ cspNonce }}" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js"></script>
-    <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js"></script>
+    <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js?{{CW_APP_VERSION}}"></script>
 {% endblock %}
 
 {% block footer %}
