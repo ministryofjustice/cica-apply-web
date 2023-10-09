@@ -108,8 +108,6 @@ const oidcAuth = auth({
 
 app.use((req, res, next) => {
     res.locals.nonce = nanoid();
-    // https://stackoverflow.com/a/22339262/2952356
-    // `process.env.npm_package_version` only works if you use npm start to run the app.
     res.set('Application-Version', process.env.npm_package_version);
     next();
 });
@@ -133,8 +131,10 @@ app.use(
                 // https://www.therobinlord.com/ga4-is-being-blocked-by-content-security-policy/
             }
         },
-        hsts: {
-            maxAge: 60 * 60 * 24 * 365 // the units is seconds.
+        xFrameOptions: {action: 'deny'},
+        strictTransportSecurity: {
+            maxAge: 60 * 60 * 24 * 365,
+            includeSubDomains: true
         }
     })
 );
