@@ -34,8 +34,8 @@
 
 {% block bodyStart %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
-    <script nonce="{{ nonce }}">
+    <script nonce="{{ cspNonce }}" async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}" integrity="sha256-reslnxoE9Ubh0YBekM4KFBNnj9mOmSzsx6lRGE9p7H4=" crossorigin="anonymous"></script>
+    <script nonce="{{ cspNonce }}">
         window.dataLayer = window.dataLayer || [];
         function gtag(){
             dataLayer.push(arguments);
@@ -110,17 +110,17 @@
 {% block bodyEnd %}
     {% include "modal-timeout.njk" %}
     {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-    <script nonce="{{ nonce }}">
+    <script nonce="{{ cspNonce }}">
         window.CICA = {
             SERVICE_URL: '{{ CW_URL }}',
             ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
         };
     </script>
-    <script src="/govuk-frontend/all.js"></script>
-    <script nonce="{{ nonce }}">window.GOVUKFrontend.initAll()</script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="/dist/js/autocomplete.min.js"></script>
-    <script src="/dist/js/bundle.js"></script>
+    <script nonce="{{ cspNonce }}" src="/govuk-frontend/all.js"></script>
+    <script nonce="{{ cspNonce }}">window.GOVUKFrontend.initAll()</script>
+    <script nonce="{{ cspNonce }}" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js"></script>
+    <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js"></script>
 {% endblock %}
 
 {% block footer %}

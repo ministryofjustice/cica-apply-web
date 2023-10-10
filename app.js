@@ -107,7 +107,7 @@ const oidcAuth = auth({
 });
 
 app.use((req, res, next) => {
-    res.locals.nonce = nanoid();
+    res.locals.cspNonce = nanoid();
     res.set('Application-Version', process.env.npm_package_version);
     next();
 });
@@ -115,14 +115,19 @@ app.use((req, res, next) => {
 app.use(
     helmet({
         contentSecurityPolicy: {
+            useDefaults: true,
+            xXssProtection: false,
             directives: {
+                baseUri: ["'self'"],
                 defaultSrc: ["'self'"],
                 scriptSrc: [
                     "'self'",
-                    (req, res) => `'nonce-${res.locals.nonce}'`,
-                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='", // hash of the inline script in frontend template.njk.
-                    '*.googletagmanager.com',
-                    "'sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU='" // hash of the inline script used for jQuery.
+                    "'strict-dynamic'",
+                    // https://content-security-policy.com/unsafe-inline/
+                    // "it is only ok to use unsafe-inline when it is combined with the strict-dynamic csp directive."
+                    "'unsafe-inline'",
+                    (req, res) => `'nonce-${res.locals.cspNonce}'`,
+                    'https:'
                 ],
                 imgSrc: ["'self'", 'data:', '*.google-analytics.com', 'www.googletagmanager.com'],
                 objectSrc: ["'none'"],

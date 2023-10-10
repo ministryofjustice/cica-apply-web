@@ -40,7 +40,7 @@ const html = `<!DOCTYPE html>
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
 </head>
 <body class="govuk-template__body ">
-<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+<script nonce="somenonce">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
 
 
@@ -197,7 +197,7 @@ const html = `<!DOCTYPE html>
 
 
 
-<script src="/govuk-frontend/all.js"></script>
+<script nonce="somenonce" src="/govuk-frontend/all.js"></script>
 <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
 
 </body>
