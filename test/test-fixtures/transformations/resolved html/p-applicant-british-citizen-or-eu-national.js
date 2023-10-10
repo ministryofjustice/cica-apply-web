@@ -41,10 +41,10 @@ const html = `<!DOCTYPE html>
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
   </head>
   <body class="govuk-template__body ">
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <script nonce="somenonce">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script nonce="somenonce" async src="https://www.googletagmanager.com/gtag/js?id=" integrity="sha256-reslnxoE9Ubh0YBekM4KFBNnj9mOmSzsx6lRGE9p7H4=" crossorigin="anonymous"></script>
     <script nonce="somenonce">
         window.dataLayer = window.dataLayer || [];
         function gtag(){
@@ -542,11 +542,11 @@ window.CICA = {
   ANALYTICS_TRACKING_ID: ''
 };
 </script>
-<script src="/govuk-frontend/all.js"></script>
+<script nonce="somenonce" src="/govuk-frontend/all.js"></script>
   <script nonce="somenonce">window.GOVUKFrontend.initAll()</script>
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js "integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="crossorigin="anonymous"></script>
-  <script src="/dist/js/autocomplete.min.js"></script>
-  <script src="/dist/js/bundle.js"></script>
+  <script nonce="somenonce" src="https://code.jquery.com/jquery-3.6.3.min.js "integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="crossorigin="anonymous"></script>
+  <script nonce="somenonce" src="/dist/js/autocomplete.min.js"></script>
+  <script nonce="somenonce" src="/dist/js/bundle.js"></script>
   </body>
 </html>
 `;
