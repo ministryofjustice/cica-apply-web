@@ -181,7 +181,12 @@ app.use(
 
 app.use(
     csrf({
-        cookie: true,
+        cookie: {
+            key: 'request-config',
+            path: '/',
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true
+        },
         sessionKey: 'session'
     })
 );

@@ -32,7 +32,10 @@ function createCookieService({req, res, cookieName}) {
             JSON.stringify({
                 ...getCookieJson(),
                 ...newProperties
-            })
+            }),
+            {
+                secure: true
+            }
         );
     }
 
