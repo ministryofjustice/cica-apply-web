@@ -53,7 +53,7 @@ const html = `<!DOCTYPE html>
     <div class="govuk-header__container govuk-width-container">
 
         <div class="govuk-header__logo">
-            <a href="/" class="govuk-header__link govuk-header__link--homepage">
+            <a href="https://www.gov.uk" class="govuk-header__link govuk-header__link--homepage">
         <span class="govuk-header__logotype">
 
           <svg
