@@ -129,7 +129,7 @@ const html = `<!DOCTYPE html>
   beta
 </strong>
 <span class="govuk-phase-banner__text">
-      This is a new service - your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">feedback (opens in new window)<span class="govuk-visually-hidden"></span></a> will help us to improve it.
+      This is a new service - your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">feedback (opens in new tab)</a> will help us to improve it.
     </span>
   </p>
 </div>
