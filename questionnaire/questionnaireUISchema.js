@@ -233,10 +233,7 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line2',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            autocomplete: 'address-line2'
                         }
                     }
                 },
@@ -244,10 +241,7 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line3',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            autocomplete: 'address-line3'
                         }
                     }
                 },
@@ -502,20 +496,14 @@ module.exports = {
                 'q-gp-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 },
                 'q-gp-building-and-street-3': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 }
@@ -556,20 +544,14 @@ module.exports = {
                 'q-applicant-treatment-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 },
                 'q-applicant-treatment-building-and-street-3': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 }
@@ -1356,20 +1338,14 @@ module.exports = {
                 'q-applicant-dentist-address-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 },
                 'q-applicant-dentist-address-building-and-street-3': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 }
@@ -1509,10 +1485,7 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line2',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            autocomplete: 'address-line2'
                         }
                     }
                 },
@@ -1520,10 +1493,7 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line2',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            autocomplete: 'address-line2'
                         }
                     }
                 },
@@ -1772,20 +1742,14 @@ module.exports = {
                 'q-rep-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 },
                 'q-rep-building-and-street-3': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 }
@@ -1820,20 +1784,14 @@ module.exports = {
                 'q-rep-building-and-street-2': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 },
                 'q-rep-building-and-street-3': {
                     options: {
                         macroOptions: {
-                            classes: '',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            classes: ''
                         }
                     }
                 }
