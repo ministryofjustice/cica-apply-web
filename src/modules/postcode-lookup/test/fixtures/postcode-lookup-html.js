@@ -69,7 +69,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 <label class="govuk-label" for="address-search-input">
 Search for a UK address using a postcode (optional)
 </label>
-<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
+<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="fill-out-the-fields-manually-hint"></div><button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-applicant-building-and-street">
@@ -333,7 +333,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 </div>
 <div id="address-search" class="govuk-form-group">
 <label class="govuk-label" for="address-search-input">Search for a UK address using a postcode (optional)</label>
-<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code">
+<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="fill-out-the-fields-manually-hint">
 </div>
 <button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">
 Find address
@@ -568,7 +568,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 <label class="govuk-label" for="address-search-input">
 Search for a UK address using a postcode (optional)
 </label>
-<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
+<input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="fill-out-the-fields-manually-hint"></div><button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
 
 <div class="govuk-form-group">
 <label class="govuk-label" for="q-mainapplicant-building-and-street">
