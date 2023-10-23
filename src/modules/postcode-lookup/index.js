@@ -416,6 +416,7 @@ function createPostcodeLookup(window) {
         addressSearchInput.setAttribute('name', 'address-search-input');
         addressSearchInput.setAttribute('type', 'search');
         addressSearchInput.setAttribute('autocomplete', 'postal-code');
+        addressSearchInput.setAttribute('aria-describedby', 'fill-out-the-fields-manually-hint');
 
         addressSearchInput.addEventListener('keypress', event => {
             if (event.code === 'Enter') {
