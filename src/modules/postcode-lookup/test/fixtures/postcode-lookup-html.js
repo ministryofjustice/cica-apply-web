@@ -67,7 +67,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 </div>
 <div id="address-search" class="govuk-form-group">
 <label class="govuk-label" for="address-search-input">
-Postcode
+Search for a UK address using a postcode (optional)
 </label>
 <input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
 
@@ -133,7 +133,7 @@ What is your address?
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.</div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
-<label class="govuk-label" for="address-search-input">Postcode</label>
+<label class="govuk-label" for="address-search-input">Search for a UK address using a postcode (optional)</label>
 <span id="address-search-input-error" class="govuk-error-message">Enter a valid postcode<span class="govuk-visually-hidden">Error:</span></span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
@@ -199,7 +199,7 @@ What is your address?
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.</div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
-<label class="govuk-label" for="address-search-input">Postcode</label>
+<label class="govuk-label" for="address-search-input">Search for a UK address using a postcode (optional)</label>
 <span id="address-search-input-error" class="govuk-error-message">Enter your postcode<span class="govuk-visually-hidden">Error:</span></span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
@@ -265,7 +265,7 @@ What is their address?
 </legend>
 <div id="fill-out-the-fields-manually-hint" class="govuk-hint">Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.</div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
-<label class="govuk-label" for="address-search-input">Postcode</label>
+<label class="govuk-label" for="address-search-input">Search for a UK address using a postcode (optional)</label>
 <span id="address-search-input-error" class="govuk-error-message">Enter their postcode<span class="govuk-visually-hidden">Error:</span></span>
 <input class="govuk-input govuk-input--error govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code" aria-describedby="address-search-input-error">
 </div>
@@ -332,7 +332,7 @@ What is your address?
 Enter a UK postcode to search for and select an address. If you cannot find the correct address, or the address is not in the UK, you should enter it manually.
 </div>
 <div id="address-search" class="govuk-form-group">
-<label class="govuk-label" for="address-search-input">Postcode</label>
+<label class="govuk-label" for="address-search-input">Search for a UK address using a postcode (optional)</label>
 <input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code">
 </div>
 <button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">
@@ -566,7 +566,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 </div>
 <div id="address-search" class="govuk-form-group">
 <label class="govuk-label" for="address-search-input">
-Postcode
+Search for a UK address using a postcode (optional)
 </label>
 <input class="govuk-input govuk-input--width-10" id="address-search-input" name="address-search-input" type="search" autocomplete="postal-code"></div><button id="search-button" class="govuk-button govuk-button--secondary ga-event ga-event--click" data-module="govuk-button" type="button" data-tracking-label="Find address" data-tracking-category="button">Find address</button><div class="govuk-form-group" id="address-search-results" name="address-search-results" role="region" aria-live="polite" style="display: none;"><label class="govuk-label" for="address-search-results-dropdown">Select an address</label><select class="govuk-select" id="address-search-results-dropdown" name="address-search-results-dropdown"></select></div>
 
@@ -697,7 +697,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 </div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">
-Postcode
+Search for a UK address using a postcode (optional)
 </label>
 <span id="address-search-input-error" class="govuk-error-message">
 Enter the postcode<span class="govuk-visually-hidden">Error:</span>
@@ -840,7 +840,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 </div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">
-Postcode
+Search for a UK address using a postcode (optional)
 </label>
 <span id="address-search-input-error" class="govuk-error-message">
 Enter the postcode<span class="govuk-visually-hidden">Error:</span>
@@ -983,7 +983,7 @@ Enter a UK postcode to search for and select an address. If you cannot find the 
 </div>
 <div id="address-search" class="govuk-form-group govuk-form-group--error">
 <label class="govuk-label" for="address-search-input">
-Postcode
+Search for a UK address using a postcode (optional)
 </label>
 <span id="address-search-input-error" class="govuk-error-message">
 Enter the postcode<span class="govuk-visually-hidden">Error:</span>

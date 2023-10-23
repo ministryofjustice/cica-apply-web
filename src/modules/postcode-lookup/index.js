@@ -401,7 +401,9 @@ function createPostcodeLookup(window) {
     }
 
     function createPostcodeSearchElements() {
-        const addressSearchLabelContent = window.document.createTextNode('Postcode');
+        const addressSearchLabelContent = window.document.createTextNode(
+            'Search for a UK address using a postcode (optional)'
+        );
 
         const addressSearchLabel = window.document.createElement('label');
         addressSearchLabel.appendChild(addressSearchLabelContent);
