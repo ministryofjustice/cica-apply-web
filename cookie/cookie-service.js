@@ -39,18 +39,9 @@ function createCookieService({req, res, cookieName}) {
         );
     }
 
-    function get(property) {
-        const cookie = getCookieJson();
-        if (property) {
-            return cookie[property];
-        }
-        return cookie;
-    }
-
     return Object.freeze({
         isSet,
         isExpired,
-        get,
         set
     });
 }
