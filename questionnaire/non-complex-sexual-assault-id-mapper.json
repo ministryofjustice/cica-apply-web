@@ -134,7 +134,6 @@
     "context-additional-info": "p--context-additional-info",
     "applicant-describe-incident": "p-applicant-describe-incident",
     "applicant-incident-description": "p-applicant-incident-description",
-    "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number",
     "system": "system",
     "mainapplicant-parent": "p-mainapplicant-parent",
     "mainapplicant-context-details": "p-mainapplicant-context-details",
@@ -235,5 +234,7 @@
     "applicant-what-do-you-want-to-do": "p-applicant-what-do-you-want-to-do",
     "transition-apply-when-18": "p--transition-apply-when-18",
     "transition-request-a-call-back": "p--transition-request-a-call-back",
-    "transition-contact-us": "p--transition-contact-us"
+    "transition-contact-us": "p--transition-contact-us",
+    "context-crime-ref-no": "p--context-crime-ref-no",
+    "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number"
 }
