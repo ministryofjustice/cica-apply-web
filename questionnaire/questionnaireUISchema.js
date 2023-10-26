@@ -1954,10 +1954,7 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line2',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            autocomplete: 'address-line2'
                         }
                     }
                 },
@@ -1965,10 +1962,7 @@ module.exports = {
                     options: {
                         macroOptions: {
                             classes: '',
-                            autocomplete: 'address-line3',
-                            label: {
-                                classes: 'govuk-visually-hidden'
-                            }
+                            autocomplete: 'address-line3'
                         }
                     }
                 },
