@@ -478,36 +478,6 @@ module.exports = {
     },
     'p-gp-enter-your-address': {
         options: {
-            properties: {
-                'q-gp-organisation-name': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-gp-building-and-street': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-gp-building-and-street-2': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-gp-building-and-street-3': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                }
-            },
             outputOrder: [
                 'q-gp-organisation-name',
                 'q-gp-building-and-street',
@@ -526,36 +496,6 @@ module.exports = {
     },
     'p-applicant-treatment-address': {
         options: {
-            properties: {
-                'q-applicant-treatment-organisation-name': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-applicant-treatment-building-and-street': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-applicant-treatment-building-and-street-2': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-applicant-treatment-building-and-street-3': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                }
-            },
             outputOrder: [
                 'q-applicant-treatment-organisation-name',
                 'q-applicant-treatment-building-and-street',
@@ -1320,36 +1260,6 @@ module.exports = {
     },
     'p-applicant-dentist-address': {
         options: {
-            properties: {
-                'q-applicant-dentist-organisation-name': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-applicant-dentist-address-building-and-street': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-applicant-dentist-address-building-and-street-2': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-applicant-dentist-address-building-and-street-3': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                }
-            },
             outputOrder: [
                 'q-applicant-dentist-organisation-name',
                 'q-applicant-dentist-address-building-and-street',
@@ -1731,29 +1641,6 @@ module.exports = {
     },
     'p-rep-address': {
         options: {
-            properties: {
-                'q-rep-building-and-street': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-rep-building-and-street-2': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-rep-building-and-street-3': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                }
-            },
             outputOrder: [
                 'q-rep-building-and-street',
                 'q-rep-building-and-street-2',
@@ -1766,36 +1653,6 @@ module.exports = {
     },
     'p-rep-organisation-address': {
         options: {
-            properties: {
-                'q-rep-organisation-name': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-rep-building-and-street': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-rep-building-and-street-2': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                },
-                'q-rep-building-and-street-3': {
-                    options: {
-                        macroOptions: {
-                            classes: ''
-                        }
-                    }
-                }
-            },
             outputOrder: [
                 'q-rep-organisation-name',
                 'q-rep-building-and-street',
