@@ -32,16 +32,22 @@ function createCookieService({req, res, cookieName}) {
             JSON.stringify({
                 ...getCookieJson(),
                 ...newProperties
-            }),
-            {
-                secure: true
-            }
+            })
         );
+    }
+
+    function get(property) {
+        const cookie = getCookieJson();
+        if (property) {
+            return cookie[property];
+        }
+        return cookie;
     }
 
     return Object.freeze({
         isSet,
         isExpired,
+        get,
         set
     });
 }

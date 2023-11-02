@@ -30,7 +30,7 @@ router.route('/start-or-resume').get((req, res) => {
         const html = render('start-or-resume.njk', {
             csrfToken: req.csrfToken(),
             submitButtonText: getFormSubmitButtonText('start'),
-            cspNonce: res.locals.cspNonce
+            nonce: res.locals.nonce
         });
         return res.send(html);
     } catch (err) {
@@ -55,7 +55,7 @@ router.post('/start-or-resume', (req, res) => {
         const html = render('start-or-resume.njk', {
             csrfToken: req.csrfToken(),
             submitButtonText: getFormSubmitButtonText('start'),
-            cspNonce: res.locals.cspNonce,
+            nonce: res.locals.nonce,
             error: {
                 text: 'Select what you would like to do'
             }
@@ -195,7 +195,7 @@ router
             const html = formHelper.getSectionHtml(
                 response.body,
                 req.csrfToken(),
-                res.locals.cspNonce,
+                res.locals.nonce,
                 isAuthenticated
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
@@ -279,7 +279,7 @@ router
                 response.body,
                 sectionId,
                 req.csrfToken(),
-                res.locals.cspNonce,
+                res.locals.nonce,
                 isAuthenticated
             );
             return res.send(html);

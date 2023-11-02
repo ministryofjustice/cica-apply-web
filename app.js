@@ -107,7 +107,9 @@ const oidcAuth = auth({
 });
 
 app.use((req, res, next) => {
-    res.locals.cspNonce = nanoid();
+    res.locals.nonce = nanoid();
+    // https://stackoverflow.com/a/22339262/2952356
+    // `process.env.npm_package_version` only works if you use npm start to run the app.
     res.set('Application-Version', process.env.npm_package_version);
     next();
 });
@@ -115,19 +117,14 @@ app.use((req, res, next) => {
 app.use(
     helmet({
         contentSecurityPolicy: {
-            useDefaults: true,
-            xXssProtection: false,
             directives: {
-                baseUri: ["'self'"],
                 defaultSrc: ["'self'"],
                 scriptSrc: [
                     "'self'",
-                    "'strict-dynamic'",
-                    // https://content-security-policy.com/unsafe-inline/
-                    // "it is only ok to use unsafe-inline when it is combined with the strict-dynamic csp directive."
-                    "'unsafe-inline'",
-                    (req, res) => `'nonce-${res.locals.cspNonce}'`,
-                    'https:'
+                    (req, res) => `'nonce-${res.locals.nonce}'`,
+                    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='", // hash of the inline script in frontend template.njk.
+                    '*.googletagmanager.com',
+                    "'sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU='" // hash of the inline script used for jQuery.
                 ],
                 imgSrc: ["'self'", 'data:', '*.google-analytics.com', 'www.googletagmanager.com'],
                 objectSrc: ["'none'"],
@@ -136,10 +133,8 @@ app.use(
                 // https://www.therobinlord.com/ga4-is-being-blocked-by-content-security-policy/
             }
         },
-        xFrameOptions: {action: 'deny'},
-        strictTransportSecurity: {
-            maxAge: 60 * 60 * 24 * 365,
-            includeSubDomains: true
+        hsts: {
+            maxAge: 60 * 60 * 24 * 365 // the units is seconds.
         }
     })
 );
@@ -180,12 +175,7 @@ app.use(
 
 app.use(
     csrf({
-        cookie: {
-            key: 'request-config',
-            path: '/',
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true
-        },
+        cookie: true,
         sessionKey: 'session'
     })
 );

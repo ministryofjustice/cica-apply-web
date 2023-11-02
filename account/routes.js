@@ -50,7 +50,7 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
             nextPageUrl: getValidReferrerOrDefault(req?.session?.referrer),
             expiryDate,
             isAuthenticated: accountService.isAuthenticated(req),
-            cspNonce: res.locals.cspNonce
+            nonce: res.locals.nonce
         });
         accountService.setOwnerId(req.oidc.user.sub);
         return res.send(html);
@@ -112,7 +112,7 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
             csrfToken: req.csrfToken(),
             isAuthenticated: accountService.isAuthenticated(req),
             ownerData,
-            cspNonce: res.locals.cspNonce
+            nonce: res.locals.nonce
         });
         return res.send(html);
     } catch (err) {
