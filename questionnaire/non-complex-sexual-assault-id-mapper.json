@@ -265,10 +265,15 @@
     "applicant-crime-location": "p-applicant-crime-location",
     "applicant-under-18": "p-applicant-under-18",
     "transition-someone-18-or-over-to-apply": "p--transition-someone-18-or-over-to-apply",
+    "info-transition-someone-18-or-over-to-apply": "p--transition-someone-18-or-over-to-apply",
     "applicant-what-do-you-want-to-do": "p-applicant-what-do-you-want-to-do",
     "transition-apply-when-18": "p--transition-apply-when-18",
+    "info-transition-apply-when-18": "p--transition-apply-when-18",
     "transition-request-a-call-back": "p--transition-request-a-call-back",
+    "info-transition-request-a-call-back": "p--transition-request-a-call-back",
     "transition-contact-us": "p--transition-contact-us",
+    "info-transition-contact-us": "p--transition-contact-us",
     "context-crime-ref-no": "p--context-crime-ref-no",
+    "info-context-crime-ref-no": "p--context-crime-ref-no",
     "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number"
 }
