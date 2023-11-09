@@ -235,5 +235,6 @@
     "transition-apply-when-18": "p--transition-apply-when-18",
     "transition-request-a-call-back": "p--transition-request-a-call-back",
     "transition-contact-us": "p--transition-contact-us",
-    "context-crime-ref-no": "p--context-crime-ref-no"
+    "context-crime-ref-no": "p--context-crime-ref-no",
+    "applicant-has-crime-reference-number": "p-applicant-has-crime-reference-number"
 }
