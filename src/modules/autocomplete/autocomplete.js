@@ -96,8 +96,7 @@ function createAutocomplete(window) {
                     templates: {
                         inputValue: inputValueTemplate,
                         suggestion: suggestionTemplate
-                    },
-                    tAssistiveHintVisible: true
+                    }
                 });
             }
         }
