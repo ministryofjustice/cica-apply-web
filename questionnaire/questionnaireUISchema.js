@@ -1641,6 +1641,29 @@ module.exports = {
     },
     'p-rep-address': {
         options: {
+            properties: {
+                'q-rep-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
             outputOrder: [
                 'q-rep-building-and-street',
                 'q-rep-building-and-street-2',
@@ -1653,6 +1676,36 @@ module.exports = {
     },
     'p-rep-organisation-address': {
         options: {
+            properties: {
+                'q-rep-building-and-street': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-organisation-name': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street-2': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                },
+                'q-rep-building-and-street-3': {
+                    options: {
+                        macroOptions: {
+                            classes: ''
+                        }
+                    }
+                }
+            },
             outputOrder: [
                 'q-rep-organisation-name',
                 'q-rep-building-and-street',
