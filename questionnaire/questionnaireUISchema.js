@@ -1972,6 +1972,9 @@ module.exports = {
     },
     'p-applicant-under-18': {
         options: {
+            signInLink: {
+                visible: false
+            },
             outputOrder: ['applicant-under-18-info', 'q-applicant-under-18'],
             properties: {
                 'q-applicant-under-18': {
@@ -2036,6 +2039,48 @@ module.exports = {
                         }
                     }
                 }
+            }
+        }
+    },
+    'p--context-crime-ref-no': {
+        options: {
+            signInLink: {
+                visible: false
+            }
+        }
+    },
+    'p-applicant-what-do-you-want-to-do': {
+        options: {
+            signInLink: {
+                visible: false
+            }
+        }
+    },
+    'p--transition-apply-when-18': {
+        options: {
+            signInLink: {
+                visible: false
+            }
+        }
+    },
+    'p--transition-request-a-call-back': {
+        options: {
+            signInLink: {
+                visible: false
+            }
+        }
+    },
+    'p--transition-contact-us': {
+        options: {
+            signInLink: {
+                visible: false
+            }
+        }
+    },
+    'p--transition-someone-18-or-over-to-apply': {
+        options: {
+            signInLink: {
+                visible: false
             }
         }
     }
