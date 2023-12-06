@@ -1,8 +1,10 @@
 'use strict';
 
 const config = {
-    testRegex: '.*\\.test\\.jsdom\\.js$',
-    setupFilesAfterEnv: ['./jest.setup.js']
+    testEnvironment: 'jsdom',
+    setupFilesAfterEnv: ['./jest.setup.js', './jest.setup.jsdom.js'],
+    coveragePathIgnorePatterns: ['.*vendor.*\\.js$'],
+    testRegex: '.*\\.test\\.jsdom\\.js$'
 };
 
 module.exports = config;
