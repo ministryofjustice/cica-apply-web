@@ -21,7 +21,7 @@ function createCicaGa(window) {
     const cookieConfig = {
         // no `expires` property means the cookie will die alongside the session.
         path: '/apply/', // only set it during the application
-        samesite: 'lax'
+        sameSite: 'Lax'
     };
 
     function send(options) {

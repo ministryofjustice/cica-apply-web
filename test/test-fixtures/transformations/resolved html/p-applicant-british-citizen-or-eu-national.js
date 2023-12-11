@@ -51,6 +51,7 @@ const html = `<!DOCTYPE html>
             dataLayer.push(arguments);
         }
         gtag('js', new Date());
+        gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
         gtag('config', '');
     </script>
 

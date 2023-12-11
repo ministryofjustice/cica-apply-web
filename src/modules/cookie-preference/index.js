@@ -4,7 +4,7 @@ function createCookiePreference(cookieName, allowedPreferences) {
     const cookieConfig = {
         path: '/',
         expires: 365,
-        samesite: 'lax'
+        sameSite: 'Lax'
     };
 
     function get(preferenceName) {

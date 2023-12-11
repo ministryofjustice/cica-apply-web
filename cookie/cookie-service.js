@@ -34,7 +34,8 @@ function createCookieService({req, res, cookieName}) {
                 ...newProperties
             }),
             {
-                secure: true
+                secure: true,
+                sameSite: 'Lax'
             }
         );
     }

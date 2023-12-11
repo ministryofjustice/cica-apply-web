@@ -197,7 +197,8 @@ app.use(
             key: 'request-config',
             path: '/',
             secure: process.env.NODE_ENV === 'production',
-            httpOnly: true
+            httpOnly: true,
+            sameSite: 'Lax'
         },
         sessionKey: 'session'
     })
