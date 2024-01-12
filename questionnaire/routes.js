@@ -43,9 +43,13 @@ router.post('/start-or-resume', (req, res) => {
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
         const startType = req.body['start-or-resume'];
+        const ownerSource = req.query.source;
         const redirectionUrl = getRedirectionUrl(
             startType,
-            getQuestionnaireIdInSession(req.session)
+            getQuestionnaireIdInSession(req.session),
+            {
+                source: ownerSource
+            }
         );
 
         if (redirectionUrl) {
@@ -71,7 +75,8 @@ router.route('/start').get(async (req, res) => {
         const accountService = createAccountService(req.session);
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
-            isAuthenticated: accountService.isAuthenticated(req)
+            isAuthenticated: accountService.isAuthenticated(req),
+            ownerSource: 'telephone' // 'web'
         });
         const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(

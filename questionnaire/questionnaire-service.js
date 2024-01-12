@@ -18,7 +18,8 @@ function questionnaireService(options = {}) {
                         templateName: 'sexual-assault',
                         owner: {
                             id: options.ownerId,
-                            isAuthenticated: options.isAuthenticated
+                            isAuthenticated: options.isAuthenticated,
+                            source: options.ownerSource
                         }
                     }
                 }
