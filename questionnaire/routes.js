@@ -8,6 +8,7 @@ const getQuestionnaireIdInSession = require('./utils/getQuestionnaireIdInSession
 const createAccountService = require('../account/account-service');
 const getRedirectionUrl = require('./utils/getRedirectionUrl');
 const createTemplateEngineService = require('../templateEngine');
+const getOwnerOrigin = require('./utils/getOwnerOrigin');
 
 const router = express.Router();
 
@@ -69,9 +70,13 @@ router.post('/start-or-resume', (req, res) => {
 router.route('/start').get(async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
+        const isAuthenticated = accountService.isAuthenticated(req);
+        const origin = getOwnerOrigin(req, isAuthenticated);
+
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
-            isAuthenticated: accountService.isAuthenticated(req)
+            isAuthenticated,
+            origin
         });
         const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(

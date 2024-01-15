@@ -84,6 +84,11 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_session_duration
+            - name: CW_INTERNAL_IP
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_internal_ip
   selector:
     matchLabels:
       app: webapp-stag

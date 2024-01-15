@@ -1,5 +1,7 @@
 'use strict';
 
+process.env.CW_INTERNAL_IP = '1.0.0.0';
+
 const config = {
     testEnvironment: 'node',
     setupFilesAfterEnv: ['./jest.setup.js'],

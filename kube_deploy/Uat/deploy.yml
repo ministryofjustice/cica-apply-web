@@ -99,6 +99,11 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_govuk_private_key
+            - name: CW_INTERNAL_IP
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_internal_ip
   selector:
     matchLabels:
       app: webapp-uat

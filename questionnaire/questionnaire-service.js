@@ -19,6 +19,9 @@ function questionnaireService(options = {}) {
                         owner: {
                             id: options.ownerId,
                             isAuthenticated: options.isAuthenticated
+                        },
+                        origin: {
+                            channel: options.origin
                         }
                     }
                 }

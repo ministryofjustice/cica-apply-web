@@ -49,7 +49,8 @@ const defaultMocks = {
             getOwnerId: () => '123ownerid',
             isAuthenticated: () => false
         }));
-    }
+    },
+    './utils/getOwnerOrigin': () => jest.fn(() => 'web')
 };
 let currentMocks = {};
 
