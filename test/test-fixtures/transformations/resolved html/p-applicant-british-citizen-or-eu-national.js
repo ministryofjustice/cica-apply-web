@@ -52,7 +52,7 @@ const html = `<!DOCTYPE html>
         }
         gtag('js', new Date());
         gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
-        gtag('config', '');
+        gtag('config', '', {'debug_mode':true});
     </script>
 
       <a href="#main-content" class="govuk-skip-link">Skip to main content</a>

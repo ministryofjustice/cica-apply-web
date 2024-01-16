@@ -32,17 +32,17 @@
 {% endblock %}
 
 {% block bodyStart %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script nonce="{{ cspNonce }}" async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
-    <script nonce="{{ cspNonce }}">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
-        gtag('config', '{{ CW_GA_TRACKING_ID }}');
-    </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script nonce="{{ cspNonce }}" async src="https://www.googletagmanager.com/gtag/js?id={{ CW_GA_TRACKING_ID }}"></script>
+  <script nonce="{{ cspNonce }}">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
+    gtag('config', '{{ CW_GA_TRACKING_ID }}', {'debug_mode': true});
+  </script>
 {% endblock %}
 
 {% block header %}
@@ -111,19 +111,23 @@
 {% endblock %}
 
 {% block bodyEnd %}
-    {% include "modal-timeout.njk" %}
-    {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-    <script nonce="{{ cspNonce }}">
-        window.CICA = {
-            SERVICE_URL: '{{ CW_URL }}',
-            ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
-        };
-    </script>
-    <script nonce="{{ cspNonce }}" src="/govuk-frontend/all.js"></script>
-    <script nonce="{{ cspNonce }}">window.GOVUKFrontend.initAll()</script>
-    <script nonce="{{ cspNonce }}" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js"></script>
-    <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js?{{CW_APP_VERSION}}"></script>
+  {% include "modal-timeout.njk" %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script nonce="{{ cspNonce }}">
+    window.CICA = {
+      SERVICE_URL: '{{ CW_URL }}',
+      ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
+    };
+  </script>
+  <script nonce="{{ cspNonce }}" src="/govuk-frontend/all.js"></script>
+  <script nonce="{{ cspNonce }}">
+    window
+      .GOVUKFrontend
+      .initAll()
+  </script>
+  <script nonce="{{ cspNonce }}" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js"></script>
+  <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js?{{CW_APP_VERSION}}"></script>
 {% endblock %}
 
 {% block footer %}
