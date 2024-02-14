@@ -41,7 +41,9 @@
         }
         gtag('js', new Date());
         gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
-        gtag('config', '{{ CW_GA_TRACKING_ID }}');
+        gtag('config', '{{ CW_GA_TRACKING_ID }}', {
+          'user_id': '{{ userId }}'
+        });
     </script>
 {% endblock %}
 
@@ -114,7 +116,8 @@
     <script nonce="{{ cspNonce }}">
         window.CICA = {
             SERVICE_URL: '{{ CW_URL }}',
-            ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}'
+            ANALYTICS_TRACKING_ID: '{{ CW_GA_TRACKING_ID }}',
+            CICA_ANALYTICS_ID: '{{ analyticsId }}'
         };
     </script>
     <script nonce="{{ cspNonce }}" src="/govuk-frontend/all.js"></script>

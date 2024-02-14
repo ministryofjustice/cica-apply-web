@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const crypto = require('crypto');
 const formHelper = require('./form-helper');
 const createQuestionnaireService = require('./questionnaire-service');
 const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
@@ -72,19 +73,22 @@ router.route('/start').get(async (req, res) => {
         const accountService = createAccountService(req.session);
         const isAuthenticated = accountService.isAuthenticated(req);
         const origin = getOwnerOrigin(req, isAuthenticated);
+        const analyticsId = `urn:uuid:${crypto.randomUUID()}`;
 
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated,
-            origin
+            origin,
+            analyticsId
         });
         const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(
             response.body.data.attributes.routes.initial
         );
         req.session.questionnaireId = response.body.data.attributes.id;
+        req.session.analyticsId = analyticsId;
 
-        res.redirect(`/apply/${initialSection}`);
+        res.redirect(`/apply/${initialSection}?utm_source=${origin}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
     }
@@ -97,6 +101,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
             ownerId: accountService.getOwnerId(),
             isAuthenticated: accountService.isAuthenticated(req)
         });
+        let resumableQuestionnaireAnalyticsId;
 
         const defaultRedirect = '/apply';
         let redirectUrl = defaultRedirect;
@@ -105,6 +110,10 @@ router.get('/resume/:questionnaireId', async (req, res) => {
         const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
             resumableQuestionnaireId
         );
+
+        if ('a_id' in req.query) {
+            resumableQuestionnaireAnalyticsId = req.query.a_id;
+        }
 
         const resumableQuestionnaireProgressEntry =
             resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;
@@ -131,6 +140,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
         // switch session info and redirect if valid.
         if (resumableQuestionnaireCurrentSectionId) {
             req.session.questionnaireId = resumableQuestionnaireId;
+            req.session.analyticsId = resumableQuestionnaireAnalyticsId;
             redirectUrl = `${redirectUrl}/${formHelper.removeSectionIdPrefix(
                 resumableQuestionnaireCurrentSectionId
             )}`;
@@ -201,10 +211,13 @@ router
                 response.body,
                 req.csrfToken(),
                 res.locals.cspNonce,
-                isAuthenticated
+                isAuthenticated,
+                accountService.getOwnerId(),
+                req.session.analyticsId
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
+                delete req.session.analyticsId;
             }
             return res.send(html);
         } catch (err) {
@@ -285,7 +298,9 @@ router
                 sectionId,
                 req.csrfToken(),
                 res.locals.cspNonce,
-                isAuthenticated
+                isAuthenticated,
+                accountService.getOwnerId(),
+                req.session.analyticsId
             );
             return res.send(html);
         } catch (err) {

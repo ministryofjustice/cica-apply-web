@@ -46,13 +46,15 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
             timeZone: 'Europe/London'
         });
 
+        accountService.setOwnerId(req.oidc.user.sub);
         const html = render('authentication-success.njk', {
             nextPageUrl: getValidReferrerOrDefault(req?.session?.referrer),
             expiryDate,
             isAuthenticated: accountService.isAuthenticated(req),
-            cspNonce: res.locals.cspNonce
+            cspNonce: res.locals.cspNonce,
+            userId: accountService.getOwnerId(req),
+            analyticsId: req.session.analyticsId
         });
-        accountService.setOwnerId(req.oidc.user.sub);
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
