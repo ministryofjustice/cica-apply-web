@@ -33,11 +33,14 @@ function renderSection({
     csrfToken,
     cspNonce,
     isAuthenticated,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated)
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated),
+    userId,
+    analyticsId
 }) {
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
+    const userUrn = isAuthenticated ? userId : undefined;
     return render(
         `
             {% extends "page.njk" %}
@@ -74,7 +77,7 @@ function renderSection({
                 </form>
             {% endblock %}
         `,
-        {cspNonce, isAuthenticated}
+        {cspNonce, isAuthenticated, userId: userUrn, analyticsId}
     );
 }
 
@@ -231,7 +234,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
     const {sectionId} = sectionData.data[0].attributes;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -258,7 +261,9 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated) {
         showBackLink,
         csrfToken,
         cspNonce,
-        isAuthenticated
+        isAuthenticated,
+        userId,
+        analyticsId
     });
 }
 
@@ -280,7 +285,15 @@ function processErrors(errors) {
     return errorObject;
 }
 
-function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, isAuthenticated) {
+function getSectionHtmlWithErrors(
+    sectionData,
+    sectionId,
+    csrfToken,
+    cspNonce,
+    isAuthenticated,
+    userId,
+    analyticsId
+) {
     const {schema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
@@ -299,7 +312,9 @@ function getSectionHtmlWithErrors(sectionData, sectionId, csrfToken, cspNonce, i
         sectionId,
         csrfToken,
         cspNonce,
-        isAuthenticated
+        isAuthenticated,
+        userId,
+        analyticsId
     });
 }
 

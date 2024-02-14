@@ -7,10 +7,14 @@ function createDashboardService(ownerId) {
     async function getFlatQuestionnaireMetadataByUserId() {
         const metadataCollection = await questionnaireService.getAllQuestionnairesMetadata();
         return (metadataCollection.body.data || []).map(metadatum => {
-            return {
+            const metaDataObject = {
                 questionnaireId: metadatum.attributes['questionnaire-id'],
                 expires: metadatum.attributes.expires
             };
+            if (metadatum.attributes['analytics-id']) {
+                metaDataObject.analyticsId = metadatum.attributes['analytics-id'];
+            }
+            return metaDataObject;
         });
     }
 
@@ -33,6 +37,9 @@ function createDashboardService(ownerId) {
             });
         }
         const templateData = dataset.reduce((acc, questionnaireData) => {
+            const resumeLink = questionnaireData.analyticsId
+                ? `/apply/resume/${questionnaireData.questionnaireId}?a_id=${questionnaireData.analyticsId}`
+                : `/apply/resume/${questionnaireData.questionnaireId}`;
             acc.push([
                 {
                     text: `${questionnaireData.answers['q-applicant-first-name']} ${questionnaireData.answers['q-applicant-last-name']}`,
@@ -50,7 +57,7 @@ function createDashboardService(ownerId) {
                     }
                 },
                 {
-                    html: `<a href="/apply/resume/${questionnaireData.questionnaireId}" class="govuk-link">Continue<span class='govuk-visually-hidden'> Continue application for ${questionnaireData.answers['q-applicant-first-name']} ${questionnaireData.answers['q-applicant-last-name']}</span></a>`
+                    html: `<a href="${resumeLink}" class="govuk-link">Continue<span class='govuk-visually-hidden'> Continue application for ${questionnaireData.answers['q-applicant-first-name']} ${questionnaireData.answers['q-applicant-last-name']}</span></a>`
                 }
             ]);
             return acc;

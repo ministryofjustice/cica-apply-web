@@ -117,6 +117,54 @@ function createCicaGa(window) {
         }
     }
 
+    // ******************************************
+    // *        GA4 APP TRACKING                *
+    // ******************************************
+
+    function trackApplication() {
+        const isFirstPage = new URLSearchParams(window.location.search).get('utm_source');
+        if (isFirstPage) {
+            const gtagOptions = {
+                type: 'event',
+                action: 'conversion',
+                category: 'application_journey_tracker',
+                label: 'start',
+                nonInteraction: true,
+                transaction_id: '{{ analyticsId }}',
+                time: Date.now()
+            };
+            send(gtagOptions);
+        } else if (window.location.pathname.includes('sign-in/success')) {
+            const gtagOptions = {
+                type: 'event',
+                action: 'conversion',
+                category: 'application_journey_tracker',
+                label: 'save',
+                nonInteraction: true,
+                transaction_id: '{{ analyticsId }}',
+                time: Date.now()
+            };
+            send(gtagOptions);
+        } else if (window.location.pathname.includes('declaration')) {
+            window.addEventListener(
+                'submit',
+                () => {
+                    const gtagOptions = {
+                        type: 'event',
+                        action: 'conversion',
+                        category: 'application_journey_tracker',
+                        label: 'finish',
+                        nonInteraction: true,
+                        transaction_id: '{{ analyticsId }}',
+                        time: Date.now()
+                    };
+                    send(gtagOptions);
+                },
+                false
+            );
+        }
+    }
+
     function recordJourneyDuration() {
         const cookieValue = jsCookies.getJSON('client') || {};
 
@@ -199,6 +247,7 @@ function createCicaGa(window) {
 
         validationError();
         recordJourneyDuration();
+        trackApplication();
     }
 
     return Object.freeze({
