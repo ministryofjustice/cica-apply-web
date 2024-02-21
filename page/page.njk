@@ -60,13 +60,15 @@
             },{
                 text: 'Log out',
                 href: '/account/sign-out'
-            }]
+            }],
+            useTudorCrown: true
         })}}
   {% else %}
     {{govukHeader({
             homepageUrl: "https://www.gov.uk",
             serviceName: "Claim criminal injuries compensation",
-            serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
+            serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
+            useTudorCrown: true
         })}}
   {% endif %}
 
