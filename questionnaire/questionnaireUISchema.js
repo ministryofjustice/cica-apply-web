@@ -1687,12 +1687,8 @@ module.exports = {
     },
     'p-rep-reference-number': {
         options: {
-            transformOrder: [
-                'help-reference-number',
-                'q-rep-reference-number',
-                'q-rep-has-reference-number'
-            ],
-            outputOrder: ['q-rep-has-reference-number', 'help-reference-number'],
+            transformOrder: ['q-rep-reference-number', 'q-rep-has-reference-number'],
+            outputOrder: ['q-rep-has-reference-number'],
             properties: {
                 'q-rep-has-reference-number': {
                     options: {
