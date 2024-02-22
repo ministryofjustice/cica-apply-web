@@ -78,7 +78,7 @@ describe('Static routes', () => {
         it('Should render a page with the correct page heading', async () => {
             const response = await request(app).get('/accessibility-statement');
             const actual = response.res.text.replace(/\s+/g, '');
-            const pageHeading = `<h1 class="govuk-heading-xl">Accessibility for Claim criminal injuries compensation</h1>`.replace(
+            const pageHeading = `<h1 class="govuk-heading-xl">Accessibility statement for the claim criminal injuries compensation service</h1>`.replace(
                 /\s+/g,
                 ''
             );
