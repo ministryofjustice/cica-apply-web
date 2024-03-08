@@ -485,51 +485,6 @@ describe('postcode lookup progressive enhancement', () => {
         });
     });
     describe('selecting an option from the search results drop down', () => {
-        describe('selection contains ORDINANCE_SURVEY as county value', () => {
-            it('maps to correct fields and sets county to an empty string', async () => {
-                fetch.mockResponse(async () => {
-                    return JSON.stringify(addressSearchCollectionResponse);
-                });
-                postcodeLookup.init();
-                window.document.getElementById('address-search-input').value = 'FO123BA';
-                window.document.getElementById('search-button').click();
-                await setTimeout(0);
-                expect(fetch.mock.calls.length).toEqual(1);
-
-                const searchResultsDropDown = window.document.getElementById(
-                    'address-search-results-dropdown'
-                );
-                expect(searchResultsDropDown[0].text).toContain('addresses found');
-
-                const selectionIndex = addressSelectionIndexFinder(
-                    'FOO CLEANERS, 3, FOOLAW PLACE, FOWTON BEARNS, FOOTOWN, A12 2BC'
-                );
-                searchResultsDropDown.selectedIndex = selectionIndex;
-                searchResultsDropDown.selectedIndex = searchResultsDropDown.dispatchEvent(
-                    new Event('change')
-                );
-                expect(searchResultsDropDown[selectionIndex].text).toEqual(
-                    'FOO CLEANERS, 3, FOOLAW PLACE, FOWTON BEARNS, FOOTOWN, A12 2BC'
-                );
-
-                expect(
-                    window.document.getElementById('q-applicant-building-and-street').value
-                ).toBe('FOO CLEANERS');
-                expect(
-                    window.document.getElementById('q-applicant-building-and-street-2').value
-                ).toBe('3 FOOLAW PLACE');
-                expect(
-                    window.document.getElementById('q-applicant-building-and-street-3').value
-                ).toBe('FOWTON BEARNS');
-                expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
-                    'FOOTOWN'
-                );
-                expect(window.document.getElementById('q-applicant-county').value).toBe('');
-                expect(window.document.getElementById('q-applicant-postcode').value).toBe(
-                    'A12 2BC'
-                );
-            });
-        });
         describe('selection contains sub building name', () => {
             it('maps to correct fields when building name contains number and letter suffix', async () => {
                 fetch.mockResponse(async () => {
@@ -568,9 +523,6 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBe('');
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOTOWN'
-                );
-                expect(window.document.getElementById('q-applicant-county').value).toBe(
-                    'CITY OF FOOTOWN'
                 );
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'B41 2FO'
@@ -613,9 +565,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'BARTOL'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe(
-                    'CITY OF FOOTOWN'
-                );
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'A12 2FO'
                 );
@@ -657,7 +606,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'ST. FIVES'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe('CORNFOO');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'FO26 1BA'
                 );
@@ -701,9 +649,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOARTH'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe(
-                    'BALE OF FOOMORGBAR'
-                );
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'FO12 3BA'
                 );
@@ -744,7 +689,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOTOWN'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'A12 2BC'
                 );
@@ -784,7 +728,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOTOWN'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe('A1 2DT');
             });
             it('maps to the correct address fields when building name contains one letter only and thouroughfare present', async () => {
@@ -822,7 +765,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'BARKING'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'AB4 1BC'
                 );
@@ -863,7 +805,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOBURGH'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe('FOOBURGH');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'AB12 3CD'
                 );
@@ -902,9 +843,6 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBe('FOOBARHALL');
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOBARHAM'
-                );
-                expect(window.document.getElementById('q-applicant-county').value).toBe(
-                    'EAST FOOBAR'
                 );
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'FB17 1BO'
@@ -948,9 +886,6 @@ describe('postcode lookup progressive enhancement', () => {
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOTOWN'
                 );
-                expect(window.document.getElementById('q-applicant-county').value).toBe(
-                    'CITY OF FOOBAR'
-                );
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'A12 2BC'
                 );
@@ -993,9 +928,6 @@ describe('postcode lookup progressive enhancement', () => {
                 ).toBe('234 FOO ROAD');
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe(
                     'FOOTOWN'
-                );
-                expect(window.document.getElementById('q-applicant-county').value).toBe(
-                    'CITY OF FOOBAR'
                 );
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe(
                     'F11 7BA'
@@ -1043,7 +975,6 @@ describe('postcode lookup progressive enhancement', () => {
                     'FOWTON BEARNS'
                 );
                 expect(window.document.getElementById('q-gp-town-or-city').value).toBe('FOOTOWN');
-                expect(window.document.getElementById('q-gp-county').value).toBe('EAST FOOSHIRE');
                 expect(window.document.getElementById('q-gp-postcode').value).toBe('A12 2BC');
             });
         });
@@ -1078,7 +1009,6 @@ describe('postcode lookup progressive enhancement', () => {
                     window.document.getElementById('q-applicant-building-and-street-3').value
                 ).toBe('');
                 expect(window.document.getElementById('q-applicant-town-or-city').value).toBe('');
-                expect(window.document.getElementById('q-applicant-county').value).toBe('');
                 expect(window.document.getElementById('q-applicant-postcode').value).toBe('');
             });
         });

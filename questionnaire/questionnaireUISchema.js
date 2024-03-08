@@ -252,13 +252,6 @@ module.exports = {
                         }
                     }
                 },
-                'q-applicant-county': {
-                    options: {
-                        macroOptions: {
-                            autocomplete: 'address-level1'
-                        }
-                    }
-                },
                 'q-applicant-postcode': {
                     options: {
                         macroOptions: {
@@ -272,7 +265,6 @@ module.exports = {
                 'q-applicant-building-and-street-2',
                 'q-applicant-building-and-street-3',
                 'q-applicant-town-or-city',
-                'q-applicant-county',
                 'q-applicant-postcode'
             ]
         }
@@ -514,7 +506,6 @@ module.exports = {
                 'q-gp-building-and-street-2',
                 'q-gp-building-and-street-3',
                 'q-gp-town-or-city',
-                'q-gp-county',
                 'q-gp-postcode'
             ]
         }
@@ -562,7 +553,6 @@ module.exports = {
                 'q-applicant-treatment-building-and-street-2',
                 'q-applicant-treatment-building-and-street-3',
                 'q-applicant-treatment-town-or-city',
-                'q-applicant-treatment-county',
                 'q-applicant-treatment-postcode'
             ]
         }
@@ -1356,7 +1346,6 @@ module.exports = {
                 'q-applicant-dentist-address-building-and-street-2',
                 'q-applicant-dentist-address-building-and-street-3',
                 'q-applicant-dentist-address-town-or-city',
-                'q-applicant-dentist-address-county',
                 'q-applicant-dentist-address-postcode'
             ]
         }
@@ -1504,13 +1493,6 @@ module.exports = {
                         }
                     }
                 },
-                'q-mainapplicant-county': {
-                    options: {
-                        macroOptions: {
-                            autocomplete: 'address-level1'
-                        }
-                    }
-                },
                 'q-mainapplicant-postcode': {
                     options: {
                         macroOptions: {
@@ -1524,7 +1506,6 @@ module.exports = {
                 'q-mainapplicant-building-and-street-2',
                 'q-mainapplicant-building-and-street-3',
                 'q-mainapplicant-town-or-city',
-                'q-mainapplicant-county',
                 'q-mainapplicant-postcode'
             ]
         }
@@ -1759,13 +1740,6 @@ module.exports = {
                         }
                     }
                 },
-                'q-rep-county': {
-                    options: {
-                        macroOptions: {
-                            autocomplete: 'address-level1'
-                        }
-                    }
-                },
                 'q-rep-postcode': {
                     options: {
                         macroOptions: {
@@ -1779,7 +1753,6 @@ module.exports = {
                 'q-rep-building-and-street-2',
                 'q-rep-building-and-street-3',
                 'q-rep-town-or-city',
-                'q-rep-county',
                 'q-rep-postcode'
             ]
         }
@@ -1826,13 +1799,6 @@ module.exports = {
                         }
                     }
                 },
-                'q-rep-county': {
-                    options: {
-                        macroOptions: {
-                            autocomplete: 'address-level1'
-                        }
-                    }
-                },
                 'q-rep-postcode': {
                     options: {
                         macroOptions: {
@@ -1847,7 +1813,6 @@ module.exports = {
                 'q-rep-building-and-street-2',
                 'q-rep-building-and-street-3',
                 'q-rep-town-or-city',
-                'q-rep-county',
                 'q-rep-postcode'
             ]
         }
@@ -2018,13 +1983,6 @@ module.exports = {
                     options: {
                         macroOptions: {
                             autocomplete: 'address-level2'
-                        }
-                    }
-                },
-                'q-deceased-county': {
-                    options: {
-                        macroOptions: {
-                            autocomplete: 'address-level1'
                         }
                     }
                 },
