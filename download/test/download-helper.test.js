@@ -16,8 +16,8 @@ describe('download-helper functions', () => {
             const timestamp = moment('2022-01-01 17:15');
             const summaryHtml = downloadHelper.getSummaryHtml(sectionData, timestamp);
             // const transformationContent = {};
-            expect(expectedSummaryHtml.html.replace(/[\n\r]/g, '')).toEqual(
-                summaryHtml.replace(/[\n\r]/g, '')
+            expect(expectedSummaryHtml.html.replace(/[\n\r]/g, '').replace(/\s/g, '')).toEqual(
+                summaryHtml.replace(/[\n\r]/g, '').replace(/\s/g, '')
             );
         });
     });

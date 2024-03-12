@@ -24,8 +24,8 @@ function createTemplateEngineService(app) {
                 [
                     `node_modules/@ministryofjustice/frontend/`,
                     `components/`,
-                    `node_modules/govuk-frontend/govuk/`,
-                    `node_modules/govuk-frontend/govuk/components/`,
+                    `node_modules/govuk-frontend/dist/govuk/`,
+                    `node_modules/govuk-frontend/dist/govuk/components/`,
                     `index/`,
                     `questionnaire/`,
                     `page/`,

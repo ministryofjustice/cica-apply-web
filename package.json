@@ -9,7 +9,7 @@
     "scripts": {
         "start:dev": "npm run build:dev && nodemon -L --inspect=0.0.0.0:9229 -e .css,.js,.json,.njk --ignore public/dist/ --ignore src/js/scripts.babel.generated.js ./bin/www",
         "start": "node ./bin/www",
-        "sass": "sass --style=compressed --no-source-map src/sass/all.scss public/stylesheets/all.css && sass --style=compressed --no-source-map src/sass/all-ie8.scss public/stylesheets/all-ie8.css",
+        "sass": "sass --style=compressed --no-source-map src/sass/all.scss public/stylesheets/all.css",
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
         "test:node": "jest --config=jest.config.js",
@@ -26,14 +26,13 @@
         "babel": "babel src/js/scripts.js -o src/js/scripts.babel.generated.js"
     },
     "dependencies": {
-        "@ministryofjustice/frontend": "^1.8.0",
+        "@ministryofjustice/frontend": "^2.1.1",
         "cookie-parser": "~1.4.3",
         "csurf": "^1.11.0",
         "debug": "~2.6.9",
         "express": "^4.18.2",
         "express-openid-connect": "^2.13.0",
         "got": "^11.8.6",
-        "govuk-frontend": "^3.15.0",
         "helmet": "^7.0.0",
         "js-cookie": "^2.2.1",
         "lodash.merge": "^4.6.2",
