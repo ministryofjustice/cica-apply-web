@@ -15,7 +15,7 @@
         "test:node": "jest --config=jest.config.js",
         "coverage": "jest --coverage",
         "build:dev": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack:dev",
-        "build": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack",
+        "build": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack -p",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "buildRun:dev": "node ./bin/www",
