@@ -1673,6 +1673,9 @@ module.exports = {
             properties: {
                 'q-rep-has-reference-number': {
                     options: {
+                        macroOptions: {
+                            classes: 'govuk-radios'
+                        },
                         conditionalComponentMap: [
                             {
                                 itemValue: true,
