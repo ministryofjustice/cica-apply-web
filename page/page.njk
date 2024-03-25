@@ -5,10 +5,10 @@
 {% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}
 {% block head %}
 
-  <link href="/govuk-frontend/all.css" rel="stylesheet"/>
+  <link href="/govuk-frontend/all.css?{{CW_APP_VERSION}}" rel="stylesheet"/>
 
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css"/>
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?{{CW_APP_VERSION}}"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?{{CW_APP_VERSION}}"/>
 {% endblock %}
 
 {% block skipLink %}
@@ -108,11 +108,11 @@
         };
     </script>
     <script type="module" nonce="{{ cspNonce }}">
-        import {initAll} from '/govuk-frontend/all.js'
+        import {initAll} from '/govuk-frontend/all.js?{{CW_APP_VERSION}}'
         initAll();
     </script>
     <script nonce="{{ cspNonce }}" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js"></script>
+    <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js?{{CW_APP_VERSION}}"></script>
     <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js?{{CW_APP_VERSION}}"></script>
 {% endblock %}
 
