@@ -13,9 +13,9 @@ const html = `<!DOCTYPE html>
       <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
       <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
       <link rel="manifest" href="/assets/manifest.json">
-    <link href="/govuk-frontend/all.css?1.2.3" rel="stylesheet"/>
-    <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?1.2.3"/>
-    <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?1.2.3"/>
+  <link href="/govuk-frontend/all.css?1.2.3" rel="stylesheet"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?1.2.3"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?1.2.3"/>
   </head>
   <body class="govuk-template__body">
     <script nonce="somenonce">document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
