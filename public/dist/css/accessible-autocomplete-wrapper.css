@@ -1,7 +1,7 @@
 .autocomplete__wrapper input,
 .autocomplete__wrapper li {
     font-family: "GDS Transport", Arial, sans-serif;
-    font-size: 19px;
+    font-size: 1.188rem;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

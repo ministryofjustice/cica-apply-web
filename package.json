@@ -19,7 +19,7 @@
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "buildRun:dev": "node ./bin/www",
-        "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/",
+        "copy:css": "rm -rf /public/dist/css || true && mkdir -p public/dist/css && cp -r ./src/modules/**/*.css public/dist/css/ && cp -r ./src/modules/**/*.css.map public/dist/css/",
         "copy:js": "rm -rf /public/dist/js || true && mkdir -p public/dist/js && cp -r ./src/modules/**/vendor/*.js public/dist/js/",
         "webpack:dev": "webpack --config webpack.config.js",
         "webpack": "webpack --config webpack.config.prod.js",
