@@ -2037,5 +2037,23 @@ module.exports = {
                 visible: false
             }
         }
+    },
+    'p-applicant-describe-incident': {
+        options: {
+            outputOrder: ['describe-incident-info', 'q-applicant-describe-incident'],
+            properties: {
+                'q-applicant-describe-incident': {
+                    options: {
+                        macroOptions: {
+                            fieldset: {
+                                legend: {
+                                    classes: 'govuk-fieldset__legend--m'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 };
