@@ -20,6 +20,18 @@ function createAutocomplete(window) {
             for (let i = 0; i < selectElements.length; i += 1) {
                 selectElements[i].parentNode.classList.add('autocomplete__wrapper');
 
+                // Select the hint element
+                const hintElement = window.document.querySelector('.govuk-hint');
+
+                // Define the default assistive hint
+                let assistiveHint =
+                    'When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.';
+
+                // Append the innerText of hintElement to assistiveHint if hintElement exists
+                if (hintElement && hintElement.innerText.trim() !== '') {
+                    assistiveHint = `${hintElement.innerText} ${assistiveHint}`;
+                }
+
                 window.accessibleAutocomplete.enhanceSelectElement({
                     selectElement: selectElements[i],
                     minLength: 2,
@@ -27,7 +39,8 @@ function createAutocomplete(window) {
                     displayMenu: 'overlay',
                     showAllValues: true,
                     autoselect: true,
-                    confirmOnBlur: false
+                    confirmOnBlur: false,
+                    tAssistiveHint: () => assistiveHint
                 });
             }
         }

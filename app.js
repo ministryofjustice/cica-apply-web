@@ -175,6 +175,13 @@ app.use(
 );
 
 app.use(
+    '/govuk-frontend/govuk-frontend.min.js.map',
+    express.static(
+        path.join(__dirname, '/node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js.map')
+    )
+);
+
+app.use(
     '/moj-frontend/all.js',
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
