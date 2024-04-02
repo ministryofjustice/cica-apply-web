@@ -72,15 +72,6 @@
         })}}
   {% endif %}
 
-  {% from "phase-banner/macro.njk" import govukPhaseBanner %}
-  {{ govukPhaseBanner({
-      html: 'This is a new service - your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">feedback (opens in new tab)</a> will help us to improve it.',
-      classes: 'govuk-width-container',
-      attributes: { 
-        'role': 'region',
-        'labelledby': 'service-banner'
-      }
-    }) }}
   <div class="govuk-width-container" role="navigation">
     {% block innerHeader %}{% endblock %}
   </div>
@@ -107,6 +98,14 @@
       {% block innerContent %}{% endblock %}
     </div>
   </div>
+{% endblock %}
+
+{% block main %}
+    {{ super() }}
+    <div class="govuk-width-container">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <p class="govuk-body-s"><a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">Tell us your feedback (opens in new tab)</a> to help us to improve our service.</p>
+    </div>
 {% endblock %}
 
 {% block bodyEnd %}

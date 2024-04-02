@@ -122,17 +122,6 @@ const html = `<!DOCTYPE html>
   </div>
 </header>
 
-
-
-    <div class="govuk-phase-banner govuk-width-container" role="region" labelledby="service-banner">
-  <p class="govuk-phase-banner__content"><strong class="govuk-tag govuk-phase-banner__content__tag ">
-</strong>
-<span class="govuk-phase-banner__text">
-      This is a new service - your <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">feedback (opens in new tab)</a> will help us to improve it.
-    </span>
-  </p>
-</div>
-
 <div class="govuk-width-container" role="navigation">
     <div class="govuk-grid-column-two-thirds">
         <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
@@ -229,8 +218,10 @@ const html = `<!DOCTYPE html>
         </main>
       </div>
 
-
-
+    <div class="govuk-width-container">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <p class="govuk-body-s"><a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">Tell us your feedback (opens in new tab)</a> to help us to improve our service.</p>
+    </div>
     <footer class="govuk-footer " role="contentinfo">
   <div class="govuk-width-container ">
 
