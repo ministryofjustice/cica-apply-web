@@ -187,6 +187,7 @@ var _modalTimeout = _interopRequireDefault(require("../modules/modal-timeout"));
 var _newWindowAnchors = _interopRequireDefault(require("../modules/new-window-anchors"));
 var _liveChat = _interopRequireDefault(require("../modules/live-chat"));
 var _postcodeLookup = _interopRequireDefault(require("../modules/postcode-lookup"));
+var _govukOneLoginServiceHeader = _interopRequireDefault(require("../modules/govuk-one-login-service-header"));
 var _msToMinutesAndSeconds = _interopRequireDefault(require("../modules/modal-timeout/utils/msToMinutesAndSeconds"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
@@ -213,6 +214,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
   });
   cookieBanner.show();
+  (0, _govukOneLoginServiceHeader.default)(window);
 
   /* ****************************************** */
   /* ** MODAL + TIMEOUT IMPLEMENTATION START ** */

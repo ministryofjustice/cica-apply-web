@@ -15,6 +15,7 @@ import createTimeoutModal from '../modules/modal-timeout';
 import createNewWindowAnchors from '../modules/new-window-anchors';
 import createLiveChat from '../modules/live-chat';
 import createPostcodeLookup from '../modules/postcode-lookup';
+import createCrossServiceHeader from '../modules/govuk-one-login-service-header';
 
 import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAndSeconds';
 
@@ -38,6 +39,7 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
         cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
     });
     cookieBanner.show();
+    createCrossServiceHeader(window);
 
     /* ****************************************** */
     /* ** MODAL + TIMEOUT IMPLEMENTATION START ** */
