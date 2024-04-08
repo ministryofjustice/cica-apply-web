@@ -114,7 +114,8 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
             csrfToken: req.csrfToken(),
             isAuthenticated: accountService.isAuthenticated(req),
             ownerData,
-            cspNonce: res.locals.cspNonce
+            cspNonce: res.locals.cspNonce,
+            currentUrlPathname: '/account/dashboard'
         });
         return res.send(html);
     } catch (err) {

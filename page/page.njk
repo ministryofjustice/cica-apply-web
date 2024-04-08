@@ -1,5 +1,6 @@
 {% extends "template.njk" %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{%- from "govuk/one-login-service-header/macro.njk" import govukOneLoginServiceHeader -%}
 
 {% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}
 {% block head %}
@@ -48,25 +49,20 @@
 {% endblock %}
 
 {% block header %}
-  {% if isAuthenticated %}
-    {{govukHeader({
+    {% if isAuthenticated %}
+        {{govukOneLoginServiceHeader({
             serviceName: "Claim criminal injuries compensation",
-            serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
-            homepageUrl: "https://www.gov.uk",
-            navigationLabel: 'Account navigation',
-            menuButtonLabel: 'Account navigation',
-            navigationClasses: 'govuk-header__navigation--right',
-            navigation: [{
-                text: 'Your applications',
-                href: '/account/dashboard'
-            },{
-                text: 'Log out',
-                href: '/account/sign-out'
-            }],
-            useTudorCrown: true
+            serviceLink: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
+            currentUrlPathname: currentUrlPathname,
+            signOutLink: "/account/sign-out",
+            navigationItems: [{
+                href: "/account/dashboard",
+                text: "Your Applications",
+                id: "header-link-dashboard"
+            }]
         })}}
-  {% else %}
-    {{govukHeader({
+    {% else %}
+        {{govukHeader({
             homepageUrl: "https://www.gov.uk",
             serviceName: "Claim criminal injuries compensation",
             serviceUrl: "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
