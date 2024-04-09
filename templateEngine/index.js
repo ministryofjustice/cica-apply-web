@@ -57,7 +57,8 @@ function createTemplateEngineService(app) {
                 'CW_MAINTENANCE_MESSAGE_ENABLED',
                 process.env.CW_MAINTENANCE_MESSAGE_ENABLED === 'true'
             )
-            .addGlobal('CW_APP_VERSION', process.env.npm_package_version);
+            .addGlobal('CW_APP_VERSION', process.env.npm_package_version)
+            .addGlobal('CW_GOVUK_ACCOUNT_URL', process.env.CW_GOVUK_ACCOUNT_URL);
 
         return environment;
     }
