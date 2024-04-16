@@ -1,10 +1,7 @@
-'use strict';
-
-const html = `<!DOCTYPE html>
 <html lang="en" class="govuk-template">
   <head>
     <meta charset="utf-8">
-    <title>Are you a British citizen or EU national? - Claim criminal injuries compensation - GOV.UK
+    <title>Who are you applying for? - Claim criminal injuries compensation - GOV.UK
             </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#0b0c0c">
@@ -13,22 +10,22 @@ const html = `<!DOCTYPE html>
       <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
       <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
       <link rel="manifest" href="/assets/manifest.json">
-  <link href="/govuk-frontend/all.css?1.2.3" rel="stylesheet"/>
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?1.2.3"/>
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?1.2.3"/>
+  <link href="/govuk-frontend/all.css?7.4.1" rel="stylesheet"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?7.4.1"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?7.4.1"/>
   </head>
   <body class="govuk-template__body">
-    <script nonce="somenonce">document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt">document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script nonce="somenonce" async src="https://www.googletagmanager.com/gtag/js?id="></script>
-    <script nonce="somenonce">
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt" async src="https://www.googletagmanager.com/gtag/js?id=G-2HXYKFX8BH"></script>
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt">
         window.dataLayer = window.dataLayer || [];
         function gtag() {
             dataLayer.push(arguments);
         }
         gtag('js', new Date());
         gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
-        gtag('config', '', {
+        gtag('config', 'G-2HXYKFX8BH', {
           'user_id': ''
         });
     </script>
@@ -80,7 +77,6 @@ const html = `<!DOCTYPE html>
 </header>
     <div class="govuk-width-container" role="navigation">
                 <div class="govuk-grid-column-two-thirds">
-                        <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
                 </div>
     </div>
       <div class="govuk-width-container">
@@ -92,21 +88,27 @@ const html = `<!DOCTYPE html>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
       <h1 class="govuk-fieldset__heading">
-        Are you a British citizen or EU national?
+        Who are you applying for?
       </h1>
     </legend>
-    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+    <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="q-applicant-british-citizen-or-eu-national" name="q-applicant-british-citizen-or-eu-national" type="radio" value="true">
-        <label class="govuk-label govuk-radios__label" for="q-applicant-british-citizen-or-eu-national">
-          Yes
+        <input class="govuk-radios__input" id="q-applicant-who-are-you-applying-for" name="q-applicant-who-are-you-applying-for" type="radio" value="myself" aria-describedby="q-applicant-who-are-you-applying-for-item-hint">
+        <label class="govuk-label govuk-radios__label" for="q-applicant-who-are-you-applying-for">
+          Myself
         </label>
+        <div id="q-applicant-who-are-you-applying-for-item-hint" class="govuk-hint govuk-radios__hint">
+          I am the person claiming compensation.
+        </div>
       </div>
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="q-applicant-british-citizen-or-eu-national-2" name="q-applicant-british-citizen-or-eu-national" type="radio" value="false">
-        <label class="govuk-label govuk-radios__label" for="q-applicant-british-citizen-or-eu-national-2">
-          No
+        <input class="govuk-radios__input" id="q-applicant-who-are-you-applying-for-2" name="q-applicant-who-are-you-applying-for" type="radio" value="someone-else" aria-describedby="q-applicant-who-are-you-applying-for-2-item-hint">
+        <label class="govuk-label govuk-radios__label" for="q-applicant-who-are-you-applying-for-2">
+          Someone else
         </label>
+        <div id="q-applicant-who-are-you-applying-for-2-item-hint" class="govuk-hint govuk-radios__hint">
+          I am a representative filling out the form for someone else.
+        </div>
       </div>
     </div>
   </fieldset>
@@ -114,7 +116,7 @@ const html = `<!DOCTYPE html>
 <button type="submit" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button">
   Continue
 </button>
-                    <input type="hidden" name="_csrf" value="sometoken">
+                    <input type="hidden" name="_csrf" value="d4T4fzug-me954LsxOBnghsEYxel-ishc_cE">
                 </form>
         </div>
     </div>
@@ -331,23 +333,20 @@ const html = `<!DOCTYPE html>
     </div>
     <div class="govuk-modal__overlay"></div>
 </div>
-    <script nonce="somenonce">
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt">
         window.CICA = {
-            SERVICE_URL: 'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk',
-            ANALYTICS_TRACKING_ID: '',
-            CICA_ANALYTICS_ID: ''
+            SERVICE_URL: 'http://localhost:3000',
+            ANALYTICS_TRACKING_ID: 'G-2HXYKFX8BH',
+            CICA_ANALYTICS_ID: 'urn:uuid:01560069-dd60-4114-9c5b-3e8fdf00e793'
         };
     </script>
-    <script type="module" nonce="somenonce" src="/govuk-frontend/all.js?1.2.3"></script>
-    <script type="module" nonce="somenonce">
-        import {initAll} from '/govuk-frontend/all.js?1.2.3'
+    <script type="module" nonce="Ap7P_UEmWRXGPpCsdUYLt" src="/govuk-frontend/all.js?7.4.1"></script>
+    <script type="module" nonce="Ap7P_UEmWRXGPpCsdUYLt">
+        import {initAll} from '/govuk-frontend/all.js?7.4.1'
         initAll();
     </script>
-    <script nonce="somenonce" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script nonce="somenonce" src="/dist/js/autocomplete.min.js?1.2.3"></script>
-    <script nonce="somenonce" src="/dist/js/bundle.js?1.2.3"></script>
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt" src="/dist/js/autocomplete.min.js?7.4.1"></script>
+    <script nonce="Ap7P_UEmWRXGPpCsdUYLt" src="/dist/js/bundle.js?7.4.1"></script>
   </body>
 </html>
-`;
-
-module.exports = html;

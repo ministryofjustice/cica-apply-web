@@ -90,6 +90,7 @@ router.route('/start').get(async (req, res) => {
 
         res.redirect(`/apply/${initialSection}?utm_source=${origin}`);
     } catch (err) {
+        console.log(err);
         res.status(err.statusCode || 404).render('404.njk');
     }
 });
