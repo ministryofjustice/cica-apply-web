@@ -13,9 +13,9 @@ const html = `<!DOCTYPE html>
       <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
       <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
       <link rel="manifest" href="/assets/manifest.json">
-  <link href="/govuk-frontend/all.css?1.2.3" rel="stylesheet"/>
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?1.2.3"/>
-  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?1.2.3"/>
+  <link href="/govuk-frontend/all.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" rel="stylesheet"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"/>
+  <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"/>
   </head>
   <body class="govuk-template__body">
     <script nonce="somenonce">document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
@@ -419,12 +419,12 @@ const html = `<!DOCTYPE html>
         };
     </script>
     <script type="module" nonce="somenonce">
-        import {initAll} from '/govuk-frontend/all.js'
+        import {initAll} from '/govuk-frontend/all.js?v=1.2.3&c=Qnefc5ywgazsrupSws1uk'
         initAll();
     </script>
     <script nonce="somenonce" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script nonce="somenonce" src="/dist/js/autocomplete.min.js"></script>
-    <script nonce="somenonce" src="/dist/js/bundle.js?1.2.3"></script>
+    <script nonce="somenonce" src="/dist/js/autocomplete.min.js?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"></script>
+    <script nonce="somenonce" src="/dist/js/bundle.js?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"></script>
   </body>
 </html>
 `;
