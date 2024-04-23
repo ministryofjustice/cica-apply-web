@@ -1,0 +1,9 @@
+.govuk-task-list__item {
+    &.govuk-task-list__item--cannot-start {
+
+        .govuk-task-list__name-and-hint,
+        .govuk-task-list__status {
+            color: govuk-colour("dark-grey");
+        }
+    }
+}
