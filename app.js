@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const ViteExpress = require('vite-express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -238,5 +239,7 @@ app.use((err, req, res, next) => {
 
     return next(err);
 });
+
+ViteExpress.listen(app, 3001, () => console.log('Server is listening on port 3001...'));
 
 module.exports = app;
