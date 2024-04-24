@@ -10,14 +10,15 @@
     {% if not data.taskListCompleted %}
         <h2 class="govuk-body govuk-!-margin-0">Application incomplete</h2>
         <p class="govuk-body govuk-!-margin-0 govuk-!-font-weight-bold">You've completed {{ data.sectionsCompletedCount }} of {{ data.sectionsTotalCount }} sections.</p>
-        <p class="govuk-body"><a href="/apply/task-list/continue" class="govuk-link">Skip to first incomplete section</a></p>
+        <p class="govuk-body"><a href="/task-list/next" class="govuk-link">Skip to first incomplete section</a></p>
     {% endif %}
 
     {% for section in data.sections %}
-        <h2 class="govuk-heading-m">{{ section.title }}</h2>
+        <h2 id="govuk-task-list-section-heading-{{ section.idPrefix }}" class="govuk-heading-m govuk-task-list-section-heading">{{ section.title }}</h2>
         {{ govukTaskList({
             idPrefix: section.idPrefix,
-            items: section.tasks
+            items: section.tasks,
+            attributes: section.attributes
         }) }}
     {% endfor %}
 
