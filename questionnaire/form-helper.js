@@ -8,7 +8,7 @@ const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
-function getButtonText(sectionId) {
+function getSubmitButtonText(sectionId) {
     return sectionId in uiSchema &&
         uiSchema[sectionId].options &&
         uiSchema[sectionId].options.buttonText
@@ -24,12 +24,27 @@ function getSectionContext(sectionId) {
     );
 }
 
+// uiSchemaShowBackLink    prevLink    result
+// false                   false       false
+// false                   true        false
+// true                    false       false
+// true                    true        true
+function shouldShowBackLink(sectionData) {
+    const defaultViibility = false;
+    // const uiSchemaShowBackLink = uiSchema?.[sectionId]?.options?.showBackButton;
+    const prevLink = sectionData?.links?.prev;
+
+    if (prevLink !== undefined) {
+        return true;
+    }
+    return defaultViibility;
+}
+
 function renderSection({
     transformation,
-    isFinal,
-    backTarget,
     sectionId,
-    showBackLink = true,
+    sectionData,
+    showBackLink = shouldShowBackLink(sectionData),
     csrfToken,
     cspNonce,
     isAuthenticated,
@@ -37,8 +52,8 @@ function renderSection({
     userId,
     analyticsId
 }) {
-    const showButton = !isFinal;
-    const buttonTitle = getButtonText(sectionId);
+    const showSubmitButton = !sectionData.meta.isFinal;
+    const buttonTitle = getSubmitButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return render(
         `
@@ -50,10 +65,10 @@ function renderSection({
                 <div class="govuk-grid-column-two-thirds">
                     {% if ${showBackLink} %}
                         {% from "back-link/macro.njk" import govukBackLink %}
-                        {{ govukBackLink({
-                            text: "Back",
-                            href: "${backTarget}"
-                        }) }}
+                            {{ govukBackLink({
+                                text: "Back",
+                                href: "${sectionData?.links?.prev}" 
+                            }) }}
                     {% endif %}
                 </div>
                 {% if ${showSignInLink} %}
@@ -66,7 +81,7 @@ function renderSection({
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
-                    {% if ${showButton} %}
+                    {% if ${showSubmitButton} %}
                         {{ govukButton({
                             text: "${buttonTitle}",
                             preventDoubleClick: true
@@ -214,15 +229,13 @@ function processRequest(rawBody, section) {
     return {};
 }
 
-function processPreviousAnswers(answersObject) {
-    let answers = {};
-    if (answersObject.length) {
-        answers = answersObject.reduce((acc, answer) => {
-            acc[answer.id] = answer.attributes;
-            return acc;
-        }, {});
+function transformAnswersResourceToObject(answersResource) {
+    const transformedAnswers = {};
+    const sectionAnswers = answersResource[0];
+    if (answersResource.length) {
+        transformedAnswers[sectionAnswers.id] = sectionAnswers.attributes;
     }
-    return answers;
+    return transformedAnswers;
 }
 
 function escapeSchemaContent(schema) {
@@ -235,29 +248,23 @@ function escapeSchemaContent(schema) {
 
 function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
     const {sectionId} = sectionData.data[0].attributes;
-    const display = sectionData.meta;
-    const schema = sectionData.included.filter(section => section.type === 'sections')[0]
+    const sectionSchema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
-    const answersObject = processPreviousAnswers(
+
+    const sectionAnswers = transformAnswersResourceToObject(
         sectionData.included.filter(answer => answer.type === 'answers')
-    );
-    const answers = answersObject[sectionId];
-    const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-    const showBackLink = !(
-        uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
-    );
+    )[sectionId];
+
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
-        schema: escapeSchemaContent(schema),
+        schema: escapeSchemaContent(sectionSchema),
         uiSchema,
-        data: answers
+        data: sectionAnswers
     });
     return renderSection({
         transformation,
-        isFinal: display.final,
-        backTarget: backLink,
         sectionId,
-        showBackLink,
+        sectionData,
         csrfToken,
         cspNonce,
         isAuthenticated,
@@ -286,29 +293,29 @@ function processErrors(errors) {
 
 function getSectionHtmlWithErrors(
     sectionData,
-    sectionId,
     csrfToken,
     cspNonce,
     isAuthenticated,
     userId,
     analyticsId
 ) {
-    const {schema} = sectionData.meta;
+    const {sectionId} = sectionData.meta;
+    // TODO: move this to be in an include type="sections" in the response (identical the `getSectionHtml` implementation).
+    const {sectionSchema} = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
-    const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-    const {answers} = sectionData.meta;
+    // TODO: move this to be in an include type="answers" in the response (identical the `getSectionHtml` implementation).
+    const sectionAnswers = sectionData.meta.answers;
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
-        schema,
+        schema: escapeSchemaContent(sectionSchema),
         uiSchema,
-        data: answers,
+        data: sectionAnswers,
         schemaErrors: errorObject
     });
     return renderSection({
         transformation,
-        isFinal: false,
-        backTarget: backLink,
         sectionId,
+        sectionData,
         csrfToken,
         cspNonce,
         isAuthenticated,
@@ -318,7 +325,7 @@ function getSectionHtmlWithErrors(
 }
 
 module.exports = {
-    getButtonText,
+    getSubmitButtonText,
     renderSection,
     removeSectionIdPrefix,
     processRequest,
@@ -327,7 +334,7 @@ module.exports = {
     removeUnwantedHiddenAnswers,
     correctPartialDates,
     processErrors,
-    processPreviousAnswers,
+    transformAnswersResourceToObject,
     getSectionHtmlWithErrors,
     addPrefix,
     escapeSchemaContent,

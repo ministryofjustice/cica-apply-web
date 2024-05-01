@@ -43,8 +43,8 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            },
-            showBackButton: false
+            } // ,
+            // showBackButton: false
         }
     },
     'p-applicant-are-you-18-or-over': {
@@ -342,7 +342,7 @@ module.exports = {
     'p--confirmation': {
         options: {
             pageContext: 'confirmation',
-            showBackButton: false,
+            // showBackButton: false,
             signInLink: {
                 visible: false
             }

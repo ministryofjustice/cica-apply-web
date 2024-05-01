@@ -295,7 +295,6 @@ router
 
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
-                sectionId,
                 req.csrfToken(),
                 res.locals.cspNonce,
                 isAuthenticated,
