@@ -221,8 +221,10 @@ router
             }
             return res.send(html);
         } catch (err) {
-            res.status(err.statusCode || 404).render('404.njk');
-            return next(err);
+            const pageNotFoundErr = new Error(err.message);
+            pageNotFoundErr.name = 'PageNotFound';
+            pageNotFoundErr.stack = err.stack;
+            return next(pageNotFoundErr);
         }
     })
     .post(async (req, res, next) => {

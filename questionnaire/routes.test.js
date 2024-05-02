@@ -89,15 +89,57 @@ describe('Hitting /apply/this-page-does-not-exist', () => {
             expect(response.statusCode).toBe(404);
         });
     });
-    describe('Instantiated questionnaire', () => {
+    describe('Instantiated questionnaire with valid session and a valid session expiry cookie', () => {
         beforeEach(() => {
             setUpCommonMocks();
         });
 
-        it('Should respond with error', async () => {
+        it('Should respond with page not found error', async () => {
             const currentAgent = request.agent(app);
             const response = await currentAgent.get('/apply/this-page-does-not-exist');
             expect(response.statusCode).toBe(404);
+        });
+    });
+});
+
+describe('accessing a page without a session', () => {
+    describe('The application has been submitted and the session expiry cookie is set to alive false', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
+                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
+            });
+        });
+
+        it('Should respond with 302 and redirect to your application has been submitted please start again page', async () => {
+            const currentAgent = request.agent(app);
+            // Set cookies
+            currentAgent.set('Cookie', [
+                'session=sessionCookieValue',
+                'sessionExpiry={"alive":false,"created":1714400569202,"duration":0,"expires":1714400569202}'
+            ]);
+            const response = await currentAgent.get('/apply/this-page-does-exist');
+            expect(response.statusCode).toBe(302);
+            expect(response.text).toMatch(
+                /<h1\s+class="govuk-heading-xl">You’ve\s+submitted\s+your\s+application<\/h1>\s*<p\s+class="govuk-body">We\s+have\s+your\s+application\s+and\s+we’re\s+processing\s+it.\s*<\/p>/
+            );
+        });
+    });
+    describe('The application has timed out and the session expiry cookie alive property has been set to timed-out', () => {
+        beforeEach(() => {
+            setUpCommonMocks();
+        });
+
+        it('Should respond with 302 and redirect to your application has timed out please start again page', async () => {
+            const currentAgent = request.agent(app);
+            currentAgent.set('Cookie', [
+                'session=sessionCookieValue',
+                'sessionExpiry={"alive":"timed-out","created":1714400569202,"duration":0,"expires":1714400569202}'
+            ]);
+            const response = await currentAgent.get('/apply/this-page-does-exist');
+            expect(response.text).toMatch(
+                /<h1\s+class="govuk-heading-xl">Your\s+application\s+has\s+timed\s+out<\/h1>\s*<p\s+class="govuk-body">This\s+happened\s+because\s+you\s+did\s+not\s+do\s+anything\s+for\s+30\s+minutes.<\/p>\s*<p\s+class="govuk-body">You\s+can\s+sign\s+back\s+in\s+to\s+resume\s+your\s+application\s+if\s+you\s+saved\s+your\s+progress.\s+If\s+not,\s+you’ll\s+have\s+to\s+start\s+a\s+new\s+application.<\/p>/
+            );
         });
     });
 });
@@ -591,6 +633,15 @@ describe('Hitting /apply/:section', () => {
                 });
             });
             it('Should submit', async () => {
+                const currentAgent = request.agent(app);
+                const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
+                    _csrf: initialCsrfToken
+                });
+                expect(response.res.text).toContain('Application submitted');
+            });
+            it('Should redirect to you have submitted your application page on refresh after confirmation page', async () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);

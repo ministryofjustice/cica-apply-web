@@ -204,7 +204,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 
       // haven't hit `/apply` yet, or the application is completed
       // there is no session expiry cookie
-      if (!sessionAlive) {
+      if (!sessionAlive || sessionAlive === 'timed-out') {
         return;
       }
       window.document.addEventListener('visibilitychange', () => {
@@ -305,7 +305,16 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
           },
           onEnd: () => {
             sessionTimingOutModal.close();
-            jsCookies.remove('sessionExpiry');
+            // create a new sessionExpiry cookie
+            const cookieData = {
+              alive: 'timed-out',
+              created: Date.now(),
+              duration: 0,
+              expires: Date.now()
+            };
+            const cookieString = JSON.stringify(cookieData);
+            // Set the cookie
+            window.document.cookie = encodeURIComponent('sessionExpiry') + '=' + encodeURIComponent(cookieString) + '; path=/';
             sessionEndedModal.open();
           }
         }

@@ -236,6 +236,23 @@ app.use((err, req, res, next) => {
         }
     }
 
+    // Page not found, can also be as a result of session timeout
+    if (err.name === 'PageNotFound') {
+        // timeout handler
+        const sessionExpiryCookie = req.cookies.sessionExpiry;
+        if (sessionExpiryCookie) {
+            if (JSON.parse(sessionExpiryCookie)?.alive === 'timed-out') {
+                return res.status(302).render('302.ApplicationTimedOut.njk');
+            }
+            // has the application been submitted
+            if (JSON.parse(sessionExpiryCookie)?.alive === false) {
+                return res.status(302).render('302.SubmitedApplicationTimedOut.njk');
+            }
+        }
+
+        // end timeout handler
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
     return next(err);
 });
 

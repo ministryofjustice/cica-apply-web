@@ -88,7 +88,7 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
 
             // haven't hit `/apply` yet, or the application is completed
             // there is no session expiry cookie
-            if (!sessionAlive) {
+            if (!sessionAlive || sessionAlive === 'timed-out') {
                 return;
             }
 
@@ -210,7 +210,19 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
                     },
                     onEnd: () => {
                         sessionTimingOutModal.close();
-                        jsCookies.remove('sessionExpiry');
+                        // create a new sessionExpiry cookie
+                        const cookieData = {
+                            alive: 'timed-out',
+                            created: Date.now(),
+                            duration: 0,
+                            expires: Date.now()
+                        };
+                        const cookieString = JSON.stringify(cookieData);
+                        // Set the cookie
+                        window.document.cookie = `${encodeURIComponent(
+                            'sessionExpiry'
+                        )}=${encodeURIComponent(cookieString)}; path=/`;
+
                         sessionEndedModal.open();
                     }
                 }
