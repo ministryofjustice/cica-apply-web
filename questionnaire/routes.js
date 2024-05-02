@@ -209,15 +209,6 @@ router
                         isAuthenticated: accountService.isAuthenticated(req)
                     });
                 }
-
-                if (progressEntryData.attributes.sectionId === 'p-task-list') {
-                    const taskListSectionResource = response?.body?.included.filter(
-                        resource => resource.id === 'p-task-list'
-                    )[0];
-                    return res.render('tasklist.njk', {
-                        data: taskListSectionResource.attributes.properties['task-list']
-                    });
-                }
             }
 
             req.session.referrer = req.originalUrl;

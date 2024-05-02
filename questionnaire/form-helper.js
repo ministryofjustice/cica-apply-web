@@ -40,6 +40,7 @@ function renderSection({
     const showButton = !isFinal;
     const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
+
     return render(
         `
             {% extends "page.njk" %}

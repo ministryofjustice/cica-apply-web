@@ -2058,5 +2058,12 @@ module.exports = {
                 }
             }
         }
+    },
+    'p-task-list': {
+        options: {
+            signInLink: {
+                visible: false
+            }
+        }
     }
 };
