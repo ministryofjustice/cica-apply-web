@@ -1,8 +1,13 @@
 {% extends "page.njk" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
-{% block pageTitle %}Signed out - {{ super() }}{% endblock %}
+{% block pageTitle %}Signed out - {{ super() }}
+{% endblock %}
 {% block innerContent %}
     <h1 class="govuk-heading-xl">You have signed out</h1>
-    <p class="govuk-body">You can <a href="https://www.gov.uk/claim-compensation-criminal-injury/make-claim" class="govuk-link">find out more about applying for Criminal Injuries Compensation</a> or <a href="/account/sign-in" class="govuk-link">sign in to your GOV.UK One Login</a> to carry on your application now.</p>
+    <p class="govuk-body">If you submitted your application, we'll let you know if we need anything else from you.</p>
+    <p class="govuk-body">If you have not submitted your application yet, you'll need to <a href="/account/sign-in" class="govuk-link" target="_blank" rel="noopener noreferrer">sign in to your GOV.UK One Login (opens in a new tab)</a> to carry on with your application.</p>
+    <p class="govuk-body">
+        You can <a href="https://www.gov.uk/claim-compensation-criminal-injury/make-claim" class="govuk-link" target="_blank" rel="noopener noreferrer">find out more about Criminal Injuries Compensation (opens in a new tab)</a> if you'd like more information before finishing your application.
+    </p>
 {% endblock %}
