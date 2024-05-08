@@ -117,6 +117,7 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
             cspNonce: res.locals.cspNonce,
             currentUrlPathname: '/account/dashboard'
         });
+        res.clearCookie('sessionExpiry', {path: '/'});
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
