@@ -2047,7 +2047,7 @@ module.exports = {
     },
     'p-applicant-describe-incident': {
         options: {
-            outputOrder: ['q-applicant-describe-incident'],
+            outputOrder: ['describe-incident-info', 'q-applicant-describe-incident'],
             properties: {
                 'q-applicant-describe-incident': {
                     options: {
