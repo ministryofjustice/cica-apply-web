@@ -217,6 +217,18 @@ function questionnaireService(options = {}) {
         return service.get(opts);
     }
 
+    async function getTaskList(questionnaireId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/task-list`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -231,7 +243,8 @@ function questionnaireService(options = {}) {
         keepAlive,
         getAllQuestionnairesMetadata,
         getQuestionnaireMetadata,
-        getSectionAnswers
+        getSectionAnswers,
+        getTaskList
     });
 }
 

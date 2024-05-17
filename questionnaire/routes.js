@@ -10,8 +10,11 @@ const createAccountService = require('../account/account-service');
 const getRedirectionUrl = require('./utils/getRedirectionUrl');
 const createTemplateEngineService = require('../templateEngine');
 const getOwnerOrigin = require('./utils/getOwnerOrigin');
+const taskListRouter = require('./task-list/routes');
 
 const router = express.Router();
+
+router.use('/task-list', taskListRouter);
 
 router.get('/', (req, res) => {
     try {
