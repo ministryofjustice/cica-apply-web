@@ -8,12 +8,28 @@ const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
-function getButtonText(sectionId) {
-    return sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.buttonText
-        ? uiSchema[sectionId].options.buttonText
-        : 'Continue';
+// function getButtonText(sectionId) {
+//     return sectionId in uiSchema &&
+//         uiSchema[sectionId].options &&
+//         uiSchema[sectionId].options.buttonText
+//         ? uiSchema[sectionId].options.buttonText
+//         : 'Continue';
+// }
+
+function getSubmitButtonTemplateModifiers(sectionId) {
+    let submitButtonTemplateModifiers = {
+        text: 'Continue'
+    };
+
+    const submitButtonUiSchema = uiSchema?.[sectionId]?.options?.submitButton;
+    if (submitButtonUiSchema) {
+        submitButtonTemplateModifiers = {
+            ...submitButtonTemplateModifiers,
+            ...submitButtonUiSchema
+        };
+    }
+
+    return JSON.stringify(submitButtonTemplateModifiers);
 }
 
 function getSectionContext(sectionId) {
@@ -38,7 +54,6 @@ function renderSection({
     analyticsId
 }) {
     const showButton = !isFinal;
-    const buttonTitle = getButtonText(sectionId);
     const hasErrors = transformation.hasErrors === true;
     return render(
         `
@@ -67,10 +82,7 @@ function renderSection({
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}
-                        {{ govukButton({
-                            text: "${buttonTitle}",
-                            preventDoubleClick: true
-                        }) }}
+                        {{ govukButton(${getSubmitButtonTemplateModifiers(sectionId)}) }}
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
@@ -318,7 +330,7 @@ function getSectionHtmlWithErrors(
 }
 
 module.exports = {
-    getButtonText,
+    getSubmitButtonTemplateModifiers,
     renderSection,
     removeSectionIdPrefix,
     processRequest,

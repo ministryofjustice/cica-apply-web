@@ -25,7 +25,9 @@ module.exports = {
     },
     'p-applicant-you-cannot-get-compensation': {
         options: {
-            buttonText: 'Continue anyway',
+            submitButton: {
+                text: 'Continue anyway'
+            },
             signInLink: {
                 visible: false
             }
@@ -41,6 +43,10 @@ module.exports = {
     },
     'p-applicant-who-are-you-applying-for': {
         options: {
+            submitButton: {
+                text: 'FUCK2222!!2!',
+                classes: 'govuk-button--secondary'
+            },
             signInLink: {
                 visible: false
             },
@@ -388,61 +394,81 @@ module.exports = {
     },
     'p-applicant-declaration': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-applicant-declaration-deceased': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-mainapplicant-declaration-under-12': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-mainapplicant-declaration-under-12-deceased': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-mainapplicant-declaration-12-and-over-deceased': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-mainapplicant-declaration-12-and-over': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-rep-declaration-under-12': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-rep-declaration-12-and-over': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-rep-declaration-12-and-over-deceased': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
     'p-rep-declaration-under-12-deceased': {
         options: {
-            buttonText: 'Agree and submit',
+            submitButton: {
+                text: 'Agree and submit'
+            },
             pageContext: 'submission'
         }
     },
@@ -1352,7 +1378,9 @@ module.exports = {
     },
     'p-applicant-you-cannot-get-compensation-violent-crime': {
         options: {
-            buttonText: 'Continue anyway'
+            submitButton: {
+                text: 'Agree and submit'
+            }
         }
     },
     'p-applicant-where-did-the-crime-happen': {
@@ -1696,7 +1724,9 @@ module.exports = {
     },
     'p--download-your-answers': {
         options: {
-            buttonText: 'Continue to declaration'
+            submitButton: {
+                text: 'Agree and submit'
+            }
         }
     },
     'p--has-legal-authority': {

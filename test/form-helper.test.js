@@ -492,21 +492,25 @@ describe('form-helper functions', () => {
         });
     });
 
-    describe('Get button text', () => {
-        it('Should return the button text if specificed in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
-            const expected = 'Agree and submit';
+    describe('getSubmitButtonTemplateModifiers', () => {
+        it('Should return the default if no modifiers are found for a schema', () => {
+            const sectionName = 'p-this-does-not-exist';
+            const expected = {
+                text: 'Continue'
+            };
 
-            const actual = formHelper.getButtonText(sectionName);
+            const actual = formHelper.getSubmitButtonTemplateModifiers(sectionName);
 
             expect(actual).toMatch(expected);
         });
 
-        it('Should return the default button text if nothing specific is specified in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
-            const expected = 'Continue';
+        it('Should return the object of template modifiers for a schema', () => {
+            const sectionName = 'p-applicant-you-cannot-get-compensation';
+            const expected = {
+                text: 'Continue anyway'
+            };
 
-            const actual = formHelper.getButtonText(sectionName);
+            const actual = formHelper.getSubmitButtonTemplateModifiers(sectionName);
 
             expect(actual).toMatch(expected);
         });
