@@ -246,7 +246,7 @@ app.use((err, req, res, next) => {
             }
             // has the application been submitted
             if (JSON.parse(sessionExpiryCookie)?.alive === false) {
-                return res.status(302).render('302.SubmitedApplicationTimedOut.njk');
+                return res.status(302).render('302.SubmittedApplicationTimedOut.njk');
             }
         }
 

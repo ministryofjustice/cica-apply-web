@@ -1,0 +1,31 @@
+{% extends "page.njk" %}
+{% block pageTitle %}You’ve submitted your application - {{ super() }}
+{% endblock %}
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">You’ve submitted your application</h1>
+    <p class="govuk-body">We have your application and we’re processing it. </p>
+    <p class="govuk-body">We’ve sent your reference number to the email address or phone number you gave us.</p>
+    <p class="govuk-body">If you didn’t give us an email address or phone number, and don’t know your reference number, you can contact us.</p>
+    <h2 class="govuk-heading-l">Why are we showing you this?</h2>
+    <p class="govuk-body">You may have clicked the back button in your browser, or refreshed the page. But you had completed your application and submitted it before you did this.</p>
+    <h2 class="govuk-heading-l">What happens next</h2>
+    <p class="govuk-body">We aim to make a decision within 12 months but it can take longer.</p>
+    <p class="govuk-body">You should let us know immediately if any of the information you have given us changes. This could include your address, telephone number or email address.</p>
+
+    <p class="govuk-body">
+        <a class="govuk-link" target="_blank" href="https://contact-the-cica.form.service.justice.gov.uk/">Tell us about any changes to the information you’ve given us (opens in new tab)</a>
+    </p>
+
+    <h2 class="govuk-heading-l">Start a new application</h2>
+    <p class="govuk-body">You can <a class="govuk-link"  href="/apply/start-or-resume">start a new application</a> if you'd like to apply:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>for compensation for an injury related to a different crime</li>
+        <li>on behalf of someone else</li>
+        <li>for a different type of compensation</li>
+    </ul>
+    <p class="govuk-body">For any injuries related to the crime you just told us about, we cannot accept another application from you.</p>
+
+    <h2 id="contact-us" class="govuk-heading-l">Contact us</h2>
+    <p class="govuk-body">You can <a class="govuk-link"  href="/contact-us">contact us</a> if you have any other questions.</p>
+{% endblock %}
