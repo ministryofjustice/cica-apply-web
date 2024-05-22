@@ -15,6 +15,7 @@ const downloadRouter = require('./download/routes');
 const sessionRouter = require('./session/routes');
 const addressFinderRouter = require('./address-finder/routes');
 const accountRouter = require('./account/routes');
+const tcqeRouter = require('./questionnaire/tcqe/routes');
 const createCookieService = require('./cookie/cookie-service');
 const createTemplateEngineService = require('./templateEngine');
 const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnaireInstantiated');
@@ -212,6 +213,7 @@ app.use((req, res, next) => {
 app.use('/address-finder', addressFinderRouter);
 app.use('/download', oidcAuth, downloadRouter);
 app.use('/apply', oidcAuth, keepAlive, applicationRouter);
+app.use('/tcqe', oidcAuth, keepAlive, tcqeRouter);
 app.use('/session', oidcAuth, sessionRouter);
 app.use('/account', oidcAuth, accountRouter);
 app.use('/', oidcAuth, indexRouter);

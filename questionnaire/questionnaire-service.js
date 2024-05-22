@@ -4,6 +4,9 @@ const service = require('./request-service')();
 
 function questionnaireService(options = {}) {
     function createQuestionnaire() {
+        if (options.templateName === undefined) {
+            options.templateName = 'sexual-assault';
+        }
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/questionnaires`,
             headers: {
@@ -15,7 +18,7 @@ function questionnaireService(options = {}) {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName: 'sexual-assault',
+                        templateName: options.templateName,
                         owner: {
                             id: options.ownerId,
                             isAuthenticated: options.isAuthenticated
