@@ -66,6 +66,14 @@ jobs:
           command: |
             docker build --target production --no-cache -t cica/cica-repo-dev .
       - run:
+          name: Install trivy
+          command: |
+            apk add --update-cache --upgrade curl
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      - run:
+          name: Scan the local image with trivy
+          command: trivy image --exit-code 0 --no-progress cica/cica-repo-dev
+      - run:
           name: Archive Docker Image
           command: |
             docker save -o image.tar cica/cica-repo-dev:latest
