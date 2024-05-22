@@ -3,6 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@4.0.0
 executors:
   docker-publisher:
     environment:
@@ -96,17 +98,16 @@ jobs:
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
+      - aws-cli/setup:
+          role_arn: $ECR_ROLE_TO_ASSUME
+          region: $ECR_REGION
       - run:
           name: Authenticate and push image to ecr
           command: |
             echo "run aws"
-            aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 754256621582.dkr.ecr.eu-west-2.amazonaws.com
-            docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-            docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-            if [["${CIRCLE_BRANCH}" ==  "cw-deploy" || "${CIRCLE_BRANCH}" ==  "cw-deploy-to-uat" || "${CIRCLE_BRANCH}" ==  "cw-deploy-to-staging"]]; then
-               docker tag cica/cica-repo-dev:latest ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-               docker push ${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1}
-            fi
+            aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin  ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com
+            docker tag ${ECR_REPOSITORY}:latest ${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1}
+            docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1}
   deploy_to_dev:
     executor: docker-publisher
     steps:
@@ -127,7 +128,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Dev/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Dev/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Dev/service.yml \
@@ -152,7 +153,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Uat/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Uat/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Uat/service.yml \
@@ -177,7 +178,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Prod/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Prod/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Prod/service.yml \
@@ -202,7 +203,7 @@ jobs:
           name: Deploy to the cluster
           command: |
             echo "deploy before aws ecr"
-            kubectl set image -f kube_deploy/Stag/deploy.yml webapp=${ECR_REPOSITORY}/cica/cica-repo-dev:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f kube_deploy/Stag/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
                 -f kube_deploy/Stag/service.yml \
