@@ -7,30 +7,7 @@ const createTemplateEngineService = require('../templateEngine');
 const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
-
-// function getButtonText(sectionId) {
-//     return sectionId in uiSchema &&
-//         uiSchema[sectionId].options &&
-//         uiSchema[sectionId].options.buttonText
-//         ? uiSchema[sectionId].options.buttonText
-//         : 'Continue';
-// }
-
-function getSubmitButtonTemplateModifiers(sectionId) {
-    let submitButtonTemplateModifiers = {
-        text: 'Continue'
-    };
-
-    const submitButtonUiSchema = uiSchema?.[sectionId]?.options?.submitButton;
-    if (submitButtonUiSchema) {
-        submitButtonTemplateModifiers = {
-            ...submitButtonTemplateModifiers,
-            ...submitButtonUiSchema
-        };
-    }
-
-    return JSON.stringify(submitButtonTemplateModifiers);
-}
+const getSubmitButtonTemplateModifiers = require('./utils/getSubmitButtonTemplateModifiers');
 
 function getSectionContext(sectionId) {
     return (
@@ -82,7 +59,11 @@ function renderSection({
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}
-                        {{ govukButton(${getSubmitButtonTemplateModifiers(sectionId)}) }}
+                        {{ govukButton(${getSubmitButtonTemplateModifiers(
+                            sectionId,
+                            uiSchema,
+                            isAuthenticated
+                        )}) }}
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>

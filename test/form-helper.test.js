@@ -495,9 +495,9 @@ describe('form-helper functions', () => {
     describe('getSubmitButtonTemplateModifiers', () => {
         it('Should return the default if no modifiers are found for a schema', () => {
             const sectionName = 'p-this-does-not-exist';
-            const expected = {
+            const expected = JSON.stringify({
                 text: 'Continue'
-            };
+            });
 
             const actual = formHelper.getSubmitButtonTemplateModifiers(sectionName);
 
@@ -506,9 +506,9 @@ describe('form-helper functions', () => {
 
         it('Should return the object of template modifiers for a schema', () => {
             const sectionName = 'p-applicant-you-cannot-get-compensation';
-            const expected = {
+            const expected = JSON.stringify({
                 text: 'Continue anyway'
-            };
+            });
 
             const actual = formHelper.getSubmitButtonTemplateModifiers(sectionName);
 
