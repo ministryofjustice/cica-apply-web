@@ -13,49 +13,110 @@ const getOwnerOrigin = require('../utils/getOwnerOrigin');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    try {
-        return res.redirect('/tcqe/start');
-    } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
-    }
-});
+// router.get('/:action', (req, res) => {
+//     try {
+//         return res.redirect(`/${req.params.action}/start`);
+//     } catch (err) {
+//         return res.status(err.statusCode || 404).render('404.njk');
+//     }
+// });
 
-router.route('/start').get(async (req, res) => {
+// TODO: delete this route before release; not needed, just using for testing
+router.route('/:action/start').get(async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
         const isAuthenticated = accountService.isAuthenticated(req);
         const origin = getOwnerOrigin(req, isAuthenticated);
         const analyticsId = `urn:uuid:${crypto.randomUUID()}`;
+        const actionId = req.params.action;
 
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated,
-            templateName: 'tcqe',
+            templateName: actionId,
             origin,
             analyticsId
         });
         const response = await questionnaireService.createQuestionnaire();
-        console.log(response.body);
         const initialSection = formHelper.removeSectionIdPrefix(
             response.body.data.attributes.routes.initial
         );
         req.session.questionnaireId = response.body.data.attributes.id;
         req.session.analyticsId = analyticsId;
 
-        res.redirect(`/tcqe/${initialSection}?utm_source=${origin}`);
+        res.redirect(`/actions/${actionId}/${initialSection}?utm_source=${origin}`);
     } catch (err) {
         console.log(err);
         res.status(err.statusCode || 404).render('404.njk');
     }
 });
 
-router.route('/previous/:section').get(async (req, res) => {
+router.get('/:action/resume/:questionnaireId', async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
-            templateName: 'tcqe',
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
+        let resumableQuestionnaireAnalyticsId;
+
+        const actionId = req.params.action;
+        const defaultRedirect = `actions/${actionId}`;
+        let redirectUrl = defaultRedirect;
+
+        const resumableQuestionnaireId = req.params.questionnaireId;
+        const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
+            resumableQuestionnaireId
+        );
+
+        if ('a_id' in req.query) {
+            resumableQuestionnaireAnalyticsId = req.query.a_id;
+        }
+
+        const resumableQuestionnaireProgressEntry =
+            resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;
+        if (
+            resumableQuestionnaireProgressEntry &&
+            resumableQuestionnaireProgressEntry.sectionId === null &&
+            resumableQuestionnaireProgressEntry.url === null
+        ) {
+            return res.render('incompatible.njk', {
+                isAuthenticated: accountService.isAuthenticated(req)
+            });
+        }
+
+        if (resumableQuestionnaireResponse.body?.errors) {
+            const errorResponse = resumableQuestionnaireResponse.body?.errors[0];
+            if (errorResponse.status === 404) {
+                // TODO: what do we want to happen in this scenario?
+                return res.status(errorResponse.statusCode).render('404.njk');
+            }
+        }
+
+        const resumableQuestionnaireCurrentSectionId =
+            resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
+
+        // switch session info and redirect if valid.
+        if (resumableQuestionnaireCurrentSectionId) {
+            req.session.questionnaireId = resumableQuestionnaireId;
+            req.session.analyticsId = resumableQuestionnaireAnalyticsId;
+            redirectUrl = `${redirectUrl}/${formHelper.removeSectionIdPrefix(
+                resumableQuestionnaireCurrentSectionId
+            )}`;
+        }
+        return res.redirect(redirectUrl);
+    } catch (err) {
+        return res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
+router.route('/:action/previous/:section').get(async (req, res) => {
+    try {
+        const accountService = createAccountService(req.session);
+        const actionId = req.params.action;
+        const questionnaireService = createQuestionnaireService({
+            ownerId: accountService.getOwnerId(),
+            templateName: actionId,
             isAuthenticated: accountService.isAuthenticated(req)
         });
         const sectionId = formHelper.addPrefix(req.params.section);
@@ -76,21 +137,22 @@ router.route('/previous/:section').get(async (req, res) => {
             });
         }
         const previousSectionId = formHelper.removeSectionIdPrefix(progressEntry.sectionId);
-        return res.redirect(`${req.baseUrl}/${previousSectionId}`);
+        return res.redirect(`${req.baseUrl}/${actionId}/${previousSectionId}`);
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk');
     }
 });
 
 router
-    .route('/:section')
+    .route('/:action/:section')
     .get(async (req, res, next) => {
         try {
             const accountService = createAccountService(req.session);
             const isAuthenticated = accountService.isAuthenticated(req);
+            const actionId = req.params.action;
             const questionnaireService = createQuestionnaireService({
                 ownerId: accountService.getOwnerId(),
-                templateName: 'tcqe',
+                templateName: actionId,
                 isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
@@ -114,7 +176,8 @@ router
                 res.locals.cspNonce,
                 isAuthenticated,
                 accountService.getOwnerId(),
-                req.session.analyticsId
+                req.session.analyticsId,
+                `actions/${actionId}`
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
@@ -137,6 +200,7 @@ router
                 isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
+            const actionId = req.params.action;
             const body = formHelper.processRequest(req.body, req.params.section);
             let nextSectionId;
             // delete the token from the body to allow AJV to validate the request.
@@ -182,7 +246,7 @@ router
                         nextSectionId = formHelper.removeSectionIdPrefix(
                             progressEntryResponse.body.data[0].attributes.sectionId
                         );
-                        return res.redirect(`${req.baseUrl}/${nextSectionId}`);
+                        return res.redirect(`${req.baseUrl}/${actionId}/${nextSectionId}`);
                     }
                 }
 
@@ -193,7 +257,7 @@ router
                     progressEntryResponse.body.data[0].attributes.sectionId
                 );
 
-                return res.redirect(`${req.baseUrl}/${nextSectionId}`);
+                return res.redirect(`${req.baseUrl}/${actionId}/${nextSectionId}`);
             }
 
             const html = formHelper.getSectionHtmlWithErrors(
@@ -203,7 +267,8 @@ router
                 res.locals.cspNonce,
                 isAuthenticated,
                 accountService.getOwnerId(),
-                req.session.analyticsId
+                req.session.analyticsId,
+                `actions/${actionId}`
             );
             return res.send(html);
         } catch (err) {

@@ -257,7 +257,15 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
+function getSectionHtml(
+    sectionData,
+    csrfToken,
+    cspNonce,
+    isAuthenticated,
+    userId,
+    analyticsId,
+    backLinkTarget = 'apply'
+) {
     const {sectionId} = sectionData.data[0].attributes;
     const sectionDataMeta = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -266,7 +274,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
         sectionData.included.filter(answer => answer.type === 'answers')
     );
     const answers = answersObject[sectionId];
-    const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+    const backLink = `/${backLinkTarget}/previous/${removeSectionIdPrefix(sectionId)}`;
     const showBackLink = !(
         uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
     );
@@ -319,12 +327,13 @@ function getSectionHtmlWithErrors(
     cspNonce,
     isAuthenticated,
     userId,
-    analyticsId
+    analyticsId,
+    backLinkTarget = 'apply'
 ) {
     const {schema} = sectionData.meta;
     const sectionDataMeta = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
-    const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
+    const backLink = `/${backLinkTarget}/previous/${removeSectionIdPrefix(sectionId)}`;
     const {answers} = sectionData.meta;
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
