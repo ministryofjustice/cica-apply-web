@@ -90,6 +90,7 @@ router.route('/start').get(async (req, res) => {
 
         res.redirect(`/apply/${initialSection}?utm_source=${origin}`);
     } catch (err) {
+        console.log(err);
         res.status(err.statusCode || 404).render('404.njk');
     }
 });
@@ -221,6 +222,7 @@ router
             }
             return res.send(html);
         } catch (err) {
+            console.log(err);
             const pageNotFoundErr = new Error(err.message);
             pageNotFoundErr.name = 'PageNotFound';
             pageNotFoundErr.stack = err.stack;
@@ -306,6 +308,7 @@ router
             );
             return res.send(html);
         } catch (err) {
+            console.log(err);
             res.status(err.statusCode || 404).render('404.njk');
             return next(err);
         }
