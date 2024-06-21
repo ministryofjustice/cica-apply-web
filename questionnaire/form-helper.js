@@ -8,12 +8,19 @@ const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
-function getButtonText(sectionId) {
-    return sectionId in uiSchema &&
+function getButtonText(sectionId, uiOptions) {
+    if (uiOptions?.buttonText) {
+        return uiOptions.buttonText;
+    }
+    if (
+        sectionId in uiSchema &&
         uiSchema[sectionId].options &&
         uiSchema[sectionId].options.buttonText
-        ? uiSchema[sectionId].options.buttonText
-        : 'Continue';
+    ) {
+        return uiSchema[sectionId].options.buttonText;
+    }
+
+    return 'Continue';
 }
 
 function getSectionContext(sectionId) {
@@ -33,13 +40,15 @@ function renderSection({
     csrfToken,
     cspNonce,
     isAuthenticated,
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated),
     userId,
-    analyticsId
+    analyticsId,
+    uiOptions = {},
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
 }) {
     const showButton = !isFinal;
-    const buttonTitle = getButtonText(sectionId);
+    const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
+    const hasButtonClass = uiOptions?.buttonClass !== undefined;
     return render(
         `
             {% extends "page.njk" %}
@@ -67,10 +76,18 @@ function renderSection({
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
                     {% if ${showButton} %}
-                        {{ govukButton({
-                            text: "${buttonTitle}",
-                            preventDoubleClick: true
-                        }) }}
+                            {% if ${hasButtonClass} %}
+                                {{ govukButton({
+                                    text: "${buttonTitle}",
+                                    classes: "${uiOptions.buttonClass}",
+                                    preventDoubleClick: true
+                                }) }}
+                            {% else %}
+                                 {{ govukButton({
+                                    text: "${buttonTitle}",                          
+                                    preventDoubleClick: true
+                                }) }}                           
+                            {% endif %}                       
                     {% endif %}
                     <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
@@ -252,6 +269,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
         uiSchema,
         data: answers
     });
+
+    const uiOptions = escapeSchemaContent(schema)?.options;
     return renderSection({
         transformation,
         isFinal: display.final,
@@ -262,7 +281,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
         cspNonce,
         isAuthenticated,
         userId,
-        analyticsId
+        analyticsId,
+        uiOptions
     });
 }
 
@@ -304,6 +324,7 @@ function getSectionHtmlWithErrors(
         data: answers,
         schemaErrors: errorObject
     });
+    const uiOptions = escapeSchemaContent(schema)?.options;
     return renderSection({
         transformation,
         isFinal: false,
@@ -313,7 +334,8 @@ function getSectionHtmlWithErrors(
         cspNonce,
         isAuthenticated,
         userId,
-        analyticsId
+        analyticsId,
+        uiOptions
     });
 }
 

@@ -3,7 +3,9 @@
 const formHelper = require('../questionnaire/form-helper');
 const validTransformation = require('./test-fixtures/transformations/p-applicant-british-citizen-or-eu-national');
 const validResolvedHtml = require('./test-fixtures/transformations/resolved html/p-applicant-british-citizen-or-eu-national');
+const secondaryButtonHtml = require('./test-fixtures/transformations/resolved html/p-applicant-secondary-button');
 const createTemplateEngineService = require('../templateEngine');
+const sectionHtmlWithErrors = require('./test-fixtures/html/sectionHtmlWithErrors');
 
 const templateEngineService = createTemplateEngineService();
 templateEngineService.init();
@@ -186,9 +188,42 @@ describe('form-helper functions', () => {
                     isFinal,
                     backTarget,
                     sectionId,
-                    showBackLink,
                     csrfToken,
-                    cspNonce
+                    cspNonce,
+                    showBackLink
+                })
+                .replace(/\s+/g, '');
+
+            expect(actual).toMatch(expected);
+        });
+
+        it('Should return html with secondary button class when that is required', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
+            const sectionId = 'p-applicant-british-citizen-or-eu-national';
+            const showBackLink = true;
+            const expected = secondaryButtonHtml.replace(/\s+/g, '');
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const options = {
+                buttonClass: 'govuk-button--secondary',
+                buttonText: 'Continue anyway',
+                signInLink: {
+                    visible: false
+                }
+            };
+
+            const actual = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    csrfToken,
+                    cspNonce,
+                    uiOptions: options,
+                    showBackLink
                 })
                 .replace(/\s+/g, '');
 
@@ -265,6 +300,54 @@ describe('form-helper functions', () => {
                     csrfToken,
                     cspNonce,
                     showSignInLink
+                })
+                .replace(/\s+/g, '');
+
+            expect(result).toEqual(expect.not.stringContaining(expected));
+        });
+
+        it('Should not show sign-in link when explicitly specified within template section options', () => {
+            const transformation = validTransformation;
+            const isFinal = false;
+            const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
+            const sectionId = 'p-applicant-who-are-you-applying-for';
+            const showBackLink = true;
+            const csrfToken = 'sometoken';
+            const cspNonce = 'somenonce';
+            const uiOptions = {
+                signInLink: {
+                    visible: true
+                }
+            };
+            const showSignInLink = shouldShowSignInLink(
+                sectionId,
+                {
+                    'p-applicant-who-are-you-applying-for': {
+                        options: {
+                            signInLink: {
+                                visible: false
+                            }
+                        }
+                    }
+                },
+                uiOptions
+            );
+            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
+                /\s+/g,
+                ''
+            );
+
+            const result = formHelper
+                .renderSection({
+                    transformation,
+                    isFinal,
+                    backTarget,
+                    sectionId,
+                    showBackLink,
+                    csrfToken,
+                    cspNonce,
+                    showSignInLink,
+                    uiOptions
                 })
                 .replace(/\s+/g, '');
 
@@ -502,6 +585,38 @@ describe('form-helper functions', () => {
             expect(actual).toMatch(expected);
         });
 
+        it('Should return the button text specificed in the template section options', () => {
+            const sectionName = 'p-applicant-declaration';
+            const expected = 'Continue anyway';
+            const options = {
+                buttonText: 'Continue anyway',
+                signInLink: {
+                    visible: false
+                }
+            };
+            const actual = formHelper.getButtonText(sectionName, options);
+            expect(actual).toMatch(expected);
+        });
+
+        it('Should return the default button text if no button text specificed in the template section options', () => {
+            const sectionName = 'p--check-your-answers';
+            const expected = 'Continue';
+            const options = {
+                signInLink: {
+                    visible: false
+                }
+            };
+            const actual = formHelper.getButtonText(sectionName, options);
+            expect(actual).toMatch(expected);
+        });
+
+        it('Should return the default button text if the template section options are undefined', () => {
+            const sectionName = 'p--check-your-answers';
+            const expected = 'Continue';
+            const actual = formHelper.getButtonText(sectionName, undefined);
+            expect(actual).toMatch(expected);
+        });
+
         it('Should return the default button text if nothing specific is specified in the UISchema', () => {
             const sectionName = 'p--check-your-answers';
             const expected = 'Continue';
@@ -663,6 +778,109 @@ describe('form-helper functions', () => {
             });
 
             expect(body).toMatchObject(expected);
+        });
+    });
+
+    describe('getSectionHtmlWithErrors', () => {
+        it('Should return the correct html with errors', () => {
+            const sectionData = {
+                errors: [
+                    {
+                        status: 400,
+                        title: '400 Bad Request',
+                        detail:
+                            'Select that you understand what happens if you apply more than once for injuries related to the same crime',
+                        code: 'errorMessage',
+                        source: {
+                            pointer: '/data/attributes'
+                        },
+                        meta: {
+                            raw: {
+                                keyword: 'errorMessage',
+                                dataPath: '',
+                                schemaPath: '#/errorMessage',
+                                params: {
+                                    errors: [
+                                        {
+                                            keyword: 'required',
+                                            dataPath: '',
+                                            schemaPath: '#/required',
+                                            params: {
+                                                missingProperty:
+                                                    'q--duplicate-application-confirmation'
+                                            },
+                                            message:
+                                                "should have required property 'q--duplicate-application-confirmation'"
+                                        }
+                                    ]
+                                },
+                                message:
+                                    'Select that you understand what happens if you apply more than once for injuries related to the same crime'
+                            }
+                        }
+                    }
+                ],
+                meta: {
+                    schema: {
+                        type: 'object',
+                        title: 'You should not apply again',
+                        $schema: 'http://json-schema.org/draft-07/schema#',
+                        options: {
+                            buttonText: 'Continue anyway',
+                            signInLink: {
+                                visible: false
+                            },
+                            buttonClass: 'govuk-button--secondary'
+                        },
+                        required: ['q--duplicate-application-confirmation'],
+                        properties: {
+                            'context-you-should-not-apply-again': {
+                                description:
+                                    '<div id="you-should-not-apply-again"> <p class="govuk-body">If you’ve applied before, or someone’s applied for you, for injuries related to this crime, we cannot accept another application from you.</p> <h2 class="govuk-heading-m">If you’re waiting to hear from us</h2> <p class="govuk-body">We have your application and are processing it. We’ll contact you if we need any more information.</p> <p class="govuk-body">In the majority of cases we make a decision within 12 months, but it can take longer. You may not hear from us during this time, but we are working hard to process your application as quickly as possible.</p><p class="govuk-body">If your information has changed and you need to let us know, you can <a class="govuk-link" href="https://contact-the-cica.form.service.justice.gov.uk/">contact us to update your existing application. </a></p><h2 class="govuk-heading-m">If you applied in the past but were not successful</h2><p class="govuk-body">We cannot accept another application from you, for injuries related to this crime. You should not apply again.</p><p class="govuk-body"> If you want to exit this application, you can close this window or tab. You can still continue, if you would like to.</p></div>'
+                            },
+                            'q--duplicate-application-confirmation': {
+                                meta: {
+                                    classifications: {
+                                        theme: 'about-application'
+                                    }
+                                },
+                                type: 'string',
+                                const: 'I understand',
+                                title:
+                                    'I understand that if I apply more than once for injuries related to the same crime, my second application won’t be considered by CICA.'
+                            }
+                        },
+                        errorMessage: {
+                            required: {
+                                'q--duplicate-application-confirmation':
+                                    'Select that you understand what happens if you apply more than once for injuries related to the same crime'
+                            }
+                        },
+                        propertyNames: {
+                            enum: ['q--duplicate-application-confirmation']
+                        }
+                    },
+                    answers: {}
+                }
+            };
+            const sectionId = 'p--context-you-should-not-apply-again';
+            const csrfToken = 'ihjsOcdp-XAWRzksu5YpE2tczpQzK02VWEKg';
+            const cspNonce = 'vxRGNXkIRC4wZnzoZC_dk';
+            const isAuthenticated = false;
+            const userId = 'urn:uuid:7c9b5213-7d51-4433-9bdd-13ddcf3ea30g';
+            const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+            const expected = sectionHtmlWithErrors;
+
+            const recievedHtml = formHelper.getSectionHtmlWithErrors(
+                sectionData,
+                sectionId,
+                csrfToken,
+                cspNonce,
+                isAuthenticated,
+                userId,
+                analyticsId
+            );
+            expect(recievedHtml).toEqual(expected);
         });
     });
 });
