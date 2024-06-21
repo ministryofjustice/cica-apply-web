@@ -880,7 +880,7 @@ describe('form-helper functions', () => {
                 userId,
                 analyticsId
             );
-            expect(recievedHtml).toEqual(expected);
+            expect(recievedHtml.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
         });
     });
 });

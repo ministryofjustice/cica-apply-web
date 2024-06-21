@@ -13,7 +13,7 @@
         "test": "npm run test:node && npm run test:dom",
         "test:dom": "jest --config=jest.config.jsdom.js",
         "test:node": "jest --config=jest.config.js",
-        "coverage": "jest --coverage",
+        "coverage": "jest --coverage --coverageReporters=html",
         "build:dev": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack:dev",
         "build": "npm run copy:css && npm run copy:js && npm run babel && npm run webpack",
         "lint": "eslint .",
