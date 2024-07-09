@@ -60,7 +60,7 @@ function renderSection({
                     {% if ${showBackLink} %}
                         {% from "back-link/macro.njk" import govukBackLink %}
                         {{ govukBackLink({
-                            text: "Back",
+                            text: "Previous page",
                             href: "${backTarget}"
                         }) }}
                     {% endif %}

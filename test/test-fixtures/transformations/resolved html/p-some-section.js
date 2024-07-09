@@ -99,7 +99,7 @@ const html = `<!DOCTYPE html>
 <div class="govuk-width-container">
 
 
-    <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
+    <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Previous page</a>
 
 
 </div>
