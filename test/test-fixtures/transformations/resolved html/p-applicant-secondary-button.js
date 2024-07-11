@@ -80,7 +80,7 @@ const html = `<!DOCTYPE html>
 </header>
     <div class="govuk-width-container" role="navigation">
                 <div class="govuk-grid-column-two-thirds">
-                        <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Back</a>
+                        <a href="/apply/previous/applicant-british-citizen-or-eu-national" class="govuk-back-link">Previous page</a>
                 </div>
     </div>
       <div class="govuk-width-container">

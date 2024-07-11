@@ -8,6 +8,14 @@ const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
+function checkIsContextPage(sectionId) {
+    return (
+        sectionId.includes('-context-') ||
+        sectionId === 'p-applicant-you-cannot-get-compensation' ||
+        sectionId === 'p--before-you-continue'
+    );
+}
+
 function getButtonText(sectionId, uiOptions) {
     if (uiOptions?.buttonText) {
         return uiOptions.buttonText;
@@ -49,6 +57,7 @@ function renderSection({
     const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
+    const isContextPage = checkIsContextPage(sectionId);
     return render(
         `
             {% extends "page.njk" %}
@@ -72,6 +81,11 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
+                {% if ${isContextPage} %}
+                    <div aria-live="polite" style="position:absolute; left:-9999px;">
+                        This page is for information and requires no action. Select continue to move on.
+                    </div>
+                {% endif %}
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
@@ -354,5 +368,6 @@ module.exports = {
     addPrefix,
     escapeSchemaContent,
     getSectionContext,
-    removeCarriageReturns
+    removeCarriageReturns,
+    checkIsContextPage
 };

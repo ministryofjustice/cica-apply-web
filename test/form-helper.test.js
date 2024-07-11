@@ -883,4 +883,25 @@ describe('form-helper functions', () => {
             expect(recievedHtml.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
         });
     });
+
+    describe('Check is context page', () => {
+        it('Should return true if a section is a context page', () => {
+            const sectionId = 'p--context-crime-ref-no';
+            const sectionId2 = 'p-applicant-you-cannot-get-compensation';
+            const sectionId3 = 'p--before-you-continue';
+
+            const actual =
+                formHelper.checkIsContextPage(sectionId) &&
+                formHelper.checkIsContextPage(sectionId2) &&
+                formHelper.checkIsContextPage(sectionId3);
+
+            expect(actual).toEqual(true);
+        });
+
+        it('Should return false if a section is not a context page', () => {
+            const sectionId = 'p-applicant-fatal-claim';
+
+            expect(formHelper.checkIsContextPage(sectionId)).toEqual(false);
+        });
+    });
 });
