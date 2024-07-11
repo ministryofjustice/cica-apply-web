@@ -34,6 +34,7 @@ function getSectionContext(sectionId) {
 function renderSection({
     transformation,
     isFinal,
+    pageType,
     backTarget,
     sectionId,
     showBackLink = true,
@@ -49,6 +50,7 @@ function renderSection({
     const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
+    const isContextPage = pageType === 'context';
     return render(
         `
             {% extends "page.njk" %}
@@ -72,6 +74,11 @@ function renderSection({
                 {% endif %}
             {% endblock %}
             {% block innerContent %}
+                {% if ${isContextPage} %}
+                    <div aria-live="polite" style="position:absolute; left:-9999px;">
+                        This page is for information and requires no action. Select continue to move on.
+                    </div>
+                {% endif %}
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                         ${transformation.content}
@@ -252,6 +259,7 @@ function escapeSchemaContent(schema) {
 
 function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
     const {sectionId} = sectionData.data[0].attributes;
+    const sectionDataMeta = sectionData.meta;
     const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
@@ -274,6 +282,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
     return renderSection({
         transformation,
         isFinal: display.final,
+        pageType: sectionDataMeta.pageType,
         backTarget: backLink,
         sectionId,
         showBackLink,
@@ -314,6 +323,7 @@ function getSectionHtmlWithErrors(
     analyticsId
 ) {
     const {schema} = sectionData.meta;
+    const sectionDataMeta = sectionData.meta;
     const errorObject = processErrors(sectionData.errors);
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
     const {answers} = sectionData.meta;
@@ -328,6 +338,7 @@ function getSectionHtmlWithErrors(
     return renderSection({
         transformation,
         isFinal: false,
+        pageType: sectionDataMeta.pageType,
         backTarget: backLink,
         sectionId,
         csrfToken,
