@@ -1,3 +1,6 @@
+.autocomplete__wrapper:focus-within > ::placeholder {
+    color: transparent;
+}
 .autocomplete__wrapper input,
 .autocomplete__wrapper li {
     font-family: "GDS Transport", Arial, sans-serif;

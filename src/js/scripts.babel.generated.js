@@ -314,7 +314,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
             };
             const cookieString = JSON.stringify(cookieData);
             // Set the cookie
-            window.document.cookie = encodeURIComponent('sessionExpiry') + '=' + encodeURIComponent(cookieString) + '; path=/';
+            window.document.cookie = `${encodeURIComponent('sessionExpiry')}=${encodeURIComponent(cookieString)}; path=/`;
             sessionEndedModal.open();
           }
         }

@@ -36,6 +36,7 @@ function createAutocomplete(window) {
                     selectElement: selectElements[i],
                     minLength: 2,
                     defaultValue: '',
+                    placeholder: 'Start typing to find a police force',
                     displayMenu: 'overlay',
                     showAllValues: true,
                     autoselect: true,
