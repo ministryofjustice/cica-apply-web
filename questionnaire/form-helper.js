@@ -46,7 +46,7 @@ function renderSection({
     uiOptions = {},
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
 }) {
-    const showButton = !isFinal;
+    const showButton = !isFinal && pageType !== 'task-list';
     const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
@@ -81,8 +81,8 @@ function renderSection({
                 {% endif %}
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
-                        ${transformation.content}
-                    {% if ${showButton} %}
+                    ${transformation.content}
+                        {% if ${showButton} %}
                             {% if ${hasButtonClass} %}
                                 {{ govukButton({
                                     text: "${buttonTitle}",
@@ -90,13 +90,13 @@ function renderSection({
                                     preventDoubleClick: true
                                 }) }}
                             {% else %}
-                                 {{ govukButton({
-                                    text: "${buttonTitle}",                          
+                                {{ govukButton({
+                                    text: "${buttonTitle}",
                                     preventDoubleClick: true
-                                }) }}                           
-                            {% endif %}                       
+                                }) }}
+                            {% endif %}
+                        <input type="hidden" name="_csrf" value="${csrfToken}">
                     {% endif %}
-                    <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
         `,
@@ -260,7 +260,6 @@ function escapeSchemaContent(schema) {
 function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
     const {sectionId} = sectionData.data[0].attributes;
     const sectionDataMeta = sectionData.meta;
-    const display = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
     const answersObject = processPreviousAnswers(
@@ -281,7 +280,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
     const uiOptions = escapeSchemaContent(schema)?.options;
     return renderSection({
         transformation,
-        isFinal: display.final,
+        isFinal: sectionDataMeta.final,
         pageType: sectionDataMeta.pageType,
         backTarget: backLink,
         sectionId,
