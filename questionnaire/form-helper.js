@@ -34,6 +34,7 @@ function getSectionContext(sectionId) {
 function renderSection({
     transformation,
     isFinal,
+    pageType,
     backTarget,
     sectionId,
     showBackLink = true,
@@ -49,6 +50,7 @@ function renderSection({
     const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
+    const isNotTaskListPageType = pageType !== 'task-list';
     return render(
         `
             {% extends "page.njk" %}
@@ -74,22 +76,24 @@ function renderSection({
             {% block innerContent %}
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
-                        ${transformation.content}
-                    {% if ${showButton} %}
-                            {% if ${hasButtonClass} %}
-                                {{ govukButton({
-                                    text: "${buttonTitle}",
-                                    classes: "${uiOptions.buttonClass}",
-                                    preventDoubleClick: true
-                                }) }}
-                            {% else %}
-                                 {{ govukButton({
-                                    text: "${buttonTitle}",                          
-                                    preventDoubleClick: true
-                                }) }}                           
-                            {% endif %}                       
+                    ${transformation.content}
+                    {% if ${isNotTaskListPageType} %}
+                        {% if ${showButton} %}
+                                {% if ${hasButtonClass} %}
+                                    {{ govukButton({
+                                        text: "${buttonTitle}",
+                                        classes: "${uiOptions.buttonClass}",
+                                        preventDoubleClick: true
+                                    }) }}
+                                {% else %}
+                                    {{ govukButton({
+                                        text: "${buttonTitle}",                          
+                                        preventDoubleClick: true
+                                    }) }}                           
+                                {% endif %}                       
+                        {% endif %}
+                        <input type="hidden" name="_csrf" value="${csrfToken}">
                     {% endif %}
-                    <input type="hidden" name="_csrf" value="${csrfToken}">
                 </form>
             {% endblock %}
         `,
@@ -252,7 +256,7 @@ function escapeSchemaContent(schema) {
 
 function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
     const {sectionId} = sectionData.data[0].attributes;
-    const display = sectionData.meta;
+    const sectionDataMeta = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
         .attributes;
     const answersObject = processPreviousAnswers(
@@ -273,7 +277,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
     const uiOptions = escapeSchemaContent(schema)?.options;
     return renderSection({
         transformation,
-        isFinal: display.final,
+        isFinal: sectionDataMeta.final,
+        pageType: sectionDataMeta.pageType,
         backTarget: backLink,
         sectionId,
         showBackLink,
