@@ -15,7 +15,7 @@ executors:
 jobs:
   build-for-test:
     docker:
-      - image: node:18.16.1-bullseye-slim
+      - image: node:20.16.0-bookworm-slim
     steps:
       - checkout
       - run:
@@ -36,7 +36,7 @@ jobs:
             - ./node_modules
   test:
     docker:
-      - image: node:18.16.1-bullseye-slim
+      - image: node:20.16.0-bookworm-slim
     steps:
       - attach_workspace:
           at: ./
@@ -47,7 +47,7 @@ jobs:
           command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
   lint:
     docker:
-      - image: node:18.16.1-bullseye-slim
+      - image: node:20.16.0-bookworm-slim
     steps:
       - attach_workspace:
           at: ./
