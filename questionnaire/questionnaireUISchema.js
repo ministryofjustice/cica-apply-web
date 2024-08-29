@@ -1,6 +1,14 @@
 'use strict';
 
 module.exports = {
+    'p-task-list': {
+        options: {
+            signInLink: {
+                visible: false
+            },
+            showBackButton: false
+        }
+    },
     'p-applicant-fatal-claim': {
         options: {
             signInLink: {
@@ -61,18 +69,8 @@ module.exports = {
             }
         }
     },
-    'p--context-applicant-details': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
     'p-applicant-confirmation-method': {
         options: {
-            signInLink: {
-                visible: false
-            },
             transformOrder: [
                 'q-applicant-enter-your-email-address',
                 'q-applicant-enter-your-telephone-number',
@@ -122,9 +120,6 @@ module.exports = {
     },
     'p-applicant-enter-your-name': {
         options: {
-            signInLink: {
-                visible: false
-            },
             outputOrder: ['q-applicant-title', 'q-applicant-first-name', 'q-applicant-last-name'],
             properties: {
                 'q-applicant-title': {
