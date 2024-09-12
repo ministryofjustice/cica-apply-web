@@ -84,6 +84,21 @@ spec:
                 secretKeyRef:
                   name: shared-secrets
                   key: session_duration
+            - name: CW_GOVUK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_govuk_client_id
+            - name: CW_GOVUK_ISSUER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_govuk_issuer_url
+            - name: CW_GOVUK_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_govuk_private_key
             - name: CW_INTERNAL_IP
               valueFrom:
                 secretKeyRef:
