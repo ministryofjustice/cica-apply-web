@@ -2,8 +2,8 @@
 
 [![GitHub repo size](https://img.shields.io/github/repo-size/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web)
 [![GitHub repo version](https://img.shields.io/github/package-json/v/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/releases/latest)
-[![GitHub repo npm version](https://img.shields.io/badge/npm_version->=9.5.0-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L5)
-[![GitHub repo node version](https://img.shields.io/badge/node_version->=18.16.1-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L6)
+[![GitHub repo npm version](https://img.shields.io/badge/npm_version->=10.8.2-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L5)
+[![GitHub repo node version](https://img.shields.io/badge/node_version->=22.8.0-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L6)
 [![GitHub repo contributors](https://img.shields.io/github/contributors/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/graphs/contributors)
 [![GitHub repo license](https://img.shields.io/github/package-json/license/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/LICENSE)
 
