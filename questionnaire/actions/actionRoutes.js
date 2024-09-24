@@ -220,7 +220,8 @@ router
             if (response.statusCode === 201) {
                 // if the page is a submission
                 const isApplicationSubmission =
-                    formHelper.getSectionContext(sectionId) === 'submission';
+                    formHelper.getSectionContext(sectionId) === 'submission' ||
+                    response.body.submission == true;
                 if (isApplicationSubmission) {
                     try {
                         await questionnaireService.postSubmission(req.session.questionnaireId);
