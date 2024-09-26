@@ -107,13 +107,15 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
         const accountService = createAccountService(req.session);
         accountService.setOwnerId(req.oidc.user.sub);
         const dashboardService = createDashboardService(req.oidc.user.sub);
-        const ownerData = await dashboardService.getTemplateData();
+        const applicationData = await dashboardService.getApplicationData();
+        const letterData = await dashboardService.getLetterData();
 
         const {render} = templateEngineService;
         const html = render('dashboard.njk', {
             csrfToken: req.csrfToken(),
             isAuthenticated: accountService.isAuthenticated(req),
-            ownerData,
+            applicationData,
+            letterData,
             cspNonce: res.locals.cspNonce,
             currentUrlPathname: '/account/dashboard'
         });

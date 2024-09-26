@@ -11,7 +11,22 @@
                     "modified": "2022-01-18T05:05:06Z",
                     "state": "IN_PROGRESS",
                     "user-id": "my-test-user-id",
-                    "expires": "2023-01-24T05:05:06Z"
+                    "expires": "2023-01-24T05:05:06Z",
+                    "template-type": "apply-for-compensation"
+                }
+            },
+            {
+                "type": "metadata",
+                "id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "questionnaire-id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
+                    "questionnaire-document-version": "4.1.0",
+                    "created": "2022-01-18T04:05:06Z",
+                    "modified": "2022-01-18T05:05:06Z",
+                    "state": "IN_PROGRESS",
+                    "user-id": "my-test-user-id",
+                    "expires": "2023-01-24T05:05:06Z",
+                    "template-type": "decisionletter"
                 }
             }
         ]

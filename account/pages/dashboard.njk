@@ -36,7 +36,33 @@
               text: "Action"
             }
           ],
-          rows: ownerData
+          rows: applicationData
+        }) }}
+    </div>
+
+    <div class="moj-scrollable-pane">
+        {{ govukTable({
+          attributes: {
+            'data-module': 'moj-sortable-table'
+          },
+          head: [
+            {
+              text: "Case reference number",
+              attributes: {
+                "aria-sort": "none"
+              }
+            },
+            {
+              text: "Expiry date",
+               attributes: {
+                 "aria-sort": "descending"
+               }
+            },
+            {
+              text: "Action"
+            }
+          ],
+          rows: letterData
         }) }}
     </div>
 

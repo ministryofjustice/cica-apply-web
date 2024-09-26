@@ -4,11 +4,8 @@ const express = require('express');
 const crypto = require('crypto');
 const formHelper = require('../form-helper');
 const createQuestionnaireService = require('../questionnaire-service');
-const getFormSubmitButtonText = require('../utils/getFormSubmitButtonText');
 const getQuestionnaireIdInSession = require('../utils/getQuestionnaireIdInSession');
 const createAccountService = require('../../account/account-service');
-const getRedirectionUrl = require('../utils/getRedirectionUrl');
-const createTemplateEngineService = require('../../templateEngine');
 const getOwnerOrigin = require('../utils/getOwnerOrigin');
 
 const router = express.Router();
@@ -50,7 +47,6 @@ router.route('/:action/start').get(async (req, res) => {
 
         res.redirect(`/actions/${actionId}/${initialSection}?utm_source=${origin}`);
     } catch (err) {
-        console.log(err);
         res.status(err.statusCode || 404).render('404.njk');
     }
 });
@@ -197,7 +193,6 @@ router
     })
     .post(async (req, res, next) => {
         try {
-            console.log(req.baseUrl);
             const accountService = createAccountService(req.session);
             const isAuthenticated = accountService.isAuthenticated(req);
             const questionnaireService = createQuestionnaireService({
@@ -221,7 +216,7 @@ router
                 // if the page is a submission
                 const isApplicationSubmission =
                     formHelper.getSectionContext(sectionId) === 'submission' ||
-                    response.body.submission == true;
+                    response.body.submission === true;
                 if (isApplicationSubmission) {
                     try {
                         await questionnaireService.postSubmission(req.session.questionnaireId);

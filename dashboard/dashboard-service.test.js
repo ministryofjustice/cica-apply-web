@@ -3,7 +3,8 @@
 'use strict';
 
 const fixtureMetaResponse = require('./fixtures/questionnaire_meta-filter-user-id.json');
-const fixturSectionSAnswersResponse = require('./fixtures/questionnaire_sections_answers.json');
+const fixtureSectionSAnswersResponse = require('./fixtures/questionnaire_sections_answers.json');
+const fixtureSubmissionResponse = require('./fixtures/questionnaire_submission_data.json');
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -18,14 +19,17 @@ describe('Dashboard service', () => {
                     return fixtureMetaResponse;
                 }),
                 getSectionAnswers: jest.fn(() => {
-                    return fixturSectionSAnswersResponse;
+                    return fixtureSectionSAnswersResponse;
+                }),
+                getSubmission: jest.fn(() => {
+                    return fixtureSubmissionResponse;
                 })
             }));
         });
-        it('Should get dashboard template data', async () => {
+        it('Should get dashboard in-flight application template data', async () => {
             const createDashboardService = require('./dashboard-service');
             const dashboardService = createDashboardService();
-            const result = await dashboardService.getTemplateData('my-test-user-id');
+            const result = await dashboardService.getApplicationData('my-test-user-id');
             expect(result).toEqual([
                 [
                     {
@@ -45,8 +49,53 @@ describe('Dashboard service', () => {
                 ]
             ]);
         });
+        it('Should get dashboard action template data', async () => {
+            const createDashboardService = require('./dashboard-service');
+            const dashboardService = createDashboardService();
+            const result = await dashboardService.getActionData('my-test-user-id');
+            expect(result).toEqual([
+                [
+                    {
+                        classes: 'govuk-table__cell__overflow',
+                        text: '12/3456'
+                    },
+                    {
+                        attributes: {
+                            'data-sort-value': 1674536706000
+                        },
+                        text: '24 January 2023'
+                    },
+                    {
+                        html:
+                            '<a href="/letters/decisionletter/resume/285cb104-0c15-4a9c-9840-cb1007f098fb" class="govuk-link">Complete action<span class=\'govuk-visually-hidden\'> Complete action for case 12/3456</span></a>'
+                    }
+                ]
+            ]);
+        });
     });
     describe('Given the owner has NO inflight applications', () => {
+        beforeAll(() => {
+            jest.doMock('../questionnaire/questionnaire-service', () => () => ({
+                getAllQuestionnairesMetadata: jest.fn(() => {
+                    return {
+                        body: {}
+                    };
+                }),
+                getSubmission: jest.fn(() => {
+                    return {
+                        body: {}
+                    };
+                })
+            }));
+        });
+        it('Should return and empty array', async () => {
+            const createDashboardService = require('./dashboard-service');
+            const dashboardService = createDashboardService();
+            const result = await dashboardService.getApplicationData('my-test-user-id');
+            expect(result).toEqual([]);
+        });
+    });
+    describe('Given the owner has NO actions', () => {
         beforeAll(() => {
             jest.doMock('../questionnaire/questionnaire-service', () => () => ({
                 getAllQuestionnairesMetadata: jest.fn(() => {
@@ -64,7 +113,7 @@ describe('Dashboard service', () => {
         it('Should return and empty array', async () => {
             const createDashboardService = require('./dashboard-service');
             const dashboardService = createDashboardService();
-            const result = await dashboardService.getTemplateData('my-test-user-id');
+            const result = await dashboardService.getActionData('my-test-user-id');
             expect(result).toEqual([]);
         });
     });

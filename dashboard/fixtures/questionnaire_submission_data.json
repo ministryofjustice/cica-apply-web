@@ -1,0 +1,14 @@
+{
+    "body": {
+        "data": {
+            "type": "submissions",
+            "id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
+            "attributes": {
+                "questionnaire-id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
+                "submitted": "false",
+                "status": "IN_PROGRESS",
+                "caseReferenceNumber": "12/3456"
+            }
+        }
+    }
+}
