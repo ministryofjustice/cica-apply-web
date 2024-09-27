@@ -1,0 +1,67 @@
+{
+    "statusCode": 200,
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p-decision-letter",
+                "attributes": {
+                    "sectionId": "p-decision-letter",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p-decision-letter"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p-decision-letter",
+                "attributes": {
+                    "required": ["q-accept-decision"],
+                    "additionalProperties": false,
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "type": "object",
+                    "properties": {
+                        "decision-letter-info": {
+                            "title": "Decision Letter",
+                            "description": "<p class=\"govuk-body\">You are ||/meta/personalisation/first-name|| ||/meta/personalisation/last-name||. You are not eligible for compensation</p>"
+                        },
+                        "q-accept-decision": {
+                            "title": "Do you accept the decision?",
+                            "type": "boolean",
+                            "oneOf": [
+                                {
+                                    "title": "Yes",
+                                    "const": true
+                                },
+                                {
+                                    "title": "No",
+                                    "const": false
+                                }
+                            ]
+                        }
+                    },
+                    "errorMessage": {
+                        "required": {
+                            "q-accept-decision": "Select yes if you accept the decision"
+                        }
+                    }
+                }
+            }
+        ],
+        "links": {
+            "prev": "undefined/api/v1/questionnaires/b826e4e1-b6a0-4a1f-8c8d-7600433beaa0/progress-entries?filter[sectionId]=p-decision-letter"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}

@@ -57,7 +57,7 @@ router.get('/:action/resume/:questionnaireId', async (req, res) => {
         let resumableQuestionnaireAnalyticsId;
 
         const actionId = req.params.action;
-        const defaultRedirect = `actions/${actionId}`;
+        const defaultRedirect = `/actions/${actionId}`;
         let redirectUrl = defaultRedirect;
 
         const resumableQuestionnaireId = req.params.questionnaireId;
@@ -85,7 +85,7 @@ router.get('/:action/resume/:questionnaireId', async (req, res) => {
             const errorResponse = resumableQuestionnaireResponse.body?.errors[0];
             if (errorResponse.status === 404) {
                 // TODO: what do we want to happen in this scenario?
-                return res.status(errorResponse.statusCode).render('404.njk');
+                return res.redirect(redirectUrl);
             }
         }
 
