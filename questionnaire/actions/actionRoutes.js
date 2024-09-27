@@ -15,11 +15,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:action', (req, res) => {
-    try {
-        return res.redirect(`/${req.params.action}/start`);
-    } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
-    }
+    return res.status(404).render('404.njk');
 });
 
 // TODO: delete this route before release; not needed, just using for testing
