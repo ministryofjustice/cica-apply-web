@@ -1,0 +1,57 @@
+{
+    "statusCode": 200,
+    "body": {
+        "data": [
+            {
+                "type": "progress-entries",
+                "id": "p-request-review",
+                "attributes": {
+                    "sectionId": "p-request-review",
+                    "url": null
+                },
+                "relationships": {
+                    "section": {
+                        "data": {
+                            "type": "sections",
+                            "id": "p-request-review"
+                        }
+                    }
+                }
+            }
+        ],
+        "included": [
+            {
+                "type": "sections",
+                "id": "p-request-review",
+                "attributes": {
+                    "required": ["q-request-review"],
+                    "errorMessage": {
+                        "required": {
+                            "q-applicant-fatal-claim": "Enter your reasons for requesting a review"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "type": "object",
+                    "properties": {
+                        "q-request-review": {
+                            "type": "string",
+                            "title": "Enter the reasons you would like to request a review",
+                            "maxLength": 2000,
+                            "errorMessage": {
+                                "maxLength": "Reasons for review must be 2000 characters or less"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "links": {
+            "prev": "undefined/api/v1/questionnaires/b826e4e1-b6a0-4a1f-8c8d-7600433beaa0/progress-entries?filter[sectionId]=p-request-review"
+        },
+        "meta": {
+            "summary": "p--check-your-answers",
+            "confirmation": "p--confirmation"
+        }
+    }
+}
