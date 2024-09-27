@@ -78,6 +78,7 @@ router.route('/start').get(async (req, res) => {
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated,
+            templateName: 'apply-for-compensation',
             origin,
             analyticsId
         });
