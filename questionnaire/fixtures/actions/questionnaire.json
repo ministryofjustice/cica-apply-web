@@ -1,0 +1,193 @@
+{
+    "body": {
+        "data": {
+            "type": "questionnaires",
+            "id": "c992d660-d1a8-4928-89a0-87d4f9640250",
+            "attributes": {
+                "id": "c992d660-d1a8-4928-89a0-87d4f9640250",
+                "type": "decisionletter",
+                "currentSectionId": "p-request-review",
+                "retractedAnswers": {},
+                "version": "1.0.0",
+                "sections": {
+                    "p--confirmation": {
+                        "schema": {
+                            "$schema": "http://json-schema.org/draft-07/schema#",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "confirmation": {
+                                    "title": "Confirmation",
+                                    "description": "test confirmation"
+                                }
+                            }
+                        }
+                    },
+                    "p-decision-letter": {
+                        "schema": {
+                            "$schema": "http://json-schema.org/draft-07/schema#",
+                            "type": "object",
+                            "required": ["q-accept-decision"],
+                            "additionalProperties": false,
+                            "properties": {
+                                "decision-letter-info": {
+                                    "title": "Decision Letter",
+                                    "description": "<p class=\"govuk-body\">You are ||/meta/personalisation/first-name|| ||/meta/personalisation/last-name||. You are not eligible for compensation</p>"
+                                },
+                                "q-accept-decision": {
+                                    "title": "Do you accept the decision?",
+                                    "type": "boolean",
+                                    "oneOf": [
+                                        {"title": "Yes", "const": true},
+                                        {"title": "No", "const": false}
+                                    ]
+                                }
+                            },
+                            "errorMessage": {
+                                "required": {
+                                    "q-accept-decision": "Select yes if you accept the decision"
+                                }
+                            },
+                            "options": {
+                                "outputOrder": ["decision-letter-info", "q-accept-decision"],
+                                "properties": {
+                                    "q-accept-decision": {
+                                        "options": {
+                                            "macroOptions": {
+                                                "fieldset": {
+                                                    "legend": {
+                                                        "classes": "govuk-fieldset__legend--m"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "p-request-review": {
+                        "schema": {
+                            "$schema": "http://json-schema.org/draft-07/schema#",
+                            "type": "object",
+                            "required": ["q-request-review"],
+                            "properties": {
+                                "q-request-review": {
+                                    "type": "string",
+                                    "title": "Enter the reasons you would like to request a review",
+                                    "maxLength": 2000,
+                                    "errorMessage": {
+                                        "maxLength": "Reasons for review must be 2000 characters or less"
+                                    }
+                                }
+                            },
+                            "errorMessage": {
+                                "required": {"q-request-review": "Enter any additional information"}
+                            }
+                        }
+                    },
+                    "p-declaration": {
+                        "schema": {
+                            "$schema": "http://json-schema.org/draft-07/schema#",
+                            "type": "object",
+                            "title": "Declaration",
+                            "required": ["q-declaration"],
+                            "propertyNames": {"enum": ["q-declaration"]},
+                            "allOf": [
+                                {"properties": {"declaration": {"description": "test"}}},
+                                {
+                                    "properties": {
+                                        "q-declaration": {
+                                            "type": "string",
+                                            "title": "I have read and understood the declaration",
+                                            "const": "i-agree"
+                                        }
+                                    }
+                                }
+                            ],
+                            "errorMessage": {
+                                "required": {
+                                    "q-declaration": "Select that you have read and understood"
+                                }
+                            },
+                            "options": {"pageContext": "submission"}
+                        }
+                    }
+                },
+                "routes": {
+                    "initial": "p-decision-letter",
+                    "referrer": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim",
+                    "confirmation": "p--confirmation",
+                    "summary": ["p-declaration"],
+                    "states": {
+                        "p--confirmation": {"type": "final"},
+                        "p-decision-letter": {
+                            "on": {
+                                "ANSWER": [
+                                    {
+                                        "target": "p--confirmation",
+                                        "cond": [
+                                            "==",
+                                            "$.answers.p-decision-letter.q-accept-decision",
+                                            true
+                                        ]
+                                    },
+                                    {"target": "p-request-review"}
+                                ]
+                            }
+                        },
+                        "p-request-review": {"on": {"ANSWER": [{"target": "p-declaration"}]}},
+                        "p-declaration": {"on": {"ANSWER": [{"target": "p-confirmation"}]}}
+                    }
+                },
+                "answers": {},
+                "progress": ["p-request-review"],
+                "taxonomies": {},
+                "onSubmit": {
+                    "id": "task0",
+                    "type": "sequential",
+                    "retries": 0,
+                    "data": [
+                        {
+                            "id": "task1",
+                            "type": "transformAndUpload",
+                            "retries": 0,
+                            "data": {"questionnaireDef": "$.questionnaireDef", "logger": "$.logger"}
+                        }
+                    ]
+                },
+                "onCreate": {
+                    "id": "task0",
+                    "type": "sequential",
+                    "retries": 0,
+                    "data": [
+                        {
+                            "id": "task1",
+                            "type": "sendNotifyMessageToSQS",
+                            "retries": 0,
+                            "data": {"questionnaire": "$.questionnaireDef", "logger": "$.logger"}
+                        }
+                    ]
+                },
+                "meta": {
+                    "questionnaireDocumentVersion": "5.0.0",
+                    "onComplete": {
+                        "actions": [
+                            {
+                                "description": "Notification email - applicant:adult",
+                                "type": "sendEmail",
+                                "cond": ["==", "$.meta.personalisation.contact-method", "email"],
+                                "data": {
+                                    "templateId": "test",
+                                    "emailAddress": "||/meta/personalisation/email||",
+                                    "personalisation": {"caseReference": "1", "content": "2"},
+                                    "reference": null
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
