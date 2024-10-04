@@ -41,4 +41,30 @@ router.route('/application-summary').get(async (req, res, next) => {
     }
 });
 
+router.route('/:sectionId').get(async (req, res, next) => {
+    try {
+        const questionnaireId = getQuestionnaireIdInSession(req.session);
+        const accountService = createAccountService(req.session);
+        const questionnaireService = createQuestionnaireService({
+            ownerId: accountService.getOwnerId(),
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
+        const response = await questionnaireService.getSection(
+            questionnaireId,
+            `p-${req.params.sectionId}`
+        );
+        const timestamp = moment().tz('Europe/London');
+        const pageHtml = downloadHelper.getPageHtml(response.body, timestamp);
+        // add timestamp to filename in the correct format
+        const filename = `${req.params.sectionId}.html`;
+
+        res.setHeader('Content-disposition', `attachment; filename=${filename}`);
+        res.type('.html');
+        return res.send(pageHtml);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
 module.exports = router;

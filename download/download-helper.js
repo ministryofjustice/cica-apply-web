@@ -7,13 +7,25 @@ const createTemplateEngineService = require('../templateEngine');
 const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 
-function renderSection({transformation, timestamp}) {
+function renderSummary({transformation, timestamp}) {
     return render(
         `
             {% extends "download.summary.njk" %}
             {% block pageTitle %}
                  Draft Application Summary - {{ super() }}
             {% endblock %}          
+            {% block innerContent %}              
+                ${transformation.content}      
+            {% endblock %}    
+            {% block downloadedTime %}${timestamp.format('LLLL')}{% endblock %}      
+        `
+    );
+}
+
+function renderSection({transformation, timestamp}) {
+    return render(
+        `
+            {% extends "download.page.njk" %}      
             {% block innerContent %}              
                 ${transformation.content}      
             {% endblock %}    
@@ -40,6 +52,22 @@ function getSummaryHtml(sectionData, timestamp) {
         schema: escapeSchemaContent(schema),
         uiSchema
     });
+    return renderSummary({
+        transformation,
+        timestamp
+    });
+}
+
+function getPageHtml(sectionData, timestamp) {
+    const {sectionId} = sectionData.data[0].attributes;
+    const schema = sectionData.included.filter(section => section.type === 'sections')[0]
+        .attributes;
+    schema.downloadSummary = true; // adding this property on the fly
+    const transformation = qTransformer.transform({
+        schemaKey: sectionId,
+        schema: escapeSchemaContent(schema),
+        uiSchema
+    });
     return renderSection({
         transformation,
         timestamp
@@ -47,5 +75,6 @@ function getSummaryHtml(sectionData, timestamp) {
 }
 
 module.exports = {
-    getSummaryHtml
+    getSummaryHtml,
+    getPageHtml
 };
