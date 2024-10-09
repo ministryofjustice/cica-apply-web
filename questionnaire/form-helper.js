@@ -46,7 +46,8 @@ function renderSection({
     uiOptions = {},
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
 }) {
-    const showButton = !isFinal && pageType !== 'task-list';
+    const disguisedButton = uiOptions?.hiddenButton;
+    const showButton = !isFinal && pageType !== 'task-list' && !disguisedButton;
     const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
@@ -95,6 +96,8 @@ function renderSection({
                                     preventDoubleClick: true
                                 }) }}
                             {% endif %}
+                        {% endif %}
+                    {% if ${disguisedButton} or ${showButton} %}
                         <input type="hidden" name="_csrf" value="${csrfToken}">
                         <input type="hidden" name="_external-id" value="${externalId}">
                     {% endif %}
