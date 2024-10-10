@@ -1,15 +1,16 @@
 // core CSS (immutable).
-@import "node_modules/govuk-frontend/dist/govuk/index";
-@import "node_modules/@ministryofjustice/frontend/moj/components/all";
+@import 'node_modules/govuk-frontend/dist/govuk/index';
+@import 'node_modules/@ministryofjustice/frontend/moj/components/all';
 
 // custom modules/extensions.
-@import "src/modules/cookie-banner/cookie-banner";
-@import "src/modules/autocomplete/accessible-autocomplete";
-@import "src/modules/autocomplete/accessible-autocomplete-wrapper";
+@import 'src/modules/cookie-banner/cookie-banner';
+@import 'src/modules/autocomplete/accessible-autocomplete';
+@import 'src/modules/autocomplete/accessible-autocomplete-wrapper';
 
 // custom components.
-@import "components/cica/modal/modal";
-@import "components/cica/prominent-link/styles";
-@import "components/govuk/one-login-service-header/service-header";
+@import 'components/cica/modal/modal';
+@import 'components/cica/prominent-link/styles';
+@import 'components/cica/disguised-button/styles.scss';
+@import 'components/govuk/one-login-service-header/service-header';
 
-@import "account/sass/all";
+@import 'account/sass/all';
