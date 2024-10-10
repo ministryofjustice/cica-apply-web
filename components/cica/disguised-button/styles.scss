@@ -1,0 +1,23 @@
+.cica-disguised-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+.cica-disguised-button:focus {
+    outline: 3px solid rgba(0, 0, 0, 0);
+    color: #0b0c0c;
+    background-color: #fd0;
+    text-decoration: none;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+.cica-disguised-button > p {
+    color: #1d70b8;
+}
+.cica-disguised-button:focus a {
+    color: #0b0c0c;
+    text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
+}
