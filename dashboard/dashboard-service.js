@@ -104,7 +104,7 @@ function createDashboardService(ownerId) {
                     }
                 },
                 {
-                    html: `<a href="${resumeLink}" class="govuk-link">Complete action<span class='govuk-visually-hidden'> Complete action for case ${questionnaireData.data.caseReferenceNumber}</span></a>`
+                    html: `<a href="${resumeLink}" class="govuk-link">View decision<span class='govuk-visually-hidden'> View decision for case ${questionnaireData.data.caseReferenceNumber}</span></a>`
                 }
             ]);
             return acc;

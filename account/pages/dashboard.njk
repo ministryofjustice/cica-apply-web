@@ -6,64 +6,76 @@
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Active Applications</h1>
-    <p class="govuk-body govuk-!-font-size-24">An application is <strong>saved for 30 days</strong> from when you start it.</p>
-    <p class="govuk-body">If you do not submit it before this date, it will be deleted and you'll need to start a new application</p>
+    <p class="govuk-body">You'll find your applications here if:.</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>you started an application less than 30 days ago</li>
+      <li>you submitted one, but we need more information</li>
+      <li>we've assessed your application</li>
+    </ul>
+    <h2 class="govuk-heading-m">If you start an application</h2>
+    <p class="govuk-body">If you start an application but do not submit it, it will be saved for 30 days. After 30 days, you will need to start a new application.<p>
+    <h2 class="govuk-heading-m">After you submit an application</h2>
+    <p class="govuk-body">We will assess your application and give you a decision. You can view the decision for 56 days after we make it.</p>
     {{ govukButton({
         text: "Start a new application",
         classes: "govuk-button--secondary",
         href: "/apply/start"
     }) }}
-
-    <div class="moj-scrollable-pane">
-        {{ govukTable({
-          attributes: {
-            'data-module': 'moj-sortable-table'
-          },
-          head: [
-            {
-              text: "Applicant name",
-              attributes: {
-                "aria-sort": "none"
+    {% if displayStartedApplications %}
+      <h2 class="govuk-heading-m">Started but not submitted</h2>
+      <div class="moj-scrollable-pane">
+          {{ govukTable({
+            attributes: {
+              'data-module': 'moj-sortable-table'
+            },
+            head: [
+              {
+                text: "Applicant name",
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Expiry date",
+                attributes: {
+                  "aria-sort": "descending"
+                }
+              },
+              {
+                text: "Action"
               }
+            ],
+            rows: applicationData
+          }) }}
+      </div>
+    {% endif %}
+    {% if displayActions %}
+      <h2 class="govuk-heading-m">Submitted</h2>
+      <div class="moj-scrollable-pane">
+          {{ govukTable({
+            attributes: {
+              'data-module': 'moj-sortable-table'
             },
-            {
-              text: "Expiry date",
-               attributes: {
-                 "aria-sort": "descending"
-               }
-            },
-            {
-              text: "Action"
-            }
-          ],
-          rows: applicationData
-        }) }}
-    </div>
-
-    <div class="moj-scrollable-pane">
-        {{ govukTable({
-          attributes: {
-            'data-module': 'moj-sortable-table'
-          },
-          head: [
-            {
-              text: "Case reference number",
-              attributes: {
-                "aria-sort": "none"
+            head: [
+              {
+                text: "Case reference number",
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Expiry date",
+                attributes: {
+                  "aria-sort": "descending"
+                }
+              },
+              {
+                text: "Action"
               }
-            },
-            {
-              text: "Expiry date",
-               attributes: {
-                 "aria-sort": "descending"
-               }
-            },
-            {
-              text: "Action"
-            }
-          ],
-          rows: letterData
-        }) }}
-    </div>
+            ],
+            rows: actionData
+          }) }}
+      </div>
+    {% endif %}
 
 {% endblock %}

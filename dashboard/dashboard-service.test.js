@@ -67,7 +67,7 @@ describe('Dashboard service', () => {
                     },
                     {
                         html:
-                            '<a href="/letters/decisionletter/resume/285cb104-0c15-4a9c-9840-cb1007f098fb" class="govuk-link">Complete action<span class=\'govuk-visually-hidden\'> Complete action for case 12/3456</span></a>'
+                            '<a href="/actions/decisionletter/resume/285cb104-0c15-4a9c-9840-cb1007f098fb" class="govuk-link">View decision<span class=\'govuk-visually-hidden\'> View decision for case 12/3456</span></a>'
                     }
                 ]
             ]);
