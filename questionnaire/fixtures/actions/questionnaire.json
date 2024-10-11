@@ -5,7 +5,7 @@
             "id": "c992d660-d1a8-4928-89a0-87d4f9640250",
             "attributes": {
                 "id": "c992d660-d1a8-4928-89a0-87d4f9640250",
-                "type": "decisionletter",
+                "type": "decision-letter",
                 "currentSectionId": "p-request-review",
                 "retractedAnswers": {},
                 "version": "1.0.0",
