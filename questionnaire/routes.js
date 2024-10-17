@@ -205,7 +205,8 @@ router
                 });
             }
 
-            req.session.referrer = req.originalUrl;
+            req.session.referrer =
+                response?.body?.meta.authenticationRedirectionUrl || req.originalUrl;
 
             const html = formHelper.getSectionHtml(
                 response.body,
