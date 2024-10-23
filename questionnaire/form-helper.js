@@ -96,6 +96,7 @@ function renderSection({
                                 }) }}
                             {% endif %}
                         <input type="hidden" name="_csrf" value="${csrfToken}">
+                        <input type="hidden" name="_analyticsId" value="${analyticsId}">
                     {% endif %}
                 </form>
             {% endblock %}

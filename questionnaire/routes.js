@@ -87,7 +87,6 @@ router.route('/start').get(async (req, res) => {
         );
         req.session.questionnaireId = response.body.data.attributes.id;
         req.session.analyticsId = analyticsId;
-
         res.redirect(`/apply/${initialSection}?utm_source=${origin}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -236,10 +235,29 @@ router
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
+            // eslint-disable-next-line no-underscore-dangle
+            const pageAnalyticsId = body._analyticsId;
+            if (
+                isAuthenticated &&
+                pageAnalyticsId !== undefined &&
+                req.session?.analyticsId !== undefined &&
+                pageAnalyticsId !== req.session?.analyticsId
+            ) {
+                console.info(
+                    `Analytics id ${
+                        req.session?.analyticsId
+                    } for questionnaire id ${getQuestionnaireIdInSession(
+                        req.session
+                    )} does not match page analytics id ${pageAnalyticsId}`
+                );
+                return res.redirect('/account/dashboard');
+            }
             let nextSectionId;
             // delete the token from the body to allow AJV to validate the request.
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
+            // eslint-disable-next-line no-underscore-dangle
+            delete body._analyticsId;
             const response = await questionnaireService.postSection(
                 getQuestionnaireIdInSession(req.session),
                 sectionId,

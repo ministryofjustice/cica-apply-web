@@ -115,6 +115,7 @@ const html = `<!DOCTYPE html>
   Continue anyway
 </button>
                     <input type="hidden" name="_csrf" value="sometoken">
+                    <input type="hidden" name="_analyticsId" value="urn:uuid:ce66be9d-5880-4559-9a93-df15928be396">
                 </form>
         </div>
     </div>
@@ -320,7 +321,7 @@ const html = `<!DOCTYPE html>
         window.CICA = {
             SERVICE_URL: 'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk',
             ANALYTICS_TRACKING_ID: '',
-            CICA_ANALYTICS_ID: ''
+            CICA_ANALYTICS_ID: 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
         };
     </script>
     <script type="module" nonce="somenonce">

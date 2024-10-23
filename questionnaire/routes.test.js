@@ -3,6 +3,7 @@
 'use strict';
 
 const request = require('supertest');
+const crypto = require('crypto');
 const fixtureQuestionnaire = require('./fixtures/questionnaire.json');
 const fixtureProgressEntryOrdinal1 = require('./fixtures/fixtureProgressEntryOrdinal1.json');
 const fixtureProgressEntryOrdinal2 = require('./fixtures/fixtureProgressEntryOrdinal2.json');
@@ -46,7 +47,7 @@ const defaultMocks = {
         jest.fn(() => 'c992d660-d1a8-4928-89a0-87d4f9640250'),
     '../account/account-service': () => {
         return jest.fn(() => ({
-            getOwnerId: () => '123ownerid',
+            getOwnerId: () => 'urn:uuid:625cc31a-dc57-4064-860e-e68d049035ad',
             isAuthenticated: () => false
         }));
     },
@@ -628,7 +629,8 @@ describe('Hitting /apply/:section', () => {
                     './form-helper.js': jest.fn(() => ({
                         getSectionContext: () => 'submission',
                         addPrefix: section => `p-${section}`,
-                        processRequest: requestBody => requestBody
+                        processRequest: requestBody => requestBody,
+                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
                     }))
                 });
             });
@@ -636,8 +638,10 @@ describe('Hitting /apply/:section', () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
                 const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken
+                    _csrf: initialCsrfToken,
+                    _analyticsId: initialAnalyticsId
                 });
                 expect(response.res.text).toContain('Application submitted');
             });
@@ -645,13 +649,77 @@ describe('Hitting /apply/:section', () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+
                 const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken
+                    _csrf: initialCsrfToken,
+                    _analyticsId: initialAnalyticsId
                 });
                 expect(response.res.text).toContain('Application submitted');
             });
         });
+        describe('Prevent cross-template edits', () => {
+            describe('Authenticated', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        './form-helper.js': jest.fn(() => ({
+                            getSectionContext: () => 'post',
+                            addPrefix: section => `p-${section}`,
+                            processRequest: requestBody => requestBody,
+                            removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                        })),
+                        '../account/account-service': () => {
+                            return jest.fn(() => ({
+                                getOwnerId: () => 'urn:uuid:625cc31a-dc57-4064-860e-e68d049035ad',
+                                isAuthenticated: () => true
+                            }));
+                        }
+                    });
+                });
+                describe('Session analytics ID and form field mismatch', () => {
+                    it('Should redirect to the dashboard', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        // Set the analyticsId
+                        await currentAgent.get('/apply/start');
+                        const incorrectAnalyticsId =
+                            'urn:uuid:11111111-2222-4333-8444-555555555555';
 
+                        const response = await currentAgent
+                            .post('/apply/applicant-fatal-claim')
+                            .send({
+                                _csrf: initialCsrfToken,
+                                _analyticsId: incorrectAnalyticsId
+                            });
+                        expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
+                    });
+                });
+                describe('Session analytics ID and form field match', () => {
+                    it('Should render the next page ', async () => {
+                        jest.spyOn(crypto, 'randomUUID').mockReturnValue(
+                            'ce66be9d-5880-4559-9a93-df15928be396'
+                        );
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        // Set the analyticsId
+                        await currentAgent.get('/apply/start');
+                        const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+
+                        const response = await currentAgent
+                            .post('/apply/applicant-fatal-claim')
+                            .send({
+                                _csrf: initialCsrfToken,
+                                _analyticsId: initialAnalyticsId
+                            });
+                        expect(response.res.text).toBe(
+                            'Found. Redirecting to /apply/applicant-fatal-claim'
+                        );
+                    });
+                });
+            });
+        });
         describe('Error', () => {
             beforeEach(() => {
                 setUpCommonMocks({
@@ -766,10 +834,12 @@ describe('Hitting /apply/:section?next=:section', () => {
         const currentAgent = request.agent(app);
         const initialResponse = await currentAgent.get('/apply/start-or-resume');
         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+        const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
         const response = await currentAgent
             .post('/apply/was-the-crime-reported-to-police?next=applicant-fatal-claim')
             .send({
-                _csrf: initialCsrfToken
+                _csrf: initialCsrfToken,
+                _analyticsId: initialAnalyticsId
             });
         expect(response.res.text).toContain('Found. Redirecting to /apply/applicant-fatal-claim');
     });
@@ -777,7 +847,6 @@ describe('Hitting /apply/:section?next=:section', () => {
     describe('Section unavailable', () => {
         beforeEach(() => {
             setUpCommonMocks({
-                '../questionnaire/questionnaire-service': '__UNMOCK__',
                 '../questionnaire/request-service': () => {
                     const apiV1 = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c992d660-d1a8-4928-89a0-87d4f9640250`;
                     const api = `${process.env.CW_DCS_URL}/api/questionnaires/c992d660-d1a8-4928-89a0-87d4f9640250`;
@@ -828,10 +897,12 @@ describe('Hitting /apply/:section?next=:section', () => {
             const currentAgent = request.agent(app);
             const initialResponse = await currentAgent.get('/apply/start-or-resume');
             const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+            const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const response = await currentAgent
                 .post('/apply/applicant-fatal-claim?next=info-check-your-answers')
                 .send({
-                    _csrf: initialCsrfToken
+                    _csrf: initialCsrfToken,
+                    _analyticsId: initialAnalyticsId
                 });
             expect(response.statusCode).toBe(302);
             expect(response.res.text).toBe(

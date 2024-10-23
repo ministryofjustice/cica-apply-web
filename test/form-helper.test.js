@@ -181,6 +181,7 @@ describe('form-helper functions', () => {
             const expected = validResolvedHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
+            const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
 
             const actual = formHelper
                 .renderSection({
@@ -190,7 +191,8 @@ describe('form-helper functions', () => {
                     sectionId,
                     csrfToken,
                     cspNonce,
-                    showBackLink
+                    showBackLink,
+                    analyticsId
                 })
                 .replace(/\s+/g, '');
 
@@ -213,6 +215,7 @@ describe('form-helper functions', () => {
                     visible: false
                 }
             };
+            const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
 
             const actual = formHelper
                 .renderSection({
@@ -223,7 +226,8 @@ describe('form-helper functions', () => {
                     csrfToken,
                     cspNonce,
                     uiOptions: options,
-                    showBackLink
+                    showBackLink,
+                    analyticsId
                 })
                 .replace(/\s+/g, '');
 
