@@ -181,6 +181,7 @@ describe('form-helper functions', () => {
             const expected = validResolvedHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
+            const questionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
 
             const actual = formHelper
                 .renderSection({
@@ -190,7 +191,8 @@ describe('form-helper functions', () => {
                     sectionId,
                     csrfToken,
                     cspNonce,
-                    showBackLink
+                    showBackLink,
+                    questionnaireId
                 })
                 .replace(/\s+/g, '');
 
@@ -213,6 +215,7 @@ describe('form-helper functions', () => {
                     visible: false
                 }
             };
+            const questionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
 
             const actual = formHelper
                 .renderSection({
@@ -223,7 +226,8 @@ describe('form-helper functions', () => {
                     csrfToken,
                     cspNonce,
                     uiOptions: options,
-                    showBackLink
+                    showBackLink,
+                    questionnaireId
                 })
                 .replace(/\s+/g, '');
 
@@ -247,6 +251,7 @@ describe('form-helper functions', () => {
                     }
                 }
             });
+            const questionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
             const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
                 /\s+/g,
                 ''
@@ -261,7 +266,8 @@ describe('form-helper functions', () => {
                     showBackLink,
                     csrfToken,
                     cspNonce,
-                    showSignInLink
+                    showSignInLink,
+                    questionnaireId
                 })
                 .replace(/\s+/g, '');
 
@@ -285,6 +291,7 @@ describe('form-helper functions', () => {
                     }
                 }
             });
+            const questionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
             const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
                 /\s+/g,
                 ''
@@ -299,7 +306,8 @@ describe('form-helper functions', () => {
                     showBackLink,
                     csrfToken,
                     cspNonce,
-                    showSignInLink
+                    showSignInLink,
+                    questionnaireId
                 })
                 .replace(/\s+/g, '');
 
@@ -332,6 +340,7 @@ describe('form-helper functions', () => {
                 },
                 uiOptions
             );
+            const questionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
             const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
                 /\s+/g,
                 ''
@@ -347,7 +356,8 @@ describe('form-helper functions', () => {
                     csrfToken,
                     cspNonce,
                     showSignInLink,
-                    uiOptions
+                    uiOptions,
+                    questionnaireId
                 })
                 .replace(/\s+/g, '');
 
@@ -870,6 +880,7 @@ describe('form-helper functions', () => {
             const userId = 'urn:uuid:7c9b5213-7d51-4433-9bdd-13ddcf3ea30g';
             const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const expected = sectionHtmlWithErrors;
+            const questionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
 
             const recievedHtml = formHelper.getSectionHtmlWithErrors(
                 sectionData,
@@ -878,7 +889,8 @@ describe('form-helper functions', () => {
                 cspNonce,
                 isAuthenticated,
                 userId,
-                analyticsId
+                analyticsId,
+                questionnaireId
             );
             expect(recievedHtml.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
         });

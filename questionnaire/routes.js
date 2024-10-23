@@ -213,7 +213,8 @@ router
                 res.locals.cspNonce,
                 isAuthenticated,
                 accountService.getOwnerId(),
-                req.session.analyticsId
+                req.session.analyticsId,
+                req.session.questionnaireId
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
@@ -237,10 +238,20 @@ router
             });
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
+            // eslint-disable-next-line no-underscore-dangle
+            const pageQuestionnaireId = body._questionnaireId;
+            if (
+                pageQuestionnaireId &&
+                pageQuestionnaireId !== getQuestionnaireIdInSession(req.session)
+            ) {
+                return res.redirect('/account/dashboard');
+            }
             let nextSectionId;
             // delete the token from the body to allow AJV to validate the request.
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
+            // eslint-disable-next-line no-underscore-dangle
+            delete body._questionnaireId;
             const response = await questionnaireService.postSection(
                 getQuestionnaireIdInSession(req.session),
                 sectionId,
@@ -302,7 +313,8 @@ router
                 res.locals.cspNonce,
                 isAuthenticated,
                 accountService.getOwnerId(),
-                req.session.analyticsId
+                req.session.analyticsId,
+                getQuestionnaireIdInSession(req.session)
             );
             return res.send(html);
         } catch (err) {

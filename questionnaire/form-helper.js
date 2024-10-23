@@ -44,7 +44,8 @@ function renderSection({
     userId,
     analyticsId,
     uiOptions = {},
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
+    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions),
+    questionnaireId
 }) {
     const showButton = !isFinal && pageType !== 'task-list';
     const buttonTitle = getButtonText(sectionId, uiOptions);
@@ -96,6 +97,7 @@ function renderSection({
                                 }) }}
                             {% endif %}
                         <input type="hidden" name="_csrf" value="${csrfToken}">
+                        <input type="hidden" name="_questionnaireId" value="${questionnaireId}">
                     {% endif %}
                 </form>
             {% endblock %}
@@ -257,7 +259,15 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
+function getSectionHtml(
+    sectionData,
+    csrfToken,
+    cspNonce,
+    isAuthenticated,
+    userId,
+    analyticsId,
+    questionnaireId
+) {
     const {sectionId} = sectionData.data[0].attributes;
     const sectionDataMeta = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -290,7 +300,8 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
         isAuthenticated,
         userId,
         analyticsId,
-        uiOptions
+        uiOptions,
+        questionnaireId
     });
 }
 
@@ -319,7 +330,8 @@ function getSectionHtmlWithErrors(
     cspNonce,
     isAuthenticated,
     userId,
-    analyticsId
+    analyticsId,
+    questionnaireId
 ) {
     const {schema} = sectionData.meta;
     const sectionDataMeta = sectionData.meta;
@@ -345,7 +357,8 @@ function getSectionHtmlWithErrors(
         isAuthenticated,
         userId,
         analyticsId,
-        uiOptions
+        uiOptions,
+        questionnaireId
     });
 }
 
