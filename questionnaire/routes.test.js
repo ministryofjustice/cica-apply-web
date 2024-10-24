@@ -636,8 +636,10 @@ describe('Hitting /apply/:section', () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const initialQuestionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
                 const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken
+                    _csrf: initialCsrfToken,
+                    questionnaireId: initialQuestionnaireId
                 });
                 expect(response.res.text).toContain('Application submitted');
             });
@@ -645,13 +647,37 @@ describe('Hitting /apply/:section', () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const initialQuestionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
+
                 const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken
+                    _csrf: initialCsrfToken,
+                    questionnaireId: initialQuestionnaireId
                 });
                 expect(response.res.text).toContain('Application submitted');
             });
         });
+        describe('Prevent cross-template edits', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    './form-helper.js': jest.fn(() => ({
+                        addPrefix: section => `p-${section}`,
+                        processRequest: requestBody => requestBody
+                    }))
+                });
+            });
+            it("Should redirect to dashboard if the session questionnaireId doesn't match the questionnaireId on the page", async () => {
+                const currentAgent = request.agent(app);
+                const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const initialQuestionnaireId = '3729f311-48ba-45e1-a54c-a10b80f949a2';
 
+                const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
+                    _csrf: initialCsrfToken,
+                    _questionnaireId: initialQuestionnaireId
+                });
+                expect(response.res.text).toContain('Found. Redirecting to /account/dashboard');
+            });
+        });
         describe('Error', () => {
             beforeEach(() => {
                 setUpCommonMocks({
@@ -766,10 +792,12 @@ describe('Hitting /apply/:section?next=:section', () => {
         const currentAgent = request.agent(app);
         const initialResponse = await currentAgent.get('/apply/start-or-resume');
         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+        const initialQuestionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
         const response = await currentAgent
             .post('/apply/was-the-crime-reported-to-police?next=applicant-fatal-claim')
             .send({
-                _csrf: initialCsrfToken
+                _csrf: initialCsrfToken,
+                questionnaireId: initialQuestionnaireId
             });
         expect(response.res.text).toContain('Found. Redirecting to /apply/applicant-fatal-claim');
     });
@@ -828,10 +856,12 @@ describe('Hitting /apply/:section?next=:section', () => {
             const currentAgent = request.agent(app);
             const initialResponse = await currentAgent.get('/apply/start-or-resume');
             const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+            const initialQuestionnaireId = 'c992d660-d1a8-4928-89a0-87d4f9640250';
             const response = await currentAgent
                 .post('/apply/applicant-fatal-claim?next=info-check-your-answers')
                 .send({
-                    _csrf: initialCsrfToken
+                    _csrf: initialCsrfToken,
+                    questionnaireId: initialQuestionnaireId
                 });
             expect(response.statusCode).toBe(302);
             expect(response.res.text).toBe(

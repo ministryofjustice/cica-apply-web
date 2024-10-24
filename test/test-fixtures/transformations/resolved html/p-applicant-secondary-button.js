@@ -115,6 +115,7 @@ const html = `<!DOCTYPE html>
   Continue anyway
 </button>
                     <input type="hidden" name="_csrf" value="sometoken">
+                    <input type="hidden" name="_questionnaireId" value="c992d660-d1a8-4928-89a0-87d4f9640250">
                 </form>
         </div>
     </div>
