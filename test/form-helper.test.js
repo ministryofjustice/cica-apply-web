@@ -867,7 +867,6 @@ describe('form-helper functions', () => {
             const csrfToken = 'ihjsOcdp-XAWRzksu5YpE2tczpQzK02VWEKg';
             const cspNonce = 'vxRGNXkIRC4wZnzoZC_dk';
             const isAuthenticated = false;
-            const userId = 'urn:uuid:7c9b5213-7d51-4433-9bdd-13ddcf3ea30g';
             const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const expected = sectionHtmlWithErrors;
 
@@ -877,7 +876,6 @@ describe('form-helper functions', () => {
                 csrfToken,
                 cspNonce,
                 isAuthenticated,
-                userId,
                 analyticsId
             );
             expect(recievedHtml.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));

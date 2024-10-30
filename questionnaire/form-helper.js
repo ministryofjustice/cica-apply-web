@@ -1,6 +1,7 @@
 'use strict';
 
 const qTransformer = require('q-transformer')();
+const crypto = require('crypto');
 const uiSchema = require('./questionnaireUISchema');
 const createTemplateEngineService = require('../templateEngine');
 
@@ -41,7 +42,6 @@ function renderSection({
     csrfToken,
     cspNonce,
     isAuthenticated,
-    userId,
     analyticsId,
     uiOptions = {},
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
@@ -100,7 +100,12 @@ function renderSection({
                 </form>
             {% endblock %}
         `,
-        {cspNonce, isAuthenticated, userId: isAuthenticated ? userId : undefined, analyticsId}
+        {
+            cspNonce,
+            isAuthenticated,
+            userId: isAuthenticated ? crypto.randomUUID() : undefined,
+            analyticsId
+        }
     );
 }
 
@@ -257,7 +262,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userId, analyticsId) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, analyticsId) {
     const {sectionId} = sectionData.data[0].attributes;
     const sectionDataMeta = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -288,7 +293,6 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, userI
         csrfToken,
         cspNonce,
         isAuthenticated,
-        userId,
         analyticsId,
         uiOptions
     });
@@ -318,7 +322,6 @@ function getSectionHtmlWithErrors(
     csrfToken,
     cspNonce,
     isAuthenticated,
-    userId,
     analyticsId
 ) {
     const {schema} = sectionData.meta;
@@ -343,7 +346,6 @@ function getSectionHtmlWithErrors(
         csrfToken,
         cspNonce,
         isAuthenticated,
-        userId,
         analyticsId,
         uiOptions
     });

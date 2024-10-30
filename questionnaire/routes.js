@@ -212,7 +212,6 @@ router
                 req.csrfToken(),
                 res.locals.cspNonce,
                 isAuthenticated,
-                accountService.getOwnerId(),
                 req.session.analyticsId
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
@@ -301,7 +300,6 @@ router
                 req.csrfToken(),
                 res.locals.cspNonce,
                 isAuthenticated,
-                accountService.getOwnerId(),
                 req.session.analyticsId
             );
             return res.send(html);
