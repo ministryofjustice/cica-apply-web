@@ -10,7 +10,7 @@ function createDashboardService(ownerId) {
             return {
                 questionnaireId: metadatum.attributes['questionnaire-id'],
                 expires: metadatum.attributes.expires,
-                analyticsId: metadatum.attributes?.['analytics-id']
+                analyticsId: metadatum.attributes?.['external-id']
             };
         });
     }
