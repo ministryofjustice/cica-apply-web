@@ -27,7 +27,10 @@ const html = `<!DOCTYPE html>
             dataLayer.push(arguments);
         }
         gtag('js', new Date());
-        gtag('set', {cookie_flags: 'SameSite=Lax;Secure'});
+        gtag('set', {
+            cookie_flags: 'SameSite=Lax;Secure',
+            cookie_domain: 'www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk'
+        });
         gtag('config', '', {
           'user_id': ''
         });

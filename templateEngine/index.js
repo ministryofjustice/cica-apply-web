@@ -36,6 +36,7 @@ function createTemplateEngineService(app) {
             )
             .addGlobal('CW_GA_TRACKING_ID', process.env.CW_GA_TRACKING_ID)
             .addGlobal('CW_URL', process.env.CW_URL)
+            .addGlobal('CW_DOMAIN', process.env.CW_DOMAIN)
             .addGlobal('CW_LIVECHAT_CHAT_ID', process.env.CW_LIVECHAT_CHAT_ID)
             .addGlobal(
                 'CW_LIVECHAT_MAINTENANCE_MESSAGE',
