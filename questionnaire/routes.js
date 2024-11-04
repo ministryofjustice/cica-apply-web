@@ -17,6 +17,11 @@ router.get('/', (req, res) => {
     try {
         const questionnaireId = getQuestionnaireIdInSession(req.session);
         if (questionnaireId) {
+            if (req.session?.analyticsId) {
+                return res.redirect(
+                    `/apply/resume/${questionnaireId}?a_id=${req.session.analyticsId}`
+                );
+            }
             return res.redirect(`/apply/resume/${questionnaireId}`);
         }
         return res.redirect('/apply/start-or-resume');

@@ -162,17 +162,40 @@ describe('Hitting /apply', () => {
         });
     });
     describe('Instantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks();
+        describe('Analytics ID not in session', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+            it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply');
+                expect(response.statusCode).toBe(302);
+                expect(response.res.text).toBe(
+                    'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                );
+            });
         });
-
-        it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply');
-            expect(response.statusCode).toBe(302);
-            expect(response.res.text).toBe(
-                'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-            );
+        describe('Analytics ID in session', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    './form-helper.js': jest.fn(() => ({
+                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                    }))
+                });
+            });
+            it('Should redirect to `/apply/resume/:questionnaireId?a_id=:analyticsId`', async () => {
+                jest.spyOn(crypto, 'randomUUID').mockReturnValue(
+                    'ce66be9d-5880-4559-9a93-df15928be396'
+                );
+                const currentAgent = request.agent(app);
+                // Set the analyticsId
+                await currentAgent.get('/apply/start');
+                const response = await currentAgent.get('/apply');
+                expect(response.statusCode).toBe(302);
+                expect(response.res.text).toBe(
+                    'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250?a_id=urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
+                );
+            });
         });
     });
 });
