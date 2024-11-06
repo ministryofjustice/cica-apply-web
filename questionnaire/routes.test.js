@@ -698,6 +698,10 @@ describe('Hitting /apply/:section', () => {
                             }));
                         }
                     });
+                    jest.spyOn(crypto, 'randomUUID').mockReturnValue(
+                        'ce66be9d-5880-4559-9a93-df15928be396'
+                    );
+                    jest.spyOn(console, 'info');
                 });
                 describe('Session analytics ID and form field mismatch', () => {
                     it('Should redirect to the dashboard', async () => {
@@ -716,13 +720,13 @@ describe('Hitting /apply/:section', () => {
                                 _analyticsId: incorrectAnalyticsId
                             });
                         expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
+                        expect(console.info).toHaveBeenCalledWith(
+                            'Analytics id urn:uuid:ce66be9d-5880-4559-9a93-df15928be396 for questionnaire id c992d660-d1a8-4928-89a0-87d4f9640250 does not match page analytics id urn:uuid:11111111-2222-4333-8444-555555555555. Redirecting to dashboard.'
+                        );
                     });
                 });
                 describe('Session analytics ID and form field match', () => {
                     it('Should render the next page ', async () => {
-                        jest.spyOn(crypto, 'randomUUID').mockReturnValue(
-                            'ce66be9d-5880-4559-9a93-df15928be396'
-                        );
                         const currentAgent = request.agent(app);
                         const initialResponse = await currentAgent.get('/apply/start-or-resume');
                         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
@@ -738,6 +742,27 @@ describe('Hitting /apply/:section', () => {
                             });
                         expect(response.res.text).toBe(
                             'Found. Redirecting to /apply/applicant-fatal-claim'
+                        );
+                    });
+                });
+                describe('Malformed form field analytics ID', () => {
+                    it('Should redirect to dashboard', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        // Set the analyticsId
+                        await currentAgent.get('/apply/start');
+                        const invalidAnalyticsId = 'foo';
+
+                        const response = await currentAgent
+                            .post('/apply/applicant-fatal-claim')
+                            .send({
+                                _csrf: initialCsrfToken,
+                                _analyticsId: invalidAnalyticsId
+                            });
+                        expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
+                        expect(console.info).toHaveBeenCalledWith(
+                            'Malformed page analytics id received for questionnaire c992d660-d1a8-4928-89a0-87d4f9640250. Redirecting to dashboard.'
                         );
                     });
                 });

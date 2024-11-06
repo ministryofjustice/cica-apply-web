@@ -10,6 +10,7 @@ const createAccountService = require('../account/account-service');
 const getRedirectionUrl = require('./utils/getRedirectionUrl');
 const createTemplateEngineService = require('../templateEngine');
 const getOwnerOrigin = require('./utils/getOwnerOrigin');
+const isValidExternalId = require('./utils/isValidExternalId');
 
 const router = express.Router();
 
@@ -248,13 +249,21 @@ router
                 req.session?.analyticsId !== undefined &&
                 pageAnalyticsId !== req.session?.analyticsId
             ) {
-                console.info(
-                    `Analytics id ${
-                        req.session?.analyticsId
-                    } for questionnaire id ${getQuestionnaireIdInSession(
-                        req.session
-                    )} does not match page analytics id ${pageAnalyticsId}`
-                );
+                if (!isValidExternalId(pageAnalyticsId)) {
+                    console.info(
+                        `Malformed page analytics id received for questionnaire ${getQuestionnaireIdInSession(
+                            req.session
+                        )}. Redirecting to dashboard.`
+                    );
+                } else {
+                    console.info(
+                        `Analytics id ${
+                            req.session?.analyticsId
+                        } for questionnaire id ${getQuestionnaireIdInSession(
+                            req.session
+                        )} does not match page analytics id ${pageAnalyticsId}. Redirecting to dashboard.`
+                    );
+                }
                 return res.redirect('/account/dashboard');
             }
             let nextSectionId;
