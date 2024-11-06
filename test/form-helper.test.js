@@ -181,7 +181,7 @@ describe('form-helper functions', () => {
             const expected = validResolvedHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
-            const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+            const externalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
 
             const actual = formHelper
                 .renderSection({
@@ -192,7 +192,7 @@ describe('form-helper functions', () => {
                     csrfToken,
                     cspNonce,
                     showBackLink,
-                    analyticsId
+                    externalId
                 })
                 .replace(/\s+/g, '');
 
@@ -215,7 +215,7 @@ describe('form-helper functions', () => {
                     visible: false
                 }
             };
-            const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+            const externalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
 
             const actual = formHelper
                 .renderSection({
@@ -227,7 +227,7 @@ describe('form-helper functions', () => {
                     cspNonce,
                     uiOptions: options,
                     showBackLink,
-                    analyticsId
+                    externalId
                 })
                 .replace(/\s+/g, '');
 
@@ -871,7 +871,7 @@ describe('form-helper functions', () => {
             const csrfToken = 'ihjsOcdp-XAWRzksu5YpE2tczpQzK02VWEKg';
             const cspNonce = 'vxRGNXkIRC4wZnzoZC_dk';
             const isAuthenticated = false;
-            const analyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+            const externalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const expected = sectionHtmlWithErrors;
 
             const recievedHtml = formHelper.getSectionHtmlWithErrors(
@@ -880,7 +880,7 @@ describe('form-helper functions', () => {
                 csrfToken,
                 cspNonce,
                 isAuthenticated,
-                analyticsId
+                externalId
             );
             expect(recievedHtml.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
         });

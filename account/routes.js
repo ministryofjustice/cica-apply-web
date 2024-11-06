@@ -53,7 +53,7 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
             isAuthenticated: accountService.isAuthenticated(req),
             cspNonce: res.locals.cspNonce,
             userId: accountService.getOwnerId(req),
-            analyticsId: req.session.analyticsId
+            externalId: req.session.externalId
         });
         return res.send(html);
     } catch (err) {

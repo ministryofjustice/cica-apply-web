@@ -162,7 +162,7 @@ describe('Hitting /apply', () => {
         });
     });
     describe('Instantiated questionnaire', () => {
-        describe('Analytics ID not in session', () => {
+        describe('External ID not in session', () => {
             beforeEach(() => {
                 setUpCommonMocks();
             });
@@ -175,7 +175,7 @@ describe('Hitting /apply', () => {
                 );
             });
         });
-        describe('Analytics ID in session', () => {
+        describe('External ID in session', () => {
             beforeEach(() => {
                 setUpCommonMocks({
                     './form-helper.js': jest.fn(() => ({
@@ -183,17 +183,17 @@ describe('Hitting /apply', () => {
                     }))
                 });
             });
-            it('Should redirect to `/apply/resume/:questionnaireId?a_id=:analyticsId`', async () => {
+            it('Should redirect to `/apply/resume/:questionnaireId?external_id=:externalId`', async () => {
                 jest.spyOn(crypto, 'randomUUID').mockReturnValue(
                     'ce66be9d-5880-4559-9a93-df15928be396'
                 );
                 const currentAgent = request.agent(app);
-                // Set the analyticsId
+                // Set the externalId
                 await currentAgent.get('/apply/start');
                 const response = await currentAgent.get('/apply');
                 expect(response.statusCode).toBe(302);
                 expect(response.res.text).toBe(
-                    'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250?a_id=urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
+                    'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250?external_id=urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
                 );
             });
         });
@@ -661,10 +661,10 @@ describe('Hitting /apply/:section', () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
                 const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
                     _csrf: initialCsrfToken,
-                    _analyticsId: initialAnalyticsId
+                    '_external-id': initialExternalId
                 });
                 expect(response.res.text).toContain('Application submitted');
             });
@@ -672,11 +672,11 @@ describe('Hitting /apply/:section', () => {
                 const currentAgent = request.agent(app);
                 const initialResponse = await currentAgent.get('/apply/start-or-resume');
                 const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
 
                 const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
                     _csrf: initialCsrfToken,
-                    _analyticsId: initialAnalyticsId
+                    '_external-id': initialExternalId
                 });
                 expect(response.res.text).toContain('Application submitted');
             });
@@ -703,66 +703,65 @@ describe('Hitting /apply/:section', () => {
                     );
                     jest.spyOn(console, 'info');
                 });
-                describe('Session analytics ID and form field mismatch', () => {
+                describe('Session external ID and form field mismatch', () => {
                     it('Should redirect to the dashboard', async () => {
                         const currentAgent = request.agent(app);
                         const initialResponse = await currentAgent.get('/apply/start-or-resume');
                         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                        // Set the analyticsId
+                        // Set the externalId
                         await currentAgent.get('/apply/start');
-                        const incorrectAnalyticsId =
-                            'urn:uuid:11111111-2222-4333-8444-555555555555';
+                        const incorrectExternalId = 'urn:uuid:11111111-2222-4333-8444-555555555555';
 
                         const response = await currentAgent
                             .post('/apply/applicant-fatal-claim')
                             .send({
                                 _csrf: initialCsrfToken,
-                                _analyticsId: incorrectAnalyticsId
+                                '_external-id': incorrectExternalId
                             });
                         expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
                         expect(console.info).toHaveBeenCalledWith(
-                            'Analytics id urn:uuid:ce66be9d-5880-4559-9a93-df15928be396 for questionnaire id c992d660-d1a8-4928-89a0-87d4f9640250 does not match page analytics id urn:uuid:11111111-2222-4333-8444-555555555555. Redirecting to dashboard.'
+                            'Session external id "urn:uuid:ce66be9d-5880-4559-9a93-df15928be396" does not match on-page external id "urn:uuid:11111111-2222-4333-8444-555555555555" for questionnaire id "c992d660-d1a8-4928-89a0-87d4f9640250". Redirecting to dashboard.'
                         );
                     });
                 });
-                describe('Session analytics ID and form field match', () => {
+                describe('Session external ID and form field match', () => {
                     it('Should render the next page ', async () => {
                         const currentAgent = request.agent(app);
                         const initialResponse = await currentAgent.get('/apply/start-or-resume');
                         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                        // Set the analyticsId
+                        // Set the externalId
                         await currentAgent.get('/apply/start');
-                        const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                        const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
 
                         const response = await currentAgent
                             .post('/apply/applicant-fatal-claim')
                             .send({
                                 _csrf: initialCsrfToken,
-                                _analyticsId: initialAnalyticsId
+                                '_external-id': initialExternalId
                             });
                         expect(response.res.text).toBe(
                             'Found. Redirecting to /apply/applicant-fatal-claim'
                         );
                     });
                 });
-                describe('Malformed form field analytics ID', () => {
+                describe('Malformed form field external ID', () => {
                     it('Should redirect to dashboard', async () => {
                         const currentAgent = request.agent(app);
                         const initialResponse = await currentAgent.get('/apply/start-or-resume');
                         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                        // Set the analyticsId
+                        // Set the externalId
                         await currentAgent.get('/apply/start');
-                        const invalidAnalyticsId = 'foo';
+                        const invalidExternalId = 'foo';
 
                         const response = await currentAgent
                             .post('/apply/applicant-fatal-claim')
                             .send({
                                 _csrf: initialCsrfToken,
-                                _analyticsId: invalidAnalyticsId
+                                '_external-id': invalidExternalId
                             });
                         expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
                         expect(console.info).toHaveBeenCalledWith(
-                            'Malformed page analytics id received for questionnaire c992d660-d1a8-4928-89a0-87d4f9640250. Redirecting to dashboard.'
+                            'Malformed page external id received for questionnaire "c992d660-d1a8-4928-89a0-87d4f9640250". Redirecting to dashboard.'
                         );
                     });
                 });
@@ -882,12 +881,12 @@ describe('Hitting /apply/:section?next=:section', () => {
         const currentAgent = request.agent(app);
         const initialResponse = await currentAgent.get('/apply/start-or-resume');
         const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-        const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+        const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
         const response = await currentAgent
             .post('/apply/was-the-crime-reported-to-police?next=applicant-fatal-claim')
             .send({
                 _csrf: initialCsrfToken,
-                _analyticsId: initialAnalyticsId
+                '_external-id': initialExternalId
             });
         expect(response.res.text).toContain('Found. Redirecting to /apply/applicant-fatal-claim');
     });
@@ -945,12 +944,12 @@ describe('Hitting /apply/:section?next=:section', () => {
             const currentAgent = request.agent(app);
             const initialResponse = await currentAgent.get('/apply/start-or-resume');
             const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-            const initialAnalyticsId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+            const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const response = await currentAgent
                 .post('/apply/applicant-fatal-claim?next=info-check-your-answers')
                 .send({
                     _csrf: initialCsrfToken,
-                    _analyticsId: initialAnalyticsId
+                    '_external-id': initialExternalId
                 });
             expect(response.statusCode).toBe(302);
             expect(response.res.text).toBe(

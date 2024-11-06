@@ -24,7 +24,7 @@ function questionnaireService(options = {}) {
                             channel: options.origin
                         },
                         external: {
-                            id: options.analyticsId
+                            id: options.externalId
                         }
                     }
                 }

@@ -42,7 +42,7 @@ function renderSection({
     csrfToken,
     cspNonce,
     isAuthenticated,
-    analyticsId,
+    externalId,
     uiOptions = {},
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
 }) {
@@ -96,7 +96,7 @@ function renderSection({
                                 }) }}
                             {% endif %}
                         <input type="hidden" name="_csrf" value="${csrfToken}">
-                        <input type="hidden" name="_analyticsId" value="${analyticsId}">
+                        <input type="hidden" name="_external-id" value="${externalId}">
                     {% endif %}
                 </form>
             {% endblock %}
@@ -105,7 +105,7 @@ function renderSection({
             cspNonce,
             isAuthenticated,
             userId: isAuthenticated ? crypto.randomUUID() : undefined,
-            analyticsId
+            externalId
         }
     );
 }
@@ -263,7 +263,7 @@ function escapeSchemaContent(schema) {
     return schemaWithEscapedContent;
 }
 
-function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, analyticsId) {
+function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, externalId) {
     const {sectionId} = sectionData.data[0].attributes;
     const sectionDataMeta = sectionData.meta;
     const schema = sectionData.included.filter(section => section.type === 'sections')[0]
@@ -294,7 +294,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, analy
         csrfToken,
         cspNonce,
         isAuthenticated,
-        analyticsId,
+        externalId,
         uiOptions
     });
 }
@@ -323,7 +323,7 @@ function getSectionHtmlWithErrors(
     csrfToken,
     cspNonce,
     isAuthenticated,
-    analyticsId
+    externalId
 ) {
     const {schema} = sectionData.meta;
     const sectionDataMeta = sectionData.meta;
@@ -347,7 +347,7 @@ function getSectionHtmlWithErrors(
         csrfToken,
         cspNonce,
         isAuthenticated,
-        analyticsId,
+        externalId,
         uiOptions
     });
 }

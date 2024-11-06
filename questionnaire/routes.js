@@ -18,9 +18,9 @@ router.get('/', (req, res) => {
     try {
         const questionnaireId = getQuestionnaireIdInSession(req.session);
         if (questionnaireId) {
-            if (req.session?.analyticsId) {
+            if (req.session?.externalId) {
                 return res.redirect(
-                    `/apply/resume/${questionnaireId}?a_id=${req.session.analyticsId}`
+                    `/apply/resume/${questionnaireId}?external_id=${req.session.externalId}`
                 );
             }
             return res.redirect(`/apply/resume/${questionnaireId}`);
@@ -79,20 +79,20 @@ router.route('/start').get(async (req, res) => {
         const accountService = createAccountService(req.session);
         const isAuthenticated = accountService.isAuthenticated(req);
         const origin = getOwnerOrigin(req, isAuthenticated);
-        const analyticsId = `urn:uuid:${crypto.randomUUID()}`;
+        const externalId = `urn:uuid:${crypto.randomUUID()}`;
 
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated,
             origin,
-            analyticsId
+            externalId
         });
         const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(
             response.body.data.attributes.routes.initial
         );
         req.session.questionnaireId = response.body.data.attributes.id;
-        req.session.analyticsId = analyticsId;
+        req.session.externalId = externalId;
         res.redirect(`/apply/${initialSection}?utm_source=${origin}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
@@ -106,7 +106,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
             ownerId: accountService.getOwnerId(),
             isAuthenticated: accountService.isAuthenticated(req)
         });
-        let resumableQuestionnaireAnalyticsId;
+        let resumableQuestionnaireExternalId;
 
         const defaultRedirect = '/apply';
         let redirectUrl = defaultRedirect;
@@ -116,8 +116,8 @@ router.get('/resume/:questionnaireId', async (req, res) => {
             resumableQuestionnaireId
         );
 
-        if ('a_id' in req.query) {
-            resumableQuestionnaireAnalyticsId = req.query.a_id;
+        if ('external_id' in req.query) {
+            resumableQuestionnaireExternalId = req.query.external_id;
         }
 
         const resumableQuestionnaireProgressEntry =
@@ -145,7 +145,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
         // switch session info and redirect if valid.
         if (resumableQuestionnaireCurrentSectionId) {
             req.session.questionnaireId = resumableQuestionnaireId;
-            req.session.analyticsId = resumableQuestionnaireAnalyticsId;
+            req.session.externalId = resumableQuestionnaireExternalId;
             redirectUrl = `${redirectUrl}/${formHelper.removeSectionIdPrefix(
                 resumableQuestionnaireCurrentSectionId
             )}`;
@@ -217,11 +217,11 @@ router
                 req.csrfToken(),
                 res.locals.cspNonce,
                 isAuthenticated,
-                req.session.analyticsId
+                req.session.externalId
             );
             if (formHelper.getSectionContext(sectionId) === 'confirmation') {
                 delete req.session.questionnaireId;
-                delete req.session.analyticsId;
+                delete req.session.externalId;
             }
             return res.send(html);
         } catch (err) {
@@ -242,26 +242,26 @@ router
             const sectionId = formHelper.addPrefix(req.params.section);
             const body = formHelper.processRequest(req.body, req.params.section);
             // eslint-disable-next-line no-underscore-dangle
-            const pageAnalyticsId = body._analyticsId;
+            const pageExternalId = body['_external-id'];
             if (
                 isAuthenticated &&
-                pageAnalyticsId !== undefined &&
-                req.session?.analyticsId !== undefined &&
-                pageAnalyticsId !== req.session?.analyticsId
+                pageExternalId !== undefined &&
+                req.session?.externalId !== undefined &&
+                pageExternalId !== req.session?.externalId
             ) {
-                if (!isValidExternalId(pageAnalyticsId)) {
+                if (!isValidExternalId(pageExternalId)) {
                     console.info(
-                        `Malformed page analytics id received for questionnaire ${getQuestionnaireIdInSession(
+                        `Malformed page external id received for questionnaire "${getQuestionnaireIdInSession(
                             req.session
-                        )}. Redirecting to dashboard.`
+                        )}". Redirecting to dashboard.`
                     );
                 } else {
                     console.info(
-                        `Analytics id ${
-                            req.session?.analyticsId
-                        } for questionnaire id ${getQuestionnaireIdInSession(
+                        `Session external id "${
+                            req.session?.externalId
+                        }" does not match on-page external id "${pageExternalId}" for questionnaire id "${getQuestionnaireIdInSession(
                             req.session
-                        )} does not match page analytics id ${pageAnalyticsId}. Redirecting to dashboard.`
+                        )}". Redirecting to dashboard.`
                     );
                 }
                 return res.redirect('/account/dashboard');
@@ -271,7 +271,7 @@ router
             // eslint-disable-next-line no-underscore-dangle
             delete body._csrf;
             // eslint-disable-next-line no-underscore-dangle
-            delete body._analyticsId;
+            delete body['_external-id'];
             const response = await questionnaireService.postSection(
                 getQuestionnaireIdInSession(req.session),
                 sectionId,
@@ -332,7 +332,7 @@ router
                 req.csrfToken(),
                 res.locals.cspNonce,
                 isAuthenticated,
-                req.session.analyticsId
+                req.session.externalId
             );
             return res.send(html);
         } catch (err) {

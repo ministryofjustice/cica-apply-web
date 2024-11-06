@@ -115,7 +115,7 @@ const html = `<!DOCTYPE html>
   Continue
 </button>
                     <input type="hidden" name="_csrf" value="sometoken">
-                    <input type="hidden" name="_analyticsId" value="urn:uuid:ce66be9d-5880-4559-9a93-df15928be396">
+                    <input type="hidden" name="_external-id" value="urn:uuid:ce66be9d-5880-4559-9a93-df15928be396">
                 </form>
         </div>
     </div>

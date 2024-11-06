@@ -10,7 +10,7 @@ function createDashboardService(ownerId) {
             return {
                 questionnaireId: metadatum.attributes['questionnaire-id'],
                 expires: metadatum.attributes.expires,
-                analyticsId: metadatum.attributes?.['external-id']
+                externalId: metadatum.attributes?.['external-id']
             };
         });
     }
@@ -34,8 +34,8 @@ function createDashboardService(ownerId) {
             });
         }
         const templateData = dataset.reduce((acc, questionnaireData) => {
-            const resumeLink = questionnaireData.analyticsId
-                ? `/apply/resume/${questionnaireData.questionnaireId}?a_id=${questionnaireData.analyticsId}`
+            const resumeLink = questionnaireData.externalId
+                ? `/apply/resume/${questionnaireData.questionnaireId}?external_id=${questionnaireData.externalId}`
                 : `/apply/resume/${questionnaireData.questionnaireId}`;
             acc.push([
                 {
