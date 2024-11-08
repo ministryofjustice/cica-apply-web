@@ -116,7 +116,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
             resumableQuestionnaireId
         );
 
-        if ('external_id' in req.query) {
+        if ('external_id' in req.query && isValidExternalId(req.query.external_id)) {
             resumableQuestionnaireExternalId = req.query.external_id;
         }
 
