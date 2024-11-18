@@ -15,7 +15,7 @@ describe('Page', () => {
                 isAuthenticated: false
             });
             const actual = html.replace(/\s+/g, '');
-            const expected = `<header class="govuk-header " role="banner" data-module="govuk-header">`.replace(
+            const expected = `<header class="govuk-header" data-module="govuk-header">`.replace(
                 /\s+/g,
                 ''
             );

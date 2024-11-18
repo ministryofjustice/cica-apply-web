@@ -26,7 +26,7 @@
         "babel": "babel src/js/scripts.js -o src/js/scripts.babel.generated.js"
     },
     "dependencies": {
-        "@ministryofjustice/frontend": "^2.1.1",
+        "@ministryofjustice/frontend": "^2.2.5",
         "cookie-parser": "~1.4.3",
         "csurf": "^1.11.0",
         "debug": "~2.6.9",

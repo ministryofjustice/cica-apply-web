@@ -52,7 +52,7 @@ const html = `<!DOCTYPE html>
         </div>
     </div>
 </div>
-        <header class="govuk-header" role="banner" data-module="govuk-header">
+        <header class="govuk-header" data-module="govuk-header">
   <div class="govuk-header__container govuk-width-container">
     <div class="govuk-header__logo">
       <a href="https://www.gov.uk" class="govuk-header__link govuk-header__link--homepage">
@@ -84,7 +84,7 @@ const html = `<!DOCTYPE html>
                 </div>
     </div>
       <div class="govuk-width-container">
-        <main class="govuk-main-wrapper" id="main-content" role="main">
+        <main class="govuk-main-wrapper" id="main-content">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
                 <form method="post" novalidate autocomplete="off">
@@ -126,7 +126,7 @@ const html = `<!DOCTYPE html>
         <p class="govuk-body-s">
             <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/YourFeedbackPB" target="_blank">Tell us your feedback (opens in new tab)</a> to help us to improve our service.</p>
     </div>
-    <footer class="govuk-footer" role="contentinfo">
+    <footer class="govuk-footer">
   <div class="govuk-width-container">
     <div class="govuk-footer__meta">
       <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
