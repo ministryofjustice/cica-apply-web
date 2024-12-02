@@ -111,7 +111,8 @@ function questionnaireService(options = {}) {
                 data: {
                     type: 'submissions',
                     attributes: {
-                        questionnaireId
+                        questionnaireId,
+                        maintenanceMode: process.env.MAINTENANCE_MESSAGE_ENABLED
                     }
                 }
             }
