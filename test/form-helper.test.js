@@ -174,7 +174,9 @@ describe('form-helper functions', () => {
     describe('Render page html', () => {
         it('Should return html given a valid transformation', () => {
             const transformation = validTransformation;
-            const isFinal = false;
+            const meta = {
+                isFinal: false
+            };
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
             const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const showBackLink = true;
@@ -186,7 +188,7 @@ describe('form-helper functions', () => {
             const actual = formHelper
                 .renderSection({
                     transformation,
-                    isFinal,
+                    meta,
                     backTarget,
                     sectionId,
                     csrfToken,
@@ -201,7 +203,9 @@ describe('form-helper functions', () => {
 
         it('Should return html with secondary button class when that is required', () => {
             const transformation = validTransformation;
-            const isFinal = false;
+            const meta = {
+                isFinal: false
+            };
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
             const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const showBackLink = true;
@@ -220,7 +224,7 @@ describe('form-helper functions', () => {
             const actual = formHelper
                 .renderSection({
                     transformation,
-                    isFinal,
+                    meta,
                     backTarget,
                     sectionId,
                     csrfToken,
@@ -236,7 +240,9 @@ describe('form-helper functions', () => {
 
         it('Should show sign-in link when explicitly specified', () => {
             const transformation = validTransformation;
-            const isFinal = false;
+            const meta = {
+                isFinal: false
+            };
             const backTarget = '/apply/previous/applicant-when-did-the-crime-stop';
             const sectionId = 'p-applicant-when-did-the-crime-stop';
             const showBackLink = true;
@@ -259,7 +265,7 @@ describe('form-helper functions', () => {
             const result = formHelper
                 .renderSection({
                     transformation,
-                    isFinal,
+                    meta,
                     backTarget,
                     sectionId,
                     showBackLink,
@@ -274,7 +280,9 @@ describe('form-helper functions', () => {
 
         it('Should not show sign-in link when explicitly specified', () => {
             const transformation = validTransformation;
-            const isFinal = false;
+            const meta = {
+                isFinal: false
+            };
             const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
             const sectionId = 'p-applicant-who-are-you-applying-for';
             const showBackLink = true;
@@ -297,7 +305,7 @@ describe('form-helper functions', () => {
             const result = formHelper
                 .renderSection({
                     transformation,
-                    isFinal,
+                    meta,
                     backTarget,
                     sectionId,
                     showBackLink,
@@ -312,7 +320,9 @@ describe('form-helper functions', () => {
 
         it('Should not show sign-in link when explicitly specified within template section options', () => {
             const transformation = validTransformation;
-            const isFinal = false;
+            const meta = {
+                isFinal: false
+            };
             const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
             const sectionId = 'p-applicant-who-are-you-applying-for';
             const showBackLink = true;
@@ -344,7 +354,7 @@ describe('form-helper functions', () => {
             const result = formHelper
                 .renderSection({
                     transformation,
-                    isFinal,
+                    meta,
                     backTarget,
                     sectionId,
                     showBackLink,
