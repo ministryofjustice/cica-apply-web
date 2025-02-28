@@ -9,7 +9,9 @@ function getOwnerOrigin(request, isAuthenticated) {
         request?.socket?.remoteAddress ||
         request?.connection?.socket?.remoteAddress;
 
-    return internalIp === clientIp ? 'telephone' : defaultSource;
+    const channel = internalIp === clientIp ? 'telephone' : defaultSource;
+    const sourceIp = internalIp === clientIp ? internalIp : '';
+    return {channel, sourceIp};
 }
 
 module.exports = getOwnerOrigin;

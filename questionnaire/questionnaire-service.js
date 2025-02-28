@@ -21,7 +21,8 @@ function questionnaireService(options = {}) {
                             isAuthenticated: options.isAuthenticated
                         },
                         origin: {
-                            channel: options.origin
+                            channel: options.channel,
+                            ip: options.ip
                         },
                         external: {
                             id: options.externalId

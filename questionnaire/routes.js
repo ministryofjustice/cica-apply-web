@@ -84,7 +84,8 @@ router.route('/start').get(async (req, res) => {
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated,
-            origin,
+            channel: origin.channel,
+            ip: origin.sourceIp,
             externalId
         });
         const response = await questionnaireService.createQuestionnaire();
