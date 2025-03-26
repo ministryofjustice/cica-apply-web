@@ -60,13 +60,13 @@ describe('Static routes', () => {
     describe('/contact-us', () => {
         it('Should respond with a 200 status code', async () => {
             const response = await request(app).get('/contact-us');
-            expect(response.statusCode).toBe(200);
+            expect(response.statusCode).toBe(301);
         });
         it('Should render a page with the correct page heading', async () => {
             const response = await request(app).get('/contact-us');
-            const actual = response.res.text.replace(/\s+/g, '');
-            const pageHeading = `<h1 class="govuk-heading-xl">Contact us</h1>`.replace(/\s+/g, '');
-            expect(actual).toContain(pageHeading);
+            expect(response.res.text).toBe(
+                'Moved Permanently. Redirecting to https://contact-the-cica.form.service.justice.gov.uk'
+            );
         });
     });
 
