@@ -14,7 +14,7 @@ router.get('/cookies', (req, res) => {
 });
 
 router.get('/contact-us', (req, res) => {
-    res.render('contact-us.njk');
+    res.redirect(301, 'https://contact-the-cica.form.service.justice.gov.uk');
 });
 
 router.get('/police-forces', (req, res) => {
