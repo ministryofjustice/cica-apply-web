@@ -115,7 +115,7 @@ const sectionHtmlWithErrorshtml = `
                                     process your application as quickly as possible.</p>
                                 <p class="govuk-body">If your information has changed and you need to let us know, you can
                                     <a class="govuk-link"
-                                        href="https://contact-the-cica.form.service.justice.gov.uk/">contact us to update
+                                        href="/contact-us">contact us to update
                                         your existing application. </a>
                                 </p>
                                 <h2 class="govuk-heading-m">If you applied in the past but were not successful</h2>
