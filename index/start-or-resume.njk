@@ -46,11 +46,9 @@
             ],
             errorMessage: error
         }) }}
-        {{ govukDetails({
-            summaryText: "I've already applied and want to update my application",
-            html: "<p class='govuk-body'>If you've already submitted an application and need to make a change, you can <a href='https://contact-the-cica.form.service.justice.gov.uk/' class='govuk-link'>tell us about an update</a>.</p>"
-            })
-        }}
+
+        <p class="govuk-body">If you've already submitted an application and need to make a change, use our <a href="/contact-us" class="govuk-link">contact form</a> to let us know.</p>
+
         {{ govukButton({
             text: submitButtonText,
             preventDoubleClick: true
