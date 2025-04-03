@@ -67,15 +67,9 @@ spec:
                   name: cica-web-secrets
                   key: cw_livechat_maintenance_message
             - name: CW_MAINTENANCE_MESSAGE
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_maintenance_message
+              value: This service will be unavailable shortly.
             - name: CW_MAINTENANCE_MESSAGE_ENABLED
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_maintenance_message_enabled
+              value: 'false'
             - name: CW_OS_PLACES_API_KEY
               valueFrom:
                 secretKeyRef:
