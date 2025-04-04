@@ -122,7 +122,7 @@ describe('accessing a page without a session', () => {
             const response = await currentAgent.get('/apply/this-page-does-exist');
             expect(response.statusCode).toBe(302);
             expect(response.text).toMatch(
-                /<h1\s+class="govuk-heading-xl">You’ve\s+submitted\s+your\s+application<\/h1>\s*<p\s+class="govuk-body">We\s+have\s+your\s+application\s+and\s+we’re\s+processing\s+it.\s*<\/p>/
+                /<h1\s+class="govuk-heading-xl">You've\s+submitted\s+your\s+application<\/h1>\s*<p\s+class="govuk-body">We\s+have\s+your\s+application\s+and\s+we're\s+processing\s+it.\s*<\/p>/
             );
         });
     });
@@ -139,7 +139,7 @@ describe('accessing a page without a session', () => {
             ]);
             const response = await currentAgent.get('/apply/this-page-does-exist');
             expect(response.text).toMatch(
-                /<h1\s+class="govuk-heading-xl">Your\s+application\s+has\s+timed\s+out<\/h1>\s*<p\s+class="govuk-body">This\s+happened\s+because\s+you\s+did\s+not\s+do\s+anything\s+for\s+30\s+minutes.<\/p>\s*<p\s+class="govuk-body">You\s+can\s+sign\s+back\s+in\s+to\s+resume\s+your\s+application\s+if\s+you\s+saved\s+your\s+progress.\s+If\s+not,\s+you’ll\s+have\s+to\s+start\s+a\s+new\s+application.<\/p>/
+                /<h1\s+class="govuk-heading-xl">Your\s+application\s+has\s+timed\s+out<\/h1>\s*<p\s+class="govuk-body">This\s+happened\s+because\s+you\s+did\s+not\s+do\s+anything\s+for\s+30\s+minutes.<\/p>\s*<p\s+class="govuk-body">You\s+can\s+sign\s+back\s+in\s+to\s+resume\s+your\s+application\s+if\s+you\s+saved\s+your\s+progress.\s+If\s+not,\s+you'll\s+have\s+to\s+start\s+a\s+new\s+application.<\/p>/
             );
         });
     });
