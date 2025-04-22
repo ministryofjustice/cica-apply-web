@@ -11,6 +11,7 @@ const getRedirectionUrl = require('./utils/getRedirectionUrl');
 const createTemplateEngineService = require('../templateEngine');
 const getOwnerOrigin = require('./utils/getOwnerOrigin');
 const isValidExternalId = require('./utils/isValidExternalId');
+const getFeatureFlagOptions = require('./utils/getFeatureFlagOptions');
 
 const router = express.Router();
 
@@ -80,12 +81,14 @@ router.route('/start').get(async (req, res) => {
         const isAuthenticated = accountService.isAuthenticated(req);
         const origin = getOwnerOrigin(req, isAuthenticated);
         const externalId = `urn:uuid:${crypto.randomUUID()}`;
+        const featureFlagOptions = getFeatureFlagOptions(req.cookies);
 
         const questionnaireService = createQuestionnaireService({
             ownerId: accountService.getOwnerId(),
             isAuthenticated,
             origin,
-            externalId
+            externalId,
+            featureFlag: featureFlagOptions
         });
         const response = await questionnaireService.createQuestionnaire();
         const initialSection = formHelper.removeSectionIdPrefix(
