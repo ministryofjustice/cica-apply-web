@@ -13,3 +13,4 @@ process.env.CW_GOVUK_ISSUER_URL = 'http://www.80443328-da85-42de-8a3d-06e1d8f8fc
 process.env.CW_SESSION_DURATION = 1800000;
 process.env.npm_package_version = '1.2.3';
 process.env.CW_BUILDTIME_ID = 'Qnefc5ywgazsrupSws1uk';
+process.env.FEATURE_FLAGS_TOKEN = 'b2a86644-e996-4abf-8ef1-2dc3458fff17';

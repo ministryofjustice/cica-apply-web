@@ -4,6 +4,10 @@ const service = require('./request-service')();
 
 function questionnaireService(options = {}) {
     function createQuestionnaire() {
+        const defaultTemplateValues = {
+            templateName: 'sexual-assault',
+            templateVersion: undefined
+        };
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/questionnaires`,
             headers: {
@@ -15,7 +19,9 @@ function questionnaireService(options = {}) {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName: 'sexual-assault',
+                        templateName:
+                            options.featureFlags?.templateName ||
+                            defaultTemplateValues.templateName,
                         owner: {
                             id: options.ownerId,
                             isAuthenticated: options.isAuthenticated
@@ -25,7 +31,10 @@ function questionnaireService(options = {}) {
                         },
                         external: {
                             id: options.externalId
-                        }
+                        },
+                        templateVersion:
+                            options.featureFlags?.templateVersion ||
+                            defaultTemplateValues.templateVersion
                     }
                 }
             }

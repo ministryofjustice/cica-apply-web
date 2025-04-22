@@ -73,6 +73,11 @@ spec:
                 secretKeyRef:
                   name: cica-web-secrets
                   key: cw_govuk_account_url
+            - name: FEATURE_FLAGS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cica-web-secrets
+                  key: cw_feature_flags_token
   selector:
     matchLabels:
       app: webapp-stag
