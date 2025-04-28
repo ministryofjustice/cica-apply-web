@@ -12,7 +12,7 @@ metadata:
     nginx.ingress.kubernetes.io/modsecurity-transaction-id: '$request_id'
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecRuleEngine On
-      SecDefaultAction "phase:1,pass,tag:github_team=cica"
+      SecDefaultAction "phase:1,pass,log,tag:github_team=cica"
       SecRuleUpdateTargetById 942100 "!REQUEST_COOKIES"
       SecRuleUpdateTargetById 942100 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932110 "!ARGS:/q-*/"
@@ -30,6 +30,8 @@ metadata:
       SecRuleUpdateTargetById 932115 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 942360 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 953100 "!RESPONSE_BODY"
+      SecRuleUpdateTargetById 932370 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 932380 "!ARGS:/q-*/"
       SecAuditEngine RelevantOnly
       SecAuditLogParts ABEIFKZ
       SecAuditLog /var/log/nginx/error.log
