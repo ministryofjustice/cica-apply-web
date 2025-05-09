@@ -15,7 +15,7 @@ function questionnaireService(options = {}) {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName: 'sexual-assault',
+                        templateName: options.featureFlag?.templateName,
                         owner: {
                             id: options.ownerId,
                             isAuthenticated: options.isAuthenticated
@@ -25,7 +25,8 @@ function questionnaireService(options = {}) {
                         },
                         external: {
                             id: options.externalId
-                        }
+                        },
+                        templateVersion: options.featureFlag?.templateVersion
                     }
                 }
             }
