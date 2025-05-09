@@ -7,7 +7,7 @@ const defaults = {
 };
 
 function getFeatureFlagOptions(cookies) {
-    const { featureFlag } = cookies;
+    const {featureFlag} = cookies;
 
     if (!featureFlag) {
         return {

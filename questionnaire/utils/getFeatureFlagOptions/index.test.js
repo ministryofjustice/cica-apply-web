@@ -1,6 +1,7 @@
 'use strict';
 
 const getFeatureFlagOptions = require('.');
+
 const validToken = 'b2a86644-e996-4abf-8ef1-2dc3458fff17';
 
 describe('getFeatureFlagOptions', () => {
@@ -21,13 +22,7 @@ describe('getFeatureFlagOptions', () => {
                 featureFlag: '{"invalidJson": true'
             };
 
-            try {
-                getFeatureFlagOptions(cookies);
-            } catch (err) {
-                expect(err.name).toBe('BadRequest');
-                expect(err.message).toBe('Malformed featureFlag cookie');
-                expect(err.statusCode).toBe(400);
-            }
+            expect(() => getFeatureFlagOptions(cookies)).toThrow('Malformed featureFlag cookie');
         });
     });
 
@@ -40,13 +35,9 @@ describe('getFeatureFlagOptions', () => {
                     bearerAuth: 'invalid-token'
                 })
             };
-            try {
-                getFeatureFlagOptions(cookies);
-            } catch (err) {
-                expect(err.name).toBe('UnauthorizedError');
-                expect(err.message).toBe('Invalid bearer token in featureFlag cookie');
-                expect(err.statusCode).toBe(401);
-            }
+            expect(() => getFeatureFlagOptions(cookies)).toThrow(
+                'Invalid bearer token in featureFlag cookie'
+            );
         });
     });
 
