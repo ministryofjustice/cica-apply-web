@@ -1,6 +1,5 @@
 "use strict";
 
-require("core-js/modules/es.regexp.flags.js");
 require("core-js/modules/esnext.array.filter-out.js");
 require("core-js/modules/esnext.array.is-template-object.js");
 require("core-js/modules/esnext.array.last-index.js");
@@ -44,7 +43,6 @@ require("core-js/modules/esnext.map.filter.js");
 require("core-js/modules/esnext.map.find.js");
 require("core-js/modules/esnext.map.find-key.js");
 require("core-js/modules/esnext.map.from.js");
-require("core-js/modules/esnext.map.group-by.js");
 require("core-js/modules/esnext.map.includes.js");
 require("core-js/modules/esnext.map.key-by.js");
 require("core-js/modules/esnext.map.key-of.js");
