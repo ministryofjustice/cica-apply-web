@@ -1,19 +1,18 @@
 {% extends "page.njk" %}
-{% from "components/table/macro.njk" import govukTable %}
 {% from "components/button/macro.njk" import govukButton %}
-{% set mainClasses = "govuk-main-wrapper--l" %}
-
 {% block pageTitle %}Your application has timed out - {{ super() }}{% endblock %}
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Your application has timed out</h1>
     <p class="govuk-body">This happened because you did not do anything for 30 minutes.</p>
-    <p class="govuk-body">You can sign back in to resume your application if you saved your progress. If not, you’ll have to start a new application.</p>
+    <p class="govuk-body">You can sign back in to resume your application if you saved your progress. If not, you'll have to start a new application.</p>
     {{
         govukButton({
             text: "Start again",
             href: "/apply"
         })
     }}
+
+    <h2 class="govuk-heading-l">Contact us</h2>
     {% include "contact.njk" %}
 {% endblock %}

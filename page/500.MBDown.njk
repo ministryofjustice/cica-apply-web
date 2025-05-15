@@ -1,7 +1,4 @@
 {% extends "page.njk" %}
-{% from "components/table/macro.njk" import govukTable %}
-{% set mainClasses = "govuk-main-wrapper--l" %}
-
 {% block pageTitle %}Application submitted - {{ super() }}{% endblock %}
 
 {% block innerContent %}
@@ -9,7 +6,8 @@
     <p class="govuk-body">We've got your application.</p>
     <p class="govuk-body">However, there is a delay with us sending your reference number to you.</p>
     <h2 class="govuk-heading-m">Your application reference number</h2>
-    <p class="govuk-body">You should receive your application reference number from us soon. If you’ve <strong>not received this in 48 hours</strong>, contact us using one of the methods below.</p>
-    <h2 class="govuk-heading-m">Contact us</h2>
+    <p class="govuk-body">You should receive your application reference number from us soon. If you've <strong>not received this in 48 hours</strong>, contact us.</p>
+
+    <h2 class="govuk-heading-l">Contact us</h2>
     {% include "contact.njk" %}
 {% endblock %}

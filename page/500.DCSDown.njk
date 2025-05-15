@@ -1,13 +1,12 @@
 {% extends "page.njk" %}
-{% from "components/table/macro.njk" import govukTable %}
-{% set mainClasses = "govuk-main-wrapper--l" %}
-
 {% block pageTitle %}There has been a problem - {{ super() }}{% endblock %}
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Sorry, there is a problem with the service</h1>
     <p class="govuk-body">Your application was not sent.</p>
     <p class="govuk-body">Try sending your application again in 10 minutes. To do this, select the back button on your browser. Then, select 'Agree and submit' again.</p>
-    <p class="govuk-body">If you still see this message, you can try these steps again. Or you can call us using the details below.</p>
+    <p class="govuk-body">If you still see this message, you can try these steps again. Or you can contact us.</p>
+
+    <h2 class="govuk-heading-l">Contact us</h2>
     {% include "contact.njk" %}
 {% endblock %}
