@@ -82,7 +82,8 @@ const oidcAuth = auth({
         cookie: {
             transient: true,
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production'
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax'
         }
     },
     authorizationParams: {
@@ -188,8 +189,15 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
-app.use(
-    csrf({
+// Exclude the OneLogin callback route from CSRF protection.
+// This is technically a cross site request but we don't
+// want to block the session cookie, or OIDC will throw
+app.use((req, res, next) => {
+    const safePaths = ['/signed-in'];
+    if (safePaths.includes(req.path)) {
+        return next();
+    }
+    return csrf({
         cookie: {
             key: 'request-config',
             path: '/',
@@ -198,8 +206,8 @@ app.use(
             sameSite: 'Lax'
         },
         sessionKey: 'session'
-    })
-);
+    })(req, res, next);
+});
 
 app.use((req, res, next) => {
     res.set({
