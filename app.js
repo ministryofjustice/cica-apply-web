@@ -5,7 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
-const {csrf} = require('csrf-csrf');
+const {doubleCsrf} = require('csrf-csrf');
 const {nanoid} = require('nanoid');
 const {auth} = require('express-openid-connect');
 const createQuestionnaireService = require('./questionnaire/questionnaire-service');
@@ -186,17 +186,19 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
-app.use(
-    csrf({
-        cookieOptions: {
-            key: 'request-config',
-            path: '/',
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true,
-            sameSite: 'Lax'
-        }
-    })
-);
+const {doubleCsrfProtection} = doubleCsrf({
+    getSecret: () => '', // Used for session based storage.
+    getSessionIdentifier: () => '', // Used for session based storage.
+    cookieName: 'request-config',
+    cookieOptions: {
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'Lax'
+    }
+});
+
+app.use(doubleCsrfProtection);
 
 app.use((req, res, next) => {
     res.set({
