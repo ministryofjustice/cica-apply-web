@@ -111,7 +111,7 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
 
         const {render} = templateEngineService;
         const html = render('dashboard.njk', {
-            csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken,
             isAuthenticated: accountService.isAuthenticated(req),
             ownerData,
             cspNonce: res.locals.cspNonce,

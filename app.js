@@ -5,7 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
-const csrf = require('csurf');
+const {csrf} = require('csrf-csrf');
 const {nanoid} = require('nanoid');
 const {auth} = require('express-openid-connect');
 const createQuestionnaireService = require('./questionnaire/questionnaire-service');
@@ -188,14 +188,13 @@ app.use(
 
 app.use(
     csrf({
-        cookie: {
+        cookieOptions: {
             key: 'request-config',
             path: '/',
             secure: process.env.NODE_ENV === 'production',
             httpOnly: true,
             sameSite: 'Lax'
-        },
-        sessionKey: 'session'
+        }
     })
 );
 

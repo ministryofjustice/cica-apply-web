@@ -36,7 +36,7 @@ router.route('/start-or-resume').get((req, res) => {
         const templateEngineService = createTemplateEngineService();
         const {render} = templateEngineService;
         const html = render('start-or-resume.njk', {
-            csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken,
             submitButtonText: getFormSubmitButtonText('start'),
             cspNonce: res.locals.cspNonce
         });
@@ -61,7 +61,7 @@ router.post('/start-or-resume', (req, res) => {
         }
 
         const html = render('start-or-resume.njk', {
-            csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken,
             submitButtonText: getFormSubmitButtonText('start'),
             cspNonce: res.locals.cspNonce,
             error: {
@@ -214,7 +214,7 @@ router
 
             const html = formHelper.getSectionHtml(
                 response.body,
-                req.csrfToken(),
+                req.csrfToken,
                 res.locals.cspNonce,
                 isAuthenticated,
                 req.session.externalId
@@ -329,7 +329,7 @@ router
             const html = formHelper.getSectionHtmlWithErrors(
                 response.body,
                 sectionId,
-                req.csrfToken(),
+                req.csrfToken,
                 res.locals.cspNonce,
                 isAuthenticated,
                 req.session.externalId
