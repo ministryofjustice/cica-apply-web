@@ -47,7 +47,7 @@ describe('Live Chat Helper', () => {
         describe('bank holidays', () => {
             it('should return false for being a bank holiday', () => {
                 jest.useFakeTimers('modern');
-                jest.setSystemTime(new Date(2018, 11, 25, 4, 0, 48)); // Tue Dec 25 2018 04:00:48 GMT+0000 (Greenwich Mean Time)
+                jest.setSystemTime(new Date(2024, 11, 25, 4, 0, 48)); // Tue Dec 25 2027 04:00:48 GMT+0000 (Greenwich Mean Time)
                 const liveChatHelper = createLiveChatHelper();
                 const result = liveChatHelper.isLiveChatActive(
                     process.env.CW_LIVECHAT_START_TIMES,
