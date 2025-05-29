@@ -6,14 +6,7 @@ const request = require('supertest');
 
 let app;
 
-const mocks = {
-    '../index/liveChatHelper': () =>
-        jest.fn(() => ({
-            isLiveChatActive: () => {
-                return true;
-            }
-        }))
-};
+const mocks = {};
 
 function setUpCommonMocks(additionalMocks = {}) {
     jest.clearAllMocks();
@@ -115,88 +108,6 @@ describe('Static routes', () => {
                 ''
             );
             expect(actual).toContain(pageHeading);
-        });
-    });
-
-    describe('/start-chat', () => {
-        it('Should respond with a 200 status code', async () => {
-            const response = await request(app).get('/start-chat');
-            expect(response.statusCode).toBe(200);
-        });
-        describe('When Live Chat is active', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-            it('Should render specific content on the page', async () => {
-                app = require('../app');
-                const response = await request(app).get('/start-chat');
-                const actual = response.res.text.replace(/\s+/g, '');
-                const pageHeading = `<h1 class="govuk-heading-xl">Chat to us online</h1>`.replace(
-                    /\s+/g,
-                    ''
-                );
-                expect(actual).toContain(pageHeading);
-            });
-        });
-        describe('When Live Chat is not active', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    '../index/liveChatHelper': () =>
-                        jest.fn(() => ({
-                            isLiveChatActive: () => {
-                                return false;
-                            }
-                        }))
-                });
-            });
-            it('Should render specific content on the page', async () => {
-                const response = await request(app).get('/start-chat');
-                const actual = response.res.text.replace(/\s+/g, '');
-                const pageHeading = `<h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>`.replace(
-                    /\s+/g,
-                    ''
-                );
-                expect(actual).toContain(pageHeading);
-            });
-        });
-    });
-
-    describe('/chat', () => {
-        it('Should respond with a 200 status code', async () => {
-            const response = await request(app).get('/chat');
-            expect(response.statusCode).toBe(200);
-        });
-        describe('When Live Chat is active', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-            it('Should render specific content on the page', async () => {
-                const response = await request(app).get('/chat');
-                const actual = response.res.text.replace(/\s+/g, '');
-                const pageContent = `<iframe id="chat-iframe"`.replace(/\s+/g, '');
-                expect(actual).toContain(pageContent);
-            });
-        });
-        describe('When Live Chat is not active', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    '../index/liveChatHelper': () =>
-                        jest.fn(() => ({
-                            isLiveChatActive: () => {
-                                return false;
-                            }
-                        }))
-                });
-            });
-            it('Should render specific content on the page', async () => {
-                const response = await request(app).get('/start-chat');
-                const actual = response.res.text.replace(/\s+/g, '');
-                const pageHeading = `<h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>`.replace(
-                    /\s+/g,
-                    ''
-                );
-                expect(actual).toContain(pageHeading);
-            });
         });
     });
 });

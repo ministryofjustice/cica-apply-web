@@ -1,1 +1,0 @@
-`chat-template-style.css` is not used directly within our services. It is the file to be supplied to our 3rd-party `live chat` chat functionality supplier.

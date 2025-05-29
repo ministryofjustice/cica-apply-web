@@ -13,7 +13,6 @@ import createCookieBanner from '../modules/cookie-banner';
 import createCookiePreference from '../modules/cookie-preference';
 import createTimeoutModal from '../modules/modal-timeout';
 import createNewWindowAnchors from '../modules/new-window-anchors';
-import createLiveChat from '../modules/live-chat';
 import createPostcodeLookup from '../modules/postcode-lookup';
 import createCrossServiceHeader from '../modules/govuk-one-login-service-header';
 
@@ -259,6 +258,5 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
     /* ****************************************** */
 
     createNewWindowAnchors(window.document.querySelectorAll('[open-new-window]'));
-    createLiveChat(window.document.querySelector('#chat-iframe'));
     initAll();
 })();

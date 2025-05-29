@@ -1,6 +1,5 @@
 "use strict";
 
-require("core-js/modules/es.regexp.flags.js");
 require("core-js/modules/esnext.array.filter-out.js");
 require("core-js/modules/esnext.array.is-template-object.js");
 require("core-js/modules/esnext.array.last-index.js");
@@ -44,7 +43,6 @@ require("core-js/modules/esnext.map.filter.js");
 require("core-js/modules/esnext.map.find.js");
 require("core-js/modules/esnext.map.find-key.js");
 require("core-js/modules/esnext.map.from.js");
-require("core-js/modules/esnext.map.group-by.js");
 require("core-js/modules/esnext.map.includes.js");
 require("core-js/modules/esnext.map.key-by.js");
 require("core-js/modules/esnext.map.key-of.js");
@@ -131,7 +129,6 @@ var _cookieBanner = _interopRequireDefault(require("../modules/cookie-banner"));
 var _cookiePreference = _interopRequireDefault(require("../modules/cookie-preference"));
 var _modalTimeout = _interopRequireDefault(require("../modules/modal-timeout"));
 var _newWindowAnchors = _interopRequireDefault(require("../modules/new-window-anchors"));
-var _liveChat = _interopRequireDefault(require("../modules/live-chat"));
 var _postcodeLookup = _interopRequireDefault(require("../modules/postcode-lookup"));
 var _govukOneLoginServiceHeader = _interopRequireDefault(require("../modules/govuk-one-login-service-header"));
 var _msToMinutesAndSeconds = _interopRequireDefault(require("../modules/modal-timeout/utils/msToMinutesAndSeconds"));
@@ -342,6 +339,5 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
   /* ****************************************** */
 
   (0, _newWindowAnchors.default)(window.document.querySelectorAll('[open-new-window]'));
-  (0, _liveChat.default)(window.document.querySelector('#chat-iframe'));
   (0, _frontend.initAll)();
 })();
