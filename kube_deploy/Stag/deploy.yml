@@ -34,38 +34,6 @@ spec:
               value: https://stag.claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_DOMAIN
               value: claim-criminal-injuries-compensation.service.justice.gov.uk
-            - name: CW_LIVECHAT_CHAT_ID
-              value: ff753a08-883d-453c-bf64-811301587100
-            - name: CW_LIVECHAT_ALIVE
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_livechat_alive
-            - name: CW_LIVECHAT_START_TIMES
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_livechat_start_times
-            - name: CW_LIVECHAT_END_TIMES
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_livechat_end_times
-            - name: CW_LIVECHAT_DISABLED
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_livechat_disabled
-            - name: CW_LIVECHAT_MAINTENANCE_MESSAGE_ENABLED
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_livechat_maintenance_message_enabled
-            - name: CW_LIVECHAT_MAINTENANCE_MESSAGE
-              valueFrom:
-                secretKeyRef:
-                  name: cica-web-secrets
-                  key: cw_livechat_maintenance_message
             - name: CW_MAINTENANCE_MESSAGE
               value: This service will be unavailable shortly.
             - name: CW_MAINTENANCE_MESSAGE_ENABLED
