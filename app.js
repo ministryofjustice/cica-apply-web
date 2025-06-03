@@ -71,7 +71,9 @@ const oidcAuth = auth({
     clientAssertionSigningKey: process.env.CW_GOVUK_PRIVATE_KEY,
     idTokenSigningAlg: 'ES256',
     issuerBaseURL: process.env.CW_GOVUK_ISSUER_URL,
-    secret: process.env.CW_COOKIE_SECRET,
+    secret: process.env.CW_COOKIE_SECRET.startsWith('[')
+        ? JSON.parse(process.env.CW_COOKIE_SECRET)
+        : process.env.CW_COOKIE_SECRET,
     session: {
         name: 'session',
         rolling: true,

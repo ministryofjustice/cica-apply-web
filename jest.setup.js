@@ -3,7 +3,7 @@
 jest.setTimeout(6000);
 jest.testEnvironment = 'node';
 process.env.CW_DCS_JWT = 'A massive string';
-process.env.CW_COOKIE_SECRET = 'Also a huge string';
+process.env.CW_COOKIE_SECRET = '["Another huge string", "Also a huge string"]';
 process.env.CW_DCS_URL = 'http://docker.for.win.localhost:3100';
 process.env.CW_URL = 'http://www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk';
 process.env.CW_DOMAIN = 'www.b44e2eaa-baf5-47aa-8ac9-5d23ee2a7297.gov.uk';
