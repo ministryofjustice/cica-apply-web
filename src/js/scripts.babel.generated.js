@@ -120,7 +120,6 @@ require("core-js/modules/esnext.weak-set.delete-all.js");
 require("core-js/modules/esnext.weak-set.from.js");
 require("core-js/modules/esnext.weak-set.of.js");
 require("core-js/modules/web.immediate.js");
-var axios = _interopRequireWildcard(require("axios"));
 var jsCookies = _interopRequireWildcard(require("js-cookie"));
 var _frontend = require("@ministryofjustice/frontend");
 var _ga = _interopRequireDefault(require("../modules/ga"));
@@ -177,8 +176,9 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
       return JSON.parse(jsCookies.get('sessionExpiry') || '{}');
     }
     async function refreshSessionAndModalTimeout() {
-      const response = await axios.get('/session/keep-alive');
-      sessionData = response.data.data[0].attributes;
+      const response = await fetch('/session/keep-alive');
+      const responseJson = await response.json(); // Fetch doesn't parse the data by default like axios did
+      sessionData = responseJson.data[0].attributes;
       sessionTimingOutModal.close();
       sessionTimingOutModal.refresh({
         startTime: sessionData.created
