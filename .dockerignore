@@ -26,6 +26,7 @@
 !address-finder
 !account
 !dashboard
+!middleware
 
 !package.json
 !package-lock.json
