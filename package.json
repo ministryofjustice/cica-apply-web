@@ -28,7 +28,7 @@
     "dependencies": {
         "@ministryofjustice/frontend": "^2.2.5",
         "cookie-parser": "~1.4.3",
-        "csurf": "^1.11.0",
+        "csrf-csrf": "^3.0.0",
         "debug": "~2.6.9",
         "express": "^4.18.2",
         "express-openid-connect": "^2.18.1",

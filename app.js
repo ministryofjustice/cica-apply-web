@@ -5,9 +5,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
-const csrf = require('csurf');
 const {nanoid} = require('nanoid');
 const {auth} = require('express-openid-connect');
+const {doubleCsrfProtection, generateToken} = require('./middleware/csrf');
 const createQuestionnaireService = require('./questionnaire/questionnaire-service');
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
@@ -82,8 +82,7 @@ const oidcAuth = auth({
         cookie: {
             transient: true,
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Lax'
+            secure: process.env.NODE_ENV === 'production'
         }
     },
     authorizationParams: {
@@ -189,24 +188,10 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
-// Exclude the OneLogin callback route from CSRF protection.
-// This is technically a cross site request but we don't
-// want to block the session cookie, or OIDC will throw
+app.use(doubleCsrfProtection);
 app.use((req, res, next) => {
-    const safePaths = ['/signed-in'];
-    if (safePaths.includes(req.path)) {
-        return next();
-    }
-    return csrf({
-        cookie: {
-            key: 'request-config',
-            path: '/',
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true,
-            sameSite: 'Lax'
-        },
-        sessionKey: 'session'
-    })(req, res, next);
+    res.locals.csrfToken = generateToken(req, res);
+    next();
 });
 
 app.use((req, res, next) => {
