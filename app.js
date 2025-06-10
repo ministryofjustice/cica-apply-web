@@ -5,9 +5,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
-const csrf = require('csurf');
 const {nanoid} = require('nanoid');
 const {auth} = require('express-openid-connect');
+const {doubleCsrfProtection, generateToken} = require('./middleware/csrf');
 const createQuestionnaireService = require('./questionnaire/questionnaire-service');
 const indexRouter = require('./index/routes');
 const applicationRouter = require('./questionnaire/routes');
@@ -188,18 +188,11 @@ app.use(
     express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
-app.use(
-    csrf({
-        cookie: {
-            key: 'request-config',
-            path: '/',
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true,
-            sameSite: 'Lax'
-        },
-        sessionKey: 'session'
-    })
-);
+app.use(doubleCsrfProtection);
+app.use((req, res, next) => {
+    res.locals.csrfToken = generateToken(req, res);
+    next();
+});
 
 app.use((req, res, next) => {
     res.set({
