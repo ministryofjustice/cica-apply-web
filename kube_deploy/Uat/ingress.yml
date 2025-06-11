@@ -32,6 +32,8 @@ metadata:
       SecRuleUpdateTargetById 953100 "!RESPONSE_BODY"
       SecRuleUpdateTargetById 932370 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932380 "!ARGS:/q-*/"
+      SecRuleRemoveByTag "language-php"
+      SecRuleRemoveByTag "platform-windows"
       SecAuditEngine RelevantOnly
       SecAuditLogParts ABEIFKZ
       SecAuditLog /var/log/nginx/error.log
