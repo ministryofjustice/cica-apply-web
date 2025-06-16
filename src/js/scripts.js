@@ -3,7 +3,6 @@ import 'core-js';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'regenerator-runtime/runtime';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as axios from 'axios';
 import * as jsCookies from 'js-cookie';
 import {initAll} from '@ministryofjustice/frontend';
 
@@ -58,8 +57,9 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
         }
 
         async function refreshSessionAndModalTimeout() {
-            const response = await axios.get('/session/keep-alive');
-            sessionData = response.data.data[0].attributes;
+            const response = await fetch('/session/keep-alive');
+            const responseJson = await response.json(); // Fetch doesn't parse the data by default like axios did
+            sessionData = responseJson.data[0].attributes;
             sessionTimingOutModal.close();
             sessionTimingOutModal.refresh({
                 startTime: sessionData.created
