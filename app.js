@@ -164,10 +164,6 @@ app.use(
     '/assets',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/dist/govuk/assets'))
 );
-app.use(
-    '/govuk-frontend/all.css',
-    express.static(path.join(__dirname, '/public/stylesheets/all.css'))
-);
 
 app.use(
     '/govuk-frontend/all.js',
@@ -181,11 +177,6 @@ app.use(
     express.static(
         path.join(__dirname, '/node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js.map')
     )
-);
-
-app.use(
-    '/moj-frontend/all.js',
-    express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
 );
 
 app.use(doubleCsrfProtection);

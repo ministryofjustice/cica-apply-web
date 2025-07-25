@@ -13,7 +13,7 @@ const html = `<!DOCTYPE html>
       <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
       <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
       <link rel="manifest" href="/assets/manifest.json">
-  <link href="/govuk-frontend/all.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" rel="stylesheet"/>
+  <link href="/stylesheets/all.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" rel="stylesheet"/>
   <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"/>
   <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"/>
   </head>
