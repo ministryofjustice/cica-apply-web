@@ -1,3 +1,5 @@
+import accessibleAutocomplete from './vendor/autocomplete.min.js';
+
 function createAutocomplete(window) {
     /**
      * Initialises the `Enhanced auto-complete` select element implementation.
@@ -17,6 +19,9 @@ function createAutocomplete(window) {
         }
 
         if (selectElements.length) {
+            // eslint-disable-next-line no-param-reassign
+            window.accessibleAutocomplete = accessibleAutocomplete;
+
             for (let i = 0; i < selectElements.length; i += 1) {
                 selectElements[i].parentNode.classList.add('autocomplete__wrapper');
 
