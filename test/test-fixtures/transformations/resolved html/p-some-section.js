@@ -21,7 +21,7 @@ const html = `<!DOCTYPE html>
 
 
     <!--[if !IE 8]><!-->
-    <link href="/govuk-frontend/all.css" rel="stylesheet" />
+    <link href="/stylesheets/all.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" rel="stylesheet"/>
     <!--<![endif]-->
 
 

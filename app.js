@@ -164,10 +164,6 @@ app.use(
     '/assets',
     express.static(path.join(__dirname, '/node_modules/govuk-frontend/dist/govuk/assets'))
 );
-app.use(
-    '/govuk-frontend/all.css',
-    express.static(path.join(__dirname, '/public/stylesheets/all.css'))
-);
 
 app.use(
     '/govuk-frontend/all.js',
