@@ -179,11 +179,6 @@ app.use(
     )
 );
 
-app.use(
-    '/moj-frontend/all.js',
-    express.static(path.join(__dirname, '/node_modules/@ministryofjustice/frontend/moj/all.js'))
-);
-
 app.use(doubleCsrfProtection);
 app.use((req, res, next) => {
     res.locals.csrfToken = generateToken(req, res);
