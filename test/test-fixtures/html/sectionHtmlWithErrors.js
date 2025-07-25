@@ -14,8 +14,6 @@ const sectionHtmlWithErrorshtml = `
         <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
         <link rel="manifest" href="/assets/manifest.json">
         <link href="/stylesheets/all.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" rel="stylesheet" />
-        <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" />
-        <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?v=1.2.3&c=Qnefc5ywgazsrupSws1uk" />
     </head>
 
     <body class="govuk-template__body">
