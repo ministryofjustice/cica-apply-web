@@ -330,7 +330,6 @@ const html = `<!DOCTYPE html>
         initAll();
     </script>
     <script nonce="somenonce" src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script nonce="somenonce" src="/dist/js/autocomplete.min.js?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"></script>
     <script nonce="somenonce" src="/dist/js/bundle.js?v=1.2.3&c=Qnefc5ywgazsrupSws1uk"></script>
   </body>
 </html>
