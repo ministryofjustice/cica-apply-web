@@ -37,7 +37,7 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
         cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
     });
     cookieBanner.show();
-    createCrossServiceHeader(window);
+    createCrossServiceHeader();
 
     /* ****************************************** */
     /* ** MODAL + TIMEOUT IMPLEMENTATION START ** */
