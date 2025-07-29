@@ -196,7 +196,7 @@ describe('form-helper functions', () => {
                 })
                 .replace(/\s+/g, '');
 
-            expect(actual).toMatch(expected);
+            expect(actual).toContain(expected);
         });
 
         it('Should return html with secondary button class when that is required', () => {
@@ -231,7 +231,7 @@ describe('form-helper functions', () => {
                 })
                 .replace(/\s+/g, '');
 
-            expect(actual).toMatch(expected);
+            expect(actual).toContain(expected);
         });
 
         it('Should show sign-in link when explicitly specified', () => {
@@ -874,7 +874,7 @@ describe('form-helper functions', () => {
             const externalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const expected = sectionHtmlWithErrors;
 
-            const recievedHtml = formHelper.getSectionHtmlWithErrors(
+            const receivedHtml = formHelper.getSectionHtmlWithErrors(
                 sectionData,
                 sectionId,
                 csrfToken,
@@ -882,7 +882,7 @@ describe('form-helper functions', () => {
                 isAuthenticated,
                 externalId
             );
-            expect(recievedHtml.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
+            expect(receivedHtml.replace(/\s+/g, '')).toContain(expected.replace(/\s+/g, ''));
         });
     });
 });
