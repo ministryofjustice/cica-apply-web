@@ -158,7 +158,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
     cookieBannerButtonAcceptAll: '#cookie-banner-accept-all'
   });
   cookieBanner.show();
-  (0, _govukOneLoginServiceHeader.default)(window);
+  (0, _govukOneLoginServiceHeader.default)();
 
   /* ****************************************** */
   /* ** MODAL + TIMEOUT IMPLEMENTATION START ** */
