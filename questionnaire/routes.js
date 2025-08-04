@@ -284,6 +284,7 @@ router
             if (response.statusCode === 201) {
                 // if the page is a submission
                 const isApplicationSubmission =
+                    response.body.data.pageContext === 'submission' ||
                     formHelper.getSectionContext(sectionId) === 'submission';
                 if (isApplicationSubmission) {
                     try {

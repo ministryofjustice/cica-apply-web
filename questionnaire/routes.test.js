@@ -35,7 +35,8 @@ const defaultMocks = {
             getPrevious: () => fixtureProgressEntryOrdinal1,
             postSection: () => {
                 return {
-                    statusCode: 201
+                    statusCode: 201,
+                    body: {data: {pageContext: undefined}}
                 };
             },
             postSubmission: () => undefined,
