@@ -1,6 +1,8 @@
 'use strict';
 
-const service = require('./request-service')();
+const createRequestService = require('./request-service');
+
+const {get, post} = createRequestService();
 
 function questionnaireService(options = {}) {
     function createQuestionnaire() {
@@ -39,7 +41,7 @@ function questionnaireService(options = {}) {
                 }
             }
         };
-        return service.post(opts);
+        return post(opts);
     }
 
     function getSection(questionnaireId, section) {
@@ -51,7 +53,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     function postSection(questionnaireId, section, body) {
@@ -69,7 +71,7 @@ function questionnaireService(options = {}) {
                 }
             }
         };
-        return service.post(opts);
+        return post(opts);
     }
 
     function getPrevious(questionnaireId, sectionId) {
@@ -81,7 +83,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     function getCurrentSection(currentQuestionnaireId) {
@@ -93,7 +95,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     function getSubmission(questionnaireId) {
@@ -105,7 +107,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     function postSubmission(questionnaireId) {
@@ -125,7 +127,7 @@ function questionnaireService(options = {}) {
                 }
             }
         };
-        return service.post(opts);
+        return post(opts);
     }
 
     function timeout(ms) {
@@ -176,7 +178,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     function keepAlive(questionnaireId) {
@@ -188,7 +190,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     async function getAllQuestionnairesMetadata() {
@@ -200,7 +202,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     async function getQuestionnaireMetadata(questionnaireId) {
@@ -212,7 +214,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
     async function getSectionAnswers(questionnaireId, sectionId) {
         const opts = {
@@ -223,7 +225,7 @@ function questionnaireService(options = {}) {
                 'Dcs-Api-Version': '2023-05-17'
             }
         };
-        return service.get(opts);
+        return get(opts);
     }
 
     return Object.freeze({

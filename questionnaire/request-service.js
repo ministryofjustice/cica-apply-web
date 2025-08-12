@@ -3,7 +3,7 @@
 const got = require('got');
 const merge = require('lodash.merge');
 
-function requestService() {
+function createRequestService() {
     function post(options) {
         let opts = {
             method: 'POST',
@@ -38,4 +38,4 @@ function requestService() {
     });
 }
 
-module.exports = requestService;
+module.exports = createRequestService;
