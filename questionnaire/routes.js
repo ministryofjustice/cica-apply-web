@@ -4,7 +4,6 @@ const express = require('express');
 const crypto = require('crypto');
 const formHelper = require('./form-helper');
 const createQuestionnaireService = require('./questionnaire-service');
-const getFormSubmitButtonText = require('./utils/getFormSubmitButtonText');
 const getQuestionnaireIdInSession = require('./utils/getQuestionnaireIdInSession');
 const createAccountService = require('../account/account-service');
 const getRedirectionUrl = require('./utils/getRedirectionUrl');
@@ -38,7 +37,7 @@ router.route('/start-or-resume').get((req, res) => {
         const {render} = templateEngineService;
         const html = render('start-or-resume.njk', {
             csrfToken: res.locals.csrfToken,
-            submitButtonText: getFormSubmitButtonText('start'),
+            submitButtonText: formHelper.getSubmitButtonText(),
             cspNonce: res.locals.cspNonce
         });
         return res.send(html);
@@ -63,7 +62,7 @@ router.post('/start-or-resume', (req, res) => {
 
         const html = render('start-or-resume.njk', {
             csrfToken: res.locals.csrfToken,
-            submitButtonText: getFormSubmitButtonText('start'),
+            submitButtonText: formHelper.getSubmitButtonText(),
             cspNonce: res.locals.cspNonce,
             error: {
                 text: 'Select what you would like to do'

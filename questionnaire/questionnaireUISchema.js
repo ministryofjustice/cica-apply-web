@@ -33,7 +33,6 @@ module.exports = {
     },
     'p-applicant-you-cannot-get-compensation': {
         options: {
-            buttonText: 'Continue anyway',
             signInLink: {
                 visible: false
             }
@@ -336,7 +335,6 @@ module.exports = {
     },
     'p--confirmation': {
         options: {
-            pageContext: 'confirmation',
             showBackButton: false,
             signInLink: {
                 visible: false
@@ -383,66 +381,6 @@ module.exports = {
                     }
                 }
             }
-        }
-    },
-    'p-applicant-declaration': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-applicant-declaration-deceased': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-mainapplicant-declaration-under-12': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-mainapplicant-declaration-under-12-deceased': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-mainapplicant-declaration-12-and-over-deceased': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-mainapplicant-declaration-12-and-over': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-rep-declaration-under-12': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-rep-declaration-12-and-over': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-rep-declaration-12-and-over-deceased': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
-        }
-    },
-    'p-rep-declaration-under-12-deceased': {
-        options: {
-            buttonText: 'Agree and submit',
-            pageContext: 'submission'
         }
     },
     'p-applicant-select-treatments': {
@@ -1349,6 +1287,7 @@ module.exports = {
             ]
         }
     },
+    // TODO: IS THIS REDUNDANT????? IT IS NOT IN THE TEMPLATE AND I CAN'T FIND MUCH HISTORY ON IT!
     'p-applicant-you-cannot-get-compensation-violent-crime': {
         options: {
             buttonText: 'Continue anyway'
@@ -1691,11 +1630,6 @@ module.exports = {
                     }
                 }
             }
-        }
-    },
-    'p--download-your-answers': {
-        options: {
-            buttonText: 'Continue to declaration'
         }
     },
     'p--has-legal-authority': {

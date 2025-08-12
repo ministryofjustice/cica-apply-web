@@ -209,8 +209,10 @@ describe('form-helper functions', () => {
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const options = {
-                buttonClass: 'govuk-button--secondary',
-                buttonText: 'Continue anyway',
+                submitButton: {
+                    text: 'Continue anyway',
+                    classes: 'govuk-button--secondary'
+                },
                 signInLink: {
                     visible: false
                 }
@@ -580,90 +582,41 @@ describe('form-helper functions', () => {
     });
 
     describe('Get button text', () => {
-        it('Should return the button text if specificed in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
-            const expected = 'Agree and submit';
-
-            const actual = formHelper.getButtonText(sectionName);
-
-            expect(actual).toMatch(expected);
-        });
-
-        it('Should return the button text specificed in the template section options', () => {
-            const sectionName = 'p-applicant-declaration';
+        it('Should return the button text specified in the template section options', () => {
             const expected = 'Continue anyway';
             const options = {
-                buttonText: 'Continue anyway',
+                submitButton: {
+                    text: 'Continue anyway'
+                },
                 signInLink: {
                     visible: false
                 }
             };
-            const actual = formHelper.getButtonText(sectionName, options);
+            const actual = formHelper.getSubmitButtonText(options);
             expect(actual).toMatch(expected);
         });
 
         it('Should return the default button text if no button text specificed in the template section options', () => {
-            const sectionName = 'p--check-your-answers';
             const expected = 'Continue';
             const options = {
                 signInLink: {
                     visible: false
                 }
             };
-            const actual = formHelper.getButtonText(sectionName, options);
+            const actual = formHelper.getSubmitButtonText(options);
             expect(actual).toMatch(expected);
         });
 
         it('Should return the default button text if the template section options are undefined', () => {
-            const sectionName = 'p--check-your-answers';
             const expected = 'Continue';
-            const actual = formHelper.getButtonText(sectionName, undefined);
+            const actual = formHelper.getSubmitButtonText(undefined);
             expect(actual).toMatch(expected);
         });
 
         it('Should return the default button text if nothing specific is specified in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
             const expected = 'Continue';
-
-            const actual = formHelper.getButtonText(sectionName);
-
+            const actual = formHelper.getSubmitButtonText();
             expect(actual).toMatch(expected);
-        });
-    });
-
-    describe('Check is summary', () => {
-        it('Should return true if a section has `pageContext: summary` in the UISchema', () => {
-            const sectionName = 'p--check-your-answers';
-
-            const actual = formHelper.getSectionContext(sectionName) === 'summary';
-
-            expect(actual).toEqual(true);
-        });
-
-        it('Should return false if a section has no `pageContext` value in the UISchema', () => {
-            const sectionName = 'p--confirmation';
-
-            const actual = formHelper.getSectionContext(sectionName) === 'summary';
-
-            expect(actual).toEqual(false);
-        });
-    });
-
-    describe('Check is submission', () => {
-        it('Should return true if a section has `pageContext: submission` in the UISchema', () => {
-            const sectionName = 'p-applicant-declaration';
-
-            const actual = formHelper.getSectionContext(sectionName) === 'submission';
-
-            expect(actual).toEqual(true);
-        });
-
-        it('Should return false if a section has no `pageContext` value in the UISchema', () => {
-            const sectionName = 'p--confirmation';
-
-            const actual = formHelper.getSectionContext(sectionName) === 'submission';
-
-            expect(actual).toEqual(false);
         });
     });
 
@@ -830,11 +783,13 @@ describe('form-helper functions', () => {
                         title: 'You should not apply again',
                         $schema: 'http://json-schema.org/draft-07/schema#',
                         options: {
-                            buttonText: 'Continue anyway',
+                            submitButton: {
+                                text: 'Continue anyway',
+                                classes: 'govuk-button--secondary'
+                            },
                             signInLink: {
                                 visible: false
-                            },
-                            buttonClass: 'govuk-button--secondary'
+                            }
                         },
                         required: ['q--duplicate-application-confirmation'],
                         properties: {

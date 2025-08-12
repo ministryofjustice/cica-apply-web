@@ -9,19 +9,10 @@ const templateEngineService = createTemplateEngineService();
 const {render} = templateEngineService;
 const shouldShowSignInLink = require('./utils/shouldShowSignInLink');
 
-function getButtonText(sectionId, uiOptions) {
-    if (uiOptions?.buttonText) {
-        return uiOptions.buttonText;
-    }
-    if (
-        sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.buttonText
-    ) {
-        return uiSchema[sectionId].options.buttonText;
-    }
-
-    return 'Continue';
+function getSubmitButtonText(uiOptions) {
+    const defaultButtonText = 'Continue';
+    const buttonText = uiOptions?.submitButton?.text || defaultButtonText;
+    return buttonText;
 }
 
 function getSectionContext(sectionId) {
@@ -47,9 +38,9 @@ function renderSection({
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
 }) {
     const showButton = !isFinal && pageType !== 'task-list';
-    const buttonTitle = getButtonText(sectionId, uiOptions);
+    const submitButtonText = getSubmitButtonText(uiOptions);
+    const submitButtonClasses = uiOptions?.submitButton?.classes || '';
     const hasErrors = transformation.hasErrors === true;
-    const hasButtonClass = uiOptions?.buttonClass !== undefined;
     const isContextPage = pageType === 'context';
     return render(
         `
@@ -82,19 +73,12 @@ function renderSection({
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
                     ${transformation.content}
-                        {% if ${showButton} %}
-                            {% if ${hasButtonClass} %}
-                                {{ govukButton({
-                                    text: "${buttonTitle}",
-                                    classes: "${uiOptions.buttonClass}",
-                                    preventDoubleClick: true
-                                }) }}
-                            {% else %}
-                                {{ govukButton({
-                                    text: "${buttonTitle}",
-                                    preventDoubleClick: true
-                                }) }}
-                            {% endif %}
+                    {% if ${showButton} %}
+                        {{ govukButton({
+                            text: "${submitButtonText}",
+                            classes: "${submitButtonClasses}",
+                            preventDoubleClick: true
+                        }) }}
                         <input type="hidden" name="_csrf" value="${csrfToken}">
                         <input type="hidden" name="_external-id" value="${externalId}">
                     {% endif %}
@@ -353,7 +337,7 @@ function getSectionHtmlWithErrors(
 }
 
 module.exports = {
-    getButtonText,
+    getSubmitButtonText,
     renderSection,
     removeSectionIdPrefix,
     processRequest,
