@@ -1,69 +1,9 @@
 'use strict';
 
 module.exports = {
-    'p-task-list': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-fatal-claim': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p--transition': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
     'p--was-the-crime-reported-to-police': {
         options: {
-            outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported'],
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-you-cannot-get-compensation': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-has-crime-reference-number': {
-        options: {
-            outputOrder: ['q-applicant-has-crime-reference-number', 'crn-info'],
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-who-are-you-applying-for': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-are-you-18-or-over': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-british-citizen-or-eu-national': {
-        options: {
-            signInLink: {
-                visible: false
-            }
+            outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported']
         }
     },
     'p-applicant-confirmation-method': {
@@ -329,13 +269,6 @@ module.exports = {
                 'q-applicant-scottish-location',
                 'additional-info-help-text'
             ]
-        }
-    },
-    'p--confirmation': {
-        options: {
-            signInLink: {
-                visible: false
-            }
         }
     },
     'p--which-police-force-is-investigating-the-crime': {
@@ -1833,10 +1766,7 @@ module.exports = {
     },
     'p-applicant-claim-type': {
         options: {
-            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info'],
-            signInLink: {
-                visible: false
-            }
+            outputOrder: ['q-applicant-claim-type', 'applicant-claim-type-info']
         }
     },
     'p-applicant-physical-help': {
@@ -1866,9 +1796,6 @@ module.exports = {
     },
     'p-applicant-under-18': {
         options: {
-            signInLink: {
-                visible: false
-            },
             outputOrder: ['applicant-under-18-info', 'q-applicant-under-18'],
             properties: {
                 'q-applicant-under-18': {
@@ -1926,48 +1853,6 @@ module.exports = {
                         }
                     }
                 }
-            }
-        }
-    },
-    'p--context-crime-ref-no': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p-applicant-what-do-you-want-to-do': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p--transition-apply-when-18': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p--transition-request-a-call-back': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p--transition-contact-us': {
-        options: {
-            signInLink: {
-                visible: false
-            }
-        }
-    },
-    'p--transition-someone-18-or-over-to-apply': {
-        options: {
-            signInLink: {
-                visible: false
             }
         }
     },

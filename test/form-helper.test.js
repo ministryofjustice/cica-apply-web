@@ -176,7 +176,6 @@ describe('form-helper functions', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
-            const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const expected = validResolvedHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
@@ -187,7 +186,6 @@ describe('form-helper functions', () => {
                     transformation,
                     isFinal,
                     backTarget,
-                    sectionId,
                     csrfToken,
                     cspNonce,
                     externalId
@@ -201,7 +199,6 @@ describe('form-helper functions', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
-            const sectionId = 'p-applicant-british-citizen-or-eu-national';
             const expected = secondaryButtonHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
@@ -221,7 +218,6 @@ describe('form-helper functions', () => {
                     transformation,
                     isFinal,
                     backTarget,
-                    sectionId,
                     csrfToken,
                     cspNonce,
                     uiOptions: options,
@@ -236,16 +232,11 @@ describe('form-helper functions', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-when-did-the-crime-stop';
-            const sectionId = 'p-applicant-when-did-the-crime-stop';
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
-            const showSignInLink = shouldShowSignInLink(sectionId, {
-                'p-applicant-when-did-the-crime-stop': {
-                    options: {
-                        signInLink: {
-                            visible: true
-                        }
-                    }
+            const signInLinkVisible = shouldShowSignInLink(false, {
+                signInLink: {
+                    visible: true
                 }
             });
             const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
@@ -258,10 +249,9 @@ describe('form-helper functions', () => {
                     transformation,
                     isFinal,
                     backTarget,
-                    sectionId,
                     csrfToken,
                     cspNonce,
-                    showSignInLink
+                    signInLinkVisible
                 })
                 .replace(/\s+/g, '');
 
@@ -272,16 +262,11 @@ describe('form-helper functions', () => {
             const transformation = validTransformation;
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
-            const sectionId = 'p-applicant-who-are-you-applying-for';
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
-            const showSignInLink = shouldShowSignInLink(sectionId, {
-                'p-applicant-who-are-you-applying-for': {
-                    options: {
-                        signInLink: {
-                            visible: false
-                        }
-                    }
+            const signInLinkVisible = shouldShowSignInLink(false, {
+                signInLink: {
+                    visible: false
                 }
             });
             const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
@@ -294,56 +279,9 @@ describe('form-helper functions', () => {
                     transformation,
                     isFinal,
                     backTarget,
-                    sectionId,
                     csrfToken,
                     cspNonce,
-                    showSignInLink
-                })
-                .replace(/\s+/g, '');
-
-            expect(result).toEqual(expect.not.stringContaining(expected));
-        });
-
-        it('Should not show sign-in link when explicitly specified within template section options', () => {
-            const transformation = validTransformation;
-            const isFinal = false;
-            const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
-            const sectionId = 'p-applicant-who-are-you-applying-for';
-            const csrfToken = 'sometoken';
-            const cspNonce = 'somenonce';
-            const uiOptions = {
-                signInLink: {
-                    visible: true
-                }
-            };
-            const showSignInLink = shouldShowSignInLink(
-                sectionId,
-                {
-                    'p-applicant-who-are-you-applying-for': {
-                        options: {
-                            signInLink: {
-                                visible: false
-                            }
-                        }
-                    }
-                },
-                uiOptions
-            );
-            const expected = '<a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>'.replace(
-                /\s+/g,
-                ''
-            );
-
-            const result = formHelper
-                .renderSection({
-                    transformation,
-                    isFinal,
-                    backTarget,
-                    sectionId,
-                    csrfToken,
-                    cspNonce,
-                    showSignInLink,
-                    uiOptions
+                    signInLinkVisible
                 })
                 .replace(/\s+/g, '');
 

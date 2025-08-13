@@ -2,20 +2,24 @@
 
 const shouldShowSignInLink = require('.');
 
-const uiSchema = {
-    section1: {
+const flags = {
+    AUTHENTICATED: true,
+    UNAUTHENTICATED: false
+};
+const sections = {
+    sectionWithNoSignInLinkOptions: {
         options: {
             foo: 'bar'
         }
     },
-    section2: {
+    sectionWithSignInLinkVisibleFalseOption: {
         options: {
             signInLink: {
                 visible: false
             }
         }
     },
-    section3: {
+    sectionWithSignInLinkVisibleTrueOption: {
         options: {
             signInLink: {
                 visible: true
@@ -25,61 +29,73 @@ const uiSchema = {
 };
 
 describe('shouldShowSignInLink', () => {
-    describe('No signInLink configuration in UISchema', () => {
-        it('Should return true by default', () => {
-            const result = shouldShowSignInLink('section1', uiSchema);
-            expect(result).toBe(true);
+    describe('Unauthenticated', () => {
+        describe('No section-modifying options', () => {
+            it('Should return true', () => {
+                const result = shouldShowSignInLink(flags.UNAUTHENTICATED);
+                expect(result).toBe(true);
+            });
         });
-        describe('Authenticated', () => {
+        describe('No applicable section-modifying options', () => {
+            it('Should return true', () => {
+                const result = shouldShowSignInLink(
+                    flags.UNAUTHENTICATED,
+                    sections.sectionWithNoSignInLinkOptions.options
+                );
+                expect(result).toBe(true);
+            });
+        });
+        describe('"signInLink.visible = false" section option', () => {
             it('Should return false', () => {
-                const result = shouldShowSignInLink('section1', uiSchema, true);
+                const result = shouldShowSignInLink(
+                    flags.UNAUTHENTICATED,
+                    sections.sectionWithSignInLinkVisibleFalseOption.options
+                );
                 expect(result).toBe(false);
             });
         });
-        describe('Unauthenticated', () => {
+        describe('"signInLink.visible = true" section option', () => {
             it('Should return true', () => {
-                const result = shouldShowSignInLink('section1', uiSchema, false);
+                const result = shouldShowSignInLink(
+                    flags.UNAUTHENTICATED,
+                    sections.sectionWithSignInLinkVisibleTrueOption.options
+                );
                 expect(result).toBe(true);
             });
         });
     });
-
-    describe('signInLink.visible configuration in UISchema', () => {
-        describe('signInLink.visible equals `false` configuration in UISchema', () => {
-            it('Should return false by default', () => {
-                const result = shouldShowSignInLink('section2', uiSchema);
+    describe('Authenticated', () => {
+        describe('No section-modifying options', () => {
+            it('Should return false', () => {
+                const result = shouldShowSignInLink(flags.AUTHENTICATED);
                 expect(result).toBe(false);
             });
-            describe('Authenticated', () => {
-                it('Should return false', () => {
-                    const result = shouldShowSignInLink('section2', uiSchema, true);
-                    expect(result).toBe(false);
-                });
-            });
-            describe('Unauthenticated', () => {
-                it('Should return false', () => {
-                    const result = shouldShowSignInLink('section2', uiSchema, false);
-                    expect(result).toBe(false);
-                });
+        });
+        describe('No applicable section-modifying options', () => {
+            it('Should return false', () => {
+                const result = shouldShowSignInLink(
+                    flags.AUTHENTICATED,
+                    sections.sectionWithNoSignInLinkOptions.options
+                );
+                expect(result).toBe(false);
             });
         });
-
-        describe('signInLink.visible equals `true` configuration in UISchema', () => {
-            it('Should return true by default', () => {
-                const result = shouldShowSignInLink('section3', uiSchema);
+        describe('"signInLink.visible = false" section option', () => {
+            it('Should return false', () => {
+                const result = shouldShowSignInLink(
+                    flags.AUTHENTICATED,
+                    sections.sectionWithSignInLinkVisibleFalseOption.options
+                );
+                expect(result).toBe(false);
+            });
+        });
+        describe('"signInLink.visible = true" section option', () => {
+            it('Should return true', () => {
+                const result = shouldShowSignInLink(
+                    flags.AUTHENTICATED,
+                    sections.sectionWithSignInLinkVisibleTrueOption.options
+                );
                 expect(result).toBe(true);
-            });
-            describe('Authenticated', () => {
-                it('Should return true', () => {
-                    const result = shouldShowSignInLink('section3', uiSchema, true);
-                    expect(result).toBe(true);
-                });
-            });
-            describe('Unauthenticated', () => {
-                it('Should return true', () => {
-                    const result = shouldShowSignInLink('section3', uiSchema, false);
-                    expect(result).toBe(true);
-                });
             });
         });
     });

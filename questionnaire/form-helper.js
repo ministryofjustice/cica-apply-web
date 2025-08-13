@@ -28,13 +28,12 @@ function renderSection({
     isFinal,
     pageType,
     backTarget,
-    sectionId,
     csrfToken,
     cspNonce,
     isAuthenticated,
     externalId,
     uiOptions = {},
-    showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
+    signInLinkVisible = shouldShowSignInLink(isAuthenticated, uiOptions)
 }) {
     const showButton = !isFinal && pageType !== 'task-list';
     const submitButtonText = getSubmitButtonText(uiOptions);
@@ -58,7 +57,7 @@ function renderSection({
                         }) }}
                     {% endif %}
                 </div>
-                {% if ${showSignInLink} %}
+                {% if ${signInLinkVisible} %}
                     <div class="govuk-grid-column-one-third">
                         <a href="/account/sign-in" class="govuk-link cica-prominent-link">Create a GOV.UK One Login to save your progress</a>
                     </div>
@@ -270,7 +269,6 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, exter
         isFinal: sectionDataMeta.final,
         pageType: sectionDataMeta.pageType,
         backTarget: backLink,
-        sectionId,
         csrfToken,
         cspNonce,
         isAuthenticated,
@@ -323,7 +321,6 @@ function getSectionHtmlWithErrors(
         isFinal: false,
         pageType: sectionDataMeta.pageType,
         backTarget: backLink,
-        sectionId,
         csrfToken,
         cspNonce,
         isAuthenticated,
