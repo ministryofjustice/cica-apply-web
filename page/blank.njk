@@ -17,10 +17,8 @@
         <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
         <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
-        <link href="/govuk-frontend/all.css?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}" rel="stylesheet"/>
+        <link href="/stylesheets/all.css?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}" rel="stylesheet"/>
 
-        <link rel="stylesheet" href="/dist/css/accessible-autocomplete.css?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}"/>
-        <link rel="stylesheet" href="/dist/css/accessible-autocomplete-wrapper.css?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}"/>
         <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
 
     </head>
@@ -66,7 +64,6 @@
             import {initAll} from '/govuk-frontend/all.js?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}'
             initAll();
         </script>
-        <script nonce="{{ cspNonce }}" src="/dist/js/autocomplete.min.js?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}"></script>
         <script nonce="{{ cspNonce }}" src="/dist/js/bundle.js?v={{CW_APP_VERSION}}&c={{CW_BUILDTIME_ID}}"></script>
     </body>
 </html>

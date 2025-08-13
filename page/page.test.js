@@ -33,7 +33,7 @@ describe('Page', () => {
                 isAuthenticated: true
             });
             const actual = html.replace(/\s+/g, '');
-            const expected = `<header class="cross-service-header" role="banner" data-module="one-login-header">`.replace(
+            const expected = `<header class="rebranded-cross-service-header" data-module="one-login-header">`.replace(
                 /\s+/g,
                 ''
             );

@@ -49,7 +49,8 @@ function createTemplateEngineService(app) {
             )
             .addGlobal('CW_APP_VERSION', process.env.npm_package_version)
             .addGlobal('CW_GOVUK_ACCOUNT_URL', process.env.CW_GOVUK_ACCOUNT_URL)
-            .addGlobal('CW_BUILDTIME_ID', process.env.CW_BUILDTIME_ID);
+            .addGlobal('CW_BUILDTIME_ID', process.env.CW_BUILDTIME_ID)
+            .addGlobal('govukRebrand', true);
 
         return environment;
     }

@@ -654,7 +654,8 @@ describe('Hitting /apply/:section', () => {
                         getSectionContext: () => 'submission',
                         addPrefix: section => `p-${section}`,
                         processRequest: requestBody => requestBody,
-                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                        removeSectionIdPrefix: () => 'applicant-fatal-claim',
+                        getSubmitButtonText: () => 'Continue'
                     }))
                 });
             });
@@ -690,7 +691,8 @@ describe('Hitting /apply/:section', () => {
                             getSectionContext: () => 'post',
                             addPrefix: section => `p-${section}`,
                             processRequest: requestBody => requestBody,
-                            removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                            removeSectionIdPrefix: () => 'applicant-fatal-claim',
+                            getSubmitButtonText: () => 'Continue'
                         })),
                         '../account/account-service': () => {
                             return jest.fn(() => ({
@@ -774,7 +776,8 @@ describe('Hitting /apply/:section', () => {
                     './form-helper.js': jest.fn(() => ({
                         addPrefix: () => {
                             throw new Error('Something went wrong!');
-                        }
+                        },
+                        getSubmitButtonText: () => 'Continue'
                     }))
                 });
             });
