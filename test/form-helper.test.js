@@ -177,7 +177,6 @@ describe('form-helper functions', () => {
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
             const sectionId = 'p-applicant-british-citizen-or-eu-national';
-            const showBackLink = true;
             const expected = validResolvedHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
@@ -191,7 +190,6 @@ describe('form-helper functions', () => {
                     sectionId,
                     csrfToken,
                     cspNonce,
-                    showBackLink,
                     externalId
                 })
                 .replace(/\s+/g, '');
@@ -204,7 +202,6 @@ describe('form-helper functions', () => {
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-british-citizen-or-eu-national';
             const sectionId = 'p-applicant-british-citizen-or-eu-national';
-            const showBackLink = true;
             const expected = secondaryButtonHtml.replace(/\s+/g, '');
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
@@ -228,7 +225,6 @@ describe('form-helper functions', () => {
                     csrfToken,
                     cspNonce,
                     uiOptions: options,
-                    showBackLink,
                     externalId
                 })
                 .replace(/\s+/g, '');
@@ -241,7 +237,6 @@ describe('form-helper functions', () => {
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-when-did-the-crime-stop';
             const sectionId = 'p-applicant-when-did-the-crime-stop';
-            const showBackLink = true;
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const showSignInLink = shouldShowSignInLink(sectionId, {
@@ -264,7 +259,6 @@ describe('form-helper functions', () => {
                     isFinal,
                     backTarget,
                     sectionId,
-                    showBackLink,
                     csrfToken,
                     cspNonce,
                     showSignInLink
@@ -279,7 +273,6 @@ describe('form-helper functions', () => {
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
             const sectionId = 'p-applicant-who-are-you-applying-for';
-            const showBackLink = true;
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const showSignInLink = shouldShowSignInLink(sectionId, {
@@ -302,7 +295,6 @@ describe('form-helper functions', () => {
                     isFinal,
                     backTarget,
                     sectionId,
-                    showBackLink,
                     csrfToken,
                     cspNonce,
                     showSignInLink
@@ -317,7 +309,6 @@ describe('form-helper functions', () => {
             const isFinal = false;
             const backTarget = '/apply/previous/applicant-who-are-you-applying-for';
             const sectionId = 'p-applicant-who-are-you-applying-for';
-            const showBackLink = true;
             const csrfToken = 'sometoken';
             const cspNonce = 'somenonce';
             const uiOptions = {
@@ -349,7 +340,6 @@ describe('form-helper functions', () => {
                     isFinal,
                     backTarget,
                     sectionId,
-                    showBackLink,
                     csrfToken,
                     cspNonce,
                     showSignInLink,

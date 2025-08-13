@@ -5,8 +5,7 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            },
-            showBackButton: false
+            }
         }
     },
     'p-applicant-fatal-claim': {
@@ -50,8 +49,7 @@ module.exports = {
         options: {
             signInLink: {
                 visible: false
-            },
-            showBackButton: false
+            }
         }
     },
     'p-applicant-are-you-18-or-over': {
@@ -335,7 +333,6 @@ module.exports = {
     },
     'p--confirmation': {
         options: {
-            showBackButton: false,
             signInLink: {
                 visible: false
             }
