@@ -1,7 +1,6 @@
 'use strict';
 
 const qTransformer = require('q-transformer')();
-const uiSchema = require('../questionnaire/questionnaireUISchema');
 const createTemplateEngineService = require('../templateEngine');
 
 const templateEngineService = createTemplateEngineService();
@@ -37,8 +36,7 @@ function getSummaryHtml(sectionData, timestamp) {
     schema.downloadSummary = true; // adding this property on the fly
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
-        schema: escapeSchemaContent(schema),
-        uiSchema
+        schema: escapeSchemaContent(schema)
     });
     return renderSection({
         transformation,
