@@ -228,6 +228,18 @@ function questionnaireService(options = {}) {
         return get(opts);
     }
 
+    async function getSectionMetadata(questionnaireId, sectionId) {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/sections/${sectionId}/metadata`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -242,7 +254,8 @@ function questionnaireService(options = {}) {
         keepAlive,
         getAllQuestionnairesMetadata,
         getQuestionnaireMetadata,
-        getSectionAnswers
+        getSectionAnswers,
+        getSectionMetadata
     });
 }
 

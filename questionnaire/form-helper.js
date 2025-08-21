@@ -15,14 +15,6 @@ function getSubmitButtonText(uiOptions) {
     return buttonText;
 }
 
-function getSectionContext(sectionId) {
-    return (
-        sectionId in uiSchema &&
-        uiSchema[sectionId].options &&
-        uiSchema[sectionId].options.pageContext
-    );
-}
-
 function renderSection({
     transformation,
     isFinal,
@@ -343,6 +335,5 @@ module.exports = {
     getSectionHtmlWithErrors,
     addPrefix,
     escapeSchemaContent,
-    getSectionContext,
     removeCarriageReturns
 };

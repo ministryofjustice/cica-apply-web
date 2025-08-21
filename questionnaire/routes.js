@@ -221,7 +221,8 @@ router
                 isAuthenticated,
                 req.session.externalId
             );
-            if (formHelper.getSectionContext(sectionId) === 'confirmation') {
+
+            if (response.body?.meta?.pageType === 'confirmation') {
                 delete req.session.questionnaireId;
                 delete req.session.externalId;
             }
@@ -242,6 +243,7 @@ router
                 isAuthenticated
             });
             const sectionId = formHelper.addPrefix(req.params.section);
+
             const body = formHelper.processRequest(req.body, req.params.section);
             // eslint-disable-next-line no-underscore-dangle
             const pageExternalId = body['_external-id'];
@@ -281,10 +283,11 @@ router
             );
 
             if (response.statusCode === 201) {
-                // if the page is a submission
-                const isApplicationSubmission =
-                    formHelper.getSectionContext(sectionId) === 'submission';
-                if (isApplicationSubmission) {
+                const responseSectionMetadata = await questionnaireService.getSectionMetadata(
+                    getQuestionnaireIdInSession(req.session),
+                    sectionId
+                );
+                if (responseSectionMetadata.body?.data?.attributes?.pageType === 'submission') {
                     try {
                         await questionnaireService.postSubmission(req.session.questionnaireId);
                         const submissionResponse = await questionnaireService.getSubmissionStatus(

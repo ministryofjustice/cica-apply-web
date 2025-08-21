@@ -39,7 +39,17 @@ const defaultMocks = {
                 };
             },
             postSubmission: () => undefined,
-            getSubmissionStatus: () => ({status: 'FAILED'})
+            getSubmissionStatus: () => ({status: 'FAILED'}),
+            getSectionMetadata: () => ({
+                statusCode: 200,
+                body: {
+                    data: {
+                        attributes: {
+                            pageType: 'somePageType'
+                        }
+                    }
+                }
+            })
         }));
     },
     '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => true),
@@ -650,12 +660,33 @@ describe('Hitting /apply/:section', () => {
             beforeEach(() => {
                 setUpCommonMocks({
                     './form-helper.js': jest.fn(() => ({
-                        getSectionContext: () => 'submission',
                         addPrefix: section => `p-${section}`,
                         processRequest: requestBody => requestBody,
                         removeSectionIdPrefix: () => 'applicant-fatal-claim',
                         getSubmitButtonText: () => 'Continue'
-                    }))
+                    })),
+                    '../questionnaire/questionnaire-service': () => {
+                        return jest.fn(() => ({
+                            keepAlive: () => getKeepAlive,
+                            postSection: () => {
+                                return {
+                                    statusCode: 201
+                                };
+                            },
+                            postSubmission: () => undefined,
+                            getSubmissionStatus: () => ({status: 'FAILED'}),
+                            getSectionMetadata: () => ({
+                                statusCode: 200,
+                                body: {
+                                    data: {
+                                        attributes: {
+                                            pageType: 'submission'
+                                        }
+                                    }
+                                }
+                            })
+                        }));
+                    }
                 });
             });
             it('Should submit', async () => {
@@ -687,7 +718,6 @@ describe('Hitting /apply/:section', () => {
                 beforeEach(() => {
                     setUpCommonMocks({
                         './form-helper.js': jest.fn(() => ({
-                            getSectionContext: () => 'post',
                             addPrefix: section => `p-${section}`,
                             processRequest: requestBody => requestBody,
                             removeSectionIdPrefix: () => 'applicant-fatal-claim',
