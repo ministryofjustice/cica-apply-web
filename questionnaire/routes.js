@@ -190,6 +190,38 @@ router.route('/previous/:section').get(async (req, res) => {
     }
 });
 
+//* *****************************************************************************************//
+//                              DO NOT DEPLOY LIVE                                          //
+//* *****************************************************************************************//
+router.route('/secure-link').get(async (req, res) => {
+    try {
+        // Random ownerId
+        const ownerId = `urn:uuid:${crypto.randomUUID()}`;
+
+        // Create new template
+        const questionnaireService = createQuestionnaireService({
+            ownerId,
+            isAuthenticated: false,
+            origin: 'web',
+            externalId: `urn:uuid:${crypto.randomUUID()}`,
+            featureFlags: {
+                templateName: 'request-a-review',
+                templateVersion: '1.0.0',
+                bearerAuth: process.env.FEATURE_FLAGS_TOKEN
+            }
+        });
+        const response = await questionnaireService.createQuestionnaire();
+
+        // Display magic link
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        res.send(
+            `${baseUrl}/account/secure-link-login?qid=${response.body.data.attributes.id}&uid=${ownerId}`
+        );
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
 router
     .route('/:section')
     .get(async (req, res, next) => {
@@ -226,6 +258,8 @@ router
                 delete req.session.questionnaireId;
                 delete req.session.externalId;
             }
+            console.log('QUESTIONNAIRE IN SESSION. U HERE?:');
+            console.log(req.session.questionnaireId);
             return res.send(html);
         } catch (err) {
             const pageNotFoundErr = new Error(err.message);
@@ -236,6 +270,8 @@ router
     })
     .post(async (req, res, next) => {
         try {
+            console.log('QUESTIONNAIRE IN SESSION. Y U NO HERE?:');
+            console.log(req.session.questionnaireId);
             const accountService = createAccountService(req.session);
             const isAuthenticated = accountService.isAuthenticated(req);
             const questionnaireService = createQuestionnaireService({
@@ -340,6 +376,7 @@ router
             );
             return res.send(html);
         } catch (err) {
+            console.log(err);
             res.status(err.statusCode || 404).render('404.njk');
             return next(err);
         }

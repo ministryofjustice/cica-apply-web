@@ -125,6 +125,32 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
     }
 });
 
+router.get('/secure-link-login', requiresAuth(), async (req, res, next) => {
+    try {
+        const accountService = createAccountService(req.session);
+        const ownerId = req.query.uid;
+        const questionnaireId = req.query.qid;
+        const questionnaireServiceUnauthenticated = createQuestionnaireService({
+            ownerId
+        });
+        if (questionnaireId) {
+            await questionnaireServiceUnauthenticated.postSection(questionnaireId, 'owner', {
+                'owner-id': req.oidc.user.sub,
+                'is-authenticated': true
+            });
+            accountService.setOwnerId(req.oidc.user.sub);
+
+            return res.redirect(`/apply/resume/${questionnaireId}`);
+        }
+
+        // Else, redirect dashboard
+        return res.redirect('/account/dashboard');
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+        return next(err);
+    }
+});
+
 router.get('/*', (req, res) => {
     res.redirect(getDashboardURI());
 });
