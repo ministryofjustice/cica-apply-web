@@ -327,6 +327,15 @@ router
                     progressEntryResponse.body.data[0].attributes.sectionId
                 );
 
+                const isRedirect = response.body.data.pageContext === 'authentication-redirect';
+                if (isRedirect) {
+                    const answer = Object.values(response.body.data.attributes);
+                    if (answer.includes('redirect')) {
+                        req.session.referrer = `/apply/${nextSectionId}`;
+                        return res.redirect(`/account/sign-in`);
+                    }
+                }
+
                 return res.redirect(`${req.baseUrl}/${nextSectionId}`);
             }
 
