@@ -5,7 +5,7 @@ const service = require('./request-service')();
 function questionnaireService(options = {}) {
     function createQuestionnaire() {
         const defaultTemplateValues = {
-            templateName: 'sexual-assault',
+            templateName: 'apply-for-compensation',
             templateVersion: undefined
         };
         const opts = {
