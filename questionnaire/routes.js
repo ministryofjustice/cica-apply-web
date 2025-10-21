@@ -191,6 +191,38 @@ router.route('/previous/:section').get(async (req, res) => {
     }
 });
 
+//* *****************************************************************************************//
+//                              DO NOT DEPLOY LIVE                                          //
+//* *****************************************************************************************//
+router.route('/secure-link').get(async (req, res) => {
+    try {
+        // Random ownerId
+        const ownerId = `urn:uuid:${crypto.randomUUID()}`;
+
+        // Create new template
+        const questionnaireService = createQuestionnaireService({
+            ownerId,
+            isAuthenticated: false,
+            templateName: 'request-a-review',
+            origin: 'web',
+            externalId: `urn:uuid:${crypto.randomUUID()}`,
+            featureFlags: {
+                templateVersion: '1.0.0',
+                bearerAuth: process.env.FEATURE_FLAGS_TOKEN
+            }
+        });
+        const response = await questionnaireService.createQuestionnaire();
+
+        // Display magic link
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        res.send(
+            `${baseUrl}/account/secure-link-login?qid=${response.body.data.attributes.id}&uid=${ownerId}`
+        );
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
+    }
+});
+
 router
     .route('/:section')
     .get(async (req, res, next) => {
