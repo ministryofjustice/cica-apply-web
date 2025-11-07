@@ -109,7 +109,8 @@ function renderSection({
             isAuthenticated,
             userId: isAuthenticated ? crypto.randomUUID() : undefined,
             externalId,
-            sectionId
+            sectionId,
+            showSurvey: uiOptions.showSurvey
         }
     );
 }
