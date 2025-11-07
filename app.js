@@ -133,7 +133,7 @@ app.use(
                 ],
                 imgSrc: ["'self'", 'data:', '*.google-analytics.com', 'www.googletagmanager.com'],
                 objectSrc: ["'none'"],
-                frameSrc: ['*.ccng.bt.com'],
+                frameSrc: ['*.ccng.bt.com', 'https://*.smartsurvey.co.uk/s/VQJBKS/'],
                 connectSrc: ["'self'", '*.google-analytics.com'],
                 // https://www.therobinlord.com/ga4-is-being-blocked-by-content-security-policy/
                 formAction: ["'self'", '*.account.gov.uk']
