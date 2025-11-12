@@ -39,7 +39,8 @@ router.route('/start-or-resume').get((req, res) => {
         const html = render('start-or-resume.njk', {
             csrfToken: res.locals.csrfToken,
             submitButtonText: getFormSubmitButtonText('start'),
-            cspNonce: res.locals.cspNonce
+            cspNonce: res.locals.cspNonce,
+            sectionId: 'start-or-resume'
         });
         return res.send(html);
     } catch (err) {

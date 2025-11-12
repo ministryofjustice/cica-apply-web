@@ -105,7 +105,8 @@ function renderSection({
             cspNonce,
             isAuthenticated,
             userId: isAuthenticated ? crypto.randomUUID() : undefined,
-            externalId
+            externalId,
+            sectionId
         }
     );
 }
