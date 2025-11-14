@@ -6,7 +6,8 @@ function questionnaireService(options = {}) {
     function createQuestionnaire() {
         const defaultTemplateValues = {
             templateName: 'sexual-assault',
-            templateVersion: undefined
+            templateVersion: undefined,
+            userData: undefined
         };
         const opts = {
             url: `${process.env.CW_DCS_URL}/api/questionnaires`,
@@ -32,7 +33,8 @@ function questionnaireService(options = {}) {
                         },
                         templateVersion:
                             options.featureFlags?.templateVersion ||
-                            defaultTemplateValues.templateVersion
+                            defaultTemplateValues.templateVersion,
+                        userData: options.userData || defaultTemplateValues.userData
                     }
                 }
             }

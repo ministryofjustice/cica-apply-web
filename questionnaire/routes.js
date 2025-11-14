@@ -209,6 +209,19 @@ router.route('/secure-link').get(async (req, res) => {
             featureFlags: {
                 templateVersion: '1.0.0',
                 bearerAuth: process.env.FEATURE_FLAGS_TOKEN
+            },
+            userData: {
+                personalisation: {
+                    'first-name': 'test',
+                    'last-name': 'test case',
+                    date: '21 October 2025',
+                    'short-reason': 'short summary of why',
+                    'decision-reason': 'full explanation',
+                    'decision-paragraphs': 'para1 </p><p class="govuk-body"> para2',
+                    'expiry-date': '31 December 2025',
+                    'barcode-string': '1234567890'
+                },
+                caseReference: '25\\123456'
             }
         });
         const response = await questionnaireService.createQuestionnaire();
