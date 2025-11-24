@@ -6,6 +6,7 @@ const validResolvedHtml = require('./test-fixtures/transformations/resolved html
 const secondaryButtonHtml = require('./test-fixtures/transformations/resolved html/p-applicant-secondary-button');
 const createTemplateEngineService = require('../templateEngine');
 const sectionHtmlWithErrors = require('./test-fixtures/html/sectionHtmlWithErrors');
+const uiSchema = require('../questionnaire/questionnaireUISchema');
 
 const templateEngineService = createTemplateEngineService();
 templateEngineService.init();
@@ -106,14 +107,12 @@ describe('form-helper functions', () => {
                 'q-applicant-select-treatments-dmi': ['cbt']
             };
 
-            const actual = formHelper.removeUnwantedHiddenAnswers(
-                body,
-                'p-applicant-have-you-applied-to-us-before'
-            );
-            const actual2 = formHelper.removeUnwantedHiddenAnswers(
-                body2,
-                'p-applicant-select-treatments'
-            );
+            const UiOptions1 =
+                uiSchema['p-applicant-have-you-applied-to-us-before'].options.properties;
+            const UiOptions2 = uiSchema['p-applicant-select-treatments'].options.properties;
+
+            const actual = formHelper.removeUnwantedHiddenAnswers(body, UiOptions1);
+            const actual2 = formHelper.removeUnwantedHiddenAnswers(body2, UiOptions2);
 
             expect(actual).toEqual(expected);
             expect(actual2).toEqual(expected2);
@@ -129,14 +128,12 @@ describe('form-helper functions', () => {
                 'q-applicant-other-treatment-dmi': 'keep me'
             };
 
-            const actual1 = formHelper.removeUnwantedHiddenAnswers(
-                body1,
-                'p-applicant-have-you-applied-to-us-before'
-            );
-            const actual2 = formHelper.removeUnwantedHiddenAnswers(
-                body2,
-                'p-applicant-select-treatments'
-            );
+            const UiOptions1 =
+                uiSchema['p-applicant-have-you-applied-to-us-before'].options.properties;
+            const UiOptions2 = uiSchema['p-applicant-select-treatments'].options.properties;
+
+            const actual1 = formHelper.removeUnwantedHiddenAnswers(body1, UiOptions1);
+            const actual2 = formHelper.removeUnwantedHiddenAnswers(body2, UiOptions2);
 
             expect(actual1).toEqual(body1);
             expect(actual2).toEqual(body2);
