@@ -246,8 +246,12 @@ router
                 ownerId: accountService.getOwnerId(),
                 isAuthenticated
             });
+            const currentSectionProgressResponse = await questionnaireService.getCurrentSection(
+                getQuestionnaireIdInSession(req.session)
+            );
+            const uiOptions = currentSectionProgressResponse.body.included[0]?.attributes?.options;
             const sectionId = formHelper.addPrefix(req.params.section);
-            const body = formHelper.processRequest(req.body, req.params.section);
+            const body = formHelper.processRequest(req.body, req.params.section, uiOptions);
             // eslint-disable-next-line no-underscore-dangle
             const pageExternalId = body['_external-id'];
             if (

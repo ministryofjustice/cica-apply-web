@@ -118,13 +118,11 @@ function removeSectionIdPrefix(sectionId) {
     return sectionId.replace(/^p-/, '');
 }
 
-function removeUnwantedHiddenAnswers(body, sectionId) {
+function removeUnwantedHiddenAnswers(body, uiOptions) {
     const answers = body;
-    Object.keys(uiSchema[sectionId].options.properties).forEach(question => {
-        if (uiSchema[sectionId].options.properties[question].options.conditionalComponentMap) {
-            uiSchema[sectionId].options.properties[
-                question
-            ].options.conditionalComponentMap.forEach(mapping => {
+    Object.keys(uiOptions).forEach(question => {
+        if (uiOptions[question].options.conditionalComponentMap) {
+            uiOptions[question].options.conditionalComponentMap.forEach(mapping => {
                 let givenAnswer = answers[question];
                 if (givenAnswer === 'true' || givenAnswer === true) {
                     givenAnswer = true;
@@ -227,12 +225,14 @@ function removeCarriageReturns(body, property) {
     return answers;
 }
 
-function processRequest(rawBody, section) {
+function processRequest(rawBody, section, uiOptions) {
     // Handle conditionally revealing routes
     let body = rawBody;
     const sectionId = addPrefix(section);
     if (uiSchema[sectionId] && uiSchema[sectionId].options.properties) {
-        body = removeUnwantedHiddenAnswers(rawBody, sectionId);
+        body = removeUnwantedHiddenAnswers(rawBody, uiSchema[sectionId].options.properties);
+    } else if (uiOptions?.properties) {
+        body = removeUnwantedHiddenAnswers(rawBody, uiOptions.properties);
     }
     if (Object.entries(body).length > 0 && body.constructor === Object) {
         Object.keys(body).forEach(question => {
