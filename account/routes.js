@@ -53,11 +53,12 @@ router.get('/sign-in/success', requiresAuth(), async (req, res, next) => {
             isAuthenticated: accountService.isAuthenticated(req),
             cspNonce: res.locals.cspNonce,
             userId: accountService.getOwnerId(req),
-            externalId: req.session.externalId
+            externalId: req.session.externalId,
+            sectionId: 'authentication-success'
         });
         return res.send(html);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
         return next(err);
     }
 });
@@ -81,7 +82,7 @@ router.get('/signed-in', requiresAuth(), (req, res, next) => {
     try {
         return res.redirect('/account/sign-in/success');
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
         return next(err);
     }
 });
@@ -94,9 +95,9 @@ router.get('/sign-out', (req, res) => {
 
 router.get('/signed-out', (req, res, next) => {
     try {
-        return res.render('signed-out.njk');
+        return res.render('signed-out.njk', {sectionId: 'signed-out'});
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
         return next(err);
     }
 });
@@ -115,12 +116,13 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
             isAuthenticated: accountService.isAuthenticated(req),
             ownerData,
             cspNonce: res.locals.cspNonce,
-            currentUrlPathname: '/account/dashboard'
+            currentUrlPathname: '/account/dashboard',
+            sectionId: 'dashboard'
         });
         res.clearCookie('sessionExpiry', {path: '/'});
         return res.send(html);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
         return next(err);
     }
 });

@@ -107,6 +107,14 @@ describe('Download', () => {
                 const response = await currentAgent.get('/download/application-summary');
                 expect(response.statusCode).toBe(404);
             });
+
+            it('Should change the feedback link page to "page-not-found"', async () => {
+                const response = await request(app).get('/download/application-summary');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                );
+            });
         });
     });
 });

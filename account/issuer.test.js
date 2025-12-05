@@ -49,5 +49,12 @@ describe('OIDC issuer', () => {
             const response = await currentAgent.get('/account/sign-in');
             expect(response.statusCode).toBe(500);
         });
+        it('Should change the feedback link page to "oidc-provider-unreachable"', async () => {
+            const response = await request(app).get('/account/sign-in');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=oidc-provider-unreachable'
+            );
+        });
     });
 });

@@ -90,10 +90,11 @@
 
 {% block main %}
     {{ super() }}
-    <div class="govuk-width-container">
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    {% if sectionId %}{% endif %}
+    <div class="govuk-width-container">        
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">        
         <p class="govuk-body-s">
-            <a class="govuk-link" href="https://www.smartsurvey.co.uk/s/inpagefeedback/?page={{sectionId}}" target="_blank">Tell us your feedback (opens in new tab)</a> to help us to improve our service.</p>
+        <a class="govuk-link" href="https://www.smartsurvey.co.uk/s/inpagefeedback/?page={{sectionId}}" target="_blank">Tell us your feedback (opens in new tab)</a> to help us to improve our service.</p>
     </div>
 {% endblock %}
 

@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
         }
         return res.redirect('/apply/start-or-resume');
     } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 
@@ -44,7 +44,7 @@ router.route('/start-or-resume').get((req, res) => {
         });
         return res.send(html);
     } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 
@@ -72,7 +72,7 @@ router.post('/start-or-resume', (req, res) => {
         });
         return res.send(html);
     } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 
@@ -99,7 +99,7 @@ router.route('/start').get(async (req, res) => {
         req.session.externalId = externalId;
         res.redirect(`/apply/${initialSection}?utm_source=${origin}`);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 
@@ -132,7 +132,8 @@ router.get('/resume/:questionnaireId', async (req, res) => {
             resumableQuestionnaireProgressEntry.url === null
         ) {
             return res.render('incompatible.njk', {
-                isAuthenticated: accountService.isAuthenticated(req)
+                isAuthenticated: accountService.isAuthenticated(req),
+                sectionId: 'incompatible'
             });
         }
 
@@ -156,7 +157,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
         }
         return res.redirect(redirectUrl);
     } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 
@@ -181,13 +182,14 @@ router.route('/previous/:section').get(async (req, res) => {
         }
         if (progressEntry && progressEntry.sectionId === null && progressEntry.url === null) {
             return res.render('incompatible.njk', {
-                isAuthenticated: accountService.isAuthenticated(req)
+                isAuthenticated: accountService.isAuthenticated(req),
+                sectionId: 'incompatible'
             });
         }
         const previousSectionId = formHelper.removeSectionIdPrefix(progressEntry.sectionId);
         return res.redirect(`${req.baseUrl}/${previousSectionId}`);
     } catch (err) {
-        return res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 
@@ -210,7 +212,8 @@ router
             const progressEntry = response?.body?.data?.[0]?.attributes;
             if (progressEntry && progressEntry.sectionId === null && progressEntry.url === null) {
                 return res.render('incompatible.njk', {
-                    isAuthenticated: accountService.isAuthenticated(req)
+                    isAuthenticated: accountService.isAuthenticated(req),
+                    sectionId: 'incompatible'
                 });
             }
 
@@ -350,7 +353,7 @@ router
             );
             return res.send(html);
         } catch (err) {
-            res.status(err.statusCode || 404).render('404.njk');
+            res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
             return next(err);
         }
     });

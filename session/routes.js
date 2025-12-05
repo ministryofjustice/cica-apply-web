@@ -28,7 +28,7 @@ router.route('/keep-alive').get(async (req, res) => {
         }
         res.json(response.body);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
 

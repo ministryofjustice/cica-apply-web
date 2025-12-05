@@ -48,6 +48,13 @@ describe('Static routes', () => {
             const pageHeading = `<h1 class="govuk-heading-xl">Cookies</h1>`.replace(/\s+/g, '');
             expect(actual).toContain(pageHeading);
         });
+        it('Should change the feedback link page to "cookies"', async () => {
+            const response = await request(app).get('/cookies');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=cookies'
+            );
+        });
     });
 
     describe('/contact-us', () => {
@@ -77,6 +84,13 @@ describe('Static routes', () => {
             );
             expect(actual).toContain(pageHeading);
         });
+        it('Should change the feedback link page to "accessibility-statement"', async () => {
+            const response = await request(app).get('/accessibility-statement');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=accessibility-statement'
+            );
+        });
     });
 
     describe('/police-forces', () => {
@@ -93,6 +107,13 @@ describe('Static routes', () => {
             );
             expect(actual).toContain(pageHeading);
         });
+        it('Should change the feedback link page to "police-forces"', async () => {
+            const response = await request(app).get('/police-forces');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=police-forces'
+            );
+        });
     });
 
     describe('/thisdoesntexist', () => {
@@ -108,6 +129,13 @@ describe('Static routes', () => {
                 ''
             );
             expect(actual).toContain(pageHeading);
+        });
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get('/thisdoesntexist');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
         });
     });
 });

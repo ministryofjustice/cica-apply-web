@@ -55,7 +55,7 @@ async function keepAlive(req, res, next) {
             });
         }
     } catch (err) {
-        return res.status(403).render('500.badToken.njk');
+        return res.status(403).render('500.badToken.njk', {sectionId: 'keep-alive-bad-token'});
     }
 
     return next();
@@ -204,20 +204,21 @@ app.use('/', oidcAuth, indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.name === 'CRNNotRetrieved') {
-        return res.status(500).render('500.MBDown.njk');
+        return res.status(500).render('500.MBDown.njk', {sectionId: 'problem'});
     }
     if (err.name === 'DCSUnavailable') {
-        return res.status(500).render('500.DCSDown.njk');
+        return res.status(500).render('500.DCSDown.njk', {sectionId: 'slow'});
     }
     if (err.code === 'EBADCSRFTOKEN') {
-        return res.status(403).render('500.badToken.njk');
+        return res.status(403).render('500.badToken.njk', {sectionId: 'timed-out'});
     }
 
     // express-openid-connect error.
     if (err.name === 'AggregateError') {
         if (/^Issuer.discover\(\) failed/.test(err.message)) {
             return res.status(500).render('oidc-provider-unreachable.njk', {
-                backTarget: req?.session?.referrer
+                backTarget: req?.session?.referrer,
+                sectionId: 'oidc-provider-unreachable'
             });
         }
     }
@@ -228,16 +229,20 @@ app.use((err, req, res, next) => {
         const sessionExpiryCookie = req.cookies.sessionExpiry;
         if (sessionExpiryCookie) {
             if (JSON.parse(sessionExpiryCookie)?.alive === 'timed-out') {
-                return res.status(302).render('302.ApplicationTimedOut.njk');
+                return res
+                    .status(302)
+                    .render('302.ApplicationTimedOut.njk', {sectionId: 'application-timed-out'});
             }
             // has the application been submitted
             if (JSON.parse(sessionExpiryCookie)?.alive === false) {
-                return res.status(302).render('302.SubmittedApplicationTimedOut.njk');
+                return res.status(302).render('302.SubmittedApplicationTimedOut.njk', {
+                    sectionId: 'submitted-application-timed-out'
+                });
             }
         }
 
         // end timeout handler
-        return res.status(err.statusCode || 404).render('404.njk');
+        return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
     return next(err);
 });

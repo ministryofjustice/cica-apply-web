@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/cookies', (req, res) => {
-    res.render('cookies.njk');
+    res.render('cookies.njk', {sectionId: 'cookies'});
 });
 
 router.get('/contact-us', (req, res) => {
@@ -17,15 +17,15 @@ router.get('/contact-us', (req, res) => {
 });
 
 router.get('/police-forces', (req, res) => {
-    res.render('police-forces.njk');
+    res.render('police-forces.njk', {sectionId: 'police-forces'});
 });
 
 router.get('/accessibility-statement', (req, res) => {
-    res.render('accessibility-statement.njk');
+    res.render('accessibility-statement.njk', {sectionId: 'accessibility-statement'});
 });
 
 router.get('*', (req, res) => {
-    res.status(404).render('404.njk');
+    res.status(404).render('404.njk', {sectionId: 'page-not-found'});
 });
 
 module.exports = router;

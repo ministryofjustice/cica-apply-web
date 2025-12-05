@@ -90,6 +90,14 @@ describe('Hitting /apply/this-page-does-not-exist', () => {
             const response = await currentAgent.get('/apply/this-page-does-not-exist');
             expect(response.statusCode).toBe(404);
         });
+
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get('/apply/this-page-does-not-exist');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
+        });
     });
     describe('Instantiated questionnaire with valid session and a valid session expiry cookie', () => {
         beforeEach(() => {
@@ -100,6 +108,14 @@ describe('Hitting /apply/this-page-does-not-exist', () => {
             const currentAgent = request.agent(app);
             const response = await currentAgent.get('/apply/this-page-does-not-exist');
             expect(response.statusCode).toBe(404);
+        });
+
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get('/apply/this-page-does-not-exist');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
         });
     });
 });
@@ -126,6 +142,20 @@ describe('accessing a page without a session', () => {
                 /<h1\s+class="govuk-heading-xl">You've\s+submitted\s+your\s+application<\/h1>\s*<p\s+class="govuk-body">We\s+have\s+your\s+application\s+and\s+we're\s+processing\s+it.\s*<\/p>/
             );
         });
+
+        it('Should change the feedback link page to "submitted-application-timed-out"', async () => {
+            const currentAgent = request.agent(app);
+            // Set cookies
+            currentAgent.set('Cookie', [
+                'session=sessionCookieValue',
+                'sessionExpiry={"alive":false,"created":1714400569202,"duration":0,"expires":1714400569202}'
+            ]);
+            const response = await currentAgent.get('/apply/this-page-does-exist');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=submitted-application-timed-out'
+            );
+        });
     });
     describe('The application has timed out and the session expiry cookie alive property has been set to timed-out', () => {
         beforeEach(() => {
@@ -141,6 +171,19 @@ describe('accessing a page without a session', () => {
             const response = await currentAgent.get('/apply/this-page-does-exist');
             expect(response.text).toMatch(
                 /<h1\s+class="govuk-heading-xl">Your\s+application\s+has\s+timed\s+out<\/h1>\s*<p\s+class="govuk-body">This\s+happened\s+because\s+you\s+did\s+not\s+do\s+anything\s+for\s+30\s+minutes.<\/p>\s*<p\s+class="govuk-body">You\s+can\s+sign\s+back\s+in\s+to\s+resume\s+your\s+application\s+if\s+you\s+saved\s+your\s+progress.\s+If\s+not,\s+you'll\s+have\s+to\s+start\s+a\s+new\s+application.<\/p>/
+            );
+        });
+
+        it('Should change the feedback link page to "application-timed-out"', async () => {
+            const currentAgent = request.agent(app);
+            currentAgent.set('Cookie', [
+                'session=sessionCookieValue',
+                'sessionExpiry={"alive":"timed-out","created":1714400569202,"duration":0,"expires":1714400569202}'
+            ]);
+            const response = await currentAgent.get('/apply/this-page-does-exist');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=application-timed-out'
             );
         });
     });
@@ -197,6 +240,29 @@ describe('Hitting /apply', () => {
                     'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250?external_id=urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
                 );
             });
+        });
+    });
+    describe('Unable to start a questionnaire', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
+                '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                    jest.fn(() => {
+                        throw new Error('404');
+                    })
+            });
+        });
+        it('should present the 404 page', async () => {
+            const response = await request(app).get('/apply');
+
+            expect(response.statusCode).toBe(404);
+        });
+        it('should set the feedback link to "page-not-found"', async () => {
+            const response = await request(app).get('/apply');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
         });
     });
 });
@@ -289,6 +355,43 @@ describe('Hitting /apply/start-or-resume', () => {
                         _csrf: initialCsrfToken
                     });
                     expect(response.res.text).toContain('Found. Redirecting to /account/sign-in');
+                });
+            });
+            describe('On Error', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                            jest.fn(() => false),
+                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                            jest.fn(() => {
+                                throw new Error('Boom!');
+                            })
+                    });
+                });
+
+                it('Throw a 404', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'resume',
+                        _csrf: initialCsrfToken
+                    });
+
+                    expect(response.statusCode).toBe(404);
+                });
+                it('Should change the feedback link page to "page-not-found"', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'resume',
+                        _csrf: initialCsrfToken
+                    });
+
+                    expect(response.res.text).toContain(
+                        'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                    );
                 });
             });
         });
@@ -396,6 +499,13 @@ describe('Hitting /apply/start', () => {
             const response = await currentAgent.get('/apply/start');
             expect(response.statusCode).toBe(404);
         });
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get('/apply/start');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
+        });
     });
 });
 
@@ -415,6 +525,13 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 const currentAgent = request.agent(app);
                 const response = await currentAgent.get('/apply/resume/');
                 expect(response.statusCode).toBe(404);
+            });
+            it('Should change the feedback link page to "page-not-found"', async () => {
+                const response = await request(app).get('/apply/resume/');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                );
             });
         });
 
@@ -488,6 +605,15 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                     '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
                 );
             });
+            it('Should change the feedback link page to "incompatible"', async () => {
+                const response = await request(app).get(
+                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                );
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=incompatible'
+                );
+            });
         });
     });
     describe('Instantiated questionnaire', () => {
@@ -500,6 +626,13 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 const currentAgent = request.agent(app);
                 const response = await currentAgent.get('/apply/resume/');
                 expect(response.statusCode).toBe(404);
+            });
+            it('Should change the feedback link page to "page-not-found"', async () => {
+                const response = await request(app).get('/apply/resume/');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                );
             });
         });
 
@@ -596,6 +729,15 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
             );
             expect(response.statusCode).toBe(404);
+        });
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get(
+                '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
+            );
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
         });
     });
 });
@@ -789,6 +931,47 @@ describe('Hitting /apply/:section', () => {
             });
         });
     });
+
+    describe('Error', () => {
+        describe('When an error is EBADCSRFTOKEN', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    './form-helper.js': jest.fn(() => ({
+                        getSectionContext: () => 'submission',
+                        addPrefix: section => `p-${section}`,
+                        processRequest: requestBody => requestBody,
+                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                    }))
+                });
+            });
+            it('should return a 403 error', async () => {
+                const initialCsrfToken = 'BADCRFTOKEN';
+                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                const response = await request(app)
+                    .post('/apply/applicant-fatal-claim')
+                    .send({
+                        _csrf: initialCsrfToken,
+                        '_external-id': initialExternalId
+                    });
+
+                expect(response.statusCode).toBe(403);
+            });
+            it('Should change the feedback link page to "timed-out"', async () => {
+                const initialCsrfToken = 'BADCRFTOKEN';
+                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                const response = await request(app)
+                    .post('/apply/applicant-fatal-claim')
+                    .send({
+                        _csrf: initialCsrfToken,
+                        '_external-id': initialExternalId
+                    });
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=timed-out'
+                );
+            });
+        });
+    });
 });
 
 describe('Hitting /apply/previous/:section', () => {
@@ -838,6 +1021,13 @@ describe('Hitting /apply/previous/:section', () => {
             const currentAgent = request.agent(app);
             const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
             expect(response.statusCode).toBe(404);
+        });
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get('/apply/previous/applicant-fatal-claim');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
         });
     });
 
@@ -953,6 +1143,7 @@ describe('Hitting /apply/:section?next=:section', () => {
                     '_external-id': initialExternalId
                 });
             expect(response.statusCode).toBe(302);
+
             expect(response.res.text).toBe(
                 'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
             );

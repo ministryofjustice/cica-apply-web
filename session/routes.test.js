@@ -59,5 +59,13 @@ describe('Session', () => {
             const response = await currentAgent.get('/session/keep-alive');
             expect(response.statusCode).toBe(404);
         });
+
+        it('Should change the feedback link page to "page-not-found"', async () => {
+            const response = await request(app).get('/session/keep-alive');
+
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+            );
+        });
     });
 });

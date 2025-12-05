@@ -36,7 +36,7 @@ router.route('/application-summary').get(async (req, res, next) => {
         res.type('.html');
         return res.send(applicationSummaryHtml);
     } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
+        res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
         return next(err);
     }
 });
