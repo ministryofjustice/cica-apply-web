@@ -278,9 +278,6 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, exter
     );
     const answers = answersObject[sectionId];
     const backLink = `/apply/previous/${removeSectionIdPrefix(sectionId)}`;
-    const showBackLink = !(
-        uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false
-    );
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
         schema: escapeSchemaContent(schema),
@@ -289,6 +286,11 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, exter
     });
 
     const uiOptions = escapeSchemaContent(schema)?.options;
+
+    const showBackLink =
+        uiOptions?.showBackButton !== undefined
+            ? uiOptions.showBackButton
+            : !(uiSchema[sectionId] && uiSchema[sectionId].options.showBackButton === false);
     return renderSection({
         transformation,
         isFinal: sectionDataMeta.final,
