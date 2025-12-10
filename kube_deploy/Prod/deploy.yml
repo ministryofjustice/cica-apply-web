@@ -35,9 +35,9 @@ spec:
             - name: CW_DOMAIN
               value: claim-criminal-injuries-compensation.service.justice.gov.uk
             - name: CW_MAINTENANCE_MESSAGE
-              value: This service will be unavailable shortly.
+              value: This service will be unavailable today from 3pm till 4pm due to essential maintenance. Please save your progress before this time.
             - name: CW_MAINTENANCE_MESSAGE_ENABLED
-              value: 'false'
+              value: 'true'
             - name: CW_OS_PLACES_API_KEY
               valueFrom:
                 secretKeyRef:
