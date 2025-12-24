@@ -6,8 +6,8 @@
 
 {% block innerContent %}
     <h1 class="govuk-heading-xl">Manage Applications</h1>
-    <p class="govuk-body">You'll find your submitted applications here, if we need more information or we've made a decision about your application.</p>
     {% if displayActions %}
+    <p class="govuk-body">You'll find your submitted applications here, if we need more information or we've made a decision about your application.</p>
       <div class="moj-scrollable-pane">
           {{ govukTable({
             attributes: {
@@ -33,6 +33,20 @@
             rows: actionData
           }) }}
       </div>
+    {% else %}
+      <p class="govuk-body">You do not have any submitted applications with actions to complete.</p>
+      <p class="govuk-body">If you've started an application but not submitted it yet, you can find it under 'Continue application'<p>
+      <p class="govuk-body">You will not find your application here if:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>you submitted one, but we're still assessing it</li>
+        <li>you submitted one, but you have no action to take</li>
+        <li>it's been more than 3 years since we made a decision on your application</li>
+      </ul>
+      {{ govukButton({
+          text: "Start a new application",
+          classes: "govuk-button--secondary",
+          href: "/apply/start"
+      }) }} 
     {% endif %}
 
 {% endblock %}
