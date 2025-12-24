@@ -1,0 +1,38 @@
+{% extends "page.njk" %}
+{% from "components/button/macro.njk" import govukButton %}
+{%- from "components/table/macro.njk" import govukTable -%}
+
+{% block pageTitle %}Manage applications {{ super() }}{% endblock %}
+
+{% block innerContent %}
+    <h1 class="govuk-heading-xl">Manage Applications</h1>
+    <p class="govuk-body">You'll find your submitted applications here, if we need more information or we've made a decision about your application.</p>
+    {% if displayActions %}
+      <div class="moj-scrollable-pane">
+          {{ govukTable({
+            attributes: {
+              'data-module': 'moj-sortable-table'
+            },
+            head: [
+              {
+                text: "Case reference number",
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Expiry date",
+                attributes: {
+                  "aria-sort": "descending"
+                }
+              },
+              {
+                text: "Action"
+              }
+            ],
+            rows: actionData
+          }) }}
+      </div>
+    {% endif %}
+
+{% endblock %}

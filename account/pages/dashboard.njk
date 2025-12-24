@@ -22,7 +22,6 @@
         href: "/apply/start"
     }) }}
     {% if displayStartedApplications %}
-      <h2 class="govuk-heading-m">Started but not submitted</h2>
       <div class="moj-scrollable-pane">
           {{ govukTable({
             attributes: {
@@ -49,33 +48,4 @@
           }) }}
       </div>
     {% endif %}
-    {% if displayActions %}
-      <h2 class="govuk-heading-m">Submitted</h2>
-      <div class="moj-scrollable-pane">
-          {{ govukTable({
-            attributes: {
-              'data-module': 'moj-sortable-table'
-            },
-            head: [
-              {
-                text: "Case reference number",
-                attributes: {
-                  "aria-sort": "none"
-                }
-              },
-              {
-                text: "Expiry date",
-                attributes: {
-                  "aria-sort": "descending"
-                }
-              },
-              {
-                text: "Action"
-              }
-            ],
-            rows: actionData
-          }) }}
-      </div>
-    {% endif %}
-
 {% endblock %}
