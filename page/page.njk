@@ -47,9 +47,11 @@
             signOutLink: "/account/sign-out",
             navigationItems: [{
                 href: "/account/dashboard",
-                text: "Your Applications",
+                text: "Continue Applications",
                 id: "header-link-dashboard"
-            }]
+            },{href: "/account/dashboard/manage",
+                text: "Manage Applications",
+                id: "header-link-dashboard-manage"}]
         })}}
     {% else %}
         {{govukHeader({

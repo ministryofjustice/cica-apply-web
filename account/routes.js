@@ -109,18 +109,14 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
         accountService.setOwnerId(req.oidc.user.sub);
         const dashboardService = createDashboardService(req.oidc.user.sub);
         const applicationData = await dashboardService.getApplicationData();
-        const actionData = await dashboardService.getActionData();
         const displayStartedApplications = applicationData.length > 0;
-        const displayActions = actionData.length > 0;
 
         const {render} = templateEngineService;
         const html = render('dashboard.njk', {
             csrfToken: req.csrfToken(),
             isAuthenticated: accountService.isAuthenticated(req),
             applicationData,
-            actionData,
             displayStartedApplications,
-            displayActions,
             cspNonce: res.locals.cspNonce,
             currentUrlPathname: '/account/dashboard',
             sectionId: 'dashboard'
@@ -129,6 +125,32 @@ router.get('/dashboard', requiresAuth(), async (req, res, next) => {
         return res.send(html);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
+        return next(err);
+    }
+});
+
+router.get('/dashboard/manage', requiresAuth(), async (req, res, next) => {
+    try {
+        const templateEngineService = createTemplateEngineService();
+        const accountService = createAccountService(req.session);
+        accountService.setOwnerId(req.oidc.user.sub);
+        const dashboardService = createDashboardService(req.oidc.user.sub);
+        const actionData = await dashboardService.getActionData();
+        const displayActions = actionData.length > 0;
+
+        const {render} = templateEngineService;
+        const html = render('manage-applications.njk', {
+            csrfToken: req.csrfToken(),
+            isAuthenticated: accountService.isAuthenticated(req),
+            actionData,
+            displayActions,
+            cspNonce: res.locals.cspNonce,
+            currentUrlPathname: '/account/dashboard/manage'
+        });
+        res.clearCookie('sessionExpiry', {path: '/'});
+        return res.send(html);
+    } catch (err) {
+        res.status(err.statusCode || 404).render('404.njk');
         return next(err);
     }
 });
