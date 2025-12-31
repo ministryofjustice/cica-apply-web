@@ -1,0 +1,39 @@
+{% extends "page.njk" %}
+{% from "components/button/macro.njk" import govukButton %}
+{%- from "components/table/macro.njk" import govukTable -%}
+{%- from "moj/components/ticket-panel/macro.njk" import mojTicketPanel -%}
+
+{% block pageTitle %}Active Applications{{ super() }}{% endblock %}
+
+{% block innerContent %}
+    <p class="govuk-body">Application {{caseReferenceNumber}}<p>
+    <h1 class="govuk-heading-l">{{applicantFirstName}} {{applicantLastName}}</h1>
+    <h2 class="govuk-heading-m">To-do list</h2>
+    {% if actionToDo %}
+        <p class="govuk-body">You have 1 thing to do.<p>
+        {{ mojTicketPanel({
+            attributes: {
+                "aria-label": "Information about your application"
+            },
+            items: [{
+                html: actionLink,
+                classes: "moj-ticket-panel__content--orange"
+            }]
+            }) 
+        }}
+    {% else %}
+        <p class="govuk-body">You have 0 things to do.<p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <h3 class="govuk-heading-s">Information for you</h3>
+        {{ mojTicketPanel({
+            attributes: {
+                "aria-label": "Information about your application"
+            },
+            items: [{
+                html: actionLink,
+                classes: "moj-ticket-panel__content--blue"
+            }]
+            }) 
+        }}
+    {% endif %}
+{% endblock %}
