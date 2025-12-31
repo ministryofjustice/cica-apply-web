@@ -155,6 +155,83 @@ router.get('/dashboard/manage', requiresAuth(), async (req, res, next) => {
     }
 });
 
+router.get('/dashboard/manage/:questionnaireId', async (req, res) => {
+    try {
+        const templateEngineService = createTemplateEngineService();
+        const accountService = createAccountService(req.session);
+        const questionnaireService = createQuestionnaireService({
+            ownerId: accountService.getOwnerId(),
+            isAuthenticated: accountService.isAuthenticated(req)
+        });
+
+        const defaultRedirect = '/dashboard';
+
+        const resumableQuestionnaireId = req.params.questionnaireId;
+        const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
+            resumableQuestionnaireId
+        );
+        const questionnaireMetadata = await questionnaireService.getQuestionnaireMetadata(
+            resumableQuestionnaireId
+        );
+        const modifiedDate = questionnaireMetadata.body.data[0].attributes.modified;
+        const createdDate = questionnaireMetadata.body.data[0].attributes.created;
+        const actionToDo = modifiedDate === createdDate;
+
+        const personalisationData = await questionnaireService.getPersonalisationData(
+            resumableQuestionnaireId
+        );
+        const applicantFirstName = personalisationData.body.data.attributes['first-name'];
+        const applicantLastName = personalisationData.body.data.attributes['last-name'];
+
+        const submissionData = await questionnaireService.getSubmission(resumableQuestionnaireId);
+        const {caseReferenceNumber} = submissionData.body.data.attributes;
+
+        const actionLink = `<p class=govuk-body><a href="/apply/resume/${resumableQuestionnaireId}" class="govuk-link">Read our decision about your application</a></p>`;
+
+        const resumableQuestionnaireProgressEntry =
+            resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;
+        if (
+            resumableQuestionnaireProgressEntry &&
+            resumableQuestionnaireProgressEntry.sectionId === null &&
+            resumableQuestionnaireProgressEntry.url === null
+        ) {
+            return res.render('incompatible.njk', {
+                isAuthenticated: accountService.isAuthenticated(req)
+            });
+        }
+
+        if (resumableQuestionnaireResponse.body?.errors) {
+            const errorResponse = resumableQuestionnaireResponse.body?.errors[0];
+            if (errorResponse.status === 404) {
+                return res.redirect(defaultRedirect);
+            }
+        }
+
+        const resumableQuestionnaireCurrentSectionId =
+            resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
+
+        // redirect if valid.
+        if (resumableQuestionnaireCurrentSectionId) {
+            const {render} = templateEngineService;
+            const html = render('todo.njk', {
+                csrfToken: req.csrfToken(),
+                isAuthenticated: accountService.isAuthenticated(req),
+                caseReferenceNumber,
+                applicantFirstName,
+                applicantLastName,
+                actionToDo,
+                actionLink,
+                cspNonce: res.locals.cspNonce,
+                currentUrlPathname: `/account/dashboard/manage/${resumableQuestionnaireId}`
+            });
+            return res.send(html);
+        }
+        return res.redirect(defaultRedirect);
+    } catch (err) {
+        return res.redirect('/dashboard');
+    }
+});
+
 router.get('/secure-link-login', requiresAuth(), async (req, res, next) => {
     try {
         const accountService = createAccountService(req.session);

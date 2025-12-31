@@ -85,8 +85,8 @@ function createDashboardService(ownerId) {
         }
         const templateData = dataset.reduce((acc, questionnaireData) => {
             const resumeLink = questionnaireData.analyticsId
-                ? `/apply/resume/${questionnaireData.questionnaireId}?a_id=${questionnaireData.analyticsId}`
-                : `/apply/resume/${questionnaireData.questionnaireId}`;
+                ? `/account/dashboard/manage/${questionnaireData.questionnaireId}?a_id=${questionnaireData.analyticsId}`
+                : `/account/dashboard/manage/${questionnaireData.questionnaireId}`;
             acc.push([
                 {
                     text: `${questionnaireData.data.caseReferenceNumber}`,
@@ -104,7 +104,7 @@ function createDashboardService(ownerId) {
                     }
                 },
                 {
-                    html: `<a href="${resumeLink}" class="govuk-link">View decision<span class='govuk-visually-hidden'> View decision for case ${questionnaireData.data.caseReferenceNumber}</span></a>`
+                    html: `<a href="${resumeLink}" class="govuk-link">View application<span class='govuk-visually-hidden'> View action for case ${questionnaireData.data.caseReferenceNumber}</span></a>`
                 }
             ]);
             return acc;
