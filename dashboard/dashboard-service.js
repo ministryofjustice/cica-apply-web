@@ -9,6 +9,8 @@ function createDashboardService(ownerId) {
         return (metadataCollection.body.data || []).map(metadatum => {
             return {
                 questionnaireId: metadatum.attributes['questionnaire-id'],
+                created: metadatum.attributes.created,
+                modified: metadatum.attributes.modified,
                 expires: metadatum.attributes.expires,
                 externalId: metadatum.attributes?.['external-id'],
                 type: metadatum.attributes['template-type']
@@ -87,6 +89,10 @@ function createDashboardService(ownerId) {
             const resumeLink = questionnaireData.analyticsId
                 ? `/account/dashboard/manage/${questionnaireData.questionnaireId}?a_id=${questionnaireData.analyticsId}`
                 : `/account/dashboard/manage/${questionnaireData.questionnaireId}`;
+            const actionToDo = questionnaireData.modified === questionnaireData.created;
+            const notificationBadge = actionToDo
+                ? ' <span class="moj-notification-badge"><span aria-hidden="true">1</span><span class="govuk-visually-hidden">(1)</span></span>'
+                : '';
             acc.push([
                 {
                     text: `${questionnaireData.data.caseReferenceNumber}`,
@@ -104,7 +110,7 @@ function createDashboardService(ownerId) {
                     }
                 },
                 {
-                    html: `<a href="${resumeLink}" class="govuk-link">View application<span class='govuk-visually-hidden'> View action for case ${questionnaireData.data.caseReferenceNumber}</span></a>`
+                    html: `<a href="${resumeLink}" class="govuk-link">View application<span class='govuk-visually-hidden'> View action for case ${questionnaireData.data.caseReferenceNumber}</span></a>${notificationBadge}`
                 }
             ]);
             return acc;
