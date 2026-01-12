@@ -186,7 +186,7 @@ router.get('/dashboard/manage/:questionnaireId', async (req, res) => {
         const submissionData = await questionnaireService.getSubmission(resumableQuestionnaireId);
         const {caseReferenceNumber} = submissionData.body.data.attributes;
 
-        const actionLink = `<p class=govuk-body><a href="/apply/resume/${resumableQuestionnaireId}" class="govuk-link">Read our decision about your application</a></p>`;
+        const actionLink = `"/apply/resume/${resumableQuestionnaireId}"`;
 
         const resumableQuestionnaireProgressEntry =
             resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;

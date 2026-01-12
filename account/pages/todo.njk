@@ -16,7 +16,14 @@
                 "aria-label": "Information about your application"
             },
             items: [{
-                html: actionLink,
+                html:  '
+                <p class="govuk-body" style="display:flex; width:100%">
+                    <a href=' + actionLink + ' class="govuk-link">Read our decision about your application</a>
+                    <strong class="govuk-tag govuk-tag--orange" style="margin-left:auto">
+                        TO DO
+                    </strong>
+                </p>
+                ',
                 classes: "moj-ticket-panel__content--orange"
             }]
             }) 
@@ -30,7 +37,14 @@
                 "aria-label": "Information about your application"
             },
             items: [{
-                html: actionLink,
+                html: '
+                <p class="govuk-body" style="display:flex; width:100%">
+                    <a href=' + actionLink + ' class="govuk-link">Read our decision about your application</a>
+                    <strong class="govuk-tag govuk-tag--blue" style="margin-left:auto">
+                        VIEWED
+                    </strong>
+                </p>
+                ',
                 classes: "moj-ticket-panel__content--blue"
             }]
             }) 
