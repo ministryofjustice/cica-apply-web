@@ -11,43 +11,49 @@
     <h2 class="govuk-heading-m">To-do list</h2>
     {% if actionToDo %}
         <p class="govuk-body">You have 1 thing to do.<p>
-        {{ mojTicketPanel({
-            attributes: {
-                "aria-label": "Information about your application"
-            },
-            items: [{
-                html:  '
-                <p class="govuk-body" style="display:flex; width:100%">
-                    <a href=' + actionLink + ' class="govuk-link">Read our decision about your application</a>
-                    <strong class="govuk-tag govuk-tag--orange" style="margin-left:auto">
-                        TO DO
-                    </strong>
-                </p>
-                ',
-                classes: "moj-ticket-panel__content--orange"
-            }]
-            }) 
-        }}
+        {% for link in toDoLinks %}
+            {{ mojTicketPanel({
+                attributes: {
+                    "aria-label": "Information about your application"
+                },
+                items: [{
+                    html:  '
+                    <p class="govuk-body" style="display:flex; width:100%">'
+                        + link + 
+                        '<strong class="govuk-tag govuk-tag--orange" style="margin-left:auto">
+                            TO DO
+                        </strong>
+                    </p>
+                    ',
+                    classes: "moj-ticket-panel__content--orange"
+                }]
+                }) 
+            }}
+        {% endfor %}
     {% else %}
         <p class="govuk-body">You have 0 things to do.<p>
+    {% endif %}
+    {% if informationToShow %}
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
         <h3 class="govuk-heading-s">Information for you</h3>
-        {{ mojTicketPanel({
-            attributes: {
-                "aria-label": "Information about your application"
-            },
-            items: [{
-                html: '
-                <p class="govuk-body" style="display:flex; width:100%">
-                    <a href=' + actionLink + ' class="govuk-link">Read our decision about your application</a>
-                    <strong class="govuk-tag govuk-tag--blue" style="margin-left:auto">
-                        VIEWED
-                    </strong>
-                </p>
-                ',
-                classes: "moj-ticket-panel__content--blue"
-            }]
-            }) 
-        }}
+        {% for link in informationLinks %}
+            {{ mojTicketPanel({
+                attributes: {
+                    "aria-label": "Information about your application"
+                },
+                items: [{
+                    html: '
+                    <p class="govuk-body" style="display:flex; width:100%">'
+                        + link + 
+                        '<strong class="govuk-tag govuk-tag--blue" style="margin-left:auto">
+                            VIEWED
+                        </strong>
+                    </p>
+                    ',
+                    classes: "moj-ticket-panel__content--blue"
+                }]
+                }) 
+            }}
+        {% endfor %}
     {% endif %}
 {% endblock %}
