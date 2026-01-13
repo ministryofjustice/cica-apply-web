@@ -226,9 +226,9 @@ function questionnaireService(options = {}) {
         return service.get(opts);
     }
 
-    async function getPersonalisationData(questionnaireId) {
+    async function getTemplateMetadata(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/personalisation-data`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/template-metadata`,
             headers: {
                 Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
                 'On-Behalf-Of': options.ownerId,
@@ -253,7 +253,7 @@ function questionnaireService(options = {}) {
         getAllQuestionnairesMetadata,
         getQuestionnaireMetadata,
         getSectionAnswers,
-        getPersonalisationData
+        getTemplateMetadata
     });
 }
 
