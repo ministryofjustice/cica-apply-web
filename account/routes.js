@@ -173,20 +173,45 @@ router.get('/dashboard/manage/:questionnaireId', async (req, res) => {
         const questionnaireMetadata = await questionnaireService.getQuestionnaireMetadata(
             resumableQuestionnaireId
         );
+
+        const submitted =
+            questionnaireMetadata.body.data[0].attributes['submission-status'] === 'COMPLETED';
         const modifiedDate = questionnaireMetadata.body.data[0].attributes.modified;
         const createdDate = questionnaireMetadata.body.data[0].attributes.created;
-        const actionToDo = modifiedDate === createdDate;
+        const letterUnopened = modifiedDate === createdDate;
 
-        const personalisationData = await questionnaireService.getPersonalisationData(
+        const templateMetadata = await questionnaireService.getTemplateMetadata(
             resumableQuestionnaireId
         );
-        const applicantFirstName = personalisationData.body.data.attributes['first-name'];
-        const applicantLastName = personalisationData.body.data.attributes['last-name'];
+
+        const personalisationData = templateMetadata.body.data.attributes.personalisation;
+        const {summaryBlocks} = templateMetadata.body.data.attributes;
+
+        const toDoLinks = [];
+
+        const informationLinks = [];
+
+        Object.keys(summaryBlocks).forEach(block => {
+            const link = summaryBlocks[block].link.replace(
+                '||questionnaireId||',
+                resumableQuestionnaireId
+            );
+            if (summaryBlocks[block].condition === 'unopened' && letterUnopened === true) {
+                toDoLinks.push(link);
+            } else if (summaryBlocks[block].condition === 'viewed' && letterUnopened === false) {
+                informationLinks.push(link);
+            } else if (summaryBlocks[block].condition === 'submitted' && submitted) {
+                informationLinks.push(link);
+            }
+        });
+        const actionToDo = toDoLinks.length > 0;
+        const informationToShow = informationLinks.length > 0;
+
+        const applicantFirstName = personalisationData['first-name'];
+        const applicantLastName = personalisationData['last-name'];
 
         const submissionData = await questionnaireService.getSubmission(resumableQuestionnaireId);
         const {caseReferenceNumber} = submissionData.body.data.attributes;
-
-        const actionLink = `"/apply/resume/${resumableQuestionnaireId}"`;
 
         const resumableQuestionnaireProgressEntry =
             resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;
@@ -220,7 +245,9 @@ router.get('/dashboard/manage/:questionnaireId', async (req, res) => {
                 applicantFirstName,
                 applicantLastName,
                 actionToDo,
-                actionLink,
+                informationToShow,
+                toDoLinks,
+                informationLinks,
                 cspNonce: res.locals.cspNonce,
                 currentUrlPathname: `/account/dashboard/manage/${resumableQuestionnaireId}`
             });
