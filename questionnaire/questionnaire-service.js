@@ -238,6 +238,18 @@ function questionnaireService(options = {}) {
         return service.get(opts);
     }
 
+    async function getAllTemplatesMetadata() {
+        const opts = {
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/template-metadata`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -253,7 +265,8 @@ function questionnaireService(options = {}) {
         getAllQuestionnairesMetadata,
         getQuestionnaireMetadata,
         getSectionAnswers,
-        getTemplateMetadata
+        getTemplateMetadata,
+        getAllTemplatesMetadata
     });
 }
 
