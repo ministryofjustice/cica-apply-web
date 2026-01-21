@@ -1,0 +1,36 @@
+{
+    "body": {
+        "data": [
+            {
+                "type": "templateMetadata",
+                "id": "123ab456-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "personalisation": {
+                        "first-name": "other",
+                        "last-name": "testcase"
+                    }
+                }
+            },
+            {
+                "type": "templateMetadata",
+                "id": "987dc654-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "personalisation": {
+                        "first-name": "other",
+                        "last-name": "testcase"
+                    }
+                }
+            },
+            {
+                "type": "templateMetadata",
+                "id": "456cd789-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "personalisation": {
+                        "first-name": "test",
+                        "last-name": "testcase"
+                    }
+                }
+            }
+        ]
+    }
+}

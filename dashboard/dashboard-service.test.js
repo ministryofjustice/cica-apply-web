@@ -5,6 +5,7 @@
 const fixtureMetaResponse = require('./fixtures/questionnaire_meta-filter-user-id.json');
 const fixtureSectionSAnswersResponse = require('./fixtures/questionnaire_sections_answers.json');
 const fixtureSubmissionResponse = require('./fixtures/questionnaire_submissions_response.json');
+const fixtureTemplateMetaResponse = require('./fixtures/questionnaire_templates_metadata.json');
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -21,8 +22,11 @@ describe('Dashboard service', () => {
                 getSectionAnswers: jest.fn(() => {
                     return fixtureSectionSAnswersResponse;
                 }),
-                getSubmission: jest.fn(() => {
-                    return fixtureSubmissionResponse;
+                getSubmission: jest.fn(questionnaireId => {
+                    return fixtureSubmissionResponse[questionnaireId];
+                }),
+                getAllTemplatesMetadata: jest.fn(() => {
+                    return fixtureTemplateMetaResponse;
                 })
             }));
         });
@@ -49,31 +53,42 @@ describe('Dashboard service', () => {
                 ]
             ]);
         });
-        it('Should get dashboard action template data', async () => {
+        it('Should get dashboard action template data grouped by CRN', async () => {
             const createDashboardService = require('./dashboard-service');
             const dashboardService = createDashboardService();
-            const result = await dashboardService.getActionData('my-test-user-id');
+            const result = await dashboardService.getActionData();
+            expect(result.length).toBe(2);
             expect(result).toEqual([
                 [
                     {
                         classes: 'govuk-table__cell__overflow',
-                        text: '12\\345678'
+                        text: 'test testcase'
                     },
                     {
-                        attributes: {
-                            'data-sort-value': 1674536706000
-                        },
-                        text: '24 January 2023'
+                        text: '88\\888888'
                     },
                     {
                         html:
-                            '<a href="/apply/resume/285cb104-0c15-4a9c-9840-cb1007f098fb" class="govuk-link">View decision<span class=\'govuk-visually-hidden\'> View decision for case 12\\345678</span></a>'
+                            '<a href="/account/dashboard/manage/88-888888" class="govuk-link">View<span class=\'govuk-visually-hidden\'>View action for case 88\\888888</span></a>'
+                    }
+                ],
+                [
+                    {
+                        classes: 'govuk-table__cell__overflow',
+                        text: 'other testcase'
+                    },
+                    {
+                        text: '99\\999999'
+                    },
+                    {
+                        html:
+                            '<a href="/account/dashboard/manage/99-999999" class="govuk-link">View<span class=\'govuk-visually-hidden\'>View action for case 99\\999999</span></a> <span class="moj-notification-badge"><span aria-hidden="true">1</span><span class="govuk-visually-hidden">(1)</span></span>'
                     }
                 ]
             ]);
         });
     });
-    describe('Given the owner has NO inflight applications', () => {
+    describe('Given the owner has NO inflight or submitted applications', () => {
         beforeAll(() => {
             jest.doMock('../questionnaire/questionnaire-service', () => () => ({
                 getAllQuestionnairesMetadata: jest.fn(() => {
@@ -85,13 +100,24 @@ describe('Dashboard service', () => {
                     return {
                         body: {}
                     };
+                }),
+                getAllTemplatesMetadata: jest.fn(() => {
+                    return {
+                        body: {}
+                    };
                 })
             }));
         });
-        it('Should return and empty array', async () => {
+        it('Should return an empty array of in flight applications', async () => {
             const createDashboardService = require('./dashboard-service');
             const dashboardService = createDashboardService();
             const result = await dashboardService.getApplicationData('my-test-user-id');
+            expect(result).toEqual([]);
+        });
+        it('Should return an empty array of submitted applications', async () => {
+            const createDashboardService = require('./dashboard-service');
+            const dashboardService = createDashboardService();
+            const result = await dashboardService.getActionData('my-test-user-id');
             expect(result).toEqual([]);
         });
     });
