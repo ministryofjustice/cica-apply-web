@@ -175,13 +175,20 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
             };
         });
 
+        const allTemplatesMetadata = await questionnaireService.getAllTemplatesMetadata();
+
+        const flatTemplateMetadata = (allTemplatesMetadata.body.data || []).map(metadatum => {
+            return {
+                questionnaireId: metadatum.id,
+                attributes: metadatum.attributes
+            };
+        });
+
         const toDoLinks = [];
         const informationLinks = [];
         let applicantFirstName;
         let applicantLastName;
 
-        // TODO: would be better if we weren't calling so many endpoints and instead had one endpoint that got all the data
-        // This would reduce time and also mean we could use a forEach instead, guaranteeing that the items remain in the same order
         await Promise.all(
             metadataCollection.map(async questionnaireMetadata => {
                 const {questionnaireId} = questionnaireMetadata;
@@ -199,10 +206,10 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                     questionnaireMetadata.modified === questionnaireMetadata.created;
 
                 // Get metadata stored in questionnaire
-                const templateMetadata = await questionnaireService.getTemplateMetadata(
-                    questionnaireId
-                );
-                const {summaryBlocks} = templateMetadata.body.data.attributes;
+                const templateMetadata = flatTemplateMetadata.filter(
+                    metadatum => metadatum.questionnaireId === questionnaireId
+                )[0];
+                const {summaryBlocks} = templateMetadata.attributes;
 
                 const currentToDoLinks = [];
                 const currentInformationLinks = [];
@@ -225,7 +232,7 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                     }
                 });
 
-                const personalisationData = templateMetadata.body.data.attributes.personalisation;
+                const personalisationData = templateMetadata.attributes.personalisation;
                 if (personalisationData) {
                     applicantFirstName = personalisationData['first-name'];
                     applicantLastName = personalisationData['last-name'];
@@ -265,7 +272,7 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
         });
         return res.send(html);
     } catch (err) {
-        return res.redirect('/dashboard');
+        return res.redirect('/account/dashboard');
     }
 });
 
