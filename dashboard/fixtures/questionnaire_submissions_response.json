@@ -1,13 +1,57 @@
 {
-    "body": {
-        "data": {
-            "type": "submissions",
-            "id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
-            "attributes": {
+    "285cb104-0c15-4a9c-9840-cb1007f098fb": {
+        "body": {
+            "data": {
+                "type": "submissions",
                 "id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
-                "submitted": false,
-                "status": "NOT_STARTED",
-                "caseReferenceNumber": "12\\345678"
+                "attributes": {
+                    "id": "285cb104-0c15-4a9c-9840-cb1007f098fb",
+                    "submitted": false,
+                    "status": "NOT_STARTED",
+                    "caseReferenceNumber": "12\\345678"
+                }
+            }
+        }
+    },
+    "123ab456-0c15-4a9c-9840-cb1007f098fb": {
+        "body": {
+            "data": {
+                "type": "submissions",
+                "id": "123ab456-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "id": "123ab456-0c15-4a9c-9840-cb1007f098fb",
+                    "submitted": false,
+                    "status": "NOT_STARTED",
+                    "caseReferenceNumber": "99\\999999"
+                }
+            }
+        }
+    },
+    "456cd789-0c15-4a9c-9840-cb1007f098fb": {
+        "body": {
+            "data": {
+                "type": "submissions",
+                "id": "456cd789-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "id": "456cd789-0c15-4a9c-9840-cb1007f098fb",
+                    "submitted": false,
+                    "status": "NOT_STARTED",
+                    "caseReferenceNumber": "88\\888888"
+                }
+            }
+        }
+    },
+    "987dc654-0c15-4a9c-9840-cb1007f098fb": {
+        "body": {
+            "data": {
+                "type": "submissions",
+                "id": "987dc654-0c15-4a9c-9840-cb1007f098fb",
+                "attributes": {
+                    "id": "987dc654-0c15-4a9c-9840-cb1007f098fb",
+                    "submitted": false,
+                    "status": "NOT_STARTED",
+                    "caseReferenceNumber": "99\\999999"
+                }
             }
         }
     }

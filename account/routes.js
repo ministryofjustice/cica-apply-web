@@ -155,7 +155,7 @@ router.get('/dashboard/manage', requiresAuth(), async (req, res, next) => {
     }
 });
 
-router.get('/dashboard/manage/:questionnaireId', async (req, res) => {
+router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
     try {
         const templateEngineService = createTemplateEngineService();
         const accountService = createAccountService(req.session);
@@ -163,97 +163,107 @@ router.get('/dashboard/manage/:questionnaireId', async (req, res) => {
             ownerId: accountService.getOwnerId(),
             isAuthenticated: accountService.isAuthenticated(req)
         });
+        const caseReferenceNumber = req.params.caseReferenceNumber.replace('-', '\\');
 
-        const defaultRedirect = '/dashboard';
-
-        const resumableQuestionnaireId = req.params.questionnaireId;
-        const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
-            resumableQuestionnaireId
-        );
-        const questionnaireMetadata = await questionnaireService.getQuestionnaireMetadata(
-            resumableQuestionnaireId
-        );
-
-        const submitted =
-            questionnaireMetadata.body.data[0].attributes['submission-status'] === 'COMPLETED';
-        const modifiedDate = questionnaireMetadata.body.data[0].attributes.modified;
-        const createdDate = questionnaireMetadata.body.data[0].attributes.created;
-        const letterUnopened = modifiedDate === createdDate;
-
-        const templateMetadata = await questionnaireService.getTemplateMetadata(
-            resumableQuestionnaireId
-        );
-
-        const personalisationData = templateMetadata.body.data.attributes.personalisation;
-        const {summaryBlocks} = templateMetadata.body.data.attributes;
+        const allQuestionnairesMetadata = await questionnaireService.getAllQuestionnairesMetadata();
+        const metadataCollection = (allQuestionnairesMetadata.body.data || []).map(metadatum => {
+            return {
+                questionnaireId: metadatum.attributes['questionnaire-id'],
+                created: metadatum.attributes.created,
+                modified: metadatum.attributes.modified,
+                submissionStatus: metadatum.attributes['submission-status']
+            };
+        });
 
         const toDoLinks = [];
-
         const informationLinks = [];
+        let applicantFirstName;
+        let applicantLastName;
 
-        Object.keys(summaryBlocks).forEach(block => {
-            const link = summaryBlocks[block].link.replace(
-                '||questionnaireId||',
-                resumableQuestionnaireId
-            );
-            if (summaryBlocks[block].condition === 'unopened' && letterUnopened === true) {
-                toDoLinks.push(link);
-            } else if (summaryBlocks[block].condition === 'viewed' && letterUnopened === false) {
-                informationLinks.push(link);
-            } else if (summaryBlocks[block].condition === 'submitted' && submitted) {
-                informationLinks.push(link);
-            }
-        });
+        // TODO: would be better if we weren't calling so many endpoints and instead had one endpoint that got all the data
+        // This would reduce time and also mean we could use a forEach instead, guaranteeing that the items remain in the same order
+        await Promise.all(
+            metadataCollection.map(async questionnaireMetadata => {
+                const {questionnaireId} = questionnaireMetadata;
+
+                // Check that the questionnaire matches the page's CRN
+                const submissionData = await questionnaireService.getSubmission(questionnaireId);
+                const questionnaireCaseReferenceNumber =
+                    submissionData.body.data.attributes.caseReferenceNumber;
+                if (questionnaireCaseReferenceNumber !== caseReferenceNumber) {
+                    return;
+                }
+
+                const submitted = questionnaireMetadata['submission-status'] === 'COMPLETED';
+                const letterUnopened =
+                    questionnaireMetadata.modified === questionnaireMetadata.created;
+
+                // Get metadata stored in questionnaire
+                const templateMetadata = await questionnaireService.getTemplateMetadata(
+                    questionnaireId
+                );
+                const {summaryBlocks} = templateMetadata.body.data.attributes;
+
+                const currentToDoLinks = [];
+                const currentInformationLinks = [];
+
+                // Add all valid todo blocks to list
+                Object.keys(summaryBlocks).forEach(block => {
+                    const link = summaryBlocks[block].link.replace(
+                        '||questionnaireId||',
+                        questionnaireId
+                    );
+                    if (summaryBlocks[block].condition === 'unopened' && letterUnopened === true) {
+                        currentToDoLinks.push(link);
+                    } else if (
+                        summaryBlocks[block].condition === 'viewed' &&
+                        letterUnopened === false
+                    ) {
+                        currentInformationLinks.push(link);
+                    } else if (summaryBlocks[block].condition === 'submitted' && submitted) {
+                        currentInformationLinks.push(link);
+                    }
+                });
+
+                const personalisationData = templateMetadata.body.data.attributes.personalisation;
+                if (personalisationData) {
+                    applicantFirstName = personalisationData['first-name'];
+                    applicantLastName = personalisationData['last-name'];
+                }
+                // TODO: This section of code is checking that a questionnaire is valid/resumable. How do we want to handle errors for it?
+                const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
+                    questionnaireId
+                );
+                const resumableQuestionnaire =
+                    resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data
+                        ?.id !== undefined;
+
+                // add questionnaire tasks to list of tasks for this CRN
+                if (resumableQuestionnaire) {
+                    toDoLinks.push(...currentToDoLinks);
+                    informationLinks.push(...currentInformationLinks);
+                }
+            })
+        );
         const actionToDo = toDoLinks.length > 0;
         const informationToShow = informationLinks.length > 0;
 
-        const applicantFirstName = personalisationData['first-name'];
-        const applicantLastName = personalisationData['last-name'];
-
-        const submissionData = await questionnaireService.getSubmission(resumableQuestionnaireId);
-        const {caseReferenceNumber} = submissionData.body.data.attributes;
-
-        const resumableQuestionnaireProgressEntry =
-            resumableQuestionnaireResponse?.body?.data?.[0]?.attributes;
-        if (
-            resumableQuestionnaireProgressEntry &&
-            resumableQuestionnaireProgressEntry.sectionId === null &&
-            resumableQuestionnaireProgressEntry.url === null
-        ) {
-            return res.render('incompatible.njk', {
-                isAuthenticated: accountService.isAuthenticated(req)
-            });
-        }
-
-        if (resumableQuestionnaireResponse.body?.errors) {
-            const errorResponse = resumableQuestionnaireResponse.body?.errors[0];
-            if (errorResponse.status === 404) {
-                return res.redirect(defaultRedirect);
-            }
-        }
-
-        const resumableQuestionnaireCurrentSectionId =
-            resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id;
-
         // redirect if valid.
-        if (resumableQuestionnaireCurrentSectionId) {
-            const {render} = templateEngineService;
-            const html = render('todo.njk', {
-                csrfToken: req.csrfToken(),
-                isAuthenticated: accountService.isAuthenticated(req),
-                caseReferenceNumber,
-                applicantFirstName,
-                applicantLastName,
-                actionToDo,
-                informationToShow,
-                toDoLinks,
-                informationLinks,
-                cspNonce: res.locals.cspNonce,
-                currentUrlPathname: `/account/dashboard/manage/${resumableQuestionnaireId}`
-            });
-            return res.send(html);
-        }
-        return res.redirect(defaultRedirect);
+        const {render} = templateEngineService;
+        const html = render('todo.njk', {
+            csrfToken: req.csrfToken(),
+            isAuthenticated: accountService.isAuthenticated(req),
+            caseReferenceNumber,
+            applicantFirstName,
+            applicantLastName,
+            actionToDo,
+            informationToShow,
+            toDoLinks,
+            informationLinks,
+            cspNonce: res.locals.cspNonce,
+            currentUrlPathname: `/account/dashboard/manage/${caseReferenceNumber}`
+        });
+        return res.send(html);
     } catch (err) {
         return res.redirect('/dashboard');
     }
