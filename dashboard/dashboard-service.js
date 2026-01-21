@@ -18,6 +18,16 @@ function createDashboardService(ownerId) {
         });
     }
 
+    async function getFlatTemplateMetadataByUserId() {
+        const metadataCollection = await questionnaireService.getAllTemplatesMetadata();
+        return (metadataCollection.body.data || []).map(metadatum => {
+            return {
+                questionnaireId: metadatum.id,
+                personalisation: metadatum.attributes.personalisation
+            };
+        });
+    }
+
     async function getApplicationData() {
         const dataset = [];
         // eslint-disable-next-line no-restricted-syntax
@@ -69,54 +79,59 @@ function createDashboardService(ownerId) {
     }
 
     async function getActionData() {
-        const dataset = [];
+        const dataSet = {};
+        const allTemplatesMetadata = await getFlatTemplateMetadataByUserId();
         // eslint-disable-next-line no-restricted-syntax
         for await (const flatMetadata of await getFlatQuestionnaireMetadataByUserId()) {
             if (flatMetadata.type !== 'apply-for-compensation') {
                 const submissionData = await questionnaireService.getSubmission(
                     flatMetadata.questionnaireId
                 );
-                dataset.push({
-                    ...flatMetadata,
-                    data: {
-                        caseReferenceNumber: '',
-                        ...submissionData.body?.data?.attributes
-                    }
-                });
+                const caseReferenceNumber =
+                    submissionData.body?.data?.attributes?.caseReferenceNumber;
+                const templateMetadata = allTemplatesMetadata.filter(
+                    metadatum => metadatum.questionnaireId === flatMetadata.questionnaireId
+                )[0];
+
+                const actionToDo =
+                    flatMetadata.created === flatMetadata.modified ||
+                    !!dataSet[caseReferenceNumber]?.actionToDo;
+                const firstName = templateMetadata?.personalisation['first-name'];
+                const lastName = templateMetadata?.personalisation['last-name'];
+                if (caseReferenceNumber !== null) {
+                    dataSet[caseReferenceNumber] = {
+                        analyticsId: flatMetadata.analyticsId,
+                        actionToDo,
+                        firstName,
+                        lastName
+                    };
+                }
             }
         }
-        const templateData = dataset.reduce((acc, questionnaireData) => {
-            const resumeLink = questionnaireData.analyticsId
-                ? `/account/dashboard/manage/${questionnaireData.questionnaireId}?a_id=${questionnaireData.analyticsId}`
-                : `/account/dashboard/manage/${questionnaireData.questionnaireId}`;
-            const actionToDo = questionnaireData.modified === questionnaireData.created;
-            const notificationBadge = actionToDo
+        const rows = [];
+        Object.keys(dataSet).forEach(caseReferenceNumber => {
+            const resumeLink = dataSet[caseReferenceNumber].analyticsId
+                ? `/account/dashboard/manage/${caseReferenceNumber.replace('\\', '-')}?a_id=${
+                      dataSet[caseReferenceNumber].analyticsId
+                  }`
+                : `/account/dashboard/manage/${caseReferenceNumber.replace('\\', '-')}`;
+            const notificationBadge = dataSet[caseReferenceNumber].actionToDo
                 ? ' <span class="moj-notification-badge"><span aria-hidden="true">1</span><span class="govuk-visually-hidden">(1)</span></span>'
                 : '';
-            acc.push([
+            rows.push([
                 {
-                    text: `${questionnaireData.data.caseReferenceNumber}`,
+                    text: `${dataSet[caseReferenceNumber].firstName} ${dataSet[caseReferenceNumber].lastName}`,
                     classes: 'govuk-table__cell__overflow'
                 },
                 {
-                    text: new Date(questionnaireData.expires).toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        timeZone: 'Europe/London'
-                    }),
-                    attributes: {
-                        'data-sort-value': new Date(questionnaireData.expires).getTime()
-                    }
+                    text: `${caseReferenceNumber}`
                 },
                 {
-                    html: `<a href="${resumeLink}" class="govuk-link">View application<span class='govuk-visually-hidden'> View action for case ${questionnaireData.data.caseReferenceNumber}</span></a>${notificationBadge}`
+                    html: `<a href="${resumeLink}" class="govuk-link">View<span class='govuk-visually-hidden'>View action for case ${caseReferenceNumber}</span></a>${notificationBadge}`
                 }
             ]);
-            return acc;
-        }, []);
-
-        return templateData;
+        });
+        return rows;
     }
     return Object.freeze({
         getApplicationData,
