@@ -1,0 +1,10 @@
+@media only screen and (width <= 600px) {
+    .inpage-survey {
+        height: 550px;
+    }
+}
+@media only screen and (width > 600px) {
+    .inpage-survey {
+        height: 400px;
+    }
+}
