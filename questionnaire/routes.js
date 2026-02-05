@@ -221,21 +221,19 @@ router.route('/secure-link').get(async (req, res) => {
                     'short-reason': 'short summary of why',
                     'decision-reason': 'full explanation',
                     'decision-paragraphs': 'para1 </p><p class="govuk-body"> para2',
-                    'expiry-date': '31 December 2025',
+                    'expiry-date': '31 December 2026',
                     'barcode-string': '1234567890',
                     'contact-method': 'email',
                     'email-address': 'test-email-address'
                 },
-                caseReference: '26\\222222'
+                caseReference: '26\\222223'
             }
         });
         const response = await questionnaireService.createQuestionnaire();
 
         // Display magic link
         const baseUrl = `${req.protocol}://${req.get('host')}`;
-        res.send(
-            `${baseUrl}/account/secure-link-login?qid=${response.body.data.attributes.id}&uid=${ownerId}`
-        );
+        res.send(`${baseUrl}/account/login?qid=${response.body.data.attributes.id}&uid=${ownerId}`);
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
     }
