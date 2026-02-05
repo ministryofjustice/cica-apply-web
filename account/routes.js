@@ -276,7 +276,7 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
     }
 });
 
-router.get('/secure-link-login', requiresAuth(), async (req, res, next) => {
+router.get('/login', requiresAuth(), async (req, res, next) => {
     try {
         const accountService = createAccountService(req.session);
         const ownerId = req.query.uid;
