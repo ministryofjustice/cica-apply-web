@@ -127,7 +127,16 @@ describe('Questionnaire service', () => {
         });
     });
     describe('timeout', () => {
-        jest.useFakeTimers();
+        beforeEach(() => {
+            jest.useFakeTimers();
+            jest.spyOn(global, 'setTimeout');
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+            jest.useRealTimers();
+        });
+
         it('waits a defined number of millisecond before returning', () => {
             // eslint-disable-next-line global-require
             const questionnaireService = require('../questionnaire/questionnaire-service')();

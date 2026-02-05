@@ -172,14 +172,8 @@ describe('GA', () => {
 
     describe('Journey duration', () => {
         it('should store a cookie', () => {
-            if (global.window === null || global.window === undefined) {
-                Object.create(window);
-            }
-            Object.defineProperty(window, 'location', {
-                value: {
-                    pathname: '/apply/confirmation'
-                }
-            });
+            window.history.pushState({}, '', '/apply/confirmation');
+
             const cicaGa = createCicaGa(window);
             cicaGa.init();
             window.gtag = jest.fn();
