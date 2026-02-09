@@ -1,6 +1,6 @@
 # lets start from an image that already has nodejs installed
 # https://snyk.io/blog/choosing-the-best-node-js-docker-image/
-FROM node:24.13.0-bookworm-slim AS base
+FROM node:22.8.0-bookworm-slim AS base
 RUN groupadd -g 1014 dc_user \
     && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
 USER dc_user
