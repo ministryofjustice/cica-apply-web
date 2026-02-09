@@ -2,7 +2,7 @@
 
 [![GitHub repo size](https://img.shields.io/github/repo-size/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web)
 [![GitHub repo version](https://img.shields.io/github/package-json/v/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/releases/latest)
-[![GitHub repo npm version](https://img.shields.io/badge/npm_version->=10.8.2-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L5)
+[![GitHub repo npm version](https://img.shields.io/badge/npm_version->=11.6.2-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L5)
 [![GitHub repo node version](https://img.shields.io/badge/node_version->=22.8.0-blue)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/package.json#L6)
 [![GitHub repo contributors](https://img.shields.io/github/contributors/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/graphs/contributors)
 [![GitHub repo license](https://img.shields.io/github/package-json/license/CriminalInjuriesCompensationAuthority/cica-web)](https://github.com/CriminalInjuriesCompensationAuthority/cica-web/blob/master/LICENSE)
@@ -13,7 +13,7 @@ Cica-Web is a front-facing web app that allows applicants to apply for compensat
 
 -   Windows machine running docker desktop.
 -   You have Node Version Manager (NVM) installed globally. <sup>(_recommended, not required_)</sup>
--   You have NPM `">=10.8.2"` installed globally.
+-   You have NPM `">=11.6.2"` installed globally.
 -   You have Node `">=22.8.0` installed globally.
 -   You have the Postgres `create-tables.sql` file in a sibling directory named `postgres-scripts` (this mapping is defined in the `docker-compose.yml` file)
 
