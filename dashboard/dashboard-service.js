@@ -92,10 +92,12 @@ function createDashboardService(ownerId) {
                 const templateMetadata = allTemplatesMetadata.filter(
                     metadatum => metadatum.questionnaireId === flatMetadata.questionnaireId
                 )[0];
-
+                //
                 const actionToDo =
-                    flatMetadata.created === flatMetadata.modified ||
+                    (flatMetadata.created === flatMetadata.modified &&
+                        flatMetadata.type !== 'stub') ||
                     !!dataSet[caseReferenceNumber]?.actionToDo;
+
                 const firstName = templateMetadata?.personalisation['first-name'];
                 const lastName = templateMetadata?.personalisation['last-name'];
                 if (caseReferenceNumber !== null) {

@@ -200,8 +200,6 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                 if (questionnaireCaseReferenceNumber !== caseReferenceNumber) {
                     return;
                 }
-
-                const submitted = questionnaireMetadata['submission-status'] === 'COMPLETED';
                 const letterUnopened =
                     questionnaireMetadata.modified === questionnaireMetadata.created;
 
@@ -227,7 +225,7 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                         letterUnopened === false
                     ) {
                         currentInformationLinks.push(link);
-                    } else if (summaryBlocks[block].condition === 'submitted' && submitted) {
+                    } else if (summaryBlocks[block].condition === 'always-visible') {
                         currentInformationLinks.push(link);
                     }
                 });
