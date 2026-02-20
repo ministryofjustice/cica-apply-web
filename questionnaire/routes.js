@@ -221,7 +221,7 @@ router.route('/secure-link').get(async (req, res) => {
                     'short-reason': 'short summary of why',
                     'decision-reason': 'full explanation',
                     'decision-paragraphs': 'para1 </p><p class="govuk-body"> para2',
-                    'expiry-date': '31 December 2026',
+                    'expiry-date': '31 December 2025',
                     'barcode-string': '1234567890',
                     'contact-method': 'email',
                     'email-address': 'test-email-address'
