@@ -226,7 +226,7 @@ router.route('/secure-link').get(async (req, res) => {
                     'contact-method': 'email',
                     'email-address': 'test-email-address'
                 },
-                caseReference: '26\\222223'
+                caseReference: '26\\123456'
             }
         });
         const response = await questionnaireService.createQuestionnaire();
