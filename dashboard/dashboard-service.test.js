@@ -69,7 +69,7 @@ describe('Dashboard service', () => {
                     },
                     {
                         html:
-                            '<a href="/account/dashboard/manage/88-888888" class="govuk-link">View<span class=\'govuk-visually-hidden\'>View action for case 88\\888888</span></a>'
+                            '<a href="/account/dashboard/manage/88-888888" class="govuk-link">View application<span class=\'govuk-visually-hidden\'>View action for case 88\\888888</span></a>'
                     }
                 ],
                 [
@@ -82,7 +82,7 @@ describe('Dashboard service', () => {
                     },
                     {
                         html:
-                            '<a href="/account/dashboard/manage/99-999999" class="govuk-link">View<span class=\'govuk-visually-hidden\'>View action for case 99\\999999</span></a> <span class="moj-notification-badge"><span aria-hidden="true">1</span><span class="govuk-visually-hidden">(1)</span></span>'
+                            '<a href="/account/dashboard/manage/99-999999" class="govuk-link">View application<span class=\'govuk-visually-hidden\'>View action for case 99\\999999</span></a> <span class="moj-notification-badge"><span aria-hidden="true">1</span><span class="govuk-visually-hidden">(1)</span></span>'
                     }
                 ]
             ]);
