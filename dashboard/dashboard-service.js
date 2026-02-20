@@ -129,7 +129,7 @@ function createDashboardService(ownerId) {
                     text: `${caseReferenceNumber}`
                 },
                 {
-                    html: `<a href="${resumeLink}" class="govuk-link">View<span class='govuk-visually-hidden'>View action for case ${caseReferenceNumber}</span></a>${notificationBadge}`
+                    html: `<a href="${resumeLink}" class="govuk-link">View application<span class='govuk-visually-hidden'>View action for case ${caseReferenceNumber}</span></a>${notificationBadge}`
                 }
             ]);
         });
