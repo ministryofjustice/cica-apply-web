@@ -34,8 +34,7 @@ function getSectionContext(sectionId) {
 
 function renderSection({
     transformation,
-    isFinal,
-    pageType,
+    meta,
     backTarget,
     sectionId,
     showBackLink = true,
@@ -46,11 +45,12 @@ function renderSection({
     uiOptions = {},
     showSignInLink = shouldShowSignInLink(sectionId, uiSchema, isAuthenticated, uiOptions)
 }) {
-    const showButton = !isFinal && pageType !== 'task-list';
+    const showButton =
+        !meta.isFinal && meta.pageType !== 'task-list' && meta.isSubmittable !== false;
     const buttonTitle = getButtonText(sectionId, uiOptions);
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
-    const isContextPage = pageType === 'context';
+    const isContextPage = meta.pageType === 'context';
     return render(
         `
             {% extends "page.njk" %}
@@ -287,8 +287,7 @@ function getSectionHtml(sectionData, csrfToken, cspNonce, isAuthenticated, exter
     const uiOptions = escapeSchemaContent(schema)?.options;
     return renderSection({
         transformation,
-        isFinal: sectionDataMeta.final,
-        pageType: sectionDataMeta.pageType,
+        meta: sectionDataMeta,
         backTarget: backLink,
         sectionId,
         showBackLink,
@@ -341,8 +340,7 @@ function getSectionHtmlWithErrors(
     const uiOptions = escapeSchemaContent(schema)?.options;
     return renderSection({
         transformation,
-        isFinal: false,
-        pageType: sectionDataMeta.pageType,
+        meta: sectionDataMeta,
         backTarget: backLink,
         sectionId,
         csrfToken,
