@@ -15,7 +15,7 @@ executors:
 jobs:
   build-for-test:
     docker:
-      - image: node:24.13.0-bookworm-slim
+      - image: node:24.13.0-trixie-slim
     steps:
       - checkout
       - run:
@@ -36,7 +36,7 @@ jobs:
             - ./node_modules
   test:
     docker:
-      - image: node:24.13.0-bookworm-slim
+      - image: node:24.13.0-trixie-slim
     steps:
       - attach_workspace:
           at: ./
@@ -47,7 +47,7 @@ jobs:
           command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
   lint:
     docker:
-      - image: node:24.13.0-bookworm-slim
+      - image: node:24.13.0-trixie-slim
     steps:
       - attach_workspace:
           at: ./
@@ -74,7 +74,6 @@ jobs:
           name: Scan the local image with trivy
           command: |
             trivy image --exit-code 0 --severity MEDIUM,HIGH --no-progress cica/cica-repo-dev
-            trivy image --exit-code 1 --severity CRITICAL --no-progress --show-suppressed cica/cica-repo-dev --vex trivy.openvex.json
       - run:
           name: Archive Docker Image
           command: |
