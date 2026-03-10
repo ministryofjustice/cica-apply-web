@@ -256,10 +256,33 @@ function processPreviousAnswers(answersObject) {
     return answers;
 }
 
+const isoDateMonths = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+];
+
+function formatIsoDateForDisplay(match, year, month, day) {
+    return `${parseInt(day, 10)} ${isoDateMonths[parseInt(month, 10) - 1]} ${year}`;
+}
+
 function escapeSchemaContent(schema) {
     // Double escape any "\\" to work around this issue: https://github.com/mozilla/nunjucks/issues/625
     const schemaAsJson = JSON.stringify(schema);
-    const schemaWithEscapedContent = JSON.parse(schemaAsJson.replace(/\\\\/g, '\\\\\\\\'));
+    const schemaWithEscapedContent = JSON.parse(
+        schemaAsJson
+            .replace(/\\\\/g, '\\\\\\\\')
+            .replace(/(\d{4})-(\d{2})-(\d{2})T00:00:00\.000Z/g, formatIsoDateForDisplay)
+    );
 
     return schemaWithEscapedContent;
 }
