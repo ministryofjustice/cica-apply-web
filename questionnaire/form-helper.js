@@ -356,7 +356,7 @@ function getSectionHtmlWithErrors(
     const {answers} = sectionData.meta;
     const transformation = qTransformer.transform({
         schemaKey: sectionId,
-        schema,
+        schema: escapeSchemaContent(schema),
         uiSchema,
         data: answers,
         schemaErrors: errorObject
