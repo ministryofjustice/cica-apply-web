@@ -250,6 +250,8 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                 }
             })
         );
+        toDoLinks.sort();
+        informationLinks.sort();
         const actionToDo = toDoLinks.length > 0;
         const informationToShow = informationLinks.length > 0;
 
