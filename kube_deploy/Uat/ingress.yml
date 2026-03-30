@@ -69,7 +69,7 @@ spec:
     - hosts:
         - uat.claim-criminal-injuries-compensation.service.justice.gov.uk
       secretName: uat-claim-criminal-injuries-compensation-cert-secret
-  ingressClassName: modsec
+  ingressClassName: modsec-non-prod
   rules:
     - host: uat.claim-criminal-injuries-compensation.apps.live.cloud-platform.service.justice.gov.uk
       http:
