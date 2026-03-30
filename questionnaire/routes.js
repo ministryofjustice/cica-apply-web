@@ -202,6 +202,16 @@ router.route('/secure-link').get(async (req, res) => {
         // Random ownerId
         const ownerId = `urn:uuid:${crypto.randomUUID()}`;
 
+        const currentDate = new Date();
+
+        const dateTime = currentDate.toISOString().split('T');
+        const day = dateTime[0].split('-')[2];
+        const time = dateTime[1]
+            .split('.')[0]
+            .split(':')
+            .join('');
+        const crn = `${day}\\${time}`;
+
         // Create new template
         const questionnaireService = createQuestionnaireService({
             ownerId,
@@ -226,7 +236,7 @@ router.route('/secure-link').get(async (req, res) => {
                     'contact-method': 'email',
                     'email-address': 'test-email-address'
                 },
-                caseReference: '26\\123456'
+                caseReference: crn
             }
         });
         const response = await questionnaireService.createQuestionnaire();
