@@ -52,6 +52,11 @@ function renderSection({
     const hasErrors = transformation.hasErrors === true;
     const hasButtonClass = uiOptions?.buttonClass !== undefined;
     const isContextPage = pageType === 'context';
+    let mainContent = transformation.content;
+    if (!showButton && isFinal) {
+        // Some pages, like the decision letter, have submit buttons within the main content.
+        mainContent = transformation.content.replace(/<button type="submit".*button>/, '');
+    }
     return render(
         `
             {% extends "page.njk" %}
@@ -82,7 +87,7 @@ function renderSection({
                 {% endif %}
                 <form method="post" novalidate autocomplete="off">
                     {% from "button/macro.njk" import govukButton %}
-                    ${transformation.content}
+                    ${mainContent}
                         {% if ${showButton} %}
                             {% if ${hasButtonClass} %}
                                 {{ govukButton({
