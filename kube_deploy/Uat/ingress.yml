@@ -35,6 +35,8 @@ metadata:
       SecRuleUpdateTargetById 932235 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932260 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 942151 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 932230 "!ARGS:/q-*/"
+      SecRuleUpdateTargetById 932250 "!ARGS:/q-*/"
       SecRuleRemoveByTag "language-php"
       SecRuleRemoveByTag "platform-windows"
       SecAuditEngine RelevantOnly
