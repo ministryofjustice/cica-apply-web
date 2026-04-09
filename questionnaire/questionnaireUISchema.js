@@ -274,19 +274,14 @@ module.exports = {
     },
     'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
         options: {
-            outputOrder: ['q-applicant-explain-reason-for-delay-reporting'],
-            summaryOrder: ['q-applicant-explain-reason-for-delay-reporting'],
-            properties: {
-                'q-applicant-explain-reason-for-delay-reporting': {
-                    options: {
-                        macroOptions: {
-                            label: {
-                                classes: 'govuk-label--s'
-                            }
-                        }
-                    }
-                }
-            }
+            outputOrder: [
+                'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
+                'q-applicant-explain-reason-for-delay-reporting'
+            ],
+            summaryOrder: [
+                'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police',
+                'q-applicant-explain-reason-for-delay-reporting'
+            ]
         }
     },
     'p-applicant-select-the-option-that-applies-to-you': {
