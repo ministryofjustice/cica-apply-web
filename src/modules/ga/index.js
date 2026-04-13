@@ -119,6 +119,23 @@ function createCicaGa(window) {
         }
     }
 
+    function anyLinkClick() {
+        const elements = window.document.querySelectorAll('.govuk-link');
+        elements.forEach(element => {
+            element.addEventListener(
+                'click',
+                () => {
+                    send({
+                        action: 'linkClick',
+                        category: element.innerText || element.innerHTML.trim(),
+                        label: element.href
+                    });
+                },
+                false
+            );
+        });
+    }
+
     // ******************************************
     // *        GA4 APP TRACKING                *
     // ******************************************
@@ -247,6 +264,7 @@ function createCicaGa(window) {
         validationError();
         recordJourneyDuration();
         trackApplication();
+        anyLinkClick();
     }
 
     return Object.freeze({

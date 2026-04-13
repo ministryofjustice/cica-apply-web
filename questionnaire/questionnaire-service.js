@@ -19,9 +19,7 @@ function questionnaireService(options = {}) {
                 data: {
                     type: 'questionnaires',
                     attributes: {
-                        templateName:
-                            options.featureFlags?.templateName ||
-                            defaultTemplateValues.templateName,
+                        templateName: options.templateName || defaultTemplateValues.templateName,
                         owner: {
                             id: options.ownerId,
                             isAuthenticated: options.isAuthenticated
