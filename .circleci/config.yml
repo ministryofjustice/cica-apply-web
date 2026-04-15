@@ -13,9 +13,33 @@ executors:
       # Image tool container
       - image: ministryofjustice/cloud-platform-tools
 jobs:
+  snyk_app_scan:
+    docker:
+      - image: node:24.14.1-trixie-slim
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-{{checksum "package-lock.json" }}
+      - run:
+          name: Install CA certificates
+          command: |
+            apt-get update
+            apt-get install -y ca-certificates
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Install Snyk
+          command: npm install -g snyk@1.1304.0
+      - run:
+          name: Snyk test
+          command: snyk test --severity-threshold=high
+      - run:
+          name: Snyk monitor
+          command: snyk monitor
   build-for-test:
     docker:
-      - image: node:24.13.0-trixie-slim
+      - image: node:24.14.1-trixie-slim
     steps:
       - checkout
       - run:
@@ -36,7 +60,7 @@ jobs:
             - ./node_modules
   test:
     docker:
-      - image: node:24.13.0-trixie-slim
+      - image: node:24.14.1-trixie-slim
     steps:
       - attach_workspace:
           at: ./
@@ -47,7 +71,7 @@ jobs:
           command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
   lint:
     docker:
-      - image: node:24.13.0-trixie-slim
+      - image: node:24.14.1-trixie-slim
     steps:
       - attach_workspace:
           at: ./
@@ -65,10 +89,27 @@ jobs:
           name: Build docker image
           command: |
             docker build --target production --no-cache -t cica/cica-repo-dev .
+
+      - run:
+          name: Install Snyk CLI
+          command: |
+            apk add --update-cache curl
+            mkdir -p /usr/local/bin
+            curl -sL https://github.com/snyk/cli/releases/download/v1.1304.0/snyk-alpine -o /usr/local/bin/snyk
+            chmod +x /usr/local/bin/snyk
+            /usr/local/bin/snyk --version
+
+      - run:
+          name: Snyk container scan
+          command: |
+            /usr/local/bin/snyk container test cica/cica-repo-dev --file=Dockerfile --severity-threshold=high 
+            /usr/local/bin/snyk container monitor cica/cica-repo-dev
+
       - run:
           name: Archive Docker Image
           command: |
             docker save -o image.tar cica/cica-repo-dev:latest
+
       - persist_to_workspace:
           root: .
           paths:
@@ -219,10 +260,14 @@ workflows:
       - lint:
           requires:
             - build-for-test
+      - snyk_app_scan:
+          requires:
+            - build-for-test
       - build:
           requires:
             - test
             - lint
+            - snyk_app_scan
       - publish_latest:
           requires:
             - build
