@@ -194,9 +194,9 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                 const {questionnaireId} = questionnaireMetadata;
 
                 // Get metadata stored in questionnaire
-                const templateMetadata = flatTemplateMetadata.filter(
+                const templateMetadata = flatTemplateMetadata.find(
                     metadatum => metadatum.questionnaireId === questionnaireId
-                )[0];
+                );
 
                 // Check that the questionnaire matches the page's CRN
                 const questionnaireCaseReferenceNumber =
