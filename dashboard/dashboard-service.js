@@ -23,7 +23,8 @@ function createDashboardService(ownerId) {
         return (metadataCollection.body.data || []).map(metadatum => {
             return {
                 questionnaireId: metadatum.id,
-                personalisation: metadatum.attributes.personalisation
+                personalisation: metadatum.attributes.personalisation,
+                caseReferenceNumber: metadatum.attributes.caseReferenceNumber
             };
         });
     }
@@ -84,14 +85,10 @@ function createDashboardService(ownerId) {
         // eslint-disable-next-line no-restricted-syntax
         for await (const flatMetadata of await getFlatQuestionnaireMetadataByUserId()) {
             if (flatMetadata.type !== 'apply-for-compensation') {
-                const submissionData = await questionnaireService.getSubmission(
-                    flatMetadata.questionnaireId
-                );
-                const caseReferenceNumber =
-                    submissionData.body?.data?.attributes?.caseReferenceNumber;
                 const templateMetadata = allTemplatesMetadata.filter(
                     metadatum => metadatum.questionnaireId === flatMetadata.questionnaireId
                 )[0];
+                const caseReferenceNumber = templateMetadata?.caseReferenceNumber;
                 //
                 const actionToDo =
                     (flatMetadata.created === flatMetadata.modified &&
