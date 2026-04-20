@@ -8,7 +8,8 @@
                     "personalisation": {
                         "first-name": "other",
                         "last-name": "testcase"
-                    }
+                    },
+                    "caseReferenceNumber": "99\\999999"
                 }
             },
             {
@@ -18,7 +19,8 @@
                     "personalisation": {
                         "first-name": "other",
                         "last-name": "testcase"
-                    }
+                    },
+                    "caseReferenceNumber": "99\\999999"
                 }
             },
             {
@@ -28,7 +30,8 @@
                     "personalisation": {
                         "first-name": "test",
                         "last-name": "testcase"
-                    }
+                    },
+                    "caseReferenceNumber": "88\\888888"
                 }
             }
         ]

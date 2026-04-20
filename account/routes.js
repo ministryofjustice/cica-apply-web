@@ -193,20 +193,20 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
             metadataCollection.map(async questionnaireMetadata => {
                 const {questionnaireId} = questionnaireMetadata;
 
+                // Get metadata stored in questionnaire
+                const templateMetadata = flatTemplateMetadata.filter(
+                    metadatum => metadatum.questionnaireId === questionnaireId
+                )[0];
+
                 // Check that the questionnaire matches the page's CRN
-                const submissionData = await questionnaireService.getSubmission(questionnaireId);
                 const questionnaireCaseReferenceNumber =
-                    submissionData.body.data.attributes.caseReferenceNumber;
+                    templateMetadata.attributes.caseReferenceNumber;
                 if (questionnaireCaseReferenceNumber !== caseReferenceNumber) {
                     return;
                 }
                 const letterUnopened =
                     questionnaireMetadata.modified === questionnaireMetadata.created;
 
-                // Get metadata stored in questionnaire
-                const templateMetadata = flatTemplateMetadata.filter(
-                    metadatum => metadatum.questionnaireId === questionnaireId
-                )[0];
                 const {summaryBlocks} = templateMetadata.attributes;
 
                 const currentToDoLinks = [];
