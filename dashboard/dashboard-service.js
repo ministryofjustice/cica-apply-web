@@ -80,33 +80,34 @@ function createDashboardService(ownerId) {
     }
 
     async function getActionData() {
-        const dataSet = {};
         const allTemplatesMetadata = await getFlatTemplateMetadataByUserId();
-        // eslint-disable-next-line no-restricted-syntax
-        for await (const flatMetadata of await getFlatQuestionnaireMetadataByUserId()) {
-            if (flatMetadata.type !== 'apply-for-compensation') {
-                const templateMetadata = allTemplatesMetadata.filter(
-                    metadatum => metadatum.questionnaireId === flatMetadata.questionnaireId
-                )[0];
-                const caseReferenceNumber = templateMetadata?.caseReferenceNumber;
+        const allQuestionnairesMetadata = await getFlatQuestionnaireMetadataByUserId();
+
+        const dataSet = allQuestionnairesMetadata
+            .filter(({type}) => type !== 'apply-for-compensation')
+            .reduce((acc, currentQuestionnaire) => {
+                const currentTemplateMetadata = allTemplatesMetadata.find(
+                    metadatum => metadatum.questionnaireId === currentQuestionnaire.questionnaireId
+                );
+                const caseReferenceNumber = currentTemplateMetadata?.caseReferenceNumber;
                 //
                 const actionToDo =
-                    (flatMetadata.created === flatMetadata.modified &&
-                        flatMetadata.type !== 'stub') ||
-                    !!dataSet[caseReferenceNumber]?.actionToDo;
+                    (currentQuestionnaire.created === currentQuestionnaire.modified &&
+                        currentQuestionnaire.type !== 'stub') ||
+                    !!acc[caseReferenceNumber]?.actionToDo;
 
-                const firstName = templateMetadata?.personalisation['first-name'];
-                const lastName = templateMetadata?.personalisation['last-name'];
+                const firstName = currentTemplateMetadata?.personalisation['first-name'];
+                const lastName = currentTemplateMetadata?.personalisation['last-name'];
                 if (caseReferenceNumber !== null) {
-                    dataSet[caseReferenceNumber] = {
-                        analyticsId: flatMetadata.analyticsId,
+                    acc[caseReferenceNumber] = {
+                        analyticsId: currentQuestionnaire.analyticsId,
                         actionToDo,
                         firstName,
                         lastName
                     };
                 }
-            }
-        }
+                return acc;
+            }, {});
         const rows = [];
         Object.keys(dataSet).forEach(caseReferenceNumber => {
             const resumeLink = dataSet[caseReferenceNumber].analyticsId
