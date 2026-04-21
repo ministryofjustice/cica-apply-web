@@ -163,15 +163,13 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
             ownerId: accountService.getOwnerId(),
             isAuthenticated: accountService.isAuthenticated(req)
         });
-        const caseReferenceNumber = req.params.caseReferenceNumber.replace('-', '\\');
+        const {caseReferenceNumber} = req.params;
 
         const allQuestionnairesMetadata = await questionnaireService.getAllQuestionnairesMetadata();
         const metadataCollection = (allQuestionnairesMetadata.body.data || []).map(metadatum => {
             return {
                 questionnaireId: metadatum.attributes['questionnaire-id'],
-                created: metadatum.attributes.created,
-                modified: metadatum.attributes.modified,
-                submissionStatus: metadatum.attributes['submission-status']
+                created: metadatum.attributes.created
             };
         });
 
@@ -259,7 +257,7 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
         const html = render('todo.njk', {
             csrfToken: req.csrfToken(),
             isAuthenticated: accountService.isAuthenticated(req),
-            caseReferenceNumber,
+            caseReferenceNumber: caseReferenceNumber.replace('-', '\\'),
             applicantFirstName,
             applicantLastName,
             actionToDo,
