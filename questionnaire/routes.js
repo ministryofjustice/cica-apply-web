@@ -108,7 +108,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
         const questionnaireService = createQuestionnaireService({
-            ownerId: accountService.getOwnerId(),
+            ownerId: req.oidc.user.sub,
             isAuthenticated: accountService.isAuthenticated(req)
         });
         let resumableQuestionnaireExternalId;
