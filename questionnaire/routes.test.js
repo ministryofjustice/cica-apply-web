@@ -76,442 +76,9 @@ function setUpCommonMocks(additionalMocks = {}) {
     app = require('../app');
 }
 
-describe('Hitting /apply/this-page-does-not-exist', () => {
-    describe('Uninstantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
-                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
-            });
-        });
-
-        it('Should respond with error', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/this-page-does-not-exist');
-            expect(response.statusCode).toBe(404);
-        });
-
-        it('Should change the feedback link page to "page-not-found"', async () => {
-            const response = await request(app).get('/apply/this-page-does-not-exist');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-            );
-        });
-    });
-    describe('Instantiated questionnaire with valid session and a valid session expiry cookie', () => {
-        beforeEach(() => {
-            setUpCommonMocks();
-        });
-
-        it('Should respond with page not found error', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/this-page-does-not-exist');
-            expect(response.statusCode).toBe(404);
-        });
-
-        it('Should change the feedback link page to "page-not-found"', async () => {
-            const response = await request(app).get('/apply/this-page-does-not-exist');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-            );
-        });
-    });
-});
-
-describe('accessing a page without a session', () => {
-    describe('The application has been submitted and the session expiry cookie is set to alive false', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
-                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
-            });
-        });
-
-        it('Should respond with 302 and redirect to your application has been submitted please start again page', async () => {
-            const currentAgent = request.agent(app);
-            // Set cookies
-            currentAgent.set('Cookie', [
-                'session=sessionCookieValue',
-                'sessionExpiry={"alive":false,"created":1714400569202,"duration":0,"expires":1714400569202}'
-            ]);
-            const response = await currentAgent.get('/apply/this-page-does-exist');
-            expect(response.statusCode).toBe(302);
-            expect(response.text).toMatch(
-                /<h1\s+class="govuk-heading-xl">You've\s+submitted\s+your\s+application<\/h1>\s*<p\s+class="govuk-body">We\s+have\s+your\s+application\s+and\s+we're\s+processing\s+it.\s*<\/p>/
-            );
-        });
-
-        it('Should change the feedback link page to "submitted-application-timed-out"', async () => {
-            const currentAgent = request.agent(app);
-            // Set cookies
-            currentAgent.set('Cookie', [
-                'session=sessionCookieValue',
-                'sessionExpiry={"alive":false,"created":1714400569202,"duration":0,"expires":1714400569202}'
-            ]);
-            const response = await currentAgent.get('/apply/this-page-does-exist');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=submitted-application-timed-out'
-            );
-        });
-    });
-    describe('The application has timed out and the session expiry cookie alive property has been set to timed-out', () => {
-        beforeEach(() => {
-            setUpCommonMocks();
-        });
-
-        it('Should respond with 302 and redirect to your application has timed out please start again page', async () => {
-            const currentAgent = request.agent(app);
-            currentAgent.set('Cookie', [
-                'session=sessionCookieValue',
-                'sessionExpiry={"alive":"timed-out","created":1714400569202,"duration":0,"expires":1714400569202}'
-            ]);
-            const response = await currentAgent.get('/apply/this-page-does-exist');
-            expect(response.text).toMatch(
-                /<h1\s+class="govuk-heading-xl">Your\s+application\s+has\s+timed\s+out<\/h1>\s*<p\s+class="govuk-body">This\s+happened\s+because\s+you\s+did\s+not\s+do\s+anything\s+for\s+30\s+minutes.<\/p>\s*<p\s+class="govuk-body">You\s+can\s+sign\s+back\s+in\s+to\s+resume\s+your\s+application\s+if\s+you\s+saved\s+your\s+progress.\s+If\s+not,\s+you'll\s+have\s+to\s+start\s+a\s+new\s+application.<\/p>/
-            );
-        });
-
-        it('Should change the feedback link page to "application-timed-out"', async () => {
-            const currentAgent = request.agent(app);
-            currentAgent.set('Cookie', [
-                'session=sessionCookieValue',
-                'sessionExpiry={"alive":"timed-out","created":1714400569202,"duration":0,"expires":1714400569202}'
-            ]);
-            const response = await currentAgent.get('/apply/this-page-does-exist');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=application-timed-out'
-            );
-        });
-    });
-});
-
-describe('Hitting /apply', () => {
-    describe('Uninstantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
-                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
-            });
-        });
-
-        it('Should redirect to `/apply/start-or-resume` page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply');
-            expect(response.statusCode).toBe(302);
-            expect(response.res.text).toBe('Found. Redirecting to /apply/start-or-resume');
-        });
-    });
-    describe('Instantiated questionnaire', () => {
-        describe('External ID not in session', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-            it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent.get('/apply');
-                expect(response.statusCode).toBe(302);
-                expect(response.res.text).toBe(
-                    'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-                );
-            });
-        });
-        describe('External ID in session', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    './form-helper.js': jest.fn(() => ({
-                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
-                    }))
-                });
-            });
-            it('Should redirect to `/apply/resume/:questionnaireId?external_id=:externalId`', async () => {
-                jest.spyOn(crypto, 'randomUUID').mockReturnValue(
-                    'ce66be9d-5880-4559-9a93-df15928be396'
-                );
-                const currentAgent = request.agent(app);
-                // Set the externalId
-                await currentAgent.get('/apply/start');
-                const response = await currentAgent.get('/apply');
-                expect(response.statusCode).toBe(302);
-                expect(response.res.text).toBe(
-                    'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250?external_id=urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
-                );
-            });
-        });
-    });
-    describe('Unable to start a questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
-                '../questionnaire/utils/getQuestionnaireIdInSession': () =>
-                    jest.fn(() => {
-                        throw new Error('404');
-                    })
-            });
-        });
-        it('should present the 404 page', async () => {
-            const response = await request(app).get('/apply');
-
-            expect(response.statusCode).toBe(404);
-        });
-        it('should set the feedback link to "page-not-found"', async () => {
-            const response = await request(app).get('/apply');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-            );
-        });
-    });
-});
-
-describe('Hitting /apply/start-or-resume', () => {
-    describe('Uninstantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
-                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
-            });
-        });
-
-        it('Should render the `/apply/start-or-resume` page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/start-or-resume');
-            expect(response.res.text).toContain('What would you like to do?');
-        });
-    });
-    describe('Instantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks();
-        });
-
-        it('Should render the `/apply/start-or-resume` page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/start-or-resume');
-            expect(response.res.text).toContain('What would you like to do?');
-        });
-    });
-    describe('Error', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../templateEngine/index.js': () => {
-                    return jest.fn(() => ({
-                        init: () => jest.fn(() => undefined),
-                        render: () => {
-                            throw new Error('Something went wrong!');
-                        }
-                    }));
-                }
-            });
-        });
-        it('Should respond with error page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/start-or-resume');
-            expect(response.statusCode).toBe(404);
-        });
-    });
-    describe('Postback', () => {
+describe('all', () => {
+    describe('Hitting /apply/this-page-does-not-exist', () => {
         describe('Uninstantiated questionnaire', () => {
-            describe('start new questionnaire', () => {
-                beforeEach(() => {
-                    setUpCommonMocks({
-                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
-                            jest.fn(() => false),
-                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
-                            jest.fn(() => undefined)
-                    });
-                });
-
-                it('Should redirect to `/apply/start`', async () => {
-                    const currentAgent = request.agent(app);
-                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                    const response = await currentAgent.post('/apply/start-or-resume').send({
-                        'start-or-resume': 'start',
-                        _csrf: initialCsrfToken
-                    });
-                    expect(response.statusCode).toBe(302);
-                    expect(response.res.text).toBe('Found. Redirecting to /apply/start');
-                });
-            });
-            describe('continue existing application', () => {
-                beforeEach(() => {
-                    setUpCommonMocks({
-                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
-                            jest.fn(() => false),
-                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
-                            jest.fn(() => undefined)
-                    });
-                });
-
-                it('Should redirect to `/account/sign-in`', async () => {
-                    const currentAgent = request.agent(app);
-                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                    const response = await currentAgent.post('/apply/start-or-resume').send({
-                        'start-or-resume': 'resume',
-                        _csrf: initialCsrfToken
-                    });
-                    expect(response.res.text).toContain('Found. Redirecting to /account/sign-in');
-                });
-            });
-            describe('On Error', () => {
-                beforeEach(() => {
-                    setUpCommonMocks({
-                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
-                            jest.fn(() => false),
-                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
-                            jest.fn(() => {
-                                throw new Error('Boom!');
-                            })
-                    });
-                });
-
-                it('Throw a 404', async () => {
-                    const currentAgent = request.agent(app);
-                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                    const response = await currentAgent.post('/apply/start-or-resume').send({
-                        'start-or-resume': 'resume',
-                        _csrf: initialCsrfToken
-                    });
-
-                    expect(response.statusCode).toBe(404);
-                });
-                it('Should change the feedback link page to "page-not-found"', async () => {
-                    const currentAgent = request.agent(app);
-                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                    const response = await currentAgent.post('/apply/start-or-resume').send({
-                        'start-or-resume': 'resume',
-                        _csrf: initialCsrfToken
-                    });
-
-                    expect(response.res.text).toContain(
-                        'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-                    );
-                });
-            });
-        });
-        describe('Instantiated questionnaire', () => {
-            describe('start new questionnaire', () => {
-                beforeEach(() => {
-                    setUpCommonMocks();
-                });
-
-                it('Should redirect to `/apply/start`', async () => {
-                    const currentAgent = request.agent(app);
-                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                    const response = await currentAgent.post('/apply/start-or-resume').send({
-                        'start-or-resume': 'start',
-                        _csrf: initialCsrfToken
-                    });
-                    expect(response.statusCode).toBe(302);
-                    expect(response.res.text).toBe('Found. Redirecting to /apply/start');
-                });
-            });
-            describe('continue existing application', () => {
-                beforeEach(() => {
-                    setUpCommonMocks();
-                });
-
-                it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
-                    const currentAgent = request.agent(app);
-                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                    const response = await currentAgent.post('/apply/start-or-resume').send({
-                        'start-or-resume': 'resume',
-                        _csrf: initialCsrfToken
-                    });
-                    expect(response.res.text).toContain(
-                        'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-                    );
-                });
-            });
-        });
-        describe('Invalid request body', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-
-            it('Should render the page with error', async () => {
-                const currentAgent = request.agent(app);
-                const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const response = await currentAgent.post('/apply/start-or-resume').send({
-                    'start-or-resume': 'notavalidvalue',
-                    _csrf: initialCsrfToken
-                });
-                expect(response.res.text).toContain('Select what you would like to do');
-            });
-        });
-    });
-});
-
-describe('Hitting /apply/start', () => {
-    describe('Uninstantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/utils/isQuestionnaireInstantiated': () => jest.fn(() => false),
-                '../questionnaire/utils/getQuestionnaireIdInSession': () => jest.fn(() => undefined)
-            });
-        });
-
-        it('Should redirect to `/apply/<initialSection>`', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/start');
-            expect(response.res.text).toContain(
-                'Found. Redirecting to /apply/applicant-fatal-claim'
-            );
-        });
-    });
-    describe('Instantiated questionnaire', () => {
-        beforeEach(() => {
-            setUpCommonMocks();
-        });
-
-        it('Should redirect to `/apply/<initialSection>`', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/start');
-            expect(response.res.text).toContain(
-                'Found. Redirecting to /apply/applicant-fatal-claim'
-            );
-        });
-    });
-    describe('Error', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/questionnaire-service': () => {
-                    return jest.fn(() => ({
-                        keepAlive: () => getKeepAlive,
-                        createQuestionnaire: () => {
-                            throw new Error('Something went wrong!');
-                        }
-                    }));
-                }
-            });
-        });
-        it('Should respond with error page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/start');
-            expect(response.statusCode).toBe(404);
-        });
-        it('Should change the feedback link page to "page-not-found"', async () => {
-            const response = await request(app).get('/apply/start');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-            );
-        });
-    });
-});
-
-describe('Hitting /apply/resume/:questionnaireId', () => {
-    describe('Uninstantiated questionnaire', () => {
-        describe('No questionnaire id', () => {
             beforeEach(() => {
                 setUpCommonMocks({
                     '../questionnaire/utils/isQuestionnaireInstantiated': () =>
@@ -521,40 +88,43 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 });
             });
 
-            it('Should response with error', async () => {
+            it('Should respond with error', async () => {
                 const currentAgent = request.agent(app);
-                const response = await currentAgent.get('/apply/resume/');
+                const response = await currentAgent.get('/apply/this-page-does-not-exist');
                 expect(response.statusCode).toBe(404);
             });
+
             it('Should change the feedback link page to "page-not-found"', async () => {
-                const response = await request(app).get('/apply/resume/');
+                const response = await request(app).get('/apply/this-page-does-not-exist');
 
                 expect(response.res.text).toContain(
                     'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
                 );
             });
         });
-
-        describe('Malformed questionnaire id', () => {
+        describe('Instantiated questionnaire with valid session and a valid session expiry cookie', () => {
             beforeEach(() => {
-                setUpCommonMocks({
-                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
-                        jest.fn(() => false),
-                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
-                        jest.fn(() => undefined)
-                });
+                setUpCommonMocks();
             });
 
-            it('Should redirect to `/apply`', async () => {
+            it('Should respond with page not found error', async () => {
                 const currentAgent = request.agent(app);
-                const response = await currentAgent.get(
-                    '/apply/resume/thisisnotavalidquestionnaireid'
+                const response = await currentAgent.get('/apply/this-page-does-not-exist');
+                expect(response.statusCode).toBe(404);
+            });
+
+            it('Should change the feedback link page to "page-not-found"', async () => {
+                const response = await request(app).get('/apply/this-page-does-not-exist');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
                 );
-                expect(response.res.text).toContain('Found. Redirecting to /apply');
             });
         });
+    });
 
-        describe('Invalid questionnaire id', () => {
+    describe('accessing a page without a session', () => {
+        describe('The application has been submitted and the session expiry cookie is set to alive false', () => {
             beforeEach(() => {
                 setUpCommonMocks({
                     '../questionnaire/utils/isQuestionnaireInstantiated': () =>
@@ -564,13 +134,639 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 });
             });
 
-            it('Should redirect to `/apply`', async () => {
+            it('Should respond with 302 and redirect to your application has been submitted please start again page', async () => {
+                const currentAgent = request.agent(app);
+                // Set cookies
+                currentAgent.set('Cookie', [
+                    'session=sessionCookieValue',
+                    'sessionExpiry={"alive":false,"created":1714400569202,"duration":0,"expires":1714400569202}'
+                ]);
+                const response = await currentAgent.get('/apply/this-page-does-exist');
+                expect(response.statusCode).toBe(302);
+                expect(response.text).toMatch(
+                    /<h1\s+class="govuk-heading-xl">You've\s+submitted\s+your\s+application<\/h1>\s*<p\s+class="govuk-body">We\s+have\s+your\s+application\s+and\s+we're\s+processing\s+it.\s*<\/p>/
+                );
+            });
+
+            it('Should change the feedback link page to "submitted-application-timed-out"', async () => {
+                const currentAgent = request.agent(app);
+                // Set cookies
+                currentAgent.set('Cookie', [
+                    'session=sessionCookieValue',
+                    'sessionExpiry={"alive":false,"created":1714400569202,"duration":0,"expires":1714400569202}'
+                ]);
+                const response = await currentAgent.get('/apply/this-page-does-exist');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=submitted-application-timed-out'
+                );
+            });
+        });
+        describe('The application has timed out and the session expiry cookie alive property has been set to timed-out', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should respond with 302 and redirect to your application has timed out please start again page', async () => {
+                const currentAgent = request.agent(app);
+                currentAgent.set('Cookie', [
+                    'session=sessionCookieValue',
+                    'sessionExpiry={"alive":"timed-out","created":1714400569202,"duration":0,"expires":1714400569202}'
+                ]);
+                const response = await currentAgent.get('/apply/this-page-does-exist');
+                expect(response.text).toMatch(
+                    /<h1\s+class="govuk-heading-xl">Your\s+application\s+has\s+timed\s+out<\/h1>\s*<p\s+class="govuk-body">This\s+happened\s+because\s+you\s+did\s+not\s+do\s+anything\s+for\s+30\s+minutes.<\/p>\s*<p\s+class="govuk-body">You\s+can\s+sign\s+back\s+in\s+to\s+resume\s+your\s+application\s+if\s+you\s+saved\s+your\s+progress.\s+If\s+not,\s+you'll\s+have\s+to\s+start\s+a\s+new\s+application.<\/p>/
+                );
+            });
+
+            it('Should change the feedback link page to "application-timed-out"', async () => {
+                const currentAgent = request.agent(app);
+                currentAgent.set('Cookie', [
+                    'session=sessionCookieValue',
+                    'sessionExpiry={"alive":"timed-out","created":1714400569202,"duration":0,"expires":1714400569202}'
+                ]);
+                const response = await currentAgent.get('/apply/this-page-does-exist');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=application-timed-out'
+                );
+            });
+        });
+    });
+
+    describe('Hitting /apply', () => {
+        describe('Uninstantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
+                });
+            });
+
+            it('Should redirect to `/apply/start-or-resume` page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply');
+                expect(response.statusCode).toBe(302);
+                expect(response.res.text).toBe('Found. Redirecting to /apply/start-or-resume');
+            });
+        });
+        describe('Instantiated questionnaire', () => {
+            describe('External ID not in session', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+                it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get('/apply');
+                    expect(response.statusCode).toBe(302);
+                    expect(response.res.text).toBe(
+                        'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    );
+                });
+            });
+            describe('External ID in session', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        './form-helper.js': jest.fn(() => ({
+                            removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                        }))
+                    });
+                });
+                it('Should redirect to `/apply/resume/:questionnaireId?external_id=:externalId`', async () => {
+                    jest.spyOn(crypto, 'randomUUID').mockReturnValue(
+                        'ce66be9d-5880-4559-9a93-df15928be396'
+                    );
+                    const currentAgent = request.agent(app);
+                    // Set the externalId
+                    await currentAgent.get('/apply/start');
+                    const response = await currentAgent.get('/apply');
+                    expect(response.statusCode).toBe(302);
+                    expect(response.res.text).toBe(
+                        'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250?external_id=urn:uuid:ce66be9d-5880-4559-9a93-df15928be396'
+                    );
+                });
+            });
+        });
+        describe('Unable to start a questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => {
+                            throw new Error('404');
+                        })
+                });
+            });
+            it('should present the 404 page', async () => {
+                const response = await request(app).get('/apply');
+
+                expect(response.statusCode).toBe(404);
+            });
+            it('should set the feedback link to "page-not-found"', async () => {
+                const response = await request(app).get('/apply');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                );
+            });
+        });
+    });
+
+    describe('Hitting /apply/start-or-resume', () => {
+        describe('Uninstantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
+                });
+            });
+
+            it('Should render the `/apply/start-or-resume` page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/start-or-resume');
+                expect(response.res.text).toContain('What would you like to do?');
+            });
+        });
+        describe('Instantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should render the `/apply/start-or-resume` page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/start-or-resume');
+                expect(response.res.text).toContain('What would you like to do?');
+            });
+        });
+        describe('Error', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../templateEngine/index.js': () => {
+                        return jest.fn(() => ({
+                            init: () => jest.fn(() => undefined),
+                            render: () => {
+                                throw new Error('Something went wrong!');
+                            }
+                        }));
+                    }
+                });
+            });
+            it('Should respond with error page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/start-or-resume');
+                expect(response.statusCode).toBe(404);
+            });
+        });
+        describe('Postback', () => {
+            describe('Uninstantiated questionnaire', () => {
+                describe('start new questionnaire', () => {
+                    beforeEach(() => {
+                        setUpCommonMocks({
+                            '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                                jest.fn(() => false),
+                            '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                                jest.fn(() => undefined)
+                        });
+                    });
+
+                    it('Should redirect to `/apply/start`', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        const response = await currentAgent.post('/apply/start-or-resume').send({
+                            'start-or-resume': 'start',
+                            _csrf: initialCsrfToken
+                        });
+                        expect(response.statusCode).toBe(302);
+                        expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+                    });
+                });
+                describe('continue existing application', () => {
+                    beforeEach(() => {
+                        setUpCommonMocks({
+                            '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                                jest.fn(() => false),
+                            '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                                jest.fn(() => undefined)
+                        });
+                    });
+
+                    it('Should redirect to `/account/sign-in`', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        const response = await currentAgent.post('/apply/start-or-resume').send({
+                            'start-or-resume': 'resume',
+                            _csrf: initialCsrfToken
+                        });
+                        expect(response.res.text).toContain(
+                            'Found. Redirecting to /account/sign-in'
+                        );
+                    });
+                });
+                describe('On Error', () => {
+                    beforeEach(() => {
+                        setUpCommonMocks({
+                            '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                                jest.fn(() => false),
+                            '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                                jest.fn(() => {
+                                    throw new Error('Boom!');
+                                })
+                        });
+                    });
+
+                    it('Throw a 404', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        const response = await currentAgent.post('/apply/start-or-resume').send({
+                            'start-or-resume': 'resume',
+                            _csrf: initialCsrfToken
+                        });
+
+                        expect(response.statusCode).toBe(404);
+                    });
+                    it('Should change the feedback link page to "page-not-found"', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        const response = await currentAgent.post('/apply/start-or-resume').send({
+                            'start-or-resume': 'resume',
+                            _csrf: initialCsrfToken
+                        });
+
+                        expect(response.res.text).toContain(
+                            'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                        );
+                    });
+                });
+            });
+            describe('Instantiated questionnaire', () => {
+                describe('start new questionnaire', () => {
+                    beforeEach(() => {
+                        setUpCommonMocks();
+                    });
+
+                    it('Should redirect to `/apply/start`', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        const response = await currentAgent.post('/apply/start-or-resume').send({
+                            'start-or-resume': 'start',
+                            _csrf: initialCsrfToken
+                        });
+                        expect(response.statusCode).toBe(302);
+                        expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+                    });
+                });
+                describe('continue existing application', () => {
+                    beforeEach(() => {
+                        setUpCommonMocks();
+                    });
+
+                    it('Should redirect to `/apply/resume/:questionnaireId`', async () => {
+                        const currentAgent = request.agent(app);
+                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                        const response = await currentAgent.post('/apply/start-or-resume').send({
+                            'start-or-resume': 'resume',
+                            _csrf: initialCsrfToken
+                        });
+                        expect(response.res.text).toContain(
+                            'Found. Redirecting to /apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                        );
+                    });
+                });
+            });
+            describe('Invalid request body', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+
+                it('Should render the page with error', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'notavalidvalue',
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.res.text).toContain('Select what you would like to do');
+                });
+            });
+        });
+    });
+
+    describe('Hitting /apply/start', () => {
+        describe('Uninstantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                        jest.fn(() => false),
+                    '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                        jest.fn(() => undefined)
+                });
+            });
+
+            it('Should redirect to `/apply/<initialSection>`', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/start');
+                expect(response.res.text).toContain(
+                    'Found. Redirecting to /apply/applicant-fatal-claim'
+                );
+            });
+        });
+        describe('Instantiated questionnaire', () => {
+            beforeEach(() => {
+                setUpCommonMocks();
+            });
+
+            it('Should redirect to `/apply/<initialSection>`', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/start');
+                expect(response.res.text).toContain(
+                    'Found. Redirecting to /apply/applicant-fatal-claim'
+                );
+            });
+        });
+        describe('Error', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/questionnaire-service': () => {
+                        return jest.fn(() => ({
+                            keepAlive: () => getKeepAlive,
+                            createQuestionnaire: () => {
+                                throw new Error('Something went wrong!');
+                            }
+                        }));
+                    }
+                });
+            });
+            it('Should respond with error page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/start');
+                expect(response.statusCode).toBe(404);
+            });
+            it('Should change the feedback link page to "page-not-found"', async () => {
+                const response = await request(app).get('/apply/start');
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                );
+            });
+        });
+    });
+
+    describe('Hitting /apply/resume/:questionnaireId', () => {
+        describe('Uninstantiated questionnaire', () => {
+            describe('No questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                            jest.fn(() => false),
+                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                            jest.fn(() => undefined)
+                    });
+                });
+
+                it('Should response with error', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get('/apply/resume/');
+                    expect(response.statusCode).toBe(404);
+                });
+                it('Should change the feedback link page to "page-not-found"', async () => {
+                    const response = await request(app).get('/apply/resume/');
+
+                    expect(response.res.text).toContain(
+                        'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                    );
+                });
+            });
+
+            describe('Malformed questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                            jest.fn(() => false),
+                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                            jest.fn(() => undefined)
+                    });
+                });
+
+                it('Should redirect to `/apply`', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/thisisnotavalidquestionnaireid'
+                    );
+                    expect(response.res.text).toContain('Found. Redirecting to /apply');
+                });
+            });
+
+            describe('Invalid questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/utils/isQuestionnaireInstantiated': () =>
+                            jest.fn(() => false),
+                        '../questionnaire/utils/getQuestionnaireIdInSession': () =>
+                            jest.fn(() => undefined)
+                    });
+                });
+
+                it('Should redirect to `/apply`', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    );
+                    expect(response.res.text).toContain('Found. Redirecting to /apply');
+                });
+            });
+
+            describe('Incompatible template', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/questionnaire-service': () => {
+                            return jest.fn(() => ({
+                                keepAlive: () => getKeepAlive,
+                                getCurrentSection: () => ({
+                                    body: {
+                                        data: [
+                                            {
+                                                attributes: {
+                                                    url: null,
+                                                    sectionId: null
+                                                }
+                                            }
+                                        ]
+                                    }
+                                })
+                            }));
+                        }
+                    });
+                });
+
+                it('Should render the "Application expired" page', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    );
+                    expect(response.res.text).toContain(
+                        '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
+                    );
+                });
+                it('Should change the feedback link page to "incompatible"', async () => {
+                    const response = await request(app).get(
+                        '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    );
+
+                    expect(response.res.text).toContain(
+                        'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=incompatible'
+                    );
+                });
+            });
+        });
+        describe('Instantiated questionnaire', () => {
+            describe('No questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+
+                it('Should response with error', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get('/apply/resume/');
+                    expect(response.statusCode).toBe(404);
+                });
+                it('Should change the feedback link page to "page-not-found"', async () => {
+                    const response = await request(app).get('/apply/resume/');
+
+                    expect(response.res.text).toContain(
+                        'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                    );
+                });
+            });
+
+            describe('Malformed questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+
+                it('Should redirect to `/apply`', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/thisisnotavalidquestionnaireid'
+                    );
+                    expect(response.res.text).toContain('Found. Redirecting to /apply');
+                });
+            });
+
+            describe('Invalid questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+
+                it('Should redirect to `/apply`', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
+                    );
+                    expect(response.res.text).toContain('Found. Redirecting to /apply');
+                });
+            });
+            describe('Valid questionnaire id', () => {
+                beforeEach(() => {
+                    setUpCommonMocks();
+                });
+
+                it('Should redirect to `current` section', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    );
+                    expect(response.res.text).toContain(
+                        'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
+                    );
+                });
+            });
+
+            describe('Insufficient privileges', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../questionnaire/questionnaire-service': () => {
+                            return jest.fn(() => ({
+                                keepAlive: () => getKeepAlive,
+                                getCurrentSection: questionnaireId => ({
+                                    body: {
+                                        errors: [
+                                            {
+                                                status: 404,
+                                                title: '404 Not Found',
+                                                detail: `Questionnaire "${questionnaireId}" not found`
+                                            }
+                                        ]
+                                    }
+                                })
+                            }));
+                        }
+                    });
+                });
+
+                it('Should redirect to `/apply`', async () => {
+                    const currentAgent = request.agent(app);
+                    const response = await currentAgent.get(
+                        '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
+                    );
+                    expect(response.res.text).toContain('Found. Redirecting to /apply');
+                });
+            });
+        });
+        describe('Error', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/questionnaire-service': () => {
+                        return jest.fn(() => ({
+                            keepAlive: () => getKeepAlive,
+                            getCurrentSection: () => {
+                                throw new Error('Something went wrong!');
+                            }
+                        }));
+                    }
+                });
+            });
+            it('Should respond with error page', async () => {
                 const currentAgent = request.agent(app);
                 const response = await currentAgent.get(
-                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
+                    '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
                 );
-                expect(response.res.text).toContain('Found. Redirecting to /apply');
+                expect(response.statusCode).toBe(404);
             });
+            it('Should change the feedback link page to "page-not-found"', async () => {
+                const response = await request(app).get(
+                    '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
+                );
+
+                expect(response.res.text).toContain(
+                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
+                );
+            });
+        });
+    });
+
+    describe('Hitting /apply/:section', () => {
+        beforeEach(() => {
+            setUpCommonMocks();
+        });
+        it('Should render a section', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/apply/applicant-fatal-claim');
+            expect(response.res.text).toContain(
+                'Are you applying because someone died from their injuries?'
+            );
         });
 
         describe('Incompatible template', () => {
@@ -579,7 +775,7 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                     '../questionnaire/questionnaire-service': () => {
                         return jest.fn(() => ({
                             keepAlive: () => getKeepAlive,
-                            getCurrentSection: () => ({
+                            getSection: () => ({
                                 body: {
                                     data: [
                                         {
@@ -598,37 +794,271 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
 
             it('Should render the "Application expired" page', async () => {
                 const currentAgent = request.agent(app);
-                const response = await currentAgent.get(
-                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-                );
+                await currentAgent.get('/apply');
+                const response = await currentAgent.get('/apply/applicant-fatal-claim');
                 expect(response.res.text).toContain(
                     '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
                 );
             });
-            it('Should change the feedback link page to "incompatible"', async () => {
-                const response = await request(app).get(
-                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-                );
+        });
 
-                expect(response.res.text).toContain(
-                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=incompatible'
-                );
+        describe('Post', () => {
+            describe('Submission', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        './form-helper.js': jest.fn(() => ({
+                            getSectionContext: () => 'submission',
+                            addPrefix: section => `p-${section}`,
+                            processRequest: requestBody => requestBody,
+                            removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                        }))
+                    });
+                });
+                it('Should submit', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                    const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
+                        _csrf: initialCsrfToken,
+                        '_external-id': initialExternalId
+                    });
+                    expect(response.res.text).toContain('Application submitted');
+                });
+                it('Should redirect to you have submitted your application page on refresh after confirmation page', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+
+                    const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
+                        _csrf: initialCsrfToken,
+                        '_external-id': initialExternalId
+                    });
+                    expect(response.res.text).toContain('Application submitted');
+                });
+            });
+            describe('Prevent cross-template edits', () => {
+                describe('Authenticated', () => {
+                    beforeEach(() => {
+                        setUpCommonMocks({
+                            './form-helper.js': jest.fn(() => ({
+                                getSectionContext: () => 'post',
+                                addPrefix: section => `p-${section}`,
+                                processRequest: requestBody => requestBody,
+                                removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                            })),
+                            '../account/account-service': () => {
+                                return jest.fn(() => ({
+                                    getOwnerId: () =>
+                                        'urn:uuid:625cc31a-dc57-4064-860e-e68d049035ad',
+                                    isAuthenticated: () => true
+                                }));
+                            }
+                        });
+                        jest.spyOn(crypto, 'randomUUID').mockReturnValue(
+                            'ce66be9d-5880-4559-9a93-df15928be396'
+                        );
+                        jest.spyOn(console, 'info');
+                    });
+                    describe('Session external ID and form field mismatch', () => {
+                        it('Should redirect to the dashboard', async () => {
+                            const currentAgent = request.agent(app);
+                            const initialResponse = await currentAgent.get(
+                                '/apply/start-or-resume'
+                            );
+                            const initialCsrfToken = getCsrfTokenFromResponse(
+                                initialResponse.res.text
+                            );
+                            // Set the externalId
+                            await currentAgent.get('/apply/start');
+                            const incorrectExternalId =
+                                'urn:uuid:11111111-2222-4333-8444-555555555555';
+
+                            const response = await currentAgent
+                                .post('/apply/applicant-fatal-claim')
+                                .send({
+                                    _csrf: initialCsrfToken,
+                                    '_external-id': incorrectExternalId
+                                });
+                            expect(response.res.text).toBe(
+                                'Found. Redirecting to /account/dashboard'
+                            );
+                            expect(console.info).toHaveBeenCalledWith(
+                                'Session external id "urn:uuid:ce66be9d-5880-4559-9a93-df15928be396" does not match on-page external id "urn:uuid:11111111-2222-4333-8444-555555555555" for questionnaire id "c992d660-d1a8-4928-89a0-87d4f9640250". Redirecting to dashboard.'
+                            );
+                        });
+                    });
+                    describe('Session external ID and form field match', () => {
+                        it('Should render the next page ', async () => {
+                            const currentAgent = request.agent(app);
+                            const initialResponse = await currentAgent.get(
+                                '/apply/start-or-resume'
+                            );
+                            const initialCsrfToken = getCsrfTokenFromResponse(
+                                initialResponse.res.text
+                            );
+                            // Set the externalId
+                            await currentAgent.get('/apply/start');
+                            const initialExternalId =
+                                'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+
+                            const response = await currentAgent
+                                .post('/apply/applicant-fatal-claim')
+                                .send({
+                                    _csrf: initialCsrfToken,
+                                    '_external-id': initialExternalId
+                                });
+                            expect(response.res.text).toBe(
+                                'Found. Redirecting to /apply/applicant-fatal-claim'
+                            );
+                        });
+                    });
+                    describe('Malformed form field external ID', () => {
+                        it('Should redirect to dashboard', async () => {
+                            const currentAgent = request.agent(app);
+                            const initialResponse = await currentAgent.get(
+                                '/apply/start-or-resume'
+                            );
+                            const initialCsrfToken = getCsrfTokenFromResponse(
+                                initialResponse.res.text
+                            );
+                            // Set the externalId
+                            await currentAgent.get('/apply/start');
+                            const invalidExternalId = 'foo';
+
+                            const response = await currentAgent
+                                .post('/apply/applicant-fatal-claim')
+                                .send({
+                                    _csrf: initialCsrfToken,
+                                    '_external-id': invalidExternalId
+                                });
+                            expect(response.res.text).toBe(
+                                'Found. Redirecting to /account/dashboard'
+                            );
+                            expect(console.info).toHaveBeenCalledWith(
+                                'Malformed page external id received for questionnaire "c992d660-d1a8-4928-89a0-87d4f9640250". Redirecting to dashboard.'
+                            );
+                        });
+                    });
+                });
+            });
+            describe('Error', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        './form-helper.js': jest.fn(() => ({
+                            addPrefix: () => {
+                                throw new Error('Something went wrong!');
+                            }
+                        }))
+                    });
+                });
+                it('Should 404', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.statusCode).toBe(404);
+                });
+            });
+        });
+
+        describe('Error', () => {
+            describe('When an error is EBADCSRFTOKEN', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        './form-helper.js': jest.fn(() => ({
+                            getSectionContext: () => 'submission',
+                            addPrefix: section => `p-${section}`,
+                            processRequest: requestBody => requestBody,
+                            removeSectionIdPrefix: () => 'applicant-fatal-claim'
+                        }))
+                    });
+                });
+                it('should return a 403 error', async () => {
+                    const initialCsrfToken = 'BADCRFTOKEN';
+                    const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                    const response = await request(app)
+                        .post('/apply/applicant-fatal-claim')
+                        .send({
+                            _csrf: initialCsrfToken,
+                            '_external-id': initialExternalId
+                        });
+
+                    expect(response.statusCode).toBe(403);
+                });
+                it('Should change the feedback link page to "timed-out"', async () => {
+                    const initialCsrfToken = 'BADCRFTOKEN';
+                    const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                    const response = await request(app)
+                        .post('/apply/applicant-fatal-claim')
+                        .send({
+                            _csrf: initialCsrfToken,
+                            '_external-id': initialExternalId
+                        });
+
+                    expect(response.res.text).toContain(
+                        'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=timed-out'
+                    );
+                });
             });
         });
     });
-    describe('Instantiated questionnaire', () => {
-        describe('No questionnaire id', () => {
+
+    describe('Hitting /apply/previous/:section', () => {
+        beforeEach(() => {
+            setUpCommonMocks();
+        });
+        it('Should render a section', async () => {
+            const currentAgent = request.agent(app);
+            await currentAgent.get('/apply');
+            const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
+            expect(response.res.text).toContain(
+                'Found. Redirecting to /apply/applicant-fatal-claim'
+            );
+        });
+
+        describe('Referrer', () => {
             beforeEach(() => {
-                setUpCommonMocks();
+                setUpCommonMocks({
+                    '../questionnaire/questionnaire-service': () => {
+                        return jest.fn(() => ({
+                            keepAlive: () => getKeepAlive,
+                            getPrevious: () => fixtureProgressEntryUrlNotNull
+                        }));
+                    }
+                });
             });
 
-            it('Should response with error', async () => {
+            it('Should redirect to the defined `url`', async () => {
                 const currentAgent = request.agent(app);
-                const response = await currentAgent.get('/apply/resume/');
+                await currentAgent.get('/apply');
+                const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
+                expect(response.res.text).toContain('Found. Redirecting to http://www.google.com');
+            });
+        });
+        describe('Error', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/questionnaire-service': () => {
+                        return jest.fn(() => ({
+                            keepAlive: () => getKeepAlive,
+                            getPrevious: () => {
+                                throw new Error('Something went wrong!');
+                            }
+                        }));
+                    }
+                });
+            });
+            it('Should respond with error page', async () => {
+                const currentAgent = request.agent(app);
+                const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
                 expect(response.statusCode).toBe(404);
             });
             it('Should change the feedback link page to "page-not-found"', async () => {
-                const response = await request(app).get('/apply/resume/');
+                const response = await request(app).get('/apply/previous/applicant-fatal-claim');
 
                 expect(response.res.text).toContain(
                     'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
@@ -636,62 +1066,20 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
             });
         });
 
-        describe('Malformed questionnaire id', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-
-            it('Should redirect to `/apply`', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent.get(
-                    '/apply/resume/thisisnotavalidquestionnaireid'
-                );
-                expect(response.res.text).toContain('Found. Redirecting to /apply');
-            });
-        });
-
-        describe('Invalid questionnaire id', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-
-            it('Should redirect to `/apply`', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent.get(
-                    '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
-                );
-                expect(response.res.text).toContain('Found. Redirecting to /apply');
-            });
-        });
-        describe('Valid questionnaire id', () => {
-            beforeEach(() => {
-                setUpCommonMocks();
-            });
-
-            it('Should redirect to `current` section', async () => {
-                const currentAgent = request.agent(app);
-                const response = await currentAgent.get(
-                    '/apply/resume/c992d660-d1a8-4928-89a0-87d4f9640250'
-                );
-                expect(response.res.text).toContain(
-                    'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
-                );
-            });
-        });
-
-        describe('Insufficient privileges', () => {
+        describe('Incompatible template', () => {
             beforeEach(() => {
                 setUpCommonMocks({
                     '../questionnaire/questionnaire-service': () => {
                         return jest.fn(() => ({
                             keepAlive: () => getKeepAlive,
-                            getCurrentSection: questionnaireId => ({
+                            getPrevious: () => ({
                                 body: {
-                                    errors: [
+                                    data: [
                                         {
-                                            status: 404,
-                                            title: '404 Not Found',
-                                            detail: `Questionnaire "${questionnaireId}" not found`
+                                            attributes: {
+                                                url: null,
+                                                sectionId: null
+                                            }
                                         }
                                     ]
                                 }
@@ -701,452 +1089,103 @@ describe('Hitting /apply/resume/:questionnaireId', () => {
                 });
             });
 
-            it('Should redirect to `/apply`', async () => {
+            it('Should render the "Application expired" page', async () => {
                 const currentAgent = request.agent(app);
-                const response = await currentAgent.get(
-                    '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
-                );
-                expect(response.res.text).toContain('Found. Redirecting to /apply');
-            });
-        });
-    });
-    describe('Error', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/questionnaire-service': () => {
-                    return jest.fn(() => ({
-                        keepAlive: () => getKeepAlive,
-                        getCurrentSection: () => {
-                            throw new Error('Something went wrong!');
-                        }
-                    }));
-                }
-            });
-        });
-        it('Should respond with error page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get(
-                '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
-            );
-            expect(response.statusCode).toBe(404);
-        });
-        it('Should change the feedback link page to "page-not-found"', async () => {
-            const response = await request(app).get(
-                '/apply/resume/8928deab-f2aa-4b62-a1ec-a5876f31257b'
-            );
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-            );
-        });
-    });
-});
-
-describe('Hitting /apply/:section', () => {
-    beforeEach(() => {
-        setUpCommonMocks();
-    });
-    it('Should render a section', async () => {
-        const currentAgent = request.agent(app);
-        await currentAgent.get('/apply');
-        const response = await currentAgent.get('/apply/applicant-fatal-claim');
-        expect(response.res.text).toContain(
-            'Are you applying because someone died from their injuries?'
-        );
-    });
-
-    describe('Incompatible template', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/questionnaire-service': () => {
-                    return jest.fn(() => ({
-                        keepAlive: () => getKeepAlive,
-                        getSection: () => ({
-                            body: {
-                                data: [
-                                    {
-                                        attributes: {
-                                            url: null,
-                                            sectionId: null
-                                        }
-                                    }
-                                ]
-                            }
-                        })
-                    }));
-                }
-            });
-        });
-
-        it('Should render the "Application expired" page', async () => {
-            const currentAgent = request.agent(app);
-            await currentAgent.get('/apply');
-            const response = await currentAgent.get('/apply/applicant-fatal-claim');
-            expect(response.res.text).toContain(
-                '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
-            );
-        });
-    });
-
-    describe('Post', () => {
-        describe('Submission', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    './form-helper.js': jest.fn(() => ({
-                        getSectionContext: () => 'submission',
-                        addPrefix: section => `p-${section}`,
-                        processRequest: requestBody => requestBody,
-                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
-                    }))
-                });
-            });
-            it('Should submit', async () => {
-                const currentAgent = request.agent(app);
-                const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
-                const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken,
-                    '_external-id': initialExternalId
-                });
-                expect(response.res.text).toContain('Application submitted');
-            });
-            it('Should redirect to you have submitted your application page on refresh after confirmation page', async () => {
-                const currentAgent = request.agent(app);
-                const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
-
-                const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken,
-                    '_external-id': initialExternalId
-                });
-                expect(response.res.text).toContain('Application submitted');
-            });
-        });
-        describe('Prevent cross-template edits', () => {
-            describe('Authenticated', () => {
-                beforeEach(() => {
-                    setUpCommonMocks({
-                        './form-helper.js': jest.fn(() => ({
-                            getSectionContext: () => 'post',
-                            addPrefix: section => `p-${section}`,
-                            processRequest: requestBody => requestBody,
-                            removeSectionIdPrefix: () => 'applicant-fatal-claim'
-                        })),
-                        '../account/account-service': () => {
-                            return jest.fn(() => ({
-                                getOwnerId: () => 'urn:uuid:625cc31a-dc57-4064-860e-e68d049035ad',
-                                isAuthenticated: () => true
-                            }));
-                        }
-                    });
-                    jest.spyOn(crypto, 'randomUUID').mockReturnValue(
-                        'ce66be9d-5880-4559-9a93-df15928be396'
-                    );
-                    jest.spyOn(console, 'info');
-                });
-                describe('Session external ID and form field mismatch', () => {
-                    it('Should redirect to the dashboard', async () => {
-                        const currentAgent = request.agent(app);
-                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                        // Set the externalId
-                        await currentAgent.get('/apply/start');
-                        const incorrectExternalId = 'urn:uuid:11111111-2222-4333-8444-555555555555';
-
-                        const response = await currentAgent
-                            .post('/apply/applicant-fatal-claim')
-                            .send({
-                                _csrf: initialCsrfToken,
-                                '_external-id': incorrectExternalId
-                            });
-                        expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
-                        expect(console.info).toHaveBeenCalledWith(
-                            'Session external id "urn:uuid:ce66be9d-5880-4559-9a93-df15928be396" does not match on-page external id "urn:uuid:11111111-2222-4333-8444-555555555555" for questionnaire id "c992d660-d1a8-4928-89a0-87d4f9640250". Redirecting to dashboard.'
-                        );
-                    });
-                });
-                describe('Session external ID and form field match', () => {
-                    it('Should render the next page ', async () => {
-                        const currentAgent = request.agent(app);
-                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                        // Set the externalId
-                        await currentAgent.get('/apply/start');
-                        const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
-
-                        const response = await currentAgent
-                            .post('/apply/applicant-fatal-claim')
-                            .send({
-                                _csrf: initialCsrfToken,
-                                '_external-id': initialExternalId
-                            });
-                        expect(response.res.text).toBe(
-                            'Found. Redirecting to /apply/applicant-fatal-claim'
-                        );
-                    });
-                });
-                describe('Malformed form field external ID', () => {
-                    it('Should redirect to dashboard', async () => {
-                        const currentAgent = request.agent(app);
-                        const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                        // Set the externalId
-                        await currentAgent.get('/apply/start');
-                        const invalidExternalId = 'foo';
-
-                        const response = await currentAgent
-                            .post('/apply/applicant-fatal-claim')
-                            .send({
-                                _csrf: initialCsrfToken,
-                                '_external-id': invalidExternalId
-                            });
-                        expect(response.res.text).toBe('Found. Redirecting to /account/dashboard');
-                        expect(console.info).toHaveBeenCalledWith(
-                            'Malformed page external id received for questionnaire "c992d660-d1a8-4928-89a0-87d4f9640250". Redirecting to dashboard.'
-                        );
-                    });
-                });
-            });
-        });
-        describe('Error', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    './form-helper.js': jest.fn(() => ({
-                        addPrefix: () => {
-                            throw new Error('Something went wrong!');
-                        }
-                    }))
-                });
-            });
-            it('Should 404', async () => {
-                const currentAgent = request.agent(app);
-                const initialResponse = await currentAgent.get('/apply/start-or-resume');
-                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-                const response = await currentAgent.post('/apply/applicant-fatal-claim').send({
-                    _csrf: initialCsrfToken
-                });
-                expect(response.statusCode).toBe(404);
-            });
-        });
-    });
-
-    describe('Error', () => {
-        describe('When an error is EBADCSRFTOKEN', () => {
-            beforeEach(() => {
-                setUpCommonMocks({
-                    './form-helper.js': jest.fn(() => ({
-                        getSectionContext: () => 'submission',
-                        addPrefix: section => `p-${section}`,
-                        processRequest: requestBody => requestBody,
-                        removeSectionIdPrefix: () => 'applicant-fatal-claim'
-                    }))
-                });
-            });
-            it('should return a 403 error', async () => {
-                const initialCsrfToken = 'BADCRFTOKEN';
-                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
-                const response = await request(app)
-                    .post('/apply/applicant-fatal-claim')
-                    .send({
-                        _csrf: initialCsrfToken,
-                        '_external-id': initialExternalId
-                    });
-
-                expect(response.statusCode).toBe(403);
-            });
-            it('Should change the feedback link page to "timed-out"', async () => {
-                const initialCsrfToken = 'BADCRFTOKEN';
-                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
-                const response = await request(app)
-                    .post('/apply/applicant-fatal-claim')
-                    .send({
-                        _csrf: initialCsrfToken,
-                        '_external-id': initialExternalId
-                    });
-
+                const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
                 expect(response.res.text).toContain(
-                    'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=timed-out'
+                    '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
                 );
             });
         });
     });
-});
 
-describe('Hitting /apply/previous/:section', () => {
-    beforeEach(() => {
-        setUpCommonMocks();
-    });
-    it('Should render a section', async () => {
-        const currentAgent = request.agent(app);
-        await currentAgent.get('/apply');
-        const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
-        expect(response.res.text).toContain('Found. Redirecting to /apply/applicant-fatal-claim');
-    });
-
-    describe('Referrer', () => {
+    describe('Hitting /apply/:section?next=:section', () => {
         beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/questionnaire-service': () => {
-                    return jest.fn(() => ({
-                        keepAlive: () => getKeepAlive,
-                        getPrevious: () => fixtureProgressEntryUrlNotNull
-                    }));
-                }
-            });
+            setUpCommonMocks();
         });
-
-        it('Should redirect to the defined `url`', async () => {
-            const currentAgent = request.agent(app);
-            await currentAgent.get('/apply');
-            const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
-            expect(response.res.text).toContain('Found. Redirecting to http://www.google.com');
-        });
-    });
-    describe('Error', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/questionnaire-service': () => {
-                    return jest.fn(() => ({
-                        keepAlive: () => getKeepAlive,
-                        getPrevious: () => {
-                            throw new Error('Something went wrong!');
-                        }
-                    }));
-                }
-            });
-        });
-        it('Should respond with error page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
-            expect(response.statusCode).toBe(404);
-        });
-        it('Should change the feedback link page to "page-not-found"', async () => {
-            const response = await request(app).get('/apply/previous/applicant-fatal-claim');
-
-            expect(response.res.text).toContain(
-                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=page-not-found'
-            );
-        });
-    });
-
-    describe('Incompatible template', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/questionnaire-service': () => {
-                    return jest.fn(() => ({
-                        keepAlive: () => getKeepAlive,
-                        getPrevious: () => ({
-                            body: {
-                                data: [
-                                    {
-                                        attributes: {
-                                            url: null,
-                                            sectionId: null
-                                        }
-                                    }
-                                ]
-                            }
-                        })
-                    }));
-                }
-            });
-        });
-
-        it('Should render the "Application expired" page', async () => {
-            const currentAgent = request.agent(app);
-            const response = await currentAgent.get('/apply/previous/applicant-fatal-claim');
-            expect(response.res.text).toContain(
-                '<title>Application expired - Claim criminal injuries compensation - GOV.UK</title>'
-            );
-        });
-    });
-});
-
-describe('Hitting /apply/:section?next=:section', () => {
-    beforeEach(() => {
-        setUpCommonMocks();
-    });
-    it('Should redirect to a section', async () => {
-        const currentAgent = request.agent(app);
-        const initialResponse = await currentAgent.get('/apply/start-or-resume');
-        const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
-        const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
-        const response = await currentAgent
-            .post('/apply/was-the-crime-reported-to-police?next=applicant-fatal-claim')
-            .send({
-                _csrf: initialCsrfToken,
-                '_external-id': initialExternalId
-            });
-        expect(response.res.text).toContain('Found. Redirecting to /apply/applicant-fatal-claim');
-    });
-
-    describe('Section unavailable', () => {
-        beforeEach(() => {
-            setUpCommonMocks({
-                '../questionnaire/request-service': () => {
-                    const apiV1 = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c992d660-d1a8-4928-89a0-87d4f9640250`;
-                    const api = `${process.env.CW_DCS_URL}/api/questionnaires/c992d660-d1a8-4928-89a0-87d4f9640250`;
-                    return () => ({
-                        post: options => {
-                            const responses = {
-                                [`${api}/sections/p-applicant-fatal-claim/answers`]: {
-                                    statusCode: 201
-                                }
-                            };
-
-                            return responses[options.url];
-                        },
-                        get: options => {
-                            const responses = {
-                                [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
-                                    statusCode: 404
-                                },
-                                [`${api}/progress-entries?filter[position]=current`]: {
-                                    statusCode: 200,
-                                    body: {
-                                        data: [
-                                            {
-                                                attributes: {
-                                                    sectionId: 'p--was-the-crime-reported-to-police'
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                [`${apiV1}/sections/p-applicant-fatal-claim/answers`]: {
-                                    statusCode: 201
-                                },
-                                [`${api}/session/keep-alive`]: {
-                                    statusCode: 200,
-                                    ...getKeepAlive
-                                }
-                            };
-
-                            return responses[options.url];
-                        }
-                    });
-                }
-            });
-        });
-
-        it('Should redirect to the current section if the `next` section id is not available', async () => {
+        it('Should redirect to a section', async () => {
             const currentAgent = request.agent(app);
             const initialResponse = await currentAgent.get('/apply/start-or-resume');
             const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
             const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
             const response = await currentAgent
-                .post('/apply/applicant-fatal-claim?next=info-check-your-answers')
+                .post('/apply/was-the-crime-reported-to-police?next=applicant-fatal-claim')
                 .send({
                     _csrf: initialCsrfToken,
                     '_external-id': initialExternalId
                 });
-            expect(response.statusCode).toBe(302);
-
-            expect(response.res.text).toBe(
-                'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
+            expect(response.res.text).toContain(
+                'Found. Redirecting to /apply/applicant-fatal-claim'
             );
+        });
+
+        describe('Section unavailable', () => {
+            beforeEach(() => {
+                setUpCommonMocks({
+                    '../questionnaire/request-service': () => {
+                        const apiV1 = `${process.env.CW_DCS_URL}/api/v1/questionnaires/c992d660-d1a8-4928-89a0-87d4f9640250`;
+                        const api = `${process.env.CW_DCS_URL}/api/questionnaires/c992d660-d1a8-4928-89a0-87d4f9640250`;
+                        return () => ({
+                            post: options => {
+                                const responses = {
+                                    [`${api}/sections/p-applicant-fatal-claim/answers`]: {
+                                        statusCode: 201
+                                    }
+                                };
+
+                                return responses[options.url];
+                            },
+                            get: options => {
+                                const responses = {
+                                    [`${api}/progress-entries?filter[sectionId]=p--check-your-answers`]: {
+                                        statusCode: 404
+                                    },
+                                    [`${api}/progress-entries?filter[position]=current`]: {
+                                        statusCode: 200,
+                                        body: {
+                                            data: [
+                                                {
+                                                    attributes: {
+                                                        sectionId:
+                                                            'p--was-the-crime-reported-to-police'
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    [`${apiV1}/sections/p-applicant-fatal-claim/answers`]: {
+                                        statusCode: 201
+                                    },
+                                    [`${api}/session/keep-alive`]: {
+                                        statusCode: 200,
+                                        ...getKeepAlive
+                                    }
+                                };
+
+                                return responses[options.url];
+                            }
+                        });
+                    }
+                });
+            });
+
+            it('Should redirect to the current section if the `next` section id is not available', async () => {
+                const currentAgent = request.agent(app);
+                const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                const initialExternalId = 'urn:uuid:ce66be9d-5880-4559-9a93-df15928be396';
+                const response = await currentAgent
+                    .post('/apply/applicant-fatal-claim?next=info-check-your-answers')
+                    .send({
+                        _csrf: initialCsrfToken,
+                        '_external-id': initialExternalId
+                    });
+                expect(response.statusCode).toBe(302);
+
+                expect(response.res.text).toBe(
+                    'Found. Redirecting to /apply/info-was-the-crime-reported-to-police'
+                );
+            });
         });
     });
 });
