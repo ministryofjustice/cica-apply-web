@@ -24,7 +24,8 @@ function createDashboardService(ownerId) {
             return {
                 questionnaireId: metadatum.id,
                 personalisation: metadatum.attributes.personalisation,
-                caseReferenceNumber: metadatum.attributes.caseReferenceNumber
+                caseReferenceNumber: metadatum.attributes.caseReferenceNumber,
+                read: metadatum.attributes.read
             };
         });
     }
@@ -90,9 +91,8 @@ function createDashboardService(ownerId) {
                     metadatum => metadatum.questionnaireId === currentQuestionnaire.questionnaireId
                 );
                 const caseReferenceNumber = currentTemplateMetadata?.caseReferenceNumber;
-                //
                 const actionToDo =
-                    (currentQuestionnaire.created === currentQuestionnaire.modified &&
+                    (currentTemplateMetadata.read !== true &&
                         currentQuestionnaire.type !== 'stub') ||
                     !!acc[caseReferenceNumber]?.actionToDo;
 
