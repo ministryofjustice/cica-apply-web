@@ -6,9 +6,8 @@
 {% block pageTitle %}Active Applications{{ super() }}{% endblock %}
 
 {% block innerContent %}
-    <p class="govuk-body">Application homepage<p>
-    <h1 class="govuk-heading-l">{{applicantFirstName}} {{applicantLastName}} (ref:{{caseReferenceNumber}})</h1>
-    <h2 class="govuk-heading-m">To-do list</h2>
+    <h1 class="govuk-heading-xl"><span class="govuk-caption-l">Application homepage</span>{{applicantFirstName}} {{applicantLastName}} (ref:{{caseReferenceNumber}})</h1>
+    <h2 class="govuk-heading-l">To-do list</h2>
     {% if actionToDo %}
         <p class="govuk-body">You have 1 thing to do.<p>
         {% for link in toDoLinks %}
@@ -30,7 +29,7 @@
     {% endif %}
     {% if informationToShow %}
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-        <h3 class="govuk-heading-s">Information for you</h3>
+        <h3 class="govuk-heading-m">Information for you</h3>
         {% for link in informationLinks %}
             {{ mojTicketPanel({
                 attributes: {
