@@ -245,7 +245,9 @@ router.route('/secure-link').get(async (req, res) => {
 
         // Display magic link
         const baseUrl = `${req.protocol}://${req.get('host')}`;
-        res.send(`${baseUrl}/account/login?qid=${response.body.data.attributes.id}&uid=${ownerId}`);
+        res.send(
+            `${baseUrl}/account/login?qid=${response.body.data.attributes.id}&uid=${ownerId}&target=${crn}`
+        );
     } catch (err) {
         res.status(err.statusCode || 404).render('404.njk');
     }
