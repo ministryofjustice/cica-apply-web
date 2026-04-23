@@ -31,7 +31,8 @@
                         "first-name": "test",
                         "last-name": "testcase"
                     },
-                    "caseReferenceNumber": "88\\888888"
+                    "caseReferenceNumber": "88\\888888",
+                    "read": true
                 }
             }
         ]

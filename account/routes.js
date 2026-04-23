@@ -204,8 +204,7 @@ router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
                 if (questionnaireCaseReferenceNumber !== caseReferenceNumber) {
                     return;
                 }
-                const letterUnopened =
-                    questionnaireMetadata.modified === questionnaireMetadata.created;
+                const letterUnopened = templateMetadata.attributes.read !== true;
 
                 const {summaryBlocks} = templateMetadata.attributes;
 
@@ -281,6 +280,7 @@ router.get('/login', requiresAuth(), async (req, res, next) => {
         const accountService = createAccountService(req.session);
         const ownerId = req.query.uid;
         const questionnaireId = req.query.qid;
+        const {target} = req.query;
         const questionnaireServiceUnauthenticated = createQuestionnaireService({
             ownerId
         });
@@ -290,7 +290,9 @@ router.get('/login', requiresAuth(), async (req, res, next) => {
                 'is-authenticated': true
             });
             accountService.setOwnerId(req.oidc.user.sub);
-
+            if (target) {
+                return res.redirect(`/account/dashboard/manage/${target.replace('\\', '-')}`);
+            }
             return res.redirect(`/apply/resume/${questionnaireId}`);
         }
 
