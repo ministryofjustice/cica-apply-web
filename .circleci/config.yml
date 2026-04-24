@@ -15,7 +15,7 @@ executors:
 jobs:
   snyk_app_scan:
     docker:
-      - image: node:24.14.1-trixie-slim
+      - image: node:24.15.0-trixie-slim
     steps:
       - checkout
       - restore_cache:
@@ -39,7 +39,7 @@ jobs:
           command: snyk monitor
   build-for-test:
     docker:
-      - image: node:24.14.1-trixie-slim
+      - image: node:24.15.0-trixie-slim
     steps:
       - checkout
       - run:
@@ -60,7 +60,7 @@ jobs:
             - ./node_modules
   test:
     docker:
-      - image: node:24.14.1-trixie-slim
+      - image: node:24.15.0-trixie-slim
     steps:
       - attach_workspace:
           at: ./
@@ -71,7 +71,7 @@ jobs:
           command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
   lint:
     docker:
-      - image: node:24.14.1-trixie-slim
+      - image: node:24.15.0-trixie-slim
     steps:
       - attach_workspace:
           at: ./
