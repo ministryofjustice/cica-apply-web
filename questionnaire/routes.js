@@ -108,7 +108,7 @@ router.get('/resume/:questionnaireId', async (req, res) => {
     try {
         const accountService = createAccountService(req.session);
         const questionnaireService = createQuestionnaireService({
-            ownerId: req.oidc.user.sub,
+            ownerId: accountService.getOwnerId(),
             isAuthenticated: accountService.isAuthenticated(req)
         });
         let resumableQuestionnaireExternalId;
@@ -156,8 +156,6 @@ router.get('/resume/:questionnaireId', async (req, res) => {
                 resumableQuestionnaireCurrentSectionId
             )}`;
         }
-
-        console.log(req.session);
         return res.redirect(redirectUrl);
     } catch (err) {
         return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
