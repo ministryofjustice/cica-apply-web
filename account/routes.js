@@ -155,7 +155,7 @@ router.get('/dashboard/manage', requiresAuth(), async (req, res, next) => {
     }
 });
 
-router.get('/dashboard/manage/:caseReferenceNumber', async (req, res) => {
+router.get('/dashboard/manage/:caseReferenceNumber', requiresAuth(), async (req, res) => {
     try {
         const templateEngineService = createTemplateEngineService();
         const accountService = createAccountService(req.session);
