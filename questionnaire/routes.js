@@ -152,9 +152,13 @@ router.get('/resume/:questionnaireId', async (req, res) => {
         if (resumableQuestionnaireCurrentSectionId) {
             req.session.questionnaireId = resumableQuestionnaireId;
             req.session.externalId = resumableQuestionnaireExternalId;
-            redirectUrl = `${redirectUrl}/${formHelper.removeSectionIdPrefix(
+            let targetPage = formHelper.removeSectionIdPrefix(
                 resumableQuestionnaireCurrentSectionId
-            )}`;
+            );
+            if (req.query?.target) {
+                targetPage = req.query.target;
+            }
+            redirectUrl = `${redirectUrl}/${targetPage}`;
         }
         return res.redirect(redirectUrl);
     } catch (err) {
