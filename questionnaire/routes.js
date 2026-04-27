@@ -194,65 +194,6 @@ router.route('/previous/:section').get(async (req, res) => {
     }
 });
 
-//* *****************************************************************************************//
-//                              DO NOT DEPLOY LIVE                                          //
-//* *****************************************************************************************//
-router.route('/secure-link').get(async (req, res) => {
-    try {
-        // Random ownerId
-        const ownerId = `urn:uuid:${crypto.randomUUID()}`;
-
-        const currentDate = new Date();
-
-        const dateTime = currentDate.toISOString().split('T');
-        const day = dateTime[0].split('-')[2];
-        const time = dateTime[1]
-            .split('.')[0]
-            .split(':')
-            .join('');
-        const crn = `${day}\\${time}`;
-
-        // Create new template
-        const questionnaireService = createQuestionnaireService({
-            ownerId,
-            isAuthenticated: false,
-            templateName: 'request-a-review',
-            origin: 'web',
-            externalId: `urn:uuid:${crypto.randomUUID()}`,
-            featureFlags: {
-                templateVersion: '1.0.0',
-                bearerAuth: process.env.FEATURE_FLAGS_TOKEN
-            },
-            userData: {
-                personalisation: {
-                    'first-name': 'Sam',
-                    'last-name': 'Smith',
-                    date: '21 October 2025',
-                    'short-reason': 'short summary of why',
-                    'decision-reason':
-                        'I was sorry to read that you were the victim of a violent crime and the impact this incident had on you. I have carefully considered your application for criminal injuries compensation. The amount of compensation that can be awarded and the rules I must apply are set out in the Criminal Injuries Compensation Scheme 2012 (the Scheme). The Scheme rules are approved by Parliament.</p><p class="govuk-body">The Scheme states that an award may be withheld or reduced if you have an unspent conviction at the date of your application for compensation or during the course of your application, depending on the seriousness of that conviction.</p><p class="govuk-body">Whether a conviction is spent or unspent will be assessed in accordance with the Rehabilitation of Offenders Act 1974 (as amended). This sets out the length of time after you have been convicted, that your conviction must still be considered by CICA and others.</p><p class="govuk-body">Where a person has an unspent conviction at the date of application which resulted in a sentence listed at paragraph 3 of Annex D, the Scheme provides CICA with no discretion and the application must be refused. This includes a community order.</p><p class="govuk-body">The evidence gathered in connection with your application shows that on 12 June 2025 you were sentenced to a community order. This conviction was unspent at the time you made your application for compensation, and I am therefore unable to make an award or a reduced award of compensation.</p><p class="govuk-body">I am also unable to make an award of compensation as your application was not received within the two-year time limit. Paragraph 87 of the Scheme states that an application must be sent by the applicant so that it is received by the Authority as soon as reasonably practicable after the incident giving rise to the criminal injury to which it relates, and in any event within two years after the date of that incident. Under paragraph 89 of the Scheme, the time limit can be extended where there are exceptional circumstances that prevented an application being made, and no further extensive enquiries are required.</p><p class="govuk-body">As your claim is not eligible due to your unspent conviction, I have not made further enquiries about the delay in your application and I am not going to extend the time limit to apply.</p><p class="govuk-body">I appreciate this will be disappointing news and not the decision you were hoping for. I must emphasise that this decision is not intended to diminish the seriousness of the circumstances which led you to apply or the impact the crime has had on you.</p><p class="govuk-body">Please note that in making my assessment I have considered the evidence available to me on this date only in so far as to determine, on the balance of probabilities, how the paragraph(s) of the Scheme set out in this letter affect your eligibility to receive an award. I have not made any decision in relation to any other paragraphs of the Scheme.</p>',
-                    'decision-paragraphs':
-                        'Under paragraph 26 of the Scheme "Annex D sets out the circumstances in which an award under this Scheme will be withheld or reduced because the applicant to whom an award would otherwise be made has unspent convictions.</p><p class="govuk-body">Under paragraph 87 of the Scheme "Subject to paragraph 88, an application must be sent by the applicant so that it is received by the Authority as soon as reasonably practicable after the incident giving rise to the criminal injury to which it relates, and in any event within two years after the date of that incident."',
-                    'expiry-date': '31 December 2025',
-                    'barcode-string': '1234567890',
-                    'contact-method': 'email',
-                    'email-address': 'test-email-address'
-                },
-                caseReference: crn
-            }
-        });
-        const response = await questionnaireService.createQuestionnaire();
-
-        // Display magic link
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
-        res.send(
-            `${baseUrl}/account/login?qid=${response.body.data.attributes.id}&uid=${ownerId}&target=${crn}`
-        );
-    } catch (err) {
-        res.status(err.statusCode || 404).render('404.njk');
-    }
-});
-
 router
     .route('/:section')
     .get(async (req, res, next) => {
