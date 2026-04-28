@@ -1,6 +1,10 @@
 # lets start from an image that already has nodejs installed
 # https://snyk.io/blog/choosing-the-best-node-js-docker-image/
-FROM node:24.13.0-trixie-slim AS base
+FROM node:24.15.0-trixie-slim AS base
+
+USER root
+RUN npm install -g npm@11.13.0
+
 RUN groupadd -g 1014 dc_user \
     && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
 USER dc_user
@@ -16,8 +20,7 @@ COPY package*.json ./
 
 EXPOSE 3000
 
-ARG NODE_ENV=production
-# Defult to production. npm will ignore devDependencies in production mode
+# Default to production. npm will ignore devDependencies in production mode
 FROM base AS production
 
 ENV NODE_ENV=production
