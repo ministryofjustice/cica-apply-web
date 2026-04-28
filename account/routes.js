@@ -275,9 +275,11 @@ router.get('/dashboard/manage/:caseReferenceNumber', requiresAuth(), async (req,
 
 router.get('/login', requiresAuth(), async (req, res, next) => {
     try {
+        const accountService = createAccountService(req.session);
         const questionnaireId = req.query.qid;
         const {target} = req.query;
         if (questionnaireId) {
+            accountService.setOwnerId(req.oidc.user.sub);
             if (target) {
                 return res.redirect(`/account/dashboard/manage/${target.replace('\\', '-')}`);
             }
