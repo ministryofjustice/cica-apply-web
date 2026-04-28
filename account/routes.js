@@ -275,25 +275,14 @@ router.get('/dashboard/manage/:caseReferenceNumber', requiresAuth(), async (req,
 
 router.get('/login', requiresAuth(), async (req, res, next) => {
     try {
-        const accountService = createAccountService(req.session);
-        const ownerId = req.query.uid;
         const questionnaireId = req.query.qid;
         const {target} = req.query;
-        const questionnaireServiceUnauthenticated = createQuestionnaireService({
-            ownerId
-        });
         if (questionnaireId) {
-            await questionnaireServiceUnauthenticated.postSection(questionnaireId, 'owner', {
-                'owner-id': req.oidc.user.sub,
-                'is-authenticated': true
-            });
-            accountService.setOwnerId(req.oidc.user.sub);
             if (target) {
                 return res.redirect(`/account/dashboard/manage/${target.replace('\\', '-')}`);
             }
             return res.redirect(`/apply/resume/${questionnaireId}`);
         }
-
         // Else, redirect dashboard
         return res.redirect('/account/dashboard');
     } catch (err) {
