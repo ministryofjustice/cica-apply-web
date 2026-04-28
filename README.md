@@ -14,7 +14,7 @@ Cica-Web is a front-facing web app that allows applicants to apply for compensat
 -   Windows machine running docker desktop.
 -   You have Node Version Manager (NVM) installed globally. <sup>(_recommended, not required_)</sup>
 -   You have NPM `">=11.12.1"` installed globally.
--   You have Node `">=24.15.0` installed globally.
+-   You have Node `">=24.15.0"` installed globally.
 -   You have the Postgres `create-tables.sql` file in a sibling directory named `postgres-scripts` (this mapping is defined in the `docker-compose.yml` file)
 
 ## Installing Cica-Web
