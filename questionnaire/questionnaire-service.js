@@ -250,6 +250,27 @@ function questionnaireService(options = {}) {
         return service.get(opts);
     }
 
+    async function getPDF(questionnaireId, caseReferenceNumber) {
+        const opts = {
+            url: `${process.env.CW_LETTER_SERVICE_URL}/api/letters/${options.ownerId}/${caseReferenceNumber}/${questionnaireId}?format=pdf`,
+            headers: {
+                Authorization: `Bearer ${process.env.CW_LETTER_SERVICE_JWT}`,
+                'On-Behalf-Of': options.ownerId
+            },
+            json: {
+                data: {
+                    type: 'letters',
+                    attributes: {
+                        userId: options.ownerId,
+                        caseReferenceNumber,
+                        letterId: questionnaireId
+                    }
+                }
+            }
+        };
+        return service.get(opts);
+    }
+
     return Object.freeze({
         createQuestionnaire,
         getSection,
@@ -266,7 +287,8 @@ function questionnaireService(options = {}) {
         getQuestionnaireMetadata,
         getSectionAnswers,
         getTemplateMetadata,
-        getAllTemplatesMetadata
+        getAllTemplatesMetadata,
+        getPDF
     });
 }
 

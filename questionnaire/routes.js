@@ -363,4 +363,42 @@ router
         }
     });
 
+router.route('/:questionnaireId/pdf').get(async (req, res, next) => {
+    try {
+        const accountService = createAccountService(req.session);
+        const isAuthenticated = accountService.isAuthenticated(req);
+        const questionnaireService = createQuestionnaireService({
+            ownerId: accountService.getOwnerId(),
+            isAuthenticated
+        });
+        const {questionnaireId} = req.params;
+
+        const templateMetadata = questionnaireService.getTemplateMetadata(questionnaireId);
+
+        const caseReferenceNumber = templateMetadata.body?.data?.attributes?.caseReferenceNumber;
+        // Check that a questionnaire is valid
+        const resumableQuestionnaireResponse = await questionnaireService.getCurrentSection(
+            questionnaireId
+        );
+        const resumableQuestionnaire =
+            resumableQuestionnaireResponse.body?.data?.[0]?.relationships?.section?.data?.id !==
+            undefined;
+
+        // questionnaire is valid for this user
+        if (resumableQuestionnaire && isAuthenticated && caseReferenceNumber) {
+            const response = await questionnaireService.getPDF(
+                questionnaireId,
+                caseReferenceNumber
+            );
+            return res.send(response);
+        }
+        return res.status(404).render('404.njk', {sectionId: 'page-not-found'});
+    } catch (err) {
+        const pageNotFoundErr = new Error(err.message);
+        pageNotFoundErr.name = 'PageNotFound';
+        pageNotFoundErr.stack = err.stack;
+        return next(pageNotFoundErr);
+    }
+});
+
 module.exports = router;
