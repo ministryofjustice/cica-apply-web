@@ -19,7 +19,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-npm-{{checksum "package-lock.json" }}
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
       - run:
           name: Install CA certificates
           command: |
@@ -34,9 +34,42 @@ jobs:
       - run:
           name: Snyk test
           command: snyk test --severity-threshold=high
+  snyk_monitor:
+    docker:
+      - image: node:24.15.0-trixie-slim
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Install Snyk
+          command: npm install -g snyk@1.1304.0
       - run:
           name: Snyk monitor
           command: snyk monitor
+  snyk_container_monitor:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Install Snyk CLI
+          command: |
+            apk add --update-cache curl
+            mkdir -p /usr/local/bin
+            curl -sL https://github.com/snyk/cli/releases/download/v1.1304.0/snyk-alpine -o /usr/local/bin/snyk
+            chmod +x /usr/local/bin/snyk
+      - run:
+          name: Snyk container monitor
+          command: |
+            /usr/local/bin/snyk container monitor cica/cica-repo-dev
   build-for-test:
     docker:
       - image: node:24.15.0-trixie-slim
@@ -102,8 +135,7 @@ jobs:
       - run:
           name: Snyk container scan
           command: |
-            /usr/local/bin/snyk container test cica/cica-repo-dev --file=Dockerfile --severity-threshold=high 
-            /usr/local/bin/snyk container monitor cica/cica-repo-dev
+            /usr/local/bin/snyk container test cica/cica-repo-dev --file=Dockerfile --severity-threshold=high
 
       - run:
           name: Archive Docker Image
@@ -263,6 +295,20 @@ workflows:
       - snyk_app_scan:
           requires:
             - build-for-test
+      - snyk_monitor:
+          requires:
+            - build-for-test
+          filters:
+            branches:
+              only:
+                - cw-deploy
+      - snyk_container_monitor:
+          requires:
+            - push_image
+          filters:
+            branches:
+              only:
+                - cw-deploy
       - build:
           requires:
             - test
