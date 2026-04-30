@@ -217,7 +217,6 @@ router
                     sectionId: 'incompatible'
                 });
             }
-
             req.session.referrer = req.originalUrl;
 
             const html = formHelper.getSectionHtml(
@@ -390,7 +389,7 @@ router.route('/:questionnaireId/pdf').get(async (req, res, next) => {
                 questionnaireId,
                 caseReferenceNumber
             );
-            return res.send(response);
+            return res.send(response.body.stream);
         }
         return res.status(404).render('404.njk', {sectionId: 'page-not-found'});
     } catch (err) {

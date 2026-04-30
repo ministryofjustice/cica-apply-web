@@ -250,22 +250,13 @@ function questionnaireService(options = {}) {
         return service.get(opts);
     }
 
-    async function getPDF(questionnaireId, caseReferenceNumber) {
+    async function getPDF(questionnaireId) {
         const opts = {
-            url: `${process.env.CW_LETTER_SERVICE_URL}/api/letters/${options.ownerId}/${caseReferenceNumber}/${questionnaireId}?format=pdf`,
+            url: `${process.env.CW_DCS_URL}/api/questionnaires/${questionnaireId}/letter`,
             headers: {
-                Authorization: `Bearer ${process.env.CW_LETTER_SERVICE_JWT}`,
-                'On-Behalf-Of': options.ownerId
-            },
-            json: {
-                data: {
-                    type: 'letters',
-                    attributes: {
-                        userId: options.ownerId,
-                        caseReferenceNumber,
-                        letterId: questionnaireId
-                    }
-                }
+                Authorization: `Bearer ${process.env.CW_DCS_JWT}`,
+                'On-Behalf-Of': options.ownerId,
+                'Dcs-Api-Version': '2023-05-17'
             }
         };
         return service.get(opts);
