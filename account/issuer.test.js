@@ -58,3 +58,34 @@ describe('OIDC issuer', () => {
         });
     });
 });
+
+describe('GOV.UK One Login rate limiting', () => {
+    describe('temporarily_unavailable error', () => {
+        beforeEach(() => {
+            setUpCommonMocks({
+                '../account/routes': () => {
+                    const express = require('express');
+                    const router = express.Router();
+                    router.get('/rate-limit-test', (req, res, next) => {
+                        const err = new Error('temporarily_unavailable');
+                        err.error = 'temporarily_unavailable';
+                        next(err);
+                    });
+                    return router;
+                }
+            });
+        });
+
+        it('Should return a 503 status code', async () => {
+            const response = await request(app).get('/account/rate-limit-test');
+            expect(response.statusCode).toBe(503);
+        });
+
+        it('Should render the oidc-provider-unreachable template with oidc-rate-limit section', async () => {
+            const response = await request(app).get('/account/rate-limit-test');
+            expect(response.res.text).toContain(
+                'https://www.smartsurvey.co.uk/s/inpagefeedback/?page=oidc-rate-limit'
+            );
+        });
+    });
+});

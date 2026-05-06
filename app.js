@@ -223,6 +223,14 @@ app.use((err, req, res, next) => {
         }
     }
 
+    // Handles rate limiting from GOV.UK One Login returning error=temporarily_unavailable.
+    if (err.error === 'temporarily_unavailable') {
+        return res.status(503).render('oidc-provider-unreachable.njk', {
+            backTarget: req?.session?.referrer,
+            sectionId: 'oidc-rate-limit'
+        });
+    }
+
     // Page not found, can also be as a result of session timeout
     if (err.name === 'PageNotFound') {
         // timeout handler
