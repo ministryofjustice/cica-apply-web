@@ -1,0 +1,39 @@
+version: v1.25.0
+ignore:
+  SNYK-JS-BRACEEXPANSION-16755174:
+    - '*':
+        reason: >
+          Vulnerability in npm's bundled brace-expansion. Not present in
+          application dependencies. No fix available for npm 11.x on Node 24 LTS.
+          Will resolve on next Node LTS upgrade.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-JS-PACOTE-8225084:
+    - '*':
+        reason: >
+          Vulnerability in npm's bundled pacote. Not present in application
+          dependencies. No upstream fix available in stable npm 11.x.
+          Will resolve on next Node LTS upgrade.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-DEBIAN13-PERL-17037371:
+    - '*':
+        reason: >
+          High severity CVE in perl's bundled Archive::Tar (symlink traversal
+          during tar extraction). Introduced by base image
+          node:24.15.0-trixie-slim. Application does not extract tar archives.
+          No fix available in Debian trixie. Review on next base image upgrade.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-DEBIAN13-PERL-17037374:
+    - '*':
+        reason: >
+          High severity CVE in perl/perl-base. Introduced by base image
+          node:24.15.0-trixie-slim. Perl is not invoked by the application.
+          No fix available in Debian trixie. Review on next base image upgrade.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-DEBIAN13-PERL-17037434:
+    - '*':
+        reason: >
+          Critical severity CVE in perl's bundled Archive::Tar (symlink
+          traversal during tar extraction). Introduced by base image
+          node:24.15.0-trixie-slim. Application does not extract tar archives.
+          No fix available in Debian trixie. Review on next base image upgrade.
+        expires: '2026-08-20T00:00:00.000Z'

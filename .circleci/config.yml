@@ -140,7 +140,7 @@ jobs:
       - run:
           name: Snyk container scan
           command: |
-            /usr/local/bin/snyk container test cica/cica-repo-dev --file=Dockerfile --severity-threshold=high
+            /usr/local/bin/snyk container test cica/cica-repo-dev --file=Dockerfile --severity-threshold=high --policy-path=.snyk
 
       - run:
           name: Archive Docker Image
