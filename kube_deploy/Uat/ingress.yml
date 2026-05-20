@@ -6,11 +6,10 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/aws-weight: '100'
     external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-uat-green
-    # 403 - WAF blocks (e.g. SQL injection) go to default backend error page
-    # 406 - Used deliberately for ModSec unknown URL blocks (rule 700020) so they
-    #        go to the default backend without interfering with the app's own 404 handling
+    # 403 - WAF blocks - show custom contact us page
+    # 406 - Used deliberately for ModSec unknown URL blocks (rule 700020) show the same content as the 404.njk (page not found, contact us)
     nginx.ingress.kubernetes.io/custom-http-errors: '403,406'
-    nginx.ingress.kubernetes.io/default-backend: default
+    nginx.ingress.kubernetes.io/default-backend: custom-errors
     nginx.ingress.kubernetes.io/enable-modsecurity: 'true'
     nginx.ingress.kubernetes.io/modsecurity-transaction-id: '$request_id'
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
@@ -38,8 +37,8 @@ metadata:
       SecRuleUpdateTargetById 932235 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 932260 "!ARGS:/q-*/"
       SecRuleUpdateTargetById 942151 "!ARGS:/q-*/"
-      SecRuleUpdateTargetById 932230 "!ARGS:/q-*/"
-      SecRuleUpdateTargetById 932250 "!ARGS:/q-*/"
+      # SecRuleUpdateTargetById 932230 "!ARGS:/q-*/"
+      # SecRuleUpdateTargetById 932250 "!ARGS:/q-*/"
       SecRuleRemoveByTag "language-php"
       SecRuleRemoveByTag "platform-windows"
       SecAuditEngine RelevantOnly

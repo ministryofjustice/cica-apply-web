@@ -1,0 +1,4 @@
+# Base Kustomize configuration for custom error pages.
+# Each environment overlay sets its own namespace.
+resources:
+  - custom-error-pages.yml

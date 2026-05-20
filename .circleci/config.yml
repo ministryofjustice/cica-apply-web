@@ -207,10 +207,13 @@ jobs:
           command: |
             echo "deploy before aws ecr"
             kubectl set image -f kube_deploy/Dev/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
-            | kubectl apply -f -
+            | kubectl apply -n claim-criminal-injuries-compensation-dev -f -
             kubectl apply \
                 -f kube_deploy/Dev/service.yml \
                 -f kube_deploy/Dev/ingress.yml
+            kubectl apply -k kube_deploy/Dev
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-dev
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-dev
   deploy_to_uat:
     executor: docker-publisher
     steps:
@@ -232,10 +235,13 @@ jobs:
           command: |
             echo "deploy before aws ecr"
             kubectl set image -f kube_deploy/Uat/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
-            | kubectl apply -f -
+            | kubectl apply -n claim-criminal-injuries-compensation-uat -f -
             kubectl apply \
                 -f kube_deploy/Uat/service.yml \
                 -f kube_deploy/Uat/ingress.yml
+            kubectl apply -k kube_deploy/Uat
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-uat
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-uat
   deploy_to_prod:
     executor: docker-publisher
     steps:
@@ -257,10 +263,13 @@ jobs:
           command: |
             echo "deploy before aws ecr"
             kubectl set image -f kube_deploy/Prod/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
-            | kubectl apply -f -
+            | kubectl apply -n claim-criminal-injuries-compensation-prod -f -
             kubectl apply \
                 -f kube_deploy/Prod/service.yml \
-                -f kube_deploy/Prod/ingress.yml
+                -f kube_deploy/Prod/ingress.yml 
+            kubectl apply -k kube_deploy/Prod
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-prod
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-prod
   deploy_to_staging:
     executor: docker-publisher
     steps:
@@ -282,10 +291,13 @@ jobs:
           command: |
             echo "deploy before aws ecr"
             kubectl set image -f kube_deploy/Stag/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
-            | kubectl apply -f -
+            | kubectl apply -n claim-criminal-injuries-compensation-stag -f -
             kubectl apply \
                 -f kube_deploy/Stag/service.yml \
                 -f kube_deploy/Stag/ingress.yml
+            kubectl apply -k kube_deploy/Stag
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-stag
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-stag
 workflows:
   version: 2
   build-test-push-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:

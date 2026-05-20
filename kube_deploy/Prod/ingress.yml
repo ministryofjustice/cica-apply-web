@@ -10,7 +10,7 @@ metadata:
     # 406 - Used deliberately for ModSec unknown URL blocks (rule 700020) so they
     #        go to the default backend without interfering with the app's own 404 handling
     nginx.ingress.kubernetes.io/custom-http-errors: '403,406'
-    nginx.ingress.kubernetes.io/default-backend: default
+    nginx.ingress.kubernetes.io/default-backend: custom-errors
     nginx.ingress.kubernetes.io/enable-modsecurity: 'true'
     nginx.ingress.kubernetes.io/modsecurity-transaction-id: '$request_id'
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
