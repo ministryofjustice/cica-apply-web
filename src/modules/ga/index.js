@@ -1,5 +1,6 @@
-import * as jsCookies from 'js-cookie';
+import jsCookies from 'js-cookie';
 import guaTrackLinks from './vendor/gua-anchor';
+import parseCookie from '../parseCookie';
 
 function createCicaGa(window) {
     // eslint-disable-next-line no-undef
@@ -165,11 +166,12 @@ function createCicaGa(window) {
     }
 
     function recordJourneyDuration() {
-        const cookieValue = jsCookies.getJSON('client') || {};
+        const rawCookie = jsCookies.get('client');
+        const cookieValue = parseCookie(rawCookie);
 
         if (!cookieValue.journeyStartTime) {
             cookieValue.journeyStartTime = new Date().getTime();
-            jsCookies.set('client', cookieValue, cookieConfig);
+            jsCookies.set('client', JSON.stringify(cookieValue), cookieConfig);
             return;
         }
         if (window.location.pathname === '/apply/confirmation') {
@@ -184,7 +186,7 @@ function createCicaGa(window) {
             });
             // reset value.
             cookieValue.journeyStartTime = undefined;
-            jsCookies.set('client', cookieValue, cookieConfig);
+            jsCookies.set('client', JSON.stringify(cookieValue), cookieConfig);
         }
     }
 

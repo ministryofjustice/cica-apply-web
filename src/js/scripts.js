@@ -3,7 +3,7 @@ import 'core-js';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'regenerator-runtime/runtime';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as jsCookies from 'js-cookie';
+import jsCookies from 'js-cookie';
 import {initAll} from '@ministryofjustice/frontend';
 
 import createCicaGa from '../modules/ga';

@@ -1,4 +1,3 @@
-﻿---
 # ConfigMap HTML pages keyed by HTTP status code.
 # The nginx-errors image serves /www/<X-Code>.html when nginx-ingress
 # proxies a blocked request to this backend.
@@ -274,7 +273,7 @@ data:
     </body>
     </html>
 ---
-# Deployment â€” runs the official ingress-nginx error pages image.
+# Deployment runs the official ingress-nginx error pages image.
 # It serves /www/<status-code>.html, populated from the ConfigMap above.
 apiVersion: apps/v1
 kind: Deployment
@@ -331,7 +330,7 @@ spec:
           configMap:
             name: custom-error-pages
 ---
-# Service â€” exposes the custom-errors deployment as 'custom-errors' on port 80.
+# Service exposes the custom-errors deployment as 'custom-errors' on port 80.
 # Referenced by the ingress annotation: default-backend: custom-errors
 apiVersion: v1
 kind: Service

@@ -1,4 +1,5 @@
-import * as jsCookies from 'js-cookie';
+import jsCookies from 'js-cookie';
+import parseCookie from '../parseCookie';
 
 function createCookiePreference(cookieName, allowedPreferences) {
     const cookieConfig = {
@@ -8,7 +9,8 @@ function createCookiePreference(cookieName, allowedPreferences) {
     };
 
     function get(preferenceName) {
-        const cookieValue = jsCookies.getJSON(cookieName) || {};
+        const rawCookie = jsCookies.get(cookieName);
+        const cookieValue = parseCookie(rawCookie);
         return {
             name: preferenceName,
             value: cookieValue[preferenceName]
@@ -22,9 +24,10 @@ function createCookiePreference(cookieName, allowedPreferences) {
             );
         }
 
-        const cookieValue = jsCookies.getJSON(cookieName) || {};
+        const rawCookie = jsCookies.get(cookieName);
+        const cookieValue = parseCookie(rawCookie);
         cookieValue[preferenceName] = preferenceValue;
-        jsCookies.set(cookieName, cookieValue, cookieConfig);
+        jsCookies.set(cookieName, JSON.stringify(cookieValue), cookieConfig);
     }
 
     function getCookie() {

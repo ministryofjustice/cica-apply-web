@@ -7,11 +7,11 @@ window.CICA = {
 jest.mock('js-cookie');
 const jsCookie = require('js-cookie');
 
-jsCookie.getJSON.mockImplementation(() => {
-    return {
+jsCookie.get.mockImplementation(() =>
+    JSON.stringify({
         journeyStartTime: new Date().getTime() - 10000
-    };
-});
+    })
+);
 describe('GA', () => {
     describe('Details element', () => {
         it('should send a tracking request', () => {

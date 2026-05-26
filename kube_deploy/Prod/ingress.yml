@@ -6,9 +6,9 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/aws-weight: '100'
     external-dns.alpha.kubernetes.io/set-identifier: webapp-ingress-claim-criminal-injuries-compensation-prod-green
-    # 403 - WAF blocks (e.g. SQL injection) go to default backend error page
+    # 403 - WAF blocks (e.g. SQL injection) go to custom-errors backend error page
     # 406 - Used deliberately for ModSec unknown URL blocks (rule 700020) so they
-    #        go to the default backend without interfering with the app's own 404 handling
+    #        go to the custom-errors backend, which serves a page mirroring the app's 404 content
     nginx.ingress.kubernetes.io/custom-http-errors: '403,406'
     nginx.ingress.kubernetes.io/default-backend: custom-errors
     nginx.ingress.kubernetes.io/enable-modsecurity: 'true'
