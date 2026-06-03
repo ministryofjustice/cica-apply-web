@@ -3,7 +3,6 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const helmet = require('helmet');
 const {nanoid} = require('nanoid');
 const {auth} = require('express-openid-connect');
@@ -20,6 +19,7 @@ const createTemplateEngineService = require('./templateEngine');
 const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnaireInstantiated');
 const getQuestionnaireIdInSession = require('./questionnaire/utils/getQuestionnaireIdInSession');
 const createAccountService = require('./account/account-service');
+const pinoLogger = require('./middleware/logger');
 
 const app = express();
 
@@ -147,7 +147,9 @@ app.use(
     })
 );
 
-app.use(logger('dev'));
+// Add questionnaireId and ownerId to every request log entry for end-to-end applicant tracing.
+app.use(pinoLogger);
+
 // https://expressjs.com/en/api.html#express.json
 app.use(express.json());
 // https://expressjs.com/en/api.html#express.urlencoded
