@@ -7,33 +7,28 @@ ignore:
           application dependencies. No fix available for npm 11.x on Node 24 LTS.
           Will resolve on next Node LTS upgrade.
         expires: '2026-08-20T00:00:00.000Z'
-  SNYK-JS-PACOTE-8225084:
+  SNYK-JS-UNDICI-17372658:
     - '*':
         reason: >
-          Vulnerability in npm's bundled pacote. Not present in application
-          dependencies. No upstream fix available in stable npm 11.x.
-          Will resolve on next Node LTS upgrade.
+          Vulnerable undici version pinned by npm's bundled node-gyp
+          dependency (node-gyp@12.x and 13.0.0 all declare undici@^6.25.0).
+          Tested npm 11.13.0 / 11.14.0 / 11.16.0 / 11.17.0 — all resolve to
+          a vulnerable undici version. Build-time tool only (node-gyp
+          compiles native modules during install), not present in the
+          running application's request path. No fix available until
+          node-gyp bumps its undici dependency.
         expires: '2026-08-20T00:00:00.000Z'
-  SNYK-DEBIAN13-PERL-17037371:
+  SNYK-JS-UNDICI-17372754:
     - '*':
         reason: >
-          High severity CVE in perl's bundled Archive::Tar (symlink traversal
-          during tar extraction). Introduced by base image
-          node:24.15.0-trixie-slim. Application does not extract tar archives.
-          No fix available in Debian trixie. Review on next base image upgrade.
+          Same root cause as SNYK-JS-UNDICI-17372658 — vulnerable undici
+          pinned via npm's bundled node-gyp dependency, build-time only,
+          no fix currently available upstream.
         expires: '2026-08-20T00:00:00.000Z'
-  SNYK-DEBIAN13-PERL-17037374:
+  SNYK-JS-UNDICI-17372758:
     - '*':
         reason: >
-          High severity CVE in perl/perl-base. Introduced by base image
-          node:24.15.0-trixie-slim. Perl is not invoked by the application.
-          No fix available in Debian trixie. Review on next base image upgrade.
-        expires: '2026-08-20T00:00:00.000Z'
-  SNYK-DEBIAN13-PERL-17037434:
-    - '*':
-        reason: >
-          Critical severity CVE in perl's bundled Archive::Tar (symlink
-          traversal during tar extraction). Introduced by base image
-          node:24.15.0-trixie-slim. Application does not extract tar archives.
-          No fix available in Debian trixie. Review on next base image upgrade.
+          Same root cause as SNYK-JS-UNDICI-17372658 — vulnerable undici
+          pinned via npm's bundled node-gyp dependency, build-time only,
+          no fix currently available upstream.
         expires: '2026-08-20T00:00:00.000Z'

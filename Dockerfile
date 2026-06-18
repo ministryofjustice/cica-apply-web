@@ -3,7 +3,7 @@
 FROM node:24.15.0-trixie-slim AS base
 
 USER root
-RUN npm install -g npm@11.13.0
+RUN npm install -g npm@11.17.0
 
 RUN groupadd -g 1014 dc_user \
     && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
