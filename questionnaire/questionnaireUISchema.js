@@ -2057,5 +2057,22 @@ module.exports = {
                 }
             }
         }
+    },
+    'p--create-account-or-sign-in': {
+        options: {
+            properties: {
+                'q-create-account-or-sign-in': {
+                    options: {
+                        macroOptions: {
+                            fieldset: {
+                                legend: {
+                                    classes: 'govuk-fieldset__legend--m'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 };
