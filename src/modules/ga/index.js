@@ -196,7 +196,7 @@ function createCicaGa(window) {
 
     function init() {
         const trackableElements = window.document.querySelectorAll(
-            '[data-module], .ga-event, .govuk-input, .govuk-textarea'
+            '[data-module], .ga-event, .ga-event--click, .govuk-input, .govuk-textarea'
         );
         // GOVUK modules, and custom events tracking.
         trackableElements.forEach(element => {

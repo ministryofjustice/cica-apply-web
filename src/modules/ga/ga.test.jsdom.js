@@ -75,6 +75,21 @@ describe('GA', () => {
                 event_callback: undefined
             });
         });
+        it('should send an event with custom data to GA when the element only has the ga-event--click class', () => {
+            // real markup (e.g. index/landing-page.njk) uses `ga-event--click` on its own,
+            // without the base `ga-event` class.
+            document.body.innerHTML = `<a id="click-test-4" class="govuk-link ga-event--click" data-tracking-category="landing_page" data-tracking-label="cica_scheme_guide" href="https://www.gov.uk/guidance/criminal-injuries-compensation-a-guide">Scheme guide</a>`;
+            const cicaGa = createCicaGa(window);
+            cicaGa.init();
+            window.gtag = jest.fn();
+            document.querySelector('#click-test-4').click();
+            expect(window.gtag).toHaveBeenCalledWith('event', 'click', {
+                event_category: 'landing_page',
+                event_label: 'cica_scheme_guide',
+                value: undefined,
+                event_callback: undefined
+            });
+        });
     });
 
     describe('Error event', () => {

@@ -1,12 +1,5 @@
 version: v1.25.0
 ignore:
-  SNYK-JS-BRACEEXPANSION-16755174:
-    - '*':
-        reason: >
-          Vulnerability in npm's bundled brace-expansion. Not present in
-          application dependencies. No fix available for npm 11.x on Node 24 LTS.
-          Will resolve on next Node LTS upgrade.
-        expires: '2026-08-20T00:00:00.000Z'
   SNYK-JS-UNDICI-17372658:
     - '*':
         reason: >
@@ -32,3 +25,60 @@ ignore:
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
         expires: '2026-08-20T00:00:00.000Z'
+  SNYK-JS-BRACEEXPANSION-18313044:
+    - '*':
+        reason: >
+          brace-expansion resolved transitively via npm's bundled
+          minimatch (npm@11.18.0 > minimatch@10.2.5 > brace-expansion@5.0.7).
+          Build/CLI tooling only — not present in the application runtime
+          path (cica-web app scan clean). Fixed in brace-expansion 5.0.8,
+          but npm@11.18.0 bundles 5.0.7 and the version isn't independently
+          controllable without patching npm's tree. Recheck when npm bumps
+          its bundled brace-expansion.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-DEBIAN13-ATTR-17678182:
+    - '*':
+        reason: >
+          libattr1, introduced by the base image
+          node:24.18.1-trixie-slim via coreutils/adduser — a base-OS
+          package, not an application dependency. No fix published for
+          Debian 13 (trixie); base-image upgrade recommendations do not
+          resolve it. Accepted pending upstream Debian patch or a base-image
+          migration. Recheck on base-image bump.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-DEBIAN13-ACL-17677866:
+    - '*':
+        reason: >
+          libacl1, introduced by the base image
+          node:24.18.1-trixie-slim via coreutils/sed/adduser/dpkg — a
+          base-OS package, not an application dependency. No fix published
+          for Debian 13 (trixie); base-image upgrade recommendations do not
+          resolve it. Accepted pending upstream Debian patch or a base-image
+          migration. Recheck on base-image bump.
+        expires: '2026-08-20T00:00:00.000Z'
+  SNYK-JS-NANOID-18506894:
+    - '*':
+        reason: >
+          Both nanoid() call sites (CSP nonce in app.js, request-id fallback in the logger) call with no size argument on the secure export.
+          The vulnerable functions (customAlphabet/customRandom and the
+          nanoid/non-secure module) are never imported, and no user input
+          reaches the size parameter, so the infinite-loop DoS is
+          unreachable. Fix available in nanoid@5.1.16.
+        expires: '2026-09-01T00:00:00.000Z'
+  SNYK-JS-NANOID-18506897:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-NANOID-18506894 — no-arg nanoid() on the secure export, vulnerable paths not imported, DoS unreachable.
+        expires: '2026-09-01T00:00:00.000Z'
+  SNYK-UPSTREAM-NODE-18507940:
+    - '*':
+        reason: >
+          node-tar hardlink directory-traversal (CVE-2026-26960) bundled in
+          the node:24.18.1-trixie-slim base image. Exploitable only by
+          extracting an attacker-controlled tar archive; node-tar is present
+          as a build-time/npm-install dependency, not invoked by the running
+          cica-web application, which does not extract untrusted archives at
+          runtime. Not bound to the network stack (requires local
+          read/write/execute). Fixed upstream in Node 26.5.0. Recheck on
+          base-image upgrade.
+        expires: '2026-09-01T00:00:00.000Z'

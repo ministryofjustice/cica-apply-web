@@ -1,3 +1,4 @@
+// Scroll tracker to watch landing-page
 export default function createGAScrollTracker(window) {
     const pageLoadTime = Date.now();
     const milestones = [25, 50, 75, 100];
@@ -55,6 +56,9 @@ export default function createGAScrollTracker(window) {
     }
 
     function processScroll() {
+        if (!initialised) {
+            return;
+        }
         const scrollPercentage = getScrollPercentage();
 
         milestones.forEach(milestone => {

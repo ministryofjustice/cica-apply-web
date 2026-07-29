@@ -148,8 +148,8 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
   if (cookiePreference.get('analytics').value === '1') {
     const cicaGa = (0, _ga.default)(window);
     cicaGa.init();
-    const GAScrollTracker = (0, _scrollTracker.default)(window);
-    GAScrollTracker.init();
+    const gaScrollTracker = (0, _scrollTracker.default)(window);
+    gaScrollTracker.init();
   } else {
     window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
   }

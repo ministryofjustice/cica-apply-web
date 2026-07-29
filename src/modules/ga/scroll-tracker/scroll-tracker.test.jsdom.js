@@ -1,6 +1,6 @@
 import createGAScrollTracker from './index';
 
-describe('GAScrollTracker', () => {
+describe('gaScrollTracker', () => {
     let trackers = [];
 
     // Every tracker binds a listener to the shared jsdom window. Register each

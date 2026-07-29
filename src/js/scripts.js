@@ -28,8 +28,8 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
     if (cookiePreference.get('analytics').value === '1') {
         const cicaGa = createCicaGa(window);
         cicaGa.init();
-        const GAScrollTracker = createGAScrollTracker(window);
-        GAScrollTracker.init();
+        const gaScrollTracker = createGAScrollTracker(window);
+        gaScrollTracker.init();
     } else {
         window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
     }
