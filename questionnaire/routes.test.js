@@ -324,7 +324,7 @@ describe('Hitting /apply/start-or-resume', () => {
                     });
                 });
 
-                it('Should redirect to `/apply/start`', async () => {
+                it('Should redirect to `/apply/landing-page`', async () => {
                     const currentAgent = request.agent(app);
                     const initialResponse = await currentAgent.get('/apply/start-or-resume');
                     const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
@@ -333,7 +333,7 @@ describe('Hitting /apply/start-or-resume', () => {
                         _csrf: initialCsrfToken
                     });
                     expect(response.statusCode).toBe(302);
-                    expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+                    expect(response.res.text).toBe('Found. Redirecting to /apply/landing-page');
                 });
             });
             describe('continue existing application', () => {
@@ -401,7 +401,7 @@ describe('Hitting /apply/start-or-resume', () => {
                     setUpCommonMocks();
                 });
 
-                it('Should redirect to `/apply/start`', async () => {
+                it('Should redirect to `/apply/landing-page`', async () => {
                     const currentAgent = request.agent(app);
                     const initialResponse = await currentAgent.get('/apply/start-or-resume');
                     const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
@@ -410,7 +410,7 @@ describe('Hitting /apply/start-or-resume', () => {
                         _csrf: initialCsrfToken
                     });
                     expect(response.statusCode).toBe(302);
-                    expect(response.res.text).toBe('Found. Redirecting to /apply/start');
+                    expect(response.res.text).toBe('Found. Redirecting to /apply/landing-page');
                 });
             });
             describe('continue existing application', () => {

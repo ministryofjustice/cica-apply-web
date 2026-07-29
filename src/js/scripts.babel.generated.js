@@ -130,6 +130,7 @@ var _modalTimeout = _interopRequireDefault(require("../modules/modal-timeout"));
 var _newWindowAnchors = _interopRequireDefault(require("../modules/new-window-anchors"));
 var _postcodeLookup = _interopRequireDefault(require("../modules/postcode-lookup"));
 var _govukOneLoginServiceHeader = _interopRequireDefault(require("../modules/govuk-one-login-service-header"));
+var _scrollTracker = _interopRequireDefault(require("../modules/ga/scroll-tracker"));
 var _msToMinutesAndSeconds = _interopRequireDefault(require("../modules/modal-timeout/utils/msToMinutesAndSeconds"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -147,6 +148,8 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
   if (cookiePreference.get('analytics').value === '1') {
     const cicaGa = (0, _ga.default)(window);
     cicaGa.init();
+    const GAScrollTracker = (0, _scrollTracker.default)(window);
+    GAScrollTracker.init();
   } else {
     window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
   }

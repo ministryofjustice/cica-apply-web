@@ -1,0 +1,84 @@
+{% extends "page.njk" %}
+{% from "button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+    {%- if error %}Error: {% endif %}Landing Page - {{ super() }}
+{% endblock %}
+{% block innerContent %}
+    <form method="post" novalidate autocomplete="off">
+
+        <h1 class="govuk-heading-l">Before you apply</h1>
+
+        <p class="govuk-body">We want to help you decide whether to apply for compensation before you spend time on an application, and to understand what to expect if you do apply.</p>
+
+        <p class="govuk-body">Before you apply for compensation under the <a target="_blank" rel="noopener noreferrer" href="https://www.gov.uk/guidance/criminal-injuries-compensation-a-guide" class="govuk-link ga-event--click" data-tracking-category="landing_page" data-tracking-label="cica_scheme_guide">Criminal Injuries Compensation Scheme 2012 (the Scheme)</a>, please read the following information about its key eligibility rules.</p>
+
+        <p class="govuk-body"><strong>Many applications are unsuccessful because they do not meet these rules.</strong></p>
+
+        <h2 class="govuk-heading-m">Check if the crime is covered</h2>
+
+        <p class="govuk-body">The crime must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>be a violent crime, as defined in the Scheme</li>
+            <li>normally have happened in Great Britain (England, Scotland and Wales), except in limited circumstances such as a British controlled plane. The process is different if the crime happened in Northern Ireland or another country</li>
+            <li>have been reported to the police as soon as reasonably possible</li>
+        </ul>
+
+        <h2 class="govuk-heading-m">Check if the injury is covered</h2>
+
+        <p class="govuk-body">The Scheme does not include very minor physical injuries or short-term psychological harm.</p>
+
+        <p class="govuk-body">Mental injuries must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>make it much harder to do things a person would normally do, for example working, going to college or university, seeing friends or having a relationship</li>
+            <li>be diagnosed by a psychiatrist or clinical psychologist and last for at least 6 weeks</li>
+        </ul>
+
+        <h2 class="govuk-heading-m">Check if you can apply</h2>
+
+        <p class="govuk-body">You must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>have a close connection to the United Kingdom – usually this means living in the UK and being British or a close relative of someone British</li>
+            <li>co-operate with the criminal investigation as much as you can</li>
+            <li>have good character (for example, you should not be involved in crime, anti-social behaviour or gang membership)</li>
+            <li>not have engaged in conduct before, during or after the crime that makes it inappropriate to receive compensation</li>
+            <li>not have an unspent criminal conviction for an offence which resulted in a custodial or community sentence</li>
+            <li>help CICA with your application</li>
+        </ul>
+
+        <p class="govuk-body">Your application to CICA must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>be made as soon as reasonably possible and within two years of reporting your injuries</li>
+            <li>not be a duplicate of a previous application about the same injuries</li>
+        </ul>
+
+        <p class="govuk-body">Different timescales apply if you were a child when the crime happened, or if you could not have applied sooner due to exceptional circumstances.</p>
+
+        <h2 class="govuk-heading-m">What you cannot get compensation for</h2>
+
+        <p class="govuk-body">Criminal injuries compensation cannot be paid for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>injuries caused by an animal unless it was used with intent to harm you</li>
+            <li>injuries caused by a vehicle unless it was used with intent to harm you</li>
+            <li>injuries caused by a sexual crime if there was no physical contact or violent threat from the offender</li>
+            <li>injuries caused in normal sporting activity which you had consented to take part in</li>
+            <li>incidents involving damage to property, theft or fraud unless combined with a violent crime causing physical or mental injury</li>
+        </ul>
+
+        <h2 class="govuk-heading-m">When you will get a decision</h2>
+
+        <p class="govuk-body">CICA receives a high volume of applications.</p>
+
+        <p class="govuk-body">Most applications are decided within 12 months. However, some applications take longer because they are more complex or because of demand for the service.</p>
+
+        <p class="govuk-body">Applications involving mental injury, loss of earnings or special expenses often take longer to process.</p>
+
+        <p class="govuk-body">CICA will usually only contact you if it needs more information. This means you may not hear from CICA until a decision has been made on your application.</p>
+
+        {{ govukButton({
+            text: buttonText,
+            preventDoubleClick: true
+        }) }}
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    </form>
+{% endblock %}

@@ -50,9 +50,12 @@ router.route('/start-or-resume').get((req, res) => {
 
 router.post('/start-or-resume', (req, res) => {
     try {
-        const templateEngineService = createTemplateEngineService();
-        const {render} = templateEngineService;
         const startType = req.body['start-or-resume'];
+
+        if (startType === 'start') {
+            return res.redirect('/apply/landing-page');
+        }
+
         const redirectionUrl = getRedirectionUrl(
             startType,
             getQuestionnaireIdInSession(req.session)
@@ -62,6 +65,8 @@ router.post('/start-or-resume', (req, res) => {
             return res.redirect(redirectionUrl);
         }
 
+        const templateEngineService = createTemplateEngineService();
+        const {render} = templateEngineService;
         const html = render('start-or-resume.njk', {
             csrfToken: res.locals.csrfToken,
             submitButtonText: getFormSubmitButtonText('start'),
@@ -75,6 +80,35 @@ router.post('/start-or-resume', (req, res) => {
         return res.status(err.statusCode || 404).render('404.njk', {sectionId: 'page-not-found'});
     }
 });
+
+router
+    .route('/landing-page')
+    .get((req, res) => {
+        try {
+            const templateEngineService = createTemplateEngineService();
+            const {render} = templateEngineService;
+            const html = render('landing-page.njk', {
+                csrfToken: res.locals.csrfToken,
+                buttonText: getFormSubmitButtonText('continue'),
+                sectionId: 'landing-page',
+                cspNonce: res.locals.cspNonce
+            });
+            return res.send(html);
+        } catch (err) {
+            return res
+                .status(err.statusCode || 404)
+                .render('404.njk', {sectionId: 'page-not-found'});
+        }
+    })
+    .post((req, res) => {
+        try {
+            return res.redirect('/apply/start');
+        } catch (err) {
+            return res
+                .status(err.statusCode || 404)
+                .render('404.njk', {sectionId: 'page-not-found'});
+        }
+    });
 
 router.route('/start').get(async (req, res) => {
     try {
