@@ -82,3 +82,16 @@ ignore:
           read/write/execute). Fixed upstream in Node 26.5.0. Recheck on
           base-image upgrade.
         expires: '2026-09-01T00:00:00.000Z'
+  SNYK-JS-BRACEEXPANSION-18512280:
+    - '*':
+        reason: >
+          brace-expansion resolved transitively via npm's bundled
+          minimatch (npm@11.18.0 > minimatch@10.2.5 > brace-expansion@5.0.7),
+          same dependency chain as SNYK-JS-BRACEEXPANSION-18313044.
+          Build/CLI tooling only — not present in the application runtime
+          path (cica-web app scan clean). No direct upgrade/patch available;
+          fixed upstream in 1.1.18, 2.1.4, 3.0.6, 5.0.9, but npm@11.18.0
+          bundles 5.0.7 and the version isn't independently controllable
+          without patching npm's tree. Recheck when npm bumps its bundled
+          brace-expansion.
+        expires: '2026-09-01T00:00:00.000Z'
