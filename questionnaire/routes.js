@@ -56,9 +56,11 @@ router.post('/start-or-resume', (req, res) => {
             return res.redirect('/apply/landing-page');
         }
 
+        const accountService = createAccountService(req.session);
         const redirectionUrl = getRedirectionUrl(
             startType,
-            getQuestionnaireIdInSession(req.session)
+            getQuestionnaireIdInSession(req.session),
+            accountService.isAuthenticated(req)
         );
 
         if (redirectionUrl) {

@@ -413,9 +413,32 @@ describe('Hitting /apply/start-or-resume', () => {
                     expect(response.res.text).toBe('Found. Redirecting to /apply/landing-page');
                 });
             });
-            describe('continue existing application', () => {
+            describe('continue existing application, not authenticated', () => {
                 beforeEach(() => {
                     setUpCommonMocks();
+                });
+
+                it('Should redirect to `/account/sign-in`, even though a questionnaireId is in session, because the session is not authenticated', async () => {
+                    const currentAgent = request.agent(app);
+                    const initialResponse = await currentAgent.get('/apply/start-or-resume');
+                    const initialCsrfToken = getCsrfTokenFromResponse(initialResponse.res.text);
+                    const response = await currentAgent.post('/apply/start-or-resume').send({
+                        'start-or-resume': 'resume',
+                        _csrf: initialCsrfToken
+                    });
+                    expect(response.res.text).toContain('Found. Redirecting to /account/sign-in');
+                });
+            });
+            describe('continue existing application, authenticated', () => {
+                beforeEach(() => {
+                    setUpCommonMocks({
+                        '../account/account-service': () => {
+                            return jest.fn(() => ({
+                                getOwnerId: () => 'urn:uuid:625cc31a-dc57-4064-860e-e68d049035ad',
+                                isAuthenticated: () => true
+                            }));
+                        }
+                    });
                 });
 
                 it('Should redirect to `/apply/resume/:questionnaireId`', async () => {

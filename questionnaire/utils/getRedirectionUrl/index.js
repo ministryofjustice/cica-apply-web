@@ -1,7 +1,11 @@
 'use strict';
 
-function getRedirectionUrl(type, questionnaireId) {
-    const inProgresstatus = questionnaireId ? 'started' : 'notstarted';
+function getRedirectionUrl(type, questionnaireId, isAuthenticated) {
+    // A questionnaireId can exist in session for an anonymous, unauthenticated
+    // in-progress application. That alone must not be treated as "there is a
+    // saved application to continue" - only an authenticated session may skip
+    // the One Login sign-in redirect when user selects Continue a saved application.
+    const inProgressStatus = isAuthenticated && questionnaireId ? 'started' : 'notstarted';
     const urls = {
         notstarted: {
             start: '/apply/start',
@@ -15,7 +19,7 @@ function getRedirectionUrl(type, questionnaireId) {
         }
     };
 
-    const redirectionUrl = urls[inProgresstatus][type];
+    const redirectionUrl = urls[inProgressStatus][type];
     return redirectionUrl;
 }
 
