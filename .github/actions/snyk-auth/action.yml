@@ -1,0 +1,50 @@
+name: Snyk OAuth token
+description: Exchange a Snyk service account client ID/secret for a short-lived OAuth access token
+inputs:
+  client-id:
+    description: Snyk service account OAuth client ID
+    required: true
+  client-secret:
+    description: Snyk service account OAuth client secret
+    required: true
+  api-url:
+    description: Snyk API base URL
+    required: false
+    default: https://api.snyk.io
+outputs:
+  token:
+    description: Short-lived Snyk OAuth access token
+    value: ${{ steps.auth.outputs.token }}
+runs:
+  using: composite
+  steps:
+    - id: auth
+      shell: bash
+      env:
+        SNYK_API_URL: ${{ inputs.api-url }}
+        SNYK_CLIENT_ID: ${{ inputs.client-id }}
+        SNYK_CLIENT_SECRET: ${{ inputs.client-secret }}
+      run: |
+        set -euo pipefail
+        if [ -z "$SNYK_CLIENT_ID" ]; then
+          echo "::error::client-id input is empty"
+          exit 1
+        fi
+        if [ -z "$SNYK_CLIENT_SECRET" ]; then
+          echo "::error::client-secret input is empty"
+          exit 1
+        fi
+        RESPONSE=$(curl --fail --silent --show-error \
+          --request POST \
+          --url "$SNYK_API_URL/oauth2/token" \
+          --header "Content-Type: application/x-www-form-urlencoded" \
+          --data-urlencode "grant_type=client_credentials" \
+          --data-urlencode "client_id=$SNYK_CLIENT_ID" \
+          --data-urlencode "client_secret=$SNYK_CLIENT_SECRET")
+        ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+        if [ -z "$ACCESS_TOKEN" ] || [ "$ACCESS_TOKEN" = "null" ]; then
+          echo "::error::Failed to retrieve Snyk OAuth access token"
+          exit 1
+        fi
+        echo "::add-mask::$ACCESS_TOKEN"
+        echo "token=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"

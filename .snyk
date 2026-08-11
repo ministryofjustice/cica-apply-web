@@ -10,21 +10,21 @@ ignore:
           compiles native modules during install), not present in the
           running application's request path. No fix available until
           node-gyp bumps its undici dependency.
-        expires: '2026-08-20T00:00:00.000Z'
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-JS-UNDICI-17372754:
     - '*':
         reason: >
           Same root cause as SNYK-JS-UNDICI-17372658 — vulnerable undici
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
-        expires: '2026-08-20T00:00:00.000Z'
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-JS-UNDICI-17372758:
     - '*':
         reason: >
           Same root cause as SNYK-JS-UNDICI-17372658 — vulnerable undici
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
-        expires: '2026-08-20T00:00:00.000Z'
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-JS-BRACEEXPANSION-18313044:
     - '*':
         reason: >
@@ -35,7 +35,21 @@ ignore:
           but npm@11.18.0 bundles 5.0.7 and the version isn't independently
           controllable without patching npm's tree. Recheck when npm bumps
           its bundled brace-expansion.
-        expires: '2026-08-20T00:00:00.000Z'
+        expires: '2026-09-25T00:00:00.000Z'
+  SNYK-JS-BRACEEXPANSION-18512280:
+    - '*':
+        reason: >
+          Same root cause and same dependency path as
+          SNYK-JS-BRACEEXPANSION-18313044 — brace-expansion@5.0.7 pulled in
+          transitively via npm's bundled minimatch
+          (npm@11.18.0 > minimatch@10.2.5 > brace-expansion@5.0.7). Surfaced
+          by the container scan against the "lib" project
+          (/usr/local/lib/node_modules, npm's own global install), not the
+          application's own dependency tree — build/CLI tooling only, no
+          direct upgrade or patch available per Snyk. Accepted on the same
+          basis as SNYK-JS-BRACEEXPANSION-18313044; recheck together when
+          npm bumps its bundled brace-expansion.
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-DEBIAN13-ATTR-17678182:
     - '*':
         reason: >
@@ -45,7 +59,7 @@ ignore:
           Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
-        expires: '2026-08-20T00:00:00.000Z'
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-DEBIAN13-ACL-17677866:
     - '*':
         reason: >
@@ -55,7 +69,7 @@ ignore:
           for Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
-        expires: '2026-08-20T00:00:00.000Z'
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-JS-NANOID-18506894:
     - '*':
         reason: >
