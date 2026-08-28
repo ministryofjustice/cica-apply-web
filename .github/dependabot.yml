@@ -1,11 +1,38 @@
 version: 2
 updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: ':dependabot: github-actions'
+      include: 'scope'
+    groups:
+      all-github-actions:
+        patterns:
+          - '*'
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: ':dependabot: docker'
+      include: 'scope'
+    groups:
+      all-docker:
+        patterns:
+          - '*'
+    ignore:
+      - dependency-name: 'node'
+        versions:
+          - '>= 25'
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'sunday'
-    open-pull-requests-limit: 5
+      interval: 'daily'
+    commit-message:
+      prefix: ':dependabot: npm'
+      include: 'scope'
     groups:
       patch-minor:
         update-types:
