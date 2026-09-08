@@ -25,6 +25,25 @@ ignore:
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
         expires: '2026-09-25T00:00:00.000Z'
+  SNYK-JS-UNDICI-19635210:
+    - '*':
+        reason: >
+          Vulnerable undici version pinned by npm's bundled node-gyp
+          dependency (npm@11.18.0 > node-gyp@12.4.0 > undici@6.27.0). Fixed
+          in undici 6.28.1/7.29.1/8.10.2, but node-gyp@12.4.0 (bundled by
+          npm@11.18.0) pins undici@^6.25.0, which is not independently
+          controllable without patching npm's tree. Build-time tool only
+          (node-gyp compiles native modules during install), not present in
+          the running application's request path. Recheck when npm bumps
+          its bundled node-gyp/undici.
+        expires: '2026-09-25T00:00:00.000Z'
+  SNYK-JS-UNDICI-19635226:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-UNDICI-19635210 — vulnerable undici
+          pinned via npm's bundled node-gyp dependency, build-time only,
+          no fix currently available upstream.
+        expires: '2026-09-25T00:00:00.000Z'
   SNYK-JS-BRACEEXPANSION-18313044:
     - '*':
         reason: >
@@ -69,6 +88,17 @@ ignore:
           for Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
+        expires: '2026-09-25T00:00:00.000Z'
+  SNYK-DEBIAN13-ZLIB-19520500:
+    - '*':
+        reason: >
+          zlib1g, introduced by the base image node:24.18.1-trixie-slim via
+          dpkg/apt — a base-OS package, not an application dependency. No
+          fix published for Debian 13 (trixie) yet; base-image upgrade
+          recommendations (e.g. alpine) are a separate, bigger migration and
+          not being done as a point fix. Accepted pending upstream Debian
+          patch or a deliberate base-image migration. Recheck on base-image
+          bump.
         expires: '2026-09-25T00:00:00.000Z'
   SNYK-JS-NANOID-18506894:
     - '*':
