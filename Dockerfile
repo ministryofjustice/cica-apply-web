@@ -5,6 +5,8 @@ FROM node:24.18.1-trixie-slim AS base
 USER root
 RUN npm install -g npm@11.18.0
 
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 RUN groupadd -g 1014 dc_user \
     && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
 USER dc_user
