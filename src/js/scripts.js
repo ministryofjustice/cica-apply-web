@@ -14,7 +14,7 @@ import createTimeoutModal from '../modules/modal-timeout';
 import createNewWindowAnchors from '../modules/new-window-anchors';
 import createPostcodeLookup from '../modules/postcode-lookup';
 import createCrossServiceHeader from '../modules/govuk-one-login-service-header';
-import createGAScrollTracker from '../modules/ga/scroll-tracker';
+import createLandingPageEngagementTracker from '../modules/ga/landing-page-engagement';
 
 import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAndSeconds';
 
@@ -28,8 +28,8 @@ import msToMinutesAndSeconds from '../modules/modal-timeout/utils/msToMinutesAnd
     if (cookiePreference.get('analytics').value === '1') {
         const cicaGa = createCicaGa(window);
         cicaGa.init();
-        const gaScrollTracker = createGAScrollTracker(window);
-        gaScrollTracker.init();
+        const landingPageEngagementTracker = createLandingPageEngagementTracker(window);
+        landingPageEngagementTracker.init();
     } else {
         window[`ga-disable-${window.CICA.ANALYTICS_TRACKING_ID}`] = true;
     }
