@@ -77,7 +77,8 @@
 
         {{ govukButton({
             text: buttonText,
-            preventDoubleClick: true
+            preventDoubleClick: true,
+            attributes: { "data-continue": "true" }
         }) }}
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     </form>
