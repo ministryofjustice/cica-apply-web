@@ -3,10 +3,6 @@ name: Validate Build and Deploy
 on:
   push:
 
-env:
-  NODE_VERSION: '24.18.1'
-  SNYK_VERSION: '1.1306.3'
-
 permissions:
   contents: read
 
@@ -16,7 +12,7 @@ concurrency:
 
 jobs:
   ci:
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-node-ci.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-node-ci.yml@v1.0.1
     with:
       test-command: 'npx jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js'
       lint-command: 'npx eslint .'
@@ -25,48 +21,20 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-security.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-security.yml@v1.0.1
     with:
       snyk-api-url: ${{ vars.SNYK_API_URL || 'https://api.snyk.io' }}
+      run-snyk-monitor: ${{ github.ref == 'refs/heads/cw-deploy' }}
     secrets:
       SNYK_CLIENT_ID: ${{ secrets.SNYK_CLIENT_ID }}
       SNYK_CLIENT_SECRET: ${{ secrets.SNYK_CLIENT_SECRET }}
-
-  # Not yet covered by any reusable workflow in cica-devsecops-workflows — the source
-  # Implementation Guide describes "snyk monitor" as belonging to a separate post-merge
-  # workflow but never allocates it a file (see docs/inputs.md's note on reusable-security.yml
-  # in that repo). Kept inline until that's built.
-  snyk-monitor:
-    runs-on: ubuntu-latest
-    needs: ci
-    if: github.ref == 'refs/heads/cw-deploy'
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
-      - name: Install Snyk
-        run: npm install -g snyk@${{ env.SNYK_VERSION }}
-      - name: Get Snyk OAuth token
-        id: snyk-auth
-        uses: ./.github/actions/snyk-auth
-        with:
-          client-id: ${{ secrets.SNYK_CLIENT_ID }}
-          client-secret: ${{ secrets.SNYK_CLIENT_SECRET }}
-          api-url: ${{ vars.SNYK_API_URL || 'https://api.snyk.io' }}
-      - name: Snyk monitor
-        run: snyk monitor
-        env:
-          SNYK_OAUTH_TOKEN: ${{ steps.snyk-auth.outputs.token }}
 
   container:
     needs: [ci, security]
     permissions:
       contents: read
       security-events: write
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-container.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-container.yml@v1.0.1
     with:
       image-name: cica/cica-repo-dev
       smoke-test-container-port: 3000
@@ -85,7 +53,7 @@ jobs:
       contents: read
       id-token: write
       attestations: write
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-publish.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-publish.yml@v1.0.1
     with:
       image-name: cica/cica-repo-dev
       ecr-region: ${{ vars.ECR_REGION }}
@@ -101,7 +69,7 @@ jobs:
   deploy-dev:
     needs: publish
     if: github.ref == 'refs/heads/cw-deploy'
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.1
     with:
       environment: dev
       namespace: claim-criminal-injuries-compensation-dev
@@ -117,7 +85,7 @@ jobs:
   deploy-prod:
     needs: [publish, deploy-dev]
     if: github.ref == 'refs/heads/cw-deploy'
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.1
     with:
       environment: prod
       namespace: claim-criminal-injuries-compensation-prod
@@ -133,7 +101,7 @@ jobs:
   deploy-uat:
     needs: publish
     if: github.ref == 'refs/heads/cw-deploy-to-uat'
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.1
     with:
       environment: uat
       namespace: claim-criminal-injuries-compensation-uat
@@ -149,7 +117,7 @@ jobs:
   deploy-staging:
     needs: publish
     if: github.ref == 'refs/heads/cw-deploy-to-staging'
-    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.0
+    uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-deploy-kubernetes.yml@v1.0.1
     with:
       environment: staging
       namespace: claim-criminal-injuries-compensation-stag
