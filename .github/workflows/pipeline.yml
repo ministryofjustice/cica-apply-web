@@ -14,6 +14,7 @@ jobs:
   ci:
     uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-node-ci.yml@8124dfe71b0851c4aa9fe05074c6c83c86caf6f6
     with:
+      npm-audit-level: 'high'
       test-command: 'npx jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js'
       lint-command: 'npx eslint .'
 
