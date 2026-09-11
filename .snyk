@@ -10,21 +10,21 @@ ignore:
           compiles native modules during install), not present in the
           running application's request path. No fix available until
           node-gyp bumps its undici dependency.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-UNDICI-17372754:
     - '*':
         reason: >
           Same root cause as SNYK-JS-UNDICI-17372658 — vulnerable undici
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-UNDICI-17372758:
     - '*':
         reason: >
           Same root cause as SNYK-JS-UNDICI-17372658 — vulnerable undici
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-UNDICI-19635210:
     - '*':
         reason: >
@@ -36,14 +36,14 @@ ignore:
           (node-gyp compiles native modules during install), not present in
           the running application's request path. Recheck when npm bumps
           its bundled node-gyp/undici.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-UNDICI-19635226:
     - '*':
         reason: >
           Same root cause as SNYK-JS-UNDICI-19635210 — vulnerable undici
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-BRACEEXPANSION-18313044:
     - '*':
         reason: >
@@ -54,7 +54,7 @@ ignore:
           but npm@11.18.0 bundles 5.0.7 and the version isn't independently
           controllable without patching npm's tree. Recheck when npm bumps
           its bundled brace-expansion.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-BRACEEXPANSION-18512280:
     - '*':
         reason: >
@@ -68,7 +68,43 @@ ignore:
           direct upgrade or patch available per Snyk. Accepted on the same
           basis as SNYK-JS-BRACEEXPANSION-18313044; recheck together when
           npm bumps its bundled brace-expansion.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-BRACEEXPANSION-20244948:
+    - '*':
+        reason: >
+          Same root cause and same dependency path as
+          SNYK-JS-BRACEEXPANSION-18313044 — brace-expansion@5.0.7 pulled in
+          transitively via npm's bundled minimatch
+          (npm@11.18.0 > minimatch@10.2.5 > brace-expansion@5.0.7). Build/CLI
+          tooling only — not present in the application runtime path
+          (cica-web app scan clean). Fixed in brace-expansion 5.0.11, but
+          npm@11.18.0 bundles 5.0.7 and the version isn't independently
+          controllable without patching npm's tree. Recheck when npm bumps
+          its bundled brace-expansion.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-BRACEEXPANSION-20244952:
+    - '*':
+        reason: >
+          Same root cause and same dependency path as
+          SNYK-JS-BRACEEXPANSION-20244948 — brace-expansion@5.0.7 pulled in
+          transitively via npm's bundled minimatch, build/CLI tooling only.
+          Fixed in brace-expansion 5.0.10. Recheck together when npm bumps
+          its bundled brace-expansion.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-POSTCSSSELECTORPARSER-20510276:
+    - '*':
+        reason: >
+          postcss-selector-parser@7.1.4 resolved transitively via npm's own
+          dependency-resolution tooling (npm@11.18.0 > @npmcli/arborist@9.9.0
+          > @npmcli/query@5.0.0 > postcss-selector-parser@7.1.4). Build/CLI
+          tooling only, surfaced by the container scan against the "lib"
+          project (/usr/local/lib/node_modules, npm's own global install) —
+          not the application's own dependency tree (cica-web app scan
+          clean). Fixed in postcss-selector-parser@7.1.6, but the version
+          bundled by npm@11.18.0's own tree isn't independently controllable
+          without patching npm itself. Recheck when npm bumps its bundled
+          dependency.
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-DEBIAN13-ATTR-17678182:
     - '*':
         reason: >
@@ -78,7 +114,7 @@ ignore:
           Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-DEBIAN13-ACL-17677866:
     - '*':
         reason: >
@@ -88,7 +124,17 @@ ignore:
           for Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-DEBIAN13-GCC14-20386241:
+    - '*':
+        reason: >
+          libstdc++6, introduced by the base image node:24.18.1-trixie-slim
+          via apt/gcc-14 — a base-OS package, not an application dependency.
+          No fix published for Debian 13 (trixie); base-image upgrade
+          recommendations do not resolve it. Accepted pending upstream
+          Debian patch or a deliberate base-image migration. Recheck on
+          base-image bump.
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-DEBIAN13-ZLIB-19520500:
     - '*':
         reason: >
@@ -99,7 +145,7 @@ ignore:
           not being done as a point fix. Accepted pending upstream Debian
           patch or a deliberate base-image migration. Recheck on base-image
           bump.
-        expires: '2026-09-25T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-NANOID-18506894:
     - '*':
         reason: >
@@ -108,12 +154,12 @@ ignore:
           nanoid/non-secure module) are never imported, and no user input
           reaches the size parameter, so the infinite-loop DoS is
           unreachable. Fix available in nanoid@5.1.16.
-        expires: '2026-09-01T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-NANOID-18506897:
     - '*':
         reason: >
           Same root cause as SNYK-JS-NANOID-18506894 — no-arg nanoid() on the secure export, vulnerable paths not imported, DoS unreachable.
-        expires: '2026-09-01T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-UPSTREAM-NODE-18507940:
     - '*':
         reason: >
@@ -125,4 +171,34 @@ ignore:
           runtime. Not bound to the network stack (requires local
           read/write/execute). Fixed upstream in Node 26.5.0. Recheck on
           base-image upgrade.
-        expires: '2026-09-01T00:00:00.000Z'
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-HTTPCACHESEMANTICS-19964064:
+    - '*':
+        reason: >
+          Origin validation flaw in http-cache-semantics' _varyMatches(),
+          which can let a Vary:* response be reused across different
+          users/requests sharing the same cache. Reachable only if got's
+          built-in HTTP response caching (via cacheable-request) is actually
+          enabled. Checked every got() call site in this app — the two in
+          questionnaire/request-service.js and the one inside
+          openid-client/lib/helpers/request.js — and none pass a `cache`
+          option; openid-client's own caching (JWKS/throttling) uses a
+          separate in-memory lru-cache, unrelated to got's HTTP cache. No fix
+          available without an ESM migration: http-cache-semantics@4.3.0 is
+          the latest version ever published (no patched release exists), and
+          the only upgrade paths (got@12+, or express-openid-connect@3 for
+          openid-client@6) are both ESM-only, which breaks this CommonJS
+          codebase's require() calls — confirmed by reverting an attempted
+          express-openid-connect@3 upgrade after it broke 86 tests with
+          "Must use import to load ES Module". Tracked as a separate,
+          deliberate future migration, not a point fix.
+        expires: '2026-11-06T00:00:00.000Z'
+  SNYK-JS-HTTPCACHESEMANTICS-19964068:
+    - '*':
+        reason: >
+          Same root cause and same verified-unreachable basis as
+          SNYK-JS-HTTPCACHESEMANTICS-19964064 — got's HTTP response caching
+          is never enabled anywhere in this app's dependency chain, so the
+          improper-authorisation variant of the same underlying bug is
+          equally unreachable. See that entry for the full reasoning.
+        expires: '2026-11-06T00:00:00.000Z'
