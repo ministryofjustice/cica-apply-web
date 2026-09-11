@@ -45,10 +45,9 @@ export default function createLandingPageEngagementTracker(window) {
 
         const activeSeconds = Math.floor(accumulatedMs / 1000);
 
-        // Only the bucketed category goes to GA — the raw ms/seconds value
-        // never leaves the browser.
         window.gtag('event', 'continue_clicked', {
             event_category: 'landing_page_engagement',
+            active_time_seconds: activeSeconds,
             reading_band: bandForSeconds(activeSeconds)
         });
     }

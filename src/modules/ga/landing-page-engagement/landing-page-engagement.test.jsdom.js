@@ -75,7 +75,7 @@ afterEach(() => {
 });
 
 describe('sending is gated on Continue', () => {
-    test('sends one event when Continue is clicked, with only the reading band — no raw time', () => {
+    test('sends one event when Continue is clicked, with raw time and the reading band', () => {
         tracker = createLandingPageEngagementTracker(window);
         tracker.init(true);
 
@@ -85,6 +85,7 @@ describe('sending is gated on Continue', () => {
         const params = continueParams();
         expect(params).toEqual({
             event_category: 'landing_page_engagement',
+            active_time_seconds: 30,
             reading_band: 'partial'
         });
     });
@@ -133,7 +134,7 @@ describe('sending is gated on Continue', () => {
     });
 });
 
-describe('active-time accounting (used only to compute reading_band)', () => {
+describe('active-time accounting', () => {
     test('pauses while the tab is hidden and resumes when visible', () => {
         tracker = createLandingPageEngagementTracker(window);
         tracker.init(true);
