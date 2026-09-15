@@ -108,12 +108,12 @@ ignore:
           nanoid/non-secure module) are never imported, and no user input
           reaches the size parameter, so the infinite-loop DoS is
           unreachable. Fix available in nanoid@5.1.16.
-        expires: '2026-09-01T00:00:00.000Z'
+        expires: '2026-10-09T00:00:00.000Z'
   SNYK-JS-NANOID-18506897:
     - '*':
         reason: >
           Same root cause as SNYK-JS-NANOID-18506894 — no-arg nanoid() on the secure export, vulnerable paths not imported, DoS unreachable.
-        expires: '2026-09-01T00:00:00.000Z'
+        expires: '2026-10-09T00:00:00.000Z'
   SNYK-UPSTREAM-NODE-18507940:
     - '*':
         reason: >
@@ -125,4 +125,4 @@ ignore:
           runtime. Not bound to the network stack (requires local
           read/write/execute). Fixed upstream in Node 26.5.0. Recheck on
           base-image upgrade.
-        expires: '2026-09-01T00:00:00.000Z'
+        expires: '2026-10-09T00:00:00.000Z'
