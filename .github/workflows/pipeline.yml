@@ -21,6 +21,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      actions: read
     uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-security.yml@v1.0.8
     with:
       snyk-api-url: ${{ vars.SNYK_API_URL || 'https://api.snyk.io' }}
@@ -34,6 +35,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      actions: read
     uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-container.yml@v1.0.8
     with:
       image-name: cica/cica-repo-dev
