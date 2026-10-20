@@ -44,6 +44,56 @@ ignore:
           pinned via npm's bundled node-gyp dependency, build-time only,
           no fix currently available upstream.
         expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-UNDICI-21181005:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-UNDICI-17372658 — undici@6.27.0
+          pinned via npm's bundled node-gyp (npm@11.18.0 > node-gyp@12.4.0
+          > undici), surfaced only in the "lib" project
+          (/usr/local/lib/node_modules, npm's own global install); cica-web
+          app scan clean. Build-time tooling only. Fixed in undici@6.29.1,
+          but no published npm bundles it yet (npm@11.21.1 ships 6.29.0,
+          npm@12.2.0 ships 6.28.0). Recheck when npm bumps its bundled
+          undici.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-UNDICI-21181013:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-UNDICI-21181005 — npm's bundled
+          node-gyp undici, build-time only, no npm release bundles the
+          fixed version yet.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-UNDICI-21181015:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-UNDICI-21181005 — npm's bundled
+          node-gyp undici, build-time only, no npm release bundles the
+          fixed version yet.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-UNDICI-21181019:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-UNDICI-21181005 — npm's bundled
+          node-gyp undici, build-time only, no npm release bundles the
+          fixed version yet.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-UNDICI-21185768:
+    - '*':
+        reason: >
+          Same root cause as SNYK-JS-UNDICI-21181005 — npm's bundled
+          node-gyp undici, build-time only, no npm release bundles the
+          fixed version yet.
+        expires: '2026-11-07T00:00:00.000Z'
+  SNYK-JS-PICOMATCH-21248802:
+    - '*':
+        reason: >
+          picomatch@4.0.4 resolved via npm's own bundled tooling
+          (npm@11.18.0 > node-gyp@12.4.0 > tinyglobby@0.2.17 > picomatch),
+          surfaced only in the "lib" project (/usr/local/lib/node_modules);
+          cica-web app scan clean. Build/CLI tooling only, never exercised
+          by the running application. No upgrade or patch available.
+          Recheck when a fix is published and npm bundles it.
+        expires: '2026-11-07T00:00:00.000Z'
   SNYK-JS-BRACEEXPANSION-18313044:
     - '*':
         reason: >
