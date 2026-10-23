@@ -73,7 +73,8 @@
         "proxy-addr": "2.0.8",
         "nunjucks": {
             "chokidar": "^4.0.3"
-        }
+        },
+        "body-parser": "1.20.9"
     },
     "license": "MIT"
 }
