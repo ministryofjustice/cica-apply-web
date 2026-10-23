@@ -1,6 +1,6 @@
 # lets start from an image that already has nodejs installed
 # https://snyk.io/blog/choosing-the-best-node-js-docker-image/
-FROM node:24.18.1-trixie-slim AS base
+FROM node:24.22.1-trixie-slim AS base
 
 USER root
 RUN npm install -g npm@11.18.0
