@@ -1,0 +1,397 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@4.0.0
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: cica-repo-dev
+    docker:
+      # Image tool container
+      - image: ministryofjustice/cloud-platform-tools
+jobs:
+  snyk_app_scan:
+    docker:
+      - image: node:24.22.1-trixie-slim
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Install CA certificates
+          command: |
+            apt-get update
+            apt-get install -y ca-certificates
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Install Snyk
+          command: npm install -g snyk@1.1304.0
+      - run:
+          name: Snyk test
+          command: snyk test --severity-threshold=high
+  snyk_monitor:
+    docker:
+      - image: node:24.22.1-trixie-slim
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Install Snyk
+          command: npm install -g snyk@1.1304.0
+      - run:
+          name: Install CA certificates
+          command: |
+            apt-get update
+            apt-get install -y ca-certificates
+      - run:
+          name: Snyk monitor
+          command: snyk monitor
+  snyk_container_monitor:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Install Snyk CLI
+          command: |
+            apk add --update-cache curl
+            mkdir -p /usr/local/bin
+            curl -sL https://github.com/snyk/cli/releases/download/v1.1304.0/snyk-alpine -o /usr/local/bin/snyk
+            chmod +x /usr/local/bin/snyk
+      - run:
+          name: Snyk container monitor
+          command: |
+            /usr/local/bin/snyk container monitor cica/cica-repo-dev
+  build-for-test:
+    docker:
+      - image: node:24.22.1-trixie-slim
+    steps:
+      - checkout
+      - run:
+          name: npm audit
+          command: npm audit --production --audit-level=moderate
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - '*'
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Install npm dependencies
+          command: 'if [ -d node_modules ]; then echo package.json and package-lock.json unchanged. Using node_modules cache.; else npm ci --loglevel warn --yes; fi'
+      - save_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+  test:
+    docker:
+      - image: node:24.22.1-trixie-slim
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Run tests and code coverage
+          command: npx --no-install jest --ci --runInBand --bail --silent --coverage --projects jest.config.js jest.config.jsdom.js
+  lint:
+    docker:
+      - image: node:24.22.1-trixie-slim
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Lint codebase
+          command: npx --no-install eslint .
+  build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build docker image
+          command: |
+            docker build --target production --no-cache -t cica/cica-repo-dev .
+
+      - run:
+          name: Install Snyk CLI
+          command: |
+            apk add --update-cache curl
+            mkdir -p /usr/local/bin
+            curl -sL https://github.com/snyk/cli/releases/download/v1.1304.0/snyk-alpine -o /usr/local/bin/snyk
+            chmod +x /usr/local/bin/snyk
+            /usr/local/bin/snyk --version
+
+      - run:
+          name: Snyk container scan
+          command: |
+            /usr/local/bin/snyk container test cica/cica-repo-dev --file=Dockerfile --severity-threshold=high --policy-path=.snyk
+
+      - run:
+          name: Archive Docker Image
+          command: |
+            docker save -o image.tar cica/cica-repo-dev:latest
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  publish_latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Test the container
+          command: |
+            docker run -d -p 3001:3001 --restart=always --name cica-repo-dev cica/cica-repo-dev:latest
+            docker ps
+            docker stop cica-repo-dev
+            docker ps
+  push_image:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - aws-cli/setup:
+          role_arn: $ECR_ROLE_TO_ASSUME
+          region: $ECR_REGION
+      - run:
+          name: Authenticate and push image to ecr
+          command: |
+            echo "run aws"
+            aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin  ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com
+            docker tag ${ECR_REPOSITORY}:latest ${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1}
+            docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1}
+  deploy_to_dev:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Authenticate with cluster
+          command: |
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_DEV}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-dev
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-dev get pods
+      - deploy:
+          name: Deploy to the cluster
+          command: |
+            echo "deploy before aws ecr"
+            kubectl set image -f kube_deploy/Dev/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -n claim-criminal-injuries-compensation-dev -f -
+            kubectl apply \
+                -f kube_deploy/Dev/service.yml \
+                -f kube_deploy/Dev/ingress.yml
+            kubectl apply -k kube_deploy/Dev
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-dev
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-dev
+  deploy_to_uat:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Authenticate with cluster
+          command: |
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_UAT}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-uat
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-uat get pods
+      - deploy:
+          name: Deploy to the cluster
+          command: |
+            echo "deploy before aws ecr"
+            kubectl set image -f kube_deploy/Uat/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -n claim-criminal-injuries-compensation-uat -f -
+            kubectl apply \
+                -f kube_deploy/Uat/service.yml \
+                -f kube_deploy/Uat/ingress.yml
+            kubectl apply -k kube_deploy/Uat
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-uat
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-uat
+  deploy_to_prod:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Authenticate with cluster
+          command: |
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_PROD}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-prod
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-prod get pods
+      - deploy:
+          name: Deploy to the cluster
+          command: |
+            echo "deploy before aws ecr"
+            kubectl set image -f kube_deploy/Prod/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -n claim-criminal-injuries-compensation-prod -f -
+            kubectl apply \
+                -f kube_deploy/Prod/service.yml \
+                -f kube_deploy/Prod/ingress.yml 
+            kubectl apply -k kube_deploy/Prod
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-prod
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-prod
+  deploy_to_staging:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Authenticate with cluster
+          command: |
+            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./live_ca.crt
+            kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./live_ca.crt --server=https://${K8S_CLUSTER_NAME}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN_STAG}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=claim-criminal-injuries-compensation-stag
+            kubectl config use-context ${K8S_CLUSTER_NAME}
+            kubectl config current-context
+            kubectl --namespace=claim-criminal-injuries-compensation-stag get pods
+      - deploy:
+          name: Deploy to the cluster
+          command: |
+            echo "deploy before aws ecr"
+            kubectl set image -f kube_deploy/Stag/deploy.yml webapp=${ECR_REGISTRY}/${ECR_REPOSITORY}:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -n claim-criminal-injuries-compensation-stag -f -
+            kubectl apply \
+                -f kube_deploy/Stag/service.yml \
+                -f kube_deploy/Stag/ingress.yml
+            kubectl apply -k kube_deploy/Stag
+            kubectl rollout restart deployment/custom-errors -n claim-criminal-injuries-compensation-stag
+            kubectl rollout status deployment/custom-errors -n claim-criminal-injuries-compensation-stag
+workflows:
+  version: 2
+  build-test-push-deploytouatapproval-deployuat-deploytoprodapproval-deployprod:
+    jobs:
+      - build-for-test
+      - test:
+          requires:
+            - build-for-test
+      - lint:
+          requires:
+            - build-for-test
+      - snyk_app_scan:
+          requires:
+            - build-for-test
+      - snyk_monitor:
+          requires:
+            - build-for-test
+          filters:
+            branches:
+              only:
+                - cw-deploy
+      - snyk_container_monitor:
+          requires:
+            - push_image
+          filters:
+            branches:
+              only:
+                - cw-deploy
+      - build:
+          requires:
+            - test
+            - lint
+            - snyk_app_scan
+      - publish_latest:
+          requires:
+            - build
+      - push_image:
+          requires:
+            - publish_latest
+          filters:
+            branches:
+              only:
+                - cw-deploy
+                - cw-deploy-to-uat
+                - cw-deploy-to-staging
+      - deploy_to_uat_approval:
+          type: approval
+          requires:
+            - push_image
+          filters:
+            branches:
+              only: cw-deploy-to-uat
+      - deploy_to_uat:
+          requires:
+            - deploy_to_uat_approval
+          filters:
+            branches:
+              only: cw-deploy-to-uat
+      - deploy_to_dev_approval:
+          type: approval
+          requires:
+            - push_image
+          filters:
+            branches:
+              only: cw-deploy
+      - deploy_to_dev:
+          requires:
+            - deploy_to_dev_approval
+          filters:
+            branches:
+              only: cw-deploy
+      - deploy_to_prod_approval:
+          type: approval
+          requires:
+            - deploy_to_dev
+          filters:
+            branches:
+              only: cw-deploy
+      - deploy_to_prod:
+          requires:
+            - deploy_to_prod_approval
+          filters:
+            branches:
+              only: cw-deploy
+      - deploy_to_staging_approval:
+          type: approval
+          requires:
+            - push_image
+          filters:
+            branches:
+              only: cw-deploy-to-staging
+      - deploy_to_staging:
+          requires:
+            - deploy_to_staging_approval
+          filters:
+            branches:
+              only: cw-deploy-to-staging
