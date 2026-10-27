@@ -3,7 +3,6 @@
 FROM node:24.22.1-trixie-slim AS base
 
 USER root
-RUN npm install -g npm@11.18.0
 
 RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
