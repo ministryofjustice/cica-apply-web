@@ -74,7 +74,8 @@
         "nunjucks": {
             "chokidar": "^4.0.3"
         },
-        "body-parser": "1.20.9"
+        "body-parser": "1.20.9",
+        "joi": "17.13.9"
     },
     "license": "MIT"
 }
