@@ -201,3 +201,31 @@ ignore:
           improper-authorisation variant of the same underlying bug is
           equally unreachable. See that entry for the full reasoning.
         expires: '2026-11-06T00:00:00.000Z'
+  SNYK-DEBIAN13-SQLITE3-22119065:
+    - '*':
+        reason: >
+          libsqlite3-0@3.46.1-7+deb13u2, introduced by the base image
+          node:24.22.1-trixie-slim via util-linux/liblastlog2-2 — a
+          base-OS package, not an application dependency (cica-web does
+          not use sqlite3). Newly disclosed; no fix published for Debian
+          13 (trixie) yet, and Snyk reports no updated node:*-trixie-slim
+          tag resolves it either.
+          Accepted pending upstream Debian patch or a deliberate base-image
+          migration. Recheck on base-image bump.
+        expires: '2026-11-16T00:00:00.000Z'
+  SNYK-DEBIAN13-SQLITE3-22119091:
+    - '*':
+        reason: >
+          Same root cause and dependency path as
+          SNYK-DEBIAN13-SQLITE3-22119065 — base-OS package, not used by
+          this app, no Debian fix or updated base-image tag available yet.
+          Recheck together on base-image bump.
+        expires: '2026-11-16T00:00:00.000Z'
+  SNYK-DEBIAN13-SQLITE3-22119098:
+    - '*':
+        reason: >
+          Same root cause and dependency path as
+          SNYK-DEBIAN13-SQLITE3-22119065 — base-OS package, not used by
+          this app, no Debian fix or updated base-image tag available yet.
+          Recheck together on base-image bump.
+        expires: '2026-11-16T00:00:00.000Z'
