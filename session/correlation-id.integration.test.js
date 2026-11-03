@@ -72,7 +72,8 @@ describe('authenticated session correlation in request logs', () => {
             issuer: {issuer: process.env.CW_GOVUK_ISSUER_URL},
             client: {
                 callbackParams: () => ({}),
-                callback: async () => new TokenSet({id_token: idToken})
+                callback: async () => new TokenSet({id_token: idToken}),
+                endSessionUrl: () => '/account/signed-out'
             }
         });
         entries = require('pino-http').entries;
@@ -119,6 +120,32 @@ describe('authenticated session correlation in request logs', () => {
         await signIn();
         expect(lastLog().sessionCorrelationId).not.toBe(firstId);
         expect(lastLog().ownerId).toBe(OWNER_ID);
+    });
+
+    it('correlates sign-out without retaining the session on subsequent requests', async () => {
+        const cookie = await signIn();
+        const id = lastLog().sessionCorrelationId;
+        const response = await request(app)
+            .get('/account/sign-out')
+            .set('Cookie', cookie)
+            .set('x-real-ip', CLIENT_IP);
+
+        expect(response.status).toBe(302);
+        expect(lastLog()).toMatchObject({
+            sessionCorrelationId: id,
+            ownerId: OWNER_ID,
+            time: expect.any(Number)
+        });
+        expect(lastLog().req.headers['x-real-ip']).toBe(CLIENT_IP);
+        expect(lastLog().req.headers.cookie).toBe('[Redacted]');
+        expect(JSON.stringify(lastLog())).not.toContain(cookie);
+        expect(sessionCookie(response)).toMatch(/^session=(; session=)*$/);
+
+        await request(app)
+            .get('/probe')
+            .set('Cookie', sessionCookie(response));
+        expect(lastLog().sessionCorrelationId).toBeUndefined();
+        expect(lastLog().ownerId).toBeUndefined();
     });
 
     it('correlates a copied cookie from a different client IP and redacts credentials', async () => {

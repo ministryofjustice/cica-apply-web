@@ -110,4 +110,18 @@ describe('logger middleware', () => {
         expect(customErrorObject(req, {}, {}, {}).ownerId).toBe('authenticated-owner');
         expect(req.session.ownerId).toBe('anonymous-owner');
     });
+
+    it('uses request logging context after logout clears the session', () => {
+        const {customSuccessObject, customErrorObject} = pinoHttp.mock.calls[0][0];
+        const req = {
+            sessionLogContext: {
+                ownerId: 'authenticated-owner',
+                sessionCorrelationId: 'session-789'
+            }
+        };
+
+        expect(customSuccessObject(req, {}, {})).toMatchObject(req.sessionLogContext);
+        expect(customErrorObject(req, {}, {}, {})).toMatchObject(req.sessionLogContext);
+        expect(req.session).toBeUndefined();
+    });
 });
