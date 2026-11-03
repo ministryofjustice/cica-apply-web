@@ -20,11 +20,13 @@ module.exports = pinoHttp({
     customSuccessObject: (req, res, val) => ({
         ...val,
         questionnaireId: req.session?.questionnaireId,
-        ownerId: req.session?.ownerId
+        ownerId: req.oidc?.user?.sub || req.session?.ownerId,
+        sessionCorrelationId: req.session?.sessionCorrelationId
     }),
     customErrorObject: (req, res, err, val) => ({
         ...val,
         questionnaireId: req.session?.questionnaireId,
-        ownerId: req.session?.ownerId
+        ownerId: req.oidc?.user?.sub || req.session?.ownerId,
+        sessionCorrelationId: req.session?.sessionCorrelationId
     })
 });

@@ -20,6 +20,8 @@ const isQuestionnaireInstantiated = require('./questionnaire/utils/isQuestionnai
 const getQuestionnaireIdInSession = require('./questionnaire/utils/getQuestionnaireIdInSession');
 const createAccountService = require('./account/account-service');
 const pinoLogger = require('./middleware/logger');
+const sessionCorrelationId = require('./middleware/session-correlation-id');
+const {createSessionCorrelationId} = require('./session/correlation-id');
 
 const app = express();
 
@@ -103,7 +105,8 @@ const oidcAuth = auth({
         return {
             ...session,
             questionnaireId: req.session.questionnaireId,
-            ownerId: req.session.ownerId
+            ownerId: req.session.ownerId,
+            sessionCorrelationId: createSessionCorrelationId()
         };
     }
 });
@@ -198,11 +201,11 @@ app.use((req, res, next) => {
 });
 
 app.use('/address-finder', addressFinderRouter);
-app.use('/download', oidcAuth, downloadRouter);
-app.use('/apply', oidcAuth, keepAlive, applicationRouter);
-app.use('/session', oidcAuth, sessionRouter);
-app.use('/account', oidcAuth, accountRouter);
-app.use('/', oidcAuth, indexRouter);
+app.use('/download', oidcAuth, sessionCorrelationId, downloadRouter);
+app.use('/apply', oidcAuth, sessionCorrelationId, keepAlive, applicationRouter);
+app.use('/session', oidcAuth, sessionCorrelationId, sessionRouter);
+app.use('/account', oidcAuth, sessionCorrelationId, accountRouter);
+app.use('/', oidcAuth, sessionCorrelationId, indexRouter);
 
 app.use((err, req, res, next) => {
     if (err.name === 'CRNNotRetrieved') {
