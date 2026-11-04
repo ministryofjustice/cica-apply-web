@@ -137,40 +137,37 @@ ignore:
   SNYK-DEBIAN13-ZLIB-19520500:
     - '*':
         reason: >
-          zlib1g, introduced by the base image node:24.18.1-trixie-slim via
+          zlib1g, introduced by the Node base image via
           dpkg/apt — a base-OS package, not an application dependency. No
           fix published for Debian 13 (trixie) yet; base-image upgrade
           recommendations (e.g. alpine) are a separate, bigger migration and
           not being done as a point fix. Accepted pending upstream Debian
           patch or a deliberate base-image migration. Recheck on base-image
           bump.
-        expires: '2026-11-07T00:00:00.000Z'
-  SNYK-JS-NANOID-18506894:
+          Re-verified 2026-11-03: still no trixie fix; premise holds.
+        expires: '2026-12-03T00:00:00.000Z'
+  SNYK-DEBIAN13-ATTR-17678182:
     - '*':
         reason: >
-          Both nanoid() call sites (CSP nonce in app.js, request-id fallback in the logger) call with no size argument on the secure export.
-          The vulnerable functions (customAlphabet/customRandom and the
-          nanoid/non-secure module) are never imported, and no user input
-          reaches the size parameter, so the infinite-loop DoS is
-          unreachable. Fix available in nanoid@5.1.16.
-        expires: '2026-11-07T00:00:00.000Z'
-  SNYK-JS-NANOID-18506897:
+          libattr1, introduced by the Node base image via
+          coreutils/adduser — a base-OS package, not an application
+          dependency. No fix published for
+          Debian 13 (trixie); base-image upgrade recommendations do not
+          resolve it. Accepted pending upstream Debian patch or a base-image
+          migration. Recheck on base-image bump.
+          Re-verified 2026-11-03: still no trixie fix; premise holds.
+        expires: '2026-12-03T00:00:00.000Z'
+  SNYK-DEBIAN13-ACL-17677866:
     - '*':
         reason: >
-          Same root cause as SNYK-JS-NANOID-18506894 — no-arg nanoid() on the secure export, vulnerable paths not imported, DoS unreachable.
-        expires: '2026-11-07T00:00:00.000Z'
-  SNYK-UPSTREAM-NODE-18507940:
-    - '*':
-        reason: >
-          node-tar hardlink directory-traversal (CVE-2026-26960) bundled in
-          the node:24.18.1-trixie-slim base image. Exploitable only by
-          extracting an attacker-controlled tar archive; node-tar is present
-          as a build-time/npm-install dependency, not invoked by the running
-          cica-web application, which does not extract untrusted archives at
-          runtime. Not bound to the network stack (requires local
-          read/write/execute). Fixed upstream in Node 26.5.0. Recheck on
-          base-image upgrade.
-        expires: '2026-11-07T00:00:00.000Z'
+          libacl1, introduced by the Node base image via
+          coreutils/sed/adduser/dpkg — a base-OS package, not an
+          application dependency. No fix published
+          for Debian 13 (trixie); base-image upgrade recommendations do not
+          resolve it. Accepted pending upstream Debian patch or a base-image
+          migration. Recheck on base-image bump.
+          Re-verified 2026-11-03: still no trixie fix; premise holds.
+        expires: '2026-12-03T00:00:00.000Z'
   SNYK-JS-HTTPCACHESEMANTICS-19964064:
     - '*':
         reason: >
@@ -191,9 +188,15 @@ ignore:
           express-openid-connect@3 upgrade after it broke 86 tests with
           "Must use import to load ES Module". Tracked as a separate,
           deliberate future migration, not a point fix.
+<<<<<<< HEAD
           Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
           to be picked up immediately after the session-correlation PR merges.
         expires: '2026-11-11T00:00:00.000Z'
+=======
+          Re-verified 2026-11-03: got HTTP caching still not enabled at any
+          call site; no non-ESM patched release; premise holds.
+        expires: '2026-12-03T00:00:00.000Z'
+>>>>>>> 62eff72 (chore: run npm audit, snyk scan and triage npm overrides and snyk ignores)
   SNYK-JS-HTTPCACHESEMANTICS-19964068:
     - '*':
         reason: >
@@ -202,6 +205,7 @@ ignore:
           is never enabled anywhere in this app's dependency chain, so the
           improper-authorisation variant of the same underlying bug is
           equally unreachable. See that entry for the full reasoning.
+<<<<<<< HEAD
           Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
           to be picked up immediately after the session-correlation PR merges.
         expires: '2026-11-11T00:00:00.000Z'
@@ -233,3 +237,7 @@ ignore:
           this app, no Debian fix or updated base-image tag available yet.
           Recheck together on base-image bump.
         expires: '2026-11-16T00:00:00.000Z'
+=======
+          Re-verified 2026-11-03: premise holds (see 19964064 entry).
+        expires: '2026-12-03T00:00:00.000Z'
+>>>>>>> 62eff72 (chore: run npm audit, snyk scan and triage npm overrides and snyk ignores)

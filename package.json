@@ -68,13 +68,10 @@
         "webpack-cli": "^5.0.1"
     },
     "overrides": {
-        "qs": "6.16.1",
         "moment": "2.31.0",
-        "proxy-addr": "2.0.8",
         "nunjucks": {
             "chokidar": "^4.0.3"
         },
-        "body-parser": "1.20.9",
         "joi": "17.13.9"
     },
     "license": "MIT"
