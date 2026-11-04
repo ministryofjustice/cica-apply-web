@@ -6,11 +6,64 @@ updates:
       interval: 'weekly'
       day: 'sunday'
     open-pull-requests-limit: 5
+    commit-message:
+      prefix: ':dependabot: npm'
+      include: 'scope'
     groups:
-      patch-minor:
+      # Four lanes keyed on dependency-type + update-type so each can have its
+      # own review/merge policy (and, later, its own auto-merge stance):
+      #   prod-major       -> highest risk, always human review (CODEOWNERS)
+      #   prod-patch-minor -> low risk, auto-merge-on-green candidate
+      #   dev-major        -> can't ship to prod; review but lower stakes
+      #   dev-patch-minor  -> lowest risk, prime auto-merge-on-green candidate
+      prod-patch-minor:
+        dependency-type: 'production'
         update-types:
           - 'patch'
           - 'minor'
-      major-updates:
+      prod-major:
+        dependency-type: 'production'
         update-types:
           - 'major'
+      dev-patch-minor:
+        dependency-type: 'development'
+        update-types:
+          - 'patch'
+          - 'minor'
+      dev-major:
+        dependency-type: 'development'
+        update-types:
+          - 'major'
+
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'sunday'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ':dependabot: docker'
+      include: 'scope'
+    groups:
+      all-docker:
+        patterns:
+          - '*'
+    ignore:
+      # Pinned to Node 24 (see Dockerfile); don't propose a major jump to 25+.
+      - dependency-name: 'node'
+        versions:
+          - '>= 25'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'sunday'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ':dependabot: github-actions'
+      include: 'scope'
+    groups:
+      all-github-actions:
+        patterns:
+          - '*'
