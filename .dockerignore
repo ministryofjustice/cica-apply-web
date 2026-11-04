@@ -31,3 +31,9 @@
 !package.json
 !package-lock.json
 !app.js
+
+# Build-time config required for the in-container build (sass + babel + webpack)
+!babel.config.js
+!.babelrc
+!webpack.config.js
+!webpack.config.prod.js
