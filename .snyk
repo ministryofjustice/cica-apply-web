@@ -1,20 +1,5 @@
 version: v1.25.0
 ignore:
-  SNYK-DEBIAN13-ZLIB-22249554:
-    - '*':
-        reason: >
-          zlib1g, introduced by the Node base image via dpkg/apt — a base-OS
-          package, not an application dependency. CVE-2026-76844 is an
-          out-of-bounds write in zlib's gz_write() after an underlying
-          write() failure; it is only reachable through the gzip file-writing
-          API (gzwrite/gzprintf on a gzFile), which this application does not
-          use. A Debian 13 (trixie) fix exists
-          (1:1.3.dfsg+really1.3.1-1+deb13u1), so the real resolution is a
-          base-image bump that pulls the patched zlib1g, not a point fix in
-          this repo. Accepted pending the next base-image bump; recheck then.
-          Re-verified 2026-11-09 on disclosure: base-OS package, gzip write
-          path unused by the app; premise holds.
-        expires: '2026-11-16T00:00:00.000Z'
   SNYK-DEBIAN13-ZLIB-19520500:
     - '*':
         reason: >
