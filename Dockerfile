@@ -87,4 +87,8 @@ ENV NODE_ENV=${NODE_ENV}
 
 # Use node directly instead of npm start to reduce runtime attack surface
 # and avoid npm lifecycle-script execution path in production containers.
+# Note: running node directly means npm does not set npm_package_version, so the
+# app reads its version from package.json itself (see app.js and templateEngine/index.js).
 CMD ["node", "./bin/www"]
+
+

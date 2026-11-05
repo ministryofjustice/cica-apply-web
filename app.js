@@ -22,6 +22,9 @@ const createAccountService = require('./account/account-service');
 const pinoLogger = require('./middleware/logger');
 const sessionCorrelationId = require('./middleware/session-correlation-id');
 const {createSessionCorrelationId} = require('./session/correlation-id');
+// Read the version straight from package.json rather than process.env.npm_package_version,
+// which npm only sets when launching via an npm script (the production image runs node directly).
+const {version: appVersion} = require('./package.json');
 
 const app = express();
 
@@ -113,7 +116,7 @@ const oidcAuth = auth({
 
 app.use((req, res, next) => {
     res.locals.cspNonce = nanoid();
-    res.set('Application-Version', process.env.npm_package_version);
+    res.set('Application-Version', appVersion);
     next();
 });
 
