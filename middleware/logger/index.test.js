@@ -54,24 +54,74 @@ describe('logger middleware', () => {
         expect(genReqId(req)).toBe('test-nanoid');
     });
 
-    it('customSuccessObject includes questionnaireId and ownerId from session', () => {
+    it('includes questionnaireId, ownerId and sessionCorrelationId from session', () => {
         const {customSuccessObject} = pinoHttp.mock.calls[0][0];
-        const req = {session: {questionnaireId: 'abc-123', ownerId: 'owner-456'}};
+        const req = {
+            session: {
+                questionnaireId: 'abc-123',
+                ownerId: 'owner-456',
+                sessionCorrelationId: 'session-789'
+            }
+        };
         const result = customSuccessObject(req, {}, {});
-        expect(result).toMatchObject({questionnaireId: 'abc-123', ownerId: 'owner-456'});
+        expect(result).toMatchObject({
+            questionnaireId: 'abc-123',
+            ownerId: 'owner-456',
+            sessionCorrelationId: 'session-789'
+        });
     });
 
-    it('customSuccessObject returns undefined for questionnaireId and ownerId when session is absent', () => {
+    it('returns undefined for questionnaireId, ownerId and sessionCorrelationId when session is absent', () => {
         const {customSuccessObject} = pinoHttp.mock.calls[0][0];
         const req = {};
         const result = customSuccessObject(req, {}, {});
-        expect(result).toMatchObject({questionnaireId: undefined, ownerId: undefined});
+        expect(result).toMatchObject({
+            questionnaireId: undefined,
+            ownerId: undefined,
+            sessionCorrelationId: undefined
+        });
     });
 
-    it('customErrorObject includes questionnaireId and ownerId from session', () => {
+    it('includes questionnaireId, ownerId and sessionCorrelationId from session in error object', () => {
         const {customErrorObject} = pinoHttp.mock.calls[0][0];
-        const req = {session: {questionnaireId: 'abc-123', ownerId: 'owner-456'}};
+        const req = {
+            session: {
+                questionnaireId: 'abc-123',
+                ownerId: 'owner-456',
+                sessionCorrelationId: 'session-789'
+            }
+        };
         const result = customErrorObject(req, {}, {}, {});
-        expect(result).toMatchObject({questionnaireId: 'abc-123', ownerId: 'owner-456'});
+        expect(result).toMatchObject({
+            questionnaireId: 'abc-123',
+            ownerId: 'owner-456',
+            sessionCorrelationId: 'session-789'
+        });
+    });
+
+    it('uses the authenticated owner before the session owner has been updated', () => {
+        const {customSuccessObject, customErrorObject} = pinoHttp.mock.calls[0][0];
+        const req = {
+            oidc: {user: {sub: 'authenticated-owner'}},
+            session: {ownerId: 'anonymous-owner', sessionCorrelationId: 'session-789'}
+        };
+
+        expect(customSuccessObject(req, {}, {}).ownerId).toBe('authenticated-owner');
+        expect(customErrorObject(req, {}, {}, {}).ownerId).toBe('authenticated-owner');
+        expect(req.session.ownerId).toBe('anonymous-owner');
+    });
+
+    it('uses request logging context after logout clears the session', () => {
+        const {customSuccessObject, customErrorObject} = pinoHttp.mock.calls[0][0];
+        const req = {
+            sessionLogContext: {
+                ownerId: 'authenticated-owner',
+                sessionCorrelationId: 'session-789'
+            }
+        };
+
+        expect(customSuccessObject(req, {}, {})).toMatchObject(req.sessionLogContext);
+        expect(customErrorObject(req, {}, {}, {})).toMatchObject(req.sessionLogContext);
+        expect(req.session).toBeUndefined();
     });
 });
