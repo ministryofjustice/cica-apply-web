@@ -29,7 +29,7 @@ jest.mock('pino-http', () => {
 jest.mock('../index/routes', () => {
     const express = require('express');
     const router = express.Router();
-    router.get('/probe', (req, res) => res.sendStatus(200));
+    router.get('/testEndpoint', (req, res) => res.sendStatus(200));
     return router;
 });
 
@@ -103,13 +103,13 @@ describe('authenticated session correlation in request logs', () => {
         const cookie = await signIn();
         const id = lastLog().sessionCorrelationId;
         const response = await request(app)
-            .get('/probe')
+            .get('/testEndpoint')
             .set('Cookie', cookie);
         expect(response.status).toBe(200);
         expect(lastLog().sessionCorrelationId).toBe(id);
 
         await request(app)
-            .get('/probe')
+            .get('/testEndpoint')
             .set('Cookie', sessionCookie(response));
         expect(lastLog().sessionCorrelationId).toBe(id);
     });
@@ -142,7 +142,7 @@ describe('authenticated session correlation in request logs', () => {
         expect(sessionCookie(response)).toMatch(/^session=(; session=)*$/);
 
         await request(app)
-            .get('/probe')
+            .get('/testEndpoint')
             .set('Cookie', sessionCookie(response));
         expect(lastLog().sessionCorrelationId).toBeUndefined();
         expect(lastLog().ownerId).toBeUndefined();
@@ -153,7 +153,7 @@ describe('authenticated session correlation in request logs', () => {
         const id = lastLog().sessionCorrelationId;
 
         await request(app)
-            .get('/probe')
+            .get('/testEndpoint')
             .set('Cookie', cookie)
             .set('Authorization', 'Bearer test-secret')
             .set('x-real-ip', '198.51.100.20');

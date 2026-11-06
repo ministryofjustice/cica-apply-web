@@ -54,7 +54,7 @@ describe('logger middleware', () => {
         expect(genReqId(req)).toBe('test-nanoid');
     });
 
-    it('customSuccessObject includes questionnaireId and ownerId from session', () => {
+    it('includes questionnaireId, ownerId and sessionCorrelationId from session', () => {
         const {customSuccessObject} = pinoHttp.mock.calls[0][0];
         const req = {
             session: {
@@ -71,7 +71,7 @@ describe('logger middleware', () => {
         });
     });
 
-    it('customSuccessObject returns undefined for questionnaireId and ownerId when session is absent', () => {
+    it('returns undefined for questionnaireId, ownerId and sessionCorrelationId when session is absent', () => {
         const {customSuccessObject} = pinoHttp.mock.calls[0][0];
         const req = {};
         const result = customSuccessObject(req, {}, {});
@@ -82,7 +82,7 @@ describe('logger middleware', () => {
         });
     });
 
-    it('customErrorObject includes questionnaireId and ownerId from session', () => {
+    it('includes questionnaireId, ownerId and sessionCorrelationId from session in error object', () => {
         const {customErrorObject} = pinoHttp.mock.calls[0][0];
         const req = {
             session: {
