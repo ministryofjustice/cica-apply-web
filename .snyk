@@ -13,14 +13,14 @@ ignore:
           ignored here, are confirmed resolved now that npm bumped from
           11.18.0 to 11.19.1 — removed from this file rather than left as
           dead entries. Recheck when npm bumps its bundled undici.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-UNDICI-19635226:
     - '*':
         reason: >
           Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
           npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
           currently available upstream without patching npm's tree.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-UNDICI-21181005:
     - '*':
         reason: >
@@ -30,35 +30,35 @@ ignore:
           patching npm's tree. Critical severity per Snyk, but never
           exercised by the running application (cica-web app scan clean).
           Recheck when npm bumps its bundled node-gyp/undici.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-UNDICI-21181013:
     - '*':
         reason: >
           Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
           npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
           currently available upstream without patching npm's tree.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-UNDICI-21181015:
     - '*':
         reason: >
           Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
           npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
           currently available upstream without patching npm's tree.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-UNDICI-21181019:
     - '*':
         reason: >
           Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
           npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
           currently available upstream without patching npm's tree.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-UNDICI-21185768:
     - '*':
         reason: >
           Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
           npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
           currently available upstream without patching npm's tree.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-PICOMATCH-21248802:
     - '*':
         reason: >
@@ -82,14 +82,14 @@ ignore:
           bundled brace-expansion moved past those versions — removed from
           this file rather than left as dead entries. Recheck when npm
           bumps its bundled brace-expansion again.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-BRACEEXPANSION-20244952:
     - '*':
         reason: >
           Same root cause and dependency path as
           SNYK-JS-BRACEEXPANSION-20244948 — build/CLI tooling only, no
           direct upgrade available while bundled by npm (fixed in 5.0.10).
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-POSTCSSSELECTORPARSER-20510276:
     - '*':
         reason: >
@@ -103,7 +103,7 @@ ignore:
           bundled by npm's own tree isn't independently controllable
           without patching npm itself. Recheck when npm bumps its bundled
           dependency.
-        expires: '2026-11-09T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-DEBIAN13-ATTR-17678182:
     - '*':
         reason: >
@@ -113,7 +113,7 @@ ignore:
           Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
-        expires: '2026-11-07T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-DEBIAN13-ACL-17677866:
     - '*':
         reason: >
@@ -123,7 +123,7 @@ ignore:
           for Debian 13 (trixie); base-image upgrade recommendations do not
           resolve it. Accepted pending upstream Debian patch or a base-image
           migration. Recheck on base-image bump.
-        expires: '2026-11-07T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-DEBIAN13-GCC14-20386241:
     - '*':
         reason: >
@@ -191,7 +191,9 @@ ignore:
           express-openid-connect@3 upgrade after it broke 86 tests with
           "Must use import to load ES Module". Tracked as a separate,
           deliberate future migration, not a point fix.
-        expires: '2026-11-06T00:00:00.000Z'
+          Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
+          to be picked up immediately after the session-correlation PR merges.
+        expires: '2026-11-11T00:00:00.000Z'
   SNYK-JS-HTTPCACHESEMANTICS-19964068:
     - '*':
         reason: >
@@ -200,7 +202,9 @@ ignore:
           is never enabled anywhere in this app's dependency chain, so the
           improper-authorisation variant of the same underlying bug is
           equally unreachable. See that entry for the full reasoning.
-        expires: '2026-11-06T00:00:00.000Z'
+          Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
+          to be picked up immediately after the session-correlation PR merges.
+        expires: '2026-11-11T00:00:00.000Z'
   SNYK-DEBIAN13-SQLITE3-22119065:
     - '*':
         reason: >
