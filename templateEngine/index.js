@@ -2,6 +2,9 @@
 
 const nunjucks = require('nunjucks');
 const isFilePath = require('./utils/isFilePath');
+// Read the version straight from package.json rather than process.env.npm_package_version,
+// which npm only sets when launching via an npm script (the production image runs node directly).
+const {version: appVersion} = require('../package.json');
 
 let environment;
 
@@ -47,7 +50,7 @@ function createTemplateEngineService(app) {
                 'CW_MAINTENANCE_MESSAGE_ENABLED',
                 process.env.CW_MAINTENANCE_MESSAGE_ENABLED === 'true'
             )
-            .addGlobal('CW_APP_VERSION', process.env.npm_package_version)
+            .addGlobal('CW_APP_VERSION', appVersion)
             .addGlobal('CW_GOVUK_ACCOUNT_URL', process.env.CW_GOVUK_ACCOUNT_URL)
             .addGlobal('CW_BUILDTIME_ID', process.env.CW_BUILDTIME_ID)
             .addGlobal('govukRebrand', true);
