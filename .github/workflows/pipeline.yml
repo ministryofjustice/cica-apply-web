@@ -1,7 +1,9 @@
 name: Validate Build and Deploy
 
 on:
+  pull_request:
   push:
+    branches: [cw-deploy, cw-deploy-to-uat, cw-deploy-to-staging]
 
 permissions:
   contents: read

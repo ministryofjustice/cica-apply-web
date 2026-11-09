@@ -1,6 +1,6 @@
 # THROWAWAY TEST VERSION — pinned to the devsecops feature branch, not a tag.
-# Purpose: prove reusable-snyk-policy-reconcile.yml works end-to-end (ref
-# resolution, $/ snyk-auth, scan, PR comment) BEFORE merging devsecops PR #13.
+# Purpose: prove full reconciliation (OSS + container surfaces) and the PR
+# comment work end-to-end BEFORE merging devsecops PR #13.
 #
 # Before merging this for real:
 #   1. Change the `uses:` ref from the branch to the released tag (e.g. @v1.0.12).
@@ -9,9 +9,15 @@
 name: Snyk policy reconcile
 
 on:
+  # PR: surface drift introduced by the change, inline, while it can be acted on.
   pull_request:
+  # Deploy-branch push: re-scan the actual artifact being shipped. Catches drift
+  # that accrued while a PR sat open before deployment (the Snyk database moves
+  # even when .snyk doesn't). No PR context here, so this run is log-only.
+  push:
+    branches: [cw-deploy, cw-deploy-to-uat, cw-deploy-to-staging]
 
-# Least privilege: this workflow's only side effect is the PR comment.
+# Least privilege: the only side effect is the PR comment (PR runs only).
 permissions:
   contents: read
   pull-requests: write
@@ -21,13 +27,13 @@ jobs:
     uses: ministryofjustice/cica-devsecops-workflows/.github/workflows/reusable-snyk-policy-reconcile.yml@feature/switch-to-internal-refs
     with:
       snyk-api-url: ${{ vars.SNYK_API_URL || 'https://api.snyk.io' }}
+      # Full reconciliation: cover the container surface as well as OSS.
+      # build-dockerfile makes the workflow build the image itself, so the
+      # container surface works on a pull_request without a prebuilt image.
+      reconcile-image: cica/cica-repo-dev
+      build-dockerfile: Dockerfile
       # node-version omitted — the reusable workflow defaults to 24.22.1, matching
       # the rest of cica-apply-web's pipeline.
-      # reconcile-ref omitted — it defaults to the ref THIS job pins the workflow
-      # to (the feature branch here), so the reconcile script is fetched from the
-      # same commit. That is exactly the resolution path we are testing.
-      # reconcile-image omitted — OSS (npm) surface only for this first test; add
-      # it later to also cover the container surface.
     secrets:
       SNYK_CLIENT_ID: ${{ secrets.SNYK_CLIENT_ID }}
       SNYK_CLIENT_SECRET: ${{ secrets.SNYK_CLIENT_SECRET }}
