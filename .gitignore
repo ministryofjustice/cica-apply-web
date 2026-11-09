@@ -72,3 +72,8 @@ typings/
 
 
 .cache
+
+# Kiro local specs/config (not for version control)
+.kiro/
+
+
