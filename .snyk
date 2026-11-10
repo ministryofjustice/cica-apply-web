@@ -174,37 +174,25 @@ ignore:
   SNYK-JS-HTTPCACHESEMANTICS-19964064:
     - '*':
         reason: >
-          Origin validation flaw in http-cache-semantics' _varyMatches(),
-          which can let a Vary:* response be reused across different
-          users/requests sharing the same cache. Reachable only if got's
-          built-in HTTP response caching (via cacheable-request) is actually
-          enabled. Checked every got() call site in this app — the two in
-          questionnaire/request-service.js and the one inside
-          openid-client/lib/helpers/request.js — and none pass a `cache`
-          option; openid-client's own caching (JWKS/throttling) uses a
-          separate in-memory lru-cache, unrelated to got's HTTP cache. No fix
-          available without an ESM migration: http-cache-semantics@4.3.0 is
-          the latest version ever published (no patched release exists), and
-          the only upgrade paths (got@12+, or express-openid-connect@3 for
-          openid-client@6) are both ESM-only, which breaks this CommonJS
-          codebase's require() calls — confirmed by reverting an attempted
-          express-openid-connect@3 upgrade after it broke 86 tests with
-          "Must use import to load ES Module". Tracked as a separate,
-          deliberate future migration, not a point fix.
-          Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
-          to be picked up immediately after the session-correlation PR merges.
-        expires: '2026-11-11T00:00:00.000Z'
+          Temporarily accepted pending review, recorded in CAPP-218. 
+          The affected HTTP response cache is not enabled in the reviewed CICA got request paths 
+          or the express-openid-connect request configuration. The vulnerable package
+          remains installed;
+          this is a time-limited risk acceptance, not a fix. Reassess if caching
+          is enabled, dependencies change, or a suitable upstream fix becomes
+          available.
+        expires: '2026-12-10T00:00:00.000Z'
   SNYK-JS-HTTPCACHESEMANTICS-19964068:
     - '*':
         reason: >
-          Same root cause and same verified-unreachable basis as
-          SNYK-JS-HTTPCACHESEMANTICS-19964064 — got's HTTP response caching
-          is never enabled anywhere in this app's dependency chain, so the
-          improper-authorisation variant of the same underlying bug is
-          equally unreachable. See that entry for the full reasoning.
-          Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
-          to be picked up immediately after the session-correlation PR merges.
-        expires: '2026-11-11T00:00:00.000Z'
+          Temporarily accepted pending review, recorded in CAPP-218. 
+          The affected HTTP response cache is not enabled
+          in the reviewed CICA got request paths or the express-openid-connect
+          request configuration. The vulnerable package remains installed;
+          this is a time-limited risk acceptance, not a fix. Reassess if caching
+          is enabled, dependencies change, or a suitable upstream fix becomes
+          available.
+        expires: '2026-12-10T00:00:00.000Z'
   SNYK-DEBIAN13-SQLITE3-22119065:
     - '*':
         reason: >
