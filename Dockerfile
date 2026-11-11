@@ -1,58 +1,94 @@
 # lets start from an image that already has nodejs installed
 # https://snyk.io/blog/choosing-the-best-node-js-docker-image/
-FROM node:24.22.1-trixie-slim AS base
 
-USER root
+# Single source of truth for the base image so both build stages stay in lockstep.
+# Dependabot (docker ecosystem) bumps the digest on this one line; both FROMs inherit it.
+# Keep the full tag@sha256 default here — Dependabot only tracks ARG-based FROMs when
+# the pinned value is the ARG's default.
+ARG BASE_IMAGE=node:24.22.2-trixie-slim@sha256:0820eaa85e07d0490446dd01d14707e17e6108a36988cf374899cd057eb3812d
 
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+# --- Stage 1: builder ---
+FROM ${BASE_IMAGE} AS builder
 
-RUN groupadd -g 1014 dc_user \
-    && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
-USER dc_user
-
-# Essentially running mkdir <name> inside the current working
-# directory, and then cd <name>
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+# Install all dependencies (including devDependencies) needed to build assets
+# A wildcard ensures both package.json AND package-lock.json are copied
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Bundle app source and build static assets (sass + babel + webpack)
+COPY . .
+RUN npm run sass && npm run build
+
+# Drop devDependencies now that the build is complete
+RUN npm prune --omit=dev
+
+# --- Stage: dev (local docker-compose hot-reload only) ---
+# Used by q-dev-utilities/docker-compose/docker-compose-dev.yml via `target: dev`.
+# Unlike `builder`, this stage keeps devDependencies (nodemon, webpack, sass,
+# babel) and never prunes them, so `npm run start:dev` works. It runs as root
+# and is overlaid by a bind mount of the host source at runtime, so it is NOT
+# suitable for production. CI/prod build the `production` target and are unaffected.
+# Re-declare ARG after FROM resets build args between stages.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS dev
+
+WORKDIR /usr/src/app
+
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
+
+# Install all dependencies, including devDependencies, and do not prune.
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Bundle source. At runtime the compose bind mount overlays this with the live
+# host checkout, and `start:dev` rebuilds assets and watches via nodemon.
+COPY . .
+
+EXPOSE 3000
+# 9229 is the Node inspector port exposed by start:dev (--inspect=0.0.0.0:9229)
+EXPOSE 9229
+
+CMD ["npm", "run", "start:dev"]
+
+# --- Stage 2: runtime (production) ---
+# Named `production` to match reusable-container.yml's `build-target` default,
+# which runs `docker build --target production`.
+# Re-declare ARG after FROM resets build args between stages; it inherits the
+# global default above unless overridden at build time.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS production
+
+WORKDIR /usr/src/app
+
+# Copy the built application (production deps + compiled assets) from the builder
+COPY --from=builder /usr/src/app .
+
+# Remove npm/npx to reduce the runtime attack surface.
+# This also clears the Snyk container "lib" project findings: Snyk scans
+# npm's own bundled dependency tree at /usr/local/lib/node_modules, which
+# carries vulns (undici, brace-expansion, etc.) unrelated to this app.
+# Deleting npm here removes that scan target entirely. Do not re-add npm
+# to the runtime image.
+RUN rm -rf /usr/local/lib/node_modules/npm && \
+    rm -f /usr/local/bin/npm /usr/local/bin/npx
+
+RUN groupadd -g 1014 dc_user && useradd -rm -d /usr/src/app -u 1015 -g dc_user dc_user
+RUN chown -R dc_user:dc_user /usr/src/app
+
+USER 1015
 
 EXPOSE 3000
 
-# Default to production. npm will ignore devDependencies in production mode
-FROM base AS production
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-ENV NODE_ENV=production
-# RUN npm install --production
-
-# RUN npm install
-# If you are building your code for production
-# RUN npm ci
-RUN npm ci --omit=dev
-# Bundle app source
-COPY . .
-
-USER 1015
-# the command line to run when the container is started
-CMD [ "npm", "start" ]
+# Use node directly instead of npm start to reduce runtime attack surface
+# and avoid npm lifecycle-script execution path in production containers.
+# Note: running node directly means npm does not set npm_package_version, so the
+# app reads its version from package.json itself (see app.js and templateEngine/index.js).
+CMD ["node", "./bin/www"]
 
 
-# Dev build runs npm ci without the --production flag
-# and runs the start:dev script
-FROM base AS dev
-
-ENV NODE_ENV=development
-
-# RUN npm install
-# If you are building your code for production
-#USER root
-RUN npm ci
-
-# Bundle app source
-COPY . .
-
-USER 1015
-# the command line to run when the container is started
-CMD [ "npm", "start" ]

@@ -1,176 +1,54 @@
 version: v1.25.0
 ignore:
-  SNYK-JS-UNDICI-19635210:
+  SNYK-DEBIAN13-ZLIB-22249554:
     - '*':
         reason: >
-          Vulnerable undici@6.28.0 pinned by npm's bundled node-gyp
-          dependency (npm@11.19.1 > node-gyp@12.4.0 > undici@6.28.0).
-          Build-time tool only (node-gyp compiles native modules during
-          install), not present in the running application's request path.
-          Fixed in 6.28.1/7.29.1/8.10.2, but the version bundled by npm
-          isn't independently controllable without patching npm's tree.
-          Note: SNYK-JS-UNDICI-17372658/17372754/17372758, previously
-          ignored here, are confirmed resolved now that npm bumped from
-          11.18.0 to 11.19.1 — removed from this file rather than left as
-          dead entries. Recheck when npm bumps its bundled undici.
+          zlib1g, introduced by the Node base image via dpkg/apt — a base-OS
+          package, not an application dependency. CVE-2026-76844 is an
+          out-of-bounds write in zlib's gz_write() after an underlying
+          write() failure; it is only reachable through the gzip file-writing
+          API (gzwrite/gzprintf on a gzFile), which this application does not
+          use. A Debian 13 (trixie) fix exists
+          (1:1.3.dfsg+really1.3.1-1+deb13u1), so the real resolution is a
+          base-image bump that pulls the patched zlib1g, not a point fix in
+          this repo. Accepted pending the next base-image bump; recheck then.
+          Re-verified 2026-11-09 on disclosure: base-OS package, gzip write
+          path unused by the app; premise holds.
         expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-UNDICI-19635226:
-    - '*':
-        reason: >
-          Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
-          npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
-          currently available upstream without patching npm's tree.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-UNDICI-21181005:
-    - '*':
-        reason: >
-          Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
-          npm's bundled node-gyp/undici@6.28.0, build-time only. Fixed in
-          6.29.1/7.30.1/8.12.2, not independently controllable without
-          patching npm's tree. Critical severity per Snyk, but never
-          exercised by the running application (cica-web app scan clean).
-          Recheck when npm bumps its bundled node-gyp/undici.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-UNDICI-21181013:
-    - '*':
-        reason: >
-          Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
-          npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
-          currently available upstream without patching npm's tree.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-UNDICI-21181015:
-    - '*':
-        reason: >
-          Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
-          npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
-          currently available upstream without patching npm's tree.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-UNDICI-21181019:
-    - '*':
-        reason: >
-          Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
-          npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
-          currently available upstream without patching npm's tree.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-UNDICI-21185768:
-    - '*':
-        reason: >
-          Same root cause and dependency path as SNYK-JS-UNDICI-19635210 —
-          npm's bundled node-gyp/undici@6.28.0, build-time only, no fix
-          currently available upstream without patching npm's tree.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-PICOMATCH-21248802:
-    - '*':
-        reason: >
-          picomatch@4.0.4 resolved via npm's own bundled tooling
-          (npm@11.19.1 > node-gyp@12.4.0 > tinyglobby@0.2.17 > picomatch),
-          surfaced only in the "lib" project (/usr/local/lib/node_modules);
-          cica-web app scan clean. Build/CLI tooling only, never exercised
-          by the running application. No upgrade or patch available.
-          Recheck when a fix is published and npm bundles it.
-        expires: '2026-11-09T00:00:00.000Z'
-  SNYK-JS-BRACEEXPANSION-20244948:
-    - '*':
-        reason: >
-          brace-expansion@5.0.9 resolved transitively via npm's bundled
-          minimatch (npm@11.19.1 > minimatch@10.2.5 > brace-expansion@5.0.9).
-          Build/CLI tooling only — not present in the application runtime
-          path (cica-web app scan clean). Fixed in 5.0.11, but the version
-          bundled by npm isn't independently controllable without patching
-          npm's tree. Note: SNYK-JS-BRACEEXPANSION-18313044/18512280,
-          previously ignored here, are confirmed resolved now that npm's
-          bundled brace-expansion moved past those versions — removed from
-          this file rather than left as dead entries. Recheck when npm
-          bumps its bundled brace-expansion again.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-BRACEEXPANSION-20244952:
-    - '*':
-        reason: >
-          Same root cause and dependency path as
-          SNYK-JS-BRACEEXPANSION-20244948 — build/CLI tooling only, no
-          direct upgrade available while bundled by npm (fixed in 5.0.10).
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-JS-POSTCSSSELECTORPARSER-20510276:
-    - '*':
-        reason: >
-          postcss-selector-parser@7.1.4 resolved transitively via npm's own
-          dependency-resolution tooling (npm@11.19.1 > @npmcli/arborist@9.9.1
-          > @npmcli/query@5.0.0 > postcss-selector-parser@7.1.4). Build/CLI
-          tooling only, surfaced by the container scan against the "lib"
-          project (/usr/local/lib/node_modules, npm's own global install) —
-          not the application's own dependency tree (cica-web app scan
-          clean). Fixed in postcss-selector-parser@7.1.6, but the version
-          bundled by npm's own tree isn't independently controllable
-          without patching npm itself. Recheck when npm bumps its bundled
-          dependency.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-DEBIAN13-ATTR-17678182:
-    - '*':
-        reason: >
-          libattr1, introduced by the base image
-          node:24.18.1-trixie-slim via coreutils/adduser — a base-OS
-          package, not an application dependency. No fix published for
-          Debian 13 (trixie); base-image upgrade recommendations do not
-          resolve it. Accepted pending upstream Debian patch or a base-image
-          migration. Recheck on base-image bump.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-DEBIAN13-ACL-17677866:
-    - '*':
-        reason: >
-          libacl1, introduced by the base image
-          node:24.18.1-trixie-slim via coreutils/sed/adduser/dpkg — a
-          base-OS package, not an application dependency. No fix published
-          for Debian 13 (trixie); base-image upgrade recommendations do not
-          resolve it. Accepted pending upstream Debian patch or a base-image
-          migration. Recheck on base-image bump.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-DEBIAN13-GCC14-20386241:
-    - '*':
-        reason: >
-          libstdc++6, introduced by the base image node:24.18.1-trixie-slim
-          via apt/gcc-14 — a base-OS package, not an application dependency.
-          No fix published for Debian 13 (trixie); base-image upgrade
-          recommendations do not resolve it. Accepted pending upstream
-          Debian patch or a deliberate base-image migration. Recheck on
-          base-image bump.
-        expires: '2026-11-07T00:00:00.000Z'
   SNYK-DEBIAN13-ZLIB-19520500:
     - '*':
         reason: >
-          zlib1g, introduced by the base image node:24.18.1-trixie-slim via
+          zlib1g, introduced by the Node base image via
           dpkg/apt — a base-OS package, not an application dependency. No
           fix published for Debian 13 (trixie) yet; base-image upgrade
           recommendations (e.g. alpine) are a separate, bigger migration and
           not being done as a point fix. Accepted pending upstream Debian
           patch or a deliberate base-image migration. Recheck on base-image
           bump.
-        expires: '2026-11-07T00:00:00.000Z'
-  SNYK-JS-NANOID-18506894:
+          Re-verified 2026-11-03: still no trixie fix; premise holds.
+        expires: '2026-11-16T00:00:00.000Z'
+  SNYK-DEBIAN13-ATTR-17678182:
     - '*':
         reason: >
-          Both nanoid() call sites (CSP nonce in app.js, request-id fallback in the logger) call with no size argument on the secure export.
-          The vulnerable functions (customAlphabet/customRandom and the
-          nanoid/non-secure module) are never imported, and no user input
-          reaches the size parameter, so the infinite-loop DoS is
-          unreachable. Fix available in nanoid@5.1.16.
-        expires: '2026-11-07T00:00:00.000Z'
-  SNYK-JS-NANOID-18506897:
+          libattr1, introduced by the Node base image via
+          coreutils/adduser — a base-OS package, not an application
+          dependency. No fix published for
+          Debian 13 (trixie); base-image upgrade recommendations do not
+          resolve it. Accepted pending upstream Debian patch or a base-image
+          migration. Recheck on base-image bump.
+          Re-verified 2026-11-03: still no trixie fix; premise holds.
+        expires: '2026-11-16T00:00:00.000Z'
+  SNYK-DEBIAN13-ACL-17677866:
     - '*':
         reason: >
-          Same root cause as SNYK-JS-NANOID-18506894 — no-arg nanoid() on the secure export, vulnerable paths not imported, DoS unreachable.
-        expires: '2026-11-07T00:00:00.000Z'
-  SNYK-UPSTREAM-NODE-18507940:
-    - '*':
-        reason: >
-          node-tar hardlink directory-traversal (CVE-2026-26960) bundled in
-          the node:24.18.1-trixie-slim base image. Exploitable only by
-          extracting an attacker-controlled tar archive; node-tar is present
-          as a build-time/npm-install dependency, not invoked by the running
-          cica-web application, which does not extract untrusted archives at
-          runtime. Not bound to the network stack (requires local
-          read/write/execute). Fixed upstream in Node 26.5.0. Recheck on
-          base-image upgrade.
-        expires: '2026-11-07T00:00:00.000Z'
+          libacl1, introduced by the Node base image via
+          coreutils/sed/adduser/dpkg — a base-OS package, not an
+          application dependency. No fix published
+          for Debian 13 (trixie); base-image upgrade recommendations do not
+          resolve it. Accepted pending upstream Debian patch or a base-image
+          migration. Recheck on base-image bump.
+          Re-verified 2026-11-03: still no trixie fix; premise holds.
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-HTTPCACHESEMANTICS-19964064:
     - '*':
         reason: >
@@ -193,7 +71,7 @@ ignore:
           deliberate future migration, not a point fix.
           Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
           to be picked up immediately after the session-correlation PR merges.
-        expires: '2026-11-11T00:00:00.000Z'
+        expires: '2026-11-16T00:00:00.000Z'
   SNYK-JS-HTTPCACHESEMANTICS-19964068:
     - '*':
         reason: >
@@ -204,32 +82,4 @@ ignore:
           equally unreachable. See that entry for the full reasoning.
           Follow-up remediation: https://dsdmoj.atlassian.net/browse/CAPP-218,
           to be picked up immediately after the session-correlation PR merges.
-        expires: '2026-11-11T00:00:00.000Z'
-  SNYK-DEBIAN13-SQLITE3-22119065:
-    - '*':
-        reason: >
-          libsqlite3-0@3.46.1-7+deb13u2, introduced by the base image
-          node:24.22.1-trixie-slim via util-linux/liblastlog2-2 — a
-          base-OS package, not an application dependency (cica-web does
-          not use sqlite3). Newly disclosed; no fix published for Debian
-          13 (trixie) yet, and Snyk reports no updated node:*-trixie-slim
-          tag resolves it either.
-          Accepted pending upstream Debian patch or a deliberate base-image
-          migration. Recheck on base-image bump.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-DEBIAN13-SQLITE3-22119091:
-    - '*':
-        reason: >
-          Same root cause and dependency path as
-          SNYK-DEBIAN13-SQLITE3-22119065 — base-OS package, not used by
-          this app, no Debian fix or updated base-image tag available yet.
-          Recheck together on base-image bump.
-        expires: '2026-11-16T00:00:00.000Z'
-  SNYK-DEBIAN13-SQLITE3-22119098:
-    - '*':
-        reason: >
-          Same root cause and dependency path as
-          SNYK-DEBIAN13-SQLITE3-22119065 — base-OS package, not used by
-          this app, no Debian fix or updated base-image tag available yet.
-          Recheck together on base-image bump.
         expires: '2026-11-16T00:00:00.000Z'

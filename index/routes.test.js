@@ -138,4 +138,25 @@ describe('Static routes', () => {
             );
         });
     });
+
+    describe('Application-Version header', () => {
+        // Guards the fix for the version being read from package.json rather than
+        // process.env.npm_package_version (which npm only sets under `npm start`;
+        // the production image runs node directly). A regression to the env var,
+        // or a broken relative require path, would fail this.
+        const {version: packageVersion} = require('../package.json');
+
+        it('Should set the Application-Version header from package.json', async () => {
+            const response = await request(app).get('/cookies');
+
+            expect(response.headers['application-version']).toBe(packageVersion);
+        });
+
+        it('Should not leave the version undefined', async () => {
+            const response = await request(app).get('/cookies');
+
+            expect(response.headers['application-version']).toBeDefined();
+            expect(response.headers['application-version']).not.toBe('undefined');
+        });
+    });
 });
