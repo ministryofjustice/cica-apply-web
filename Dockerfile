@@ -5,7 +5,7 @@
 # Dependabot (docker ecosystem) bumps the digest on this one line; both FROMs inherit it.
 # Keep the full tag@sha256 default here — Dependabot only tracks ARG-based FROMs when
 # the pinned value is the ARG's default.
-ARG BASE_IMAGE=node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+ARG BASE_IMAGE=node:24.22.3-trixie-slim@sha256:60587baa7c895cf438d44f691e4ac8248b36c13b26be77332f874bebb3a64201
 
 # --- Stage 1: builder ---
 FROM ${BASE_IMAGE} AS builder
