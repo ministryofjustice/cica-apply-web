@@ -1,6 +1,6 @@
 # lets start from an image that already has nodejs installed
 # https://snyk.io/blog/choosing-the-best-node-js-docker-image/
-FROM node:24.22.1-trixie-slim AS base
+FROM node:24.22.2-trixie-slim AS base
 
 USER root
 
