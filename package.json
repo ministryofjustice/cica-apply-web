@@ -61,7 +61,7 @@
         "lint-staged": "^11.2.6",
         "nodemon": "^3.1.14",
         "prettier": "^1.19.1",
-        "sass": "^1.108.1",
+        "sass": "^1.108.2",
         "supertest": "^4.0.2",
         "time-convert": "0.0.2",
         "webpack": "^5.112.2",
